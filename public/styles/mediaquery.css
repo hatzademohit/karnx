@@ -1,0 +1,21 @@
+@media (min-width: 1800px){
+    .login-page{
+        /* .img-section{
+        } */
+        .input-section{
+            padding: 0 80px;
+        }
+    }
+    .info-card{
+        padding: 24px 28px 20px 32px;
+    }
+    
+    .card-count{
+        width: 74px;
+        height: 74px;
+
+    svg{
+        font-size: 38px;
+    }
+    }
+}

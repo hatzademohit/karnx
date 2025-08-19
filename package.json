@@ -1,0 +1,33 @@
+{
+  "name": "karnx",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.14.12",
+    "@mui/material": "^5.14.11",
+    "@mui/x-data-grid": "^8.5.0",
+    "axios": "^1.11.0",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "material-react-table": "^1.15.0",
+    "next": "14.2.15",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-draggable": "^4.5.0",
+    "react-hook-form": "^7.62.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}

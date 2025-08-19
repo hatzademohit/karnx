@@ -1,0 +1,163 @@
+"use client";
+
+import { useState } from "react";
+import { Box, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, Typography } from "@mui/material";
+import loginBg from "@/public/imgs/loginbg.png";
+import karnxLogo from "@/public/imgs/karnx_logo.svg";
+import Image from "next/image";
+import { CustomTextField } from "@/components";
+import Link from "next/link";
+import { useForm, Controller } from "react-hook-form";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import axios from "axios";
+import { useAuth } from "@/app/context/AuthContext";
+import {apiBaseUrl} from '@/karnx/api';
+
+interface LoginFormInputs {
+  userId: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+const LoginPage = () => {
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<LoginFormInputs>({
+    defaultValues: {
+      userId: "",
+      password: "",
+      rememberMe: true,
+    },
+  });
+
+  const [inputType, setInputType] = useState('password');
+
+  const inputChange = () => {
+    setInputType(inputType === 'text' ? 'password' : 'text');
+  };
+ const {setAlertMessage, setLoader, setOpenAlert, setSeverity} = useAuth();
+
+  const onSubmit = async (data: LoginFormInputs) => {
+    try {
+          const response = await axios.post(`${apiBaseUrl}/login`, {
+            email: data.userId,
+            password: data.password,
+          });
+    
+          const { token, user } = response.data;
+    
+          localStorage.setItem("token", token);
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+          setAlertMessage(response.data.message);
+          setOpenAlert(true);
+          setSeverity('success');
+          window.location.href = "/dashboard";
+        } catch (error: any) {
+          if (error.response) {
+            setAlertMessage(error.response.data.message || "Invalid credentials");
+            setOpenAlert(true);
+            setSeverity('error');
+          } else {
+            setAlertMessage("Something went wrong. Please try again.");
+            setOpenAlert(true);
+            setSeverity('error');
+          }
+        } finally {
+          setLoader(false);
+        }
+    // console.log("Login Data:", data);
+    // localStorage.setItem('loggedInUser', JSON.stringify(data));
+    // window.location.href = '/dashboard';
+  };
+
+  return (
+    <Box className="login-page">
+      <Box className="img-section">
+        <Image src={loginBg} alt="img-not-found" />
+      </Box>
+
+      <Box className="input-section">
+        <Image className="img-fluid" src={karnxLogo} alt="logo" />
+        <Typography component="h3" variant="h3" sx={{ width: "100%" }}>
+          Login to your account
+        </Typography>
+
+        <Typography component='form' sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: '28px'}} onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            name="userId"
+            control={control}
+            rules={{ required: "User email is required" }}
+            render={({ field }) => (
+              <CustomTextField
+                {...field}
+                inputLabel="User Email"
+                placeholder="Enter your user email"
+                variant="outlined"
+                size="small"
+                error={!!errors.userId}
+                helperText={errors.userId?.message}
+              />
+            )}
+          />
+
+          <Box sx={{ position: "relative" }}>
+            <Link href="/forgot-password" className="forgot-link">
+              Forgot password
+            </Link>
+            <Controller
+              name="password"
+              control={control}
+              rules={{ required: "Password is required" }}
+              render={({ field }) => (
+                <CustomTextField
+                  {...field}
+                  inputLabel="Password"
+                  type={inputType}
+                  placeholder="Password"
+                  variant="outlined"
+                  size="small"
+                  error={!!errors.password}
+                  helperText={errors.password?.message}                  
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton size='small' onClick={inputChange}>
+                          {inputType === 'password' ? <RemoveRedEyeOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+            />
+
+            {/* <Controller
+              name="rememberMe"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={<Checkbox {...field} size="small" checked={field.value} />}
+                  label="Remember for 30 days"
+                />
+              )}
+            /> */}
+          </Box>
+
+          <Button
+            className="btn btn-blue"
+            variant="contained"
+            type="submit"
+            fullWidth
+          >
+            Login
+          </Button>
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
+export default LoginPage;
