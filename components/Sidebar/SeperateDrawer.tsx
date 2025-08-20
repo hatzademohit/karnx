@@ -32,7 +32,7 @@ export default function SeperateDrawer({
     { menu: 'Inquiries', icon: <SearchOutlinedIcon />, path: '/inquiries' },
     { menu: 'Flight Ops', icon: <FlightIcon />, path: '/flight-ops' },
     { menu: 'Fleet', icon: <BuildOutlinedIcon />, path: '/fleet' },
-    { menu: 'Crew', icon: <Groups2OutlinedIcon />, path: '/crew' },
+    { menu: 'Crew', icon: <Groups2OutlinedIcon />, path: '/crew-roster' },
   ]
 
   return (
@@ -42,6 +42,7 @@ export default function SeperateDrawer({
         variant="permanent"
         open={open}
         theme={theme}
+        sx={{ position: 'absolute' }}
       >
         <DrawerHeader />
          <List component='ul' className="List-menu-sidebar">
@@ -54,7 +55,7 @@ export default function SeperateDrawer({
                   slotProps={{
                     popper: {
                       sx: {
-                        boxShadow: '1px 0px 2px 0px rgba(0, 0, 0, 0.3)', opacity: open ? "0 !important" : 1,
+                        boxShadow: '1px 0px 2px 0px rgba(0, 0, 0, 0.3)', backgroundColor: '#ffffff', opacity: open ? "0 !important" : 1,
                         [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`] : { marginLeft: "0px" },
                         [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .MuiTooltip-tooltip`] :
                         { margin: "0px", backgroundColor: "#ffffff", color: "#000000", fontFamily: "poppins", fontSize: "13px", padding: "11px 18px 11px 0", borderRadius: "0 12px 12px 0", height: 40 },
@@ -64,7 +65,7 @@ export default function SeperateDrawer({
                 >
                   <ListItem
                     disablePadding
-                    sx={{ display: "block", color: '#202531' }}
+                    sx={{ display: "block", color: '#202531', '& a': {color: 'inherit', textDecoration: 'none'} }}
                   >
                     {
                       data.menu == 'Navination' ?
@@ -84,7 +85,7 @@ export default function SeperateDrawer({
                             />
                         </ListItemButton>
                       : 
-                        <Link href={data.path} style={{ color: 'inherit' }}>
+                        <Link href={data.path}>
                           <ListItemButton className={`menu-icon-btn ${ pathname == data.path ? "active" : "inactive" }`}
                             sx={{ minHeight: 40, height: 40, justifyContent: open ? "initial" : "center", px: "10.5px", mb: '8px' }}
                             disableRipple

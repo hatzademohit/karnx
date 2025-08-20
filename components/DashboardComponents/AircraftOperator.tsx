@@ -6,7 +6,7 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
-import { RecentInquiries, Next24Hours, Inquiries } from '@/components/DashboardComponents';
+import { RecentInquiries, Next24Hours } from '@/components/DashboardComponents';
 
 const AircraftOperator = () => {
     const [cardInfoData, setCardInfoData] = useState([
@@ -29,9 +29,6 @@ const AircraftOperator = () => {
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
                 <Next24Hours />
-            </Grid>
-            <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Inquiries />
             </Grid>
         </Grid>
     )

@@ -10,7 +10,7 @@ import SeperateDrawer from './SeperateDrawer';
 import { Theme } from '@mui/system';
 
 export const drawerWidth = 240;
-export const headerHeight = 128;
+export const headerHeight = 70;
 
 interface MainProps {
   theme: Theme;

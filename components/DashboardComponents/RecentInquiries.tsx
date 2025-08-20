@@ -43,7 +43,7 @@ const RecentInquiries = () => {
                             <Typography sx={{fontSize: '14px'}}>{item.headhing}</Typography>
                             <Typography sx={{fontSize: '10px', color: '#03045E'}}>{item.assign}</Typography>
                         </Box>
-                        <Button className="btn btn-status-rounded" variant="contained" sx={{backgroundColor: '#2563EB'}}>{item.status}</Button>
+                        <Button className={`btn btn-status-rounded ${item.status === 'QUOTE PENDING' && 'bg-yellow'}`} variant="contained">{item.status}</Button>
                     </Box>
                 ))}
             </Box>

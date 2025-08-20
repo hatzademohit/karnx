@@ -1,4 +1,5 @@
-import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
+'use client'
+import { Box, Button, Grid, IconButton, InputAdornment, Typography } from "@mui/material";
 import { CustomModal, CustomTextField } from "@/components";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -6,6 +7,7 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useState } from "react";
+import SearchIcon from '@mui/icons-material/Search';
 
 const Inquiries = () => {
 
@@ -17,8 +19,19 @@ const Inquiries = () => {
         <Box sx={{ padding: '24px 0 0 ', border: '1px solid #E6E6E6'  }}>
             <Box sx={{ padding: '0 24px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography component='h4' variant="h4">Assigned Inquiries</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <CustomTextField variant='outlined' size='small' placeholder="Search" />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <CustomTextField 
+                        variant='outlined' 
+                        size='small' 
+                        placeholder="Search"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
                     <IconButton>
                         <FilterAltOutlinedIcon />
                     </IconButton>
@@ -89,7 +102,7 @@ const Inquiries = () => {
         </Box>
 
         <CustomModal open={inqueryModal} setOpen={setInqueryModal} dataClose={() => setInqueryModal(false)} headerText="Inquiry Details - INQ-2024-001">
-            <Grid container>
+            <Grid container spacing={2}>
                 <Grid item lg={6} md={6} sm={12} xs={12}>
                     <Typography component='h4' variant="h4" sx={{mb: '12px'}}>Flight Details</Typography>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
@@ -117,15 +130,17 @@ const Inquiries = () => {
                     </Box>
                 </Grid>
                 <Grid item lg={12}>
-                    <Button variant="contained" className="btn btn-status bg-green" onClick={ () => setInqueryModal(false)}>
-                        <TaskAltIcon sx={{mr: '8px', fontSize: '14px'}} /> Accept Inquiry
-                    </Button>
-                    <Button variant="contained" className="btn btn-status bg-red" onClick={ () => setInqueryModal(false)}>
-                        <CancelOutlinedIcon sx={{mr: '8px', fontSize: '14px'}} /> Reject Inquiry
-                    </Button>
-                    <Button variant="outlined" className="btn btn-status" sx={{border: '1px solid #cccccc', color: '#333333'}} onClick={ () => setInqueryModal(false)}>
-                        Request More Info
-                    </Button>
+                   <Box sx={{display: 'flex', justifyContent: 'flex-end', alignItems: "center", gap: '10px'}} className='modal-footer'>
+                        <Button variant="contained" className="btn btn-status bg-green" onClick={ () => setInqueryModal(false)}>
+                            <TaskAltIcon sx={{mr: '8px', fontSize: '14px'}} /> Accept Inquiry
+                        </Button>
+                        <Button variant="contained" className="btn btn-status bg-red" onClick={ () => setInqueryModal(false)}>
+                            <CancelOutlinedIcon sx={{mr: '8px', fontSize: '14px'}} /> Reject Inquiry
+                        </Button>
+                        <Button variant="outlined" className="btn btn-status" sx={{border: '1px solid #cccccc', color: '#333333'}} onClick={ () => setInqueryModal(false)}>
+                            Request More Info
+                        </Button>
+                   </Box>
                 </Grid>
             </Grid>
         </CustomModal>

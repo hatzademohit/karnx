@@ -34,7 +34,7 @@ const pathname = usePathname()
       >
         <Toolbar className="toolbar" sx={{minHeight: `${headerHeight}px !important`}}>
           <Typography noWrap component="div" sx={{ display: 'flex', width: drawerWidth, margin: '-6px 0 -2px -25px', padding: '6px 0 3px 25px' }}>
-            <Image src={karnxLogo} alt='img-not-found' style={{ width: 'auto', height: '88px' }} />
+            <Image src={karnxLogo} alt='img-not-found' style={{ width: 'auto', height: '50px' }} />
           </Typography>
           <Typography
             noWrap

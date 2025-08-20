@@ -3,14 +3,11 @@ import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Box, Typography } from '@mui/material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 
@@ -42,6 +39,7 @@ const StyledMenu = styled((props: MenuProps) => (
       padding: '4px 0',
     },
     '& .MuiMenuItem-root': {
+      fontFamily: 'poppins-lt',
       '& .MuiSvgIcon-root': {
         fontSize: 18,
         color: theme.palette.text.secondary,
@@ -80,10 +78,6 @@ export default function MyAccount() {
     setAnchorEl(null);
     router.push('/updatepassword')
   }
-  // React.useEffect(() => {
-  //   const userData = localStorage.getItem('loggedInUser');
-  //   setUserData(userData);
-  // }, [user])
 
   return (
     <Box>
@@ -96,32 +90,28 @@ export default function MyAccount() {
         variant="contained"
         disableElevation
         onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}
         sx={{
           backgroundColor: 'transparent',
-          height: '38px',
+          height: '40px',
           padding: '4px 14px 4px 4px',
           borderRadius: '26px',
           gap: '14px',
-          color: '#ffffff',
           textTransform: 'capitalize',
-          fontFamily: 'kyn, sans-serif',
           width: 'fit-content',
           '&:hover': {
             backgroundColor: 'transparent',
           }
         }}
       >
-        <Typography component="span">
-          <AccountCircleIcon sx={{ fontSize: '25px', position: 'relative',top:'3px' }} />
+        <Typography component="span" sx={{ backgroundColor: '#F6F7FF', padding: '6px', borderRadius: '50%', width: '40px', height: '40px' }}>
+          <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: '#03045E' }} />
         </Typography>
         <Typography sx={{display: 'flex', flexDirection: 'column', textAlign: 'start'}}>
           <Typography component='span'
             sx={{
-              fontFamily: 'kyn-md, sans-serif',
-              fontSize: '14px',
+              color: '#333333'
             }}
-          >{ (user?.name) ? user.name : ''  }</Typography>
+          >{ (user?.name) ? user.name : 'Operator'  }</Typography>
         </Typography>
       </Button>
       <StyledMenu
@@ -133,26 +123,26 @@ export default function MyAccount() {
         open={open}
         onClose={handleClose}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: "6px 16px", gap: '15px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', padding: "6px 16px", gap: '15px' }}>
           <Typography component='span'>
-            <AccountCircleIcon sx={{ fontSize: '25px', position: 'relative',top:'3.5px' }} />
+            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative',top:'3.5px' }} />
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography component='h4' variant='h4' sx={{ fontFamily: 'kyn-md, sans-serif', fontSize: '18px' }}>
-              { (user?.name) ? user.name : ''  }
+            <Typography component='h5' variant='h5'>
+              { (user?.name) ? user.name : 'Operator'  }
             </Typography>
           </Box>
         </Box>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple sx={{ fontFamily: 'kyn, sans-serif' }}>
+        <MenuItem onClick={handleClose} disableRipple>
           <AccountCircleOutlinedIcon sx={{ fontSize: '25px !important' }} />
           My Company
         </MenuItem>
-        <MenuItem onClick={updatePass} disableRipple sx={{ fontFamily: 'kyn, sans-serif' }}>
+        <MenuItem onClick={updatePass} disableRipple>
           <LockResetIcon sx={{ fontSize: '25px !important' }} />
           Update Password
         </MenuItem>
-        <MenuItem onClick={logout} disableRipple sx={{ fontFamily: 'kyn, sans-serif' }}>
+        <MenuItem onClick={logout} disableRipple>
           <LoginOutlinedIcon sx={{ fontSize: '25px !important' }} />
           Logout
         </MenuItem>

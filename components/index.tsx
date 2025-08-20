@@ -12,5 +12,6 @@ import InfoCard from "./InfoCard/InfoCard";
 import MultiSelectCheckbox from "./SelectOption/MultiSelectCheckbox";
 import SingleSelectRadio from "./SelectOption/SingleSelectRadio";
 import ConfirmationModal from "./ConfirmationModal";
+import SimpleTable from "./TableComp/SimpleTable";
 
-export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal }
+export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable }
