@@ -3,14 +3,14 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { AppBar } from '../Sidebar/Sidebarheader';
 import Myaccount from './MyAccount';
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { drawerWidth } from '../Sidebar/Sidebarheader';
 import { headerHeight } from '../Sidebar/Sidebarheader';
 import karnxLogo from "@/public/imgs/karnx_logo.svg";
 import Image from "next/image";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import { Badge, Icon, IconButton } from '@mui/material';
+import { Badge, Icon, IconButton, Tooltip } from '@mui/material';
 
 interface SeperateAppBarProps {
   open: boolean;
@@ -22,6 +22,7 @@ const SeperateAppBar: FC<SeperateAppBarProps> = ({
 }) => {
 
 const pathname = usePathname()
+const router = useRouter()
   
   return (
     <>
@@ -47,9 +48,11 @@ const pathname = usePathname()
                 <NotificationsNoneIcon />
               </Badge>
             </IconButton>
-            <IconButton sx={{color: 'rgba(3, 4, 94, 1)'}}>
-              <SettingsOutlinedIcon />
-            </IconButton>
+            <Tooltip title="Configuration Setting" arrow placement='top'>
+              <IconButton onClick={ () => router.push('/configuration')} sx={{color: 'rgba(3, 4, 94, 1)'}}>
+                <SettingsOutlinedIcon />
+              </IconButton>
+            </Tooltip>
             <Myaccount />
           </Typography>
         </Toolbar>

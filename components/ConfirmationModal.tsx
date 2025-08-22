@@ -14,7 +14,7 @@ const ConfirmationModal = ({ open, dataAction, setOpen, heading="Are You Sure Yo
         aria-describedby="keep-mounted-modal-description"
       >
         <Box className='custom-modal' sx={{padding: '20px 20px 15px', maxWidth: "600px !important", backgroundColor: '#ffffff', position: 'absolute', inset: 0,margin: 'auto', height: 'fit-content', borderRadius: '4px', '& .btn': {maxWidth: '100px !important', height: '36px' }}}>
-          <Typography component='h1' sx={{fontFamily: 'kyn-md', fontSize: '24px', mb: '10px'}}>{heading}</Typography>
+          <Typography component='h4' variant='h4' sx={{mb: '20px'}}>{heading}</Typography>
           <Box 
             sx={{
                 display: 'flex',
@@ -23,8 +23,8 @@ const ConfirmationModal = ({ open, dataAction, setOpen, heading="Are You Sure Yo
                 gap: '10px'
             }}
           >
-            <Button variant='contained' className='btn black-btn' onClick={() => setOpen(false)}>Cancel</Button>
             <Button variant='contained' className='btn black-btn' onClick={dataAction}>Yes</Button>
+            <Button variant='contained' color='error' className='btn black-btn' onClick={() => setOpen(false)}>Cancel</Button>
           </Box>
         </Box>
       </Modal>

@@ -76,9 +76,13 @@ export default function MyAccount() {
 
   const updatePass = () => {
     setAnchorEl(null);
-    router.push('/updatepassword')
+    router.push('/profile/update-password')
   }
 
+  const myProfile = () => {
+    setAnchorEl(null);
+    router.push('/profile/my-profile');
+  }
   return (
     <Box>
       <Button
@@ -134,9 +138,9 @@ export default function MyAccount() {
           </Box>
         </Box>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={myProfile} disableRipple>
           <AccountCircleOutlinedIcon sx={{ fontSize: '25px !important' }} />
-          My Company
+          My Profile
         </MenuItem>
         <MenuItem onClick={updatePass} disableRipple>
           <LockResetIcon sx={{ fontSize: '25px !important' }} />

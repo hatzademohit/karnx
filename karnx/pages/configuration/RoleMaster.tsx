@@ -8,33 +8,28 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { apiBaseUrl } from '@/karnx/api';
 import { toast } from 'react-toastify';
 import { useAuth } from "@/app/context/AuthContext";
-const UserMaster = () => {
+const RoleMaster = () => {
   const [columns, setColumns] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
   const [addRow, setAddRow] = useState(false);
-  const [modalName, setModalName] = useState<boolean>(false)
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [roles, setRoles] = useState<any[]>([]); // roles from API
   // Pagination, Search, Sort states
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [rowCount, setRowCount] = useState(0);
   const [search, setSearch] = useState("");
   const [sortModel, setSortModel] = useState<any>([{ field: "name", sort: "asc" }]);
-  const [status, setStatus] = useState<any[]>([{id: 1, status: 'Active'}, {id: 2, status: 'Inactive'}]);
-
   const { user, setLoader } = useAuth();
   const clientId = user?.client_id;
   // Fetch Users
   const fetchUsers = async () => {
-  setLoader(true)
   try {
     const sortBy = sortModel[0]?.field || "id";
     const order = sortModel[0]?.sort || "asc";
 
     const res = await fetch(
-      `${apiBaseUrl}/user?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
+      `${apiBaseUrl}/role?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
       {
         method: "GET",
         headers: {
@@ -48,49 +43,25 @@ const UserMaster = () => {
 
     const withSrNo = json.data.map((user: any, index: number) => ({ 
       ...user,
-      srNo: page * pageSize + index + 1,
-      gender: user.gender.charAt(0).toUpperCase() + user.gender.slice(1),      
-      status: user.is_active == 1 ? "Active" : "Inactive",
+      srNo: page * pageSize + index + 1,     
+      status: user.is_active == 1 ? "Active" : "Inactive",      
     }));
 
     setData(withSrNo);
     setRowCount(json.total); // from Laravel pagination response
-    setLoader(false)
   } catch (error) {
-    setLoader(false)
     console.error("Error fetching users:", error);
   }
 };
 
-// Fetch roles from API
-  useEffect(() => {
-    const fetchRoles = async () => {
-      setLoader(true)
-      try {
-        const res = await fetch(`${apiBaseUrl}/role?client_id=${clientId}`, {
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` }
-        });
-        const data = await res.json();
-        setRoles(data.data); // assuming API returns array like [{id:1, name:"Admin"}, ...]
-        setLoader(false)
-      } catch (err) {
-        console.error("Error fetching roles:", err);
-        setLoader(false)
-      }
-    };
-    fetchRoles();
-  }, []);
-  
+
   useEffect(() => {
     setColumns([
       { headerName: 'Sr.No', field: 'srNo', width: 90 },
       { headerName: 'Name', field: 'name', flex: 1 },
-      { headerName: 'Email', field: 'email', flex: 1 },
-      { headerName: 'Contact No.', field: 'phone', flex: 1 },
-      { headerName: 'DOB', field: 'dob', flex: 1 },
-      { headerName: 'Gender', field: 'gender', flex: 1 },
+      { headerName: 'Guard Name', field: 'guard_name', flex: 1 },
+      { headerName: 'Description', field: 'description', flex: 1 },
       { headerName: 'Client', field: 'client_name', flex: 1 },
-      { headerName: 'Role', field: 'role', flex: 1 },
       { headerName: 'Status', field: 'status', flex: 1 },
       {
         field: 'action',
@@ -99,14 +70,14 @@ const UserMaster = () => {
         sortable: false,
         renderCell: (params: any) => (
           <>
-            <Tooltip title='Edit User' arrow placement="top">
+            <Tooltip title='Edit User'>
               <IconButton size="small" onClick={() => editRow(params.row)}>
-                <EditOutlinedIcon sx={{ color: '#03045E', fontSize: '20px' }} />
+                <EditOutlinedIcon sx={{ color: '#848484', fontSize: '20px' }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title='Delete User' arrow placement="top">
+            <Tooltip title='Delete User'>
               <IconButton size="small" onClick={() => deleteRow(params.row)}>
-                <DeleteOutlineOutlinedIcon sx={{ color: '#BC0019', fontSize: '20px' }} />
+                <DeleteOutlineOutlinedIcon sx={{ color: '#848484', fontSize: '20px' }} />
               </IconButton>
             </Tooltip>
           </>
@@ -122,7 +93,6 @@ const UserMaster = () => {
   // CRUD Functions
   const editRow = (user: any) => {
     setSelectedUser(user);
-    setModalName(true)
     setAddRow(true);
   };
 
@@ -134,8 +104,8 @@ const UserMaster = () => {
   const handleSaveUser = async () => {
     const method = selectedUser ? "PUT" : "POST";
     const url = selectedUser
-      ? `${apiBaseUrl}/user/${selectedUser.id}`
-      : `${apiBaseUrl}/user`;
+      ? `${apiBaseUrl}/role/${selectedUser.id}`
+      : `${apiBaseUrl}/role`;
 
     const res = await fetch(url, {
       method,
@@ -153,9 +123,8 @@ const UserMaster = () => {
   };
 
   const handleDeleteUser = async () => {
-    setLoader(true)
     try {
-      const res = await fetch(`${apiBaseUrl}/user/${selectedUser.id}`, {
+      const res = await fetch(`${apiBaseUrl}/role/${selectedUser.id}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -172,11 +141,9 @@ const UserMaster = () => {
         const errorData = await res.json();
         toast.error(errorData.message || "Failed to delete user"); // ❌ error toast
       }
-      setLoader(false)
     } catch (err) {
       console.error("Error deleting user:", err);
       toast.error("Something went wrong! Please try again later.");
-      setLoader(false)
     }
 
     
@@ -184,7 +151,7 @@ const UserMaster = () => {
 
   return (
     <Box>
-      <Typography component='h1' variant="h1" sx={{ color: '#03045E', mb: '24px' }}>User Master</Typography>
+      <Typography component='h1' variant="h1">Role Master</Typography>
 
       <MUIDataGrid
         gridColumns={columns}
@@ -194,11 +161,11 @@ const UserMaster = () => {
         rowCount={rowCount}
         page={page}
         pageSize={pageSize}
-        // onPageChange={(newPage) => setPage(newPage)}
+        onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newSize) => setPageSize(newSize)}
         onSortModelChange={(model) => setSortModel(model)}
-        buttonText='Add User'
-        onClick={() => { setSelectedUser(null); setAddRow(true); setModalName(false) }}
+        buttonText='Add Role'
+        onClick={() => { setSelectedUser(null); setAddRow(true); }}
       />
 
       {/* Add / Edit Modal */}
@@ -206,7 +173,7 @@ const UserMaster = () => {
         open={addRow}
         setOpen={setAddRow}
         dataClose={() => setAddRow(false)}
-        headerText={modalName ? "Edit User" : "Add User"}
+        headerText={selectedUser ? "Edit Role" : "Add Role"}
       >
         <Grid container spacing={2}>
           <Grid item lg={6}>
@@ -217,38 +184,7 @@ const UserMaster = () => {
               onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
             />
           </Grid>
-          <Grid item lg={6}>
-            <SingleSelect   // gives value and onChange from react-hook-form
-                inputLabel="Role"
-                size="small"
-                name="role"
-                value={selectedUser?.role || ""}
-                onChange={(e) => setSelectedUser({ ...selectedUser, role: e.target.value })}
-              >
-              {roles.map((role) => (
-                <MenuItem key={role.id} value={role.id}>
-                  {role.name}
-                </MenuItem>
-              ))}
-            </SingleSelect>
-          </Grid>
-          { modalName &&  
-            <Grid item lg={6}>
-              <SingleSelect
-                  inputLabel="Status"
-                  size="small"
-                  name="status"
-                  value={selectedUser?.status || ""}
-                  onChange={(e) => setSelectedUser({ ...selectedUser, status: e.target.value })}
-                >
-                {status.map((status) => (
-                  <MenuItem key={status.id} value={status.id}>
-                    {status.status}
-                  </MenuItem>
-                ))}
-              </SingleSelect>
-            </Grid>
-          }
+          
           {/* more fields */}
           <Grid item lg={12}>
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
@@ -273,4 +209,4 @@ const UserMaster = () => {
   );
 };
 
-export default UserMaster;
+export default RoleMaster;

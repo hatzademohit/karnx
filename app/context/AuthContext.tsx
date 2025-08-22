@@ -11,7 +11,7 @@ interface User {
   userId: number;
   name: string;
   email: string;
-  company_id?: number;
+  client_id?: number;
 }
 
 interface AuthContextType {
@@ -67,8 +67,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       router.push("/");
       return;
     }
+    // if (storedUser) {
+    //   setLogUser(JSON.parse(storedUser));
+    // }
     if (storedUser) {
-      setLogUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setLogUser(parsedUser);
+      } catch (error) {
+        console.error("Invalid JSON in localStorage.user", error);
+        localStorage.removeItem("user"); // cleanup bad value
+      }
     }
     if (!storedLoginTime) return;
     // Parse stored login time (HH:mm)

@@ -1,8 +1,11 @@
 import ResetPassword from "@/karnx/pages/ResetPassword";
+import { Suspense } from "react";
 
 const page = () => {
     return(
-        <ResetPassword/>
+        <Suspense>
+            <ResetPassword/>
+        </Suspense>
     )
 }
 

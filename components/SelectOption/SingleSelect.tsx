@@ -2,7 +2,7 @@ import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { FormHelperText } from '@mui/material';
+import { Box, FormHelperText, MenuItem } from '@mui/material';
 
 export interface SelectProps {
     variant?: any;
@@ -16,10 +16,11 @@ export interface SelectProps {
     style?: any;
     required?: boolean;
     error?: boolean;
+    inputLabel?: string;
 }
 
 const SingleSelect: React.FC<SelectProps> = ({
-    variant,
+    variant= 'outlined',
     label, 
     children,
     name,
@@ -29,22 +30,20 @@ const SingleSelect: React.FC<SelectProps> = ({
     onChange,
     style,
     required,
-    error
+    error,
+    inputLabel
 }) => {
 
   return (
-        <FormControl required={required} variant={variant ? variant : 'filled'} fullWidth size={size} 
-            sx={{
-                ...(size === 'small' ? { height: '49px' } : ''),
-                ...(helperText?.length >= 0 ? {height: '60px'} : '')
-            }}
-        >
-            <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+    <>
+        
+        { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel}</InputLabel> }
+        <FormControl fullWidth size={size} variant={variant}>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={value}
-                label="Age"
+                label={label}
                 name={name}
                 onChange={onChange}
                 displayEmpty
@@ -58,10 +57,13 @@ const SingleSelect: React.FC<SelectProps> = ({
                     },
                 }}
             >
+                <MenuItem value="" disabled> {`Select ${inputLabel}`}</MenuItem>
                 {children}
             </Select>
             <FormHelperText> { helperText } </FormHelperText>
         </FormControl>
+        
+    </>
   );
 }
 

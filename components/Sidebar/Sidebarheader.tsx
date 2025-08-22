@@ -11,6 +11,7 @@ import { Theme } from '@mui/system';
 
 export const drawerWidth = 240;
 export const headerHeight = 70;
+const closeDrawerWidth = 48;
 
 interface MainProps {
   theme: Theme;
@@ -26,7 +27,6 @@ export const Main = styled('main', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  // marginLeft: `${drawerWidth}px`,
   width: 'calc(100% - 65px)',
   ...(open && {
     transition: theme.transitions.create('margin', {
@@ -36,7 +36,7 @@ export const Main = styled('main', {
     width: 'calc(100% - 200px)',
   }),
   overflow: 'hidden',
-  margin: `${headerHeight}px 0 0`,
+  margin: `${headerHeight}px 0 0 ${closeDrawerWidth}px`,
 }));
 
 const openedMixin = (theme: any) => ({
@@ -55,10 +55,10 @@ const closedMixin = (theme: any) => ({
   }),
   overflowX: 'hidden' as const, // Explicitly type the overflowX property
   // width: `calc(${theme.spacing(7)} + 1px)`,
-  width: `48px`,
+  width: `${closeDrawerWidth}px`,
   [theme.breakpoints.up('sm')]: {
     // width: `calc(${theme.spacing(8)} + 1px)`,
-  width: `48px`,
+  width: `${closeDrawerWidth}px`,
   },
 });
 

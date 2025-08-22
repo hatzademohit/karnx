@@ -17,6 +17,12 @@ export interface MUIDataGridProps{
   fileHeading?: string;
   rowHeight?: number;
   getRowClassName?: any;
+  sortingMode?: any;
+  rowCount?: any;
+  page?: any;
+  pageSize?: any;
+  onPageSizeChange?: any;
+  onSortModelChange?: any;
 }
 
 const MUIDataGrid:React.FC<MUIDataGridProps> = ({
@@ -30,7 +36,13 @@ const MUIDataGrid:React.FC<MUIDataGridProps> = ({
   fileName,
   fileHeading,
   rowHeight= 43,
-  getRowClassName
+  getRowClassName,
+  sortingMode,
+  rowCount,
+  page = 0,
+  pageSize = 10,
+  onPageSizeChange,
+  onSortModelChange,
 }) => {
 const [searchText, setSearchText] = useState("");
 
@@ -53,7 +65,7 @@ const handleExportExcel = () => {
   return(
     <Box className='page-wrapper' sx={{width: '100%'}}>
       <Box sx={{ display: 'flex', mb: '5px', justifyContent: 'space-between', alignContent: 'center', gap: '10px' }}>
-        { buttonText && <Button variant="outlined" className="btn btn-sm btn-sm-outlined" disableElevation onClick={onClick}>{buttonText}</Button> }
+        { buttonText && <Button variant="outlined" className="btn btn-blue" disableElevation onClick={onClick}>{buttonText}</Button> }
         {selectFilter}
         {exportButtton &&
           <Button
@@ -98,13 +110,17 @@ const handleExportExcel = () => {
         columns={gridColumns}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
+            paginationModel: { page: page, pageSize: pageSize },
           },
         }}  
         pageSizeOptions={[10, 20, 25, 50, 100]}
         disableColumnMenu
         rowHeight={rowHeight}
         getRowClassName={getRowClassName}
+        sortingMode={sortingMode}
+        rowCount={rowCount}
+        onPaginationModelChange={onPageSizeChange}
+        onSortModelChange={onSortModelChange}
       />
     </Box>
   )

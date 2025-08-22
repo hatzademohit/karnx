@@ -39,6 +39,17 @@ export const karnxTheme = createTheme({
                 }
             }
         },
+        MuiCssBaseline: {
+            styleOverrides: {
+                // ".MuiDataGrid-columnHeaders": {
+                //     fontFamily: "Verdana, sans-serif",
+                //     fontWeight: 600,
+                // },
+                ".MuiDataGrid-cell": {
+                    fontFamily: "poppins-lt, sans-serif",
+                },
+            },
+        },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
