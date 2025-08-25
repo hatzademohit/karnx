@@ -10,7 +10,8 @@ import LockResetIcon from '@mui/icons-material/LockReset';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
-
+import Image from 'next/image';
+import { fileStorageUrl } from "@/karnx/api";
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
     elevation={0}
@@ -107,9 +108,12 @@ export default function MyAccount() {
           }
         }}
       >
-        <Typography component="span" sx={{ backgroundColor: '#F6F7FF', padding: '6px', borderRadius: '50%', width: '40px', height: '40px' }}>
-          <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: '#03045E' }} />
-        </Typography>
+        {
+          user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{ borderRadius: '50%', objectFit: 'cover' }} /> : 
+          <Typography component="span" sx={{ backgroundColor: '#F6F7FF', padding: '6px', borderRadius: '50%', width: '40px', height: '40px' }}>
+            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: '#03045E' }} />
+          </Typography>
+        }
         <Typography sx={{display: 'flex', flexDirection: 'column', textAlign: 'start'}}>
           <Typography component='span'
             sx={{
@@ -128,9 +132,12 @@ export default function MyAccount() {
         onClose={handleClose}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', padding: "6px 16px", gap: '15px' }}>
-          <Typography component='span'>
-            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative',top:'3.5px' }} />
+          {
+          user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{borderRadius: '50%', objectFit: 'cover' }} /> : 
+          <Typography component="span">
+            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: '#03045E' }} />
           </Typography>
+        }
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography component='h5' variant='h5'>
               { (user?.name) ? user.name : 'Operator'  }

@@ -15,6 +15,7 @@ const UserMaster = () => {
   const [modalName, setModalName] = useState<boolean>(false)
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [clients, setClient] = useState<any[]>([]);
   const [roles, setRoles] = useState<any[]>([]); // roles from API
   // Pagination, Search, Sort states
   const [page, setPage] = useState(0);
@@ -32,7 +33,7 @@ const UserMaster = () => {
   try {
     const sortBy = sortModel[0]?.field || "id";
     const order = sortModel[0]?.sort || "asc";
-
+    const limit = pageSize;
     const res = await fetch(
       `${apiBaseUrl}/user?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
       {
@@ -46,7 +47,7 @@ const UserMaster = () => {
 
     const json = await res.json();
 
-    const withSrNo = json.data.map((user: any, index: number) => ({ 
+    const withSrNo = json.data.data.map((user: any, index: number) => ({ 
       ...user,
       srNo: page * pageSize + index + 1,
       gender: user.gender.charAt(0).toUpperCase() + user.gender.slice(1),      
@@ -55,6 +56,7 @@ const UserMaster = () => {
 
     setData(withSrNo);
     setRowCount(json.total); // from Laravel pagination response
+    //toast.success(json.message);
     setLoader(false)
   } catch (error) {
     setLoader(false)
@@ -79,6 +81,22 @@ const UserMaster = () => {
       }
     };
     fetchRoles();
+
+    const fetchClients = async () => {
+      setLoader(true)
+      try {
+        const res = await fetch(`${apiBaseUrl}/clients?client_id=${clientId}`, {
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.token}` }
+        });
+        const data = await res.json();
+        setClient(data.data); // assuming API returns array like [{id:1, name:"Admin"}, ...]
+        setLoader(false)
+      } catch (err) {
+        console.error("Error fetching roles:", err);
+        setLoader(false)
+      }
+    };
+    fetchClients();
   }, []);
   
   useEffect(() => {
@@ -148,7 +166,12 @@ const UserMaster = () => {
 
     if (res.ok) {
       fetchUsers();
+      const msg = await res.json();
+      toast.success(msg.message);
       setAddRow(false);
+    }else{
+      const errorData = await res.json();
+      toast.error(errorData.message || "Something went wrong! Please try again later.");
     }
   };
 
@@ -181,7 +204,6 @@ const UserMaster = () => {
 
     
   };
-
   return (
     <Box>
       <Typography component='h1' variant="h1" sx={{ color: '#03045E', mb: '24px' }}>User Master</Typography>
@@ -215,6 +237,7 @@ const UserMaster = () => {
               placeholder="Enter Email"
               value={selectedUser?.email || ""}
               onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
+              InputProps={{ readOnly: modalName }}
             />
           </Grid>
           <Grid item lg={6}>
@@ -222,7 +245,7 @@ const UserMaster = () => {
                 inputLabel="Role"
                 size="small"
                 name="role"
-                value={selectedUser?.role || ""}
+                value={selectedUser?.role_id || ""}
                 onChange={(e) => setSelectedUser({ ...selectedUser, role: e.target.value })}
               >
               {roles.map((role) => (
@@ -238,8 +261,8 @@ const UserMaster = () => {
                   inputLabel="Status"
                   size="small"
                   name="status"
-                  value={selectedUser?.status || ""}
-                  onChange={(e) => setSelectedUser({ ...selectedUser, status: e.target.value })}
+                  value={selectedUser?.is_active || ""}
+                  onChange={(e) => setSelectedUser({ ...selectedUser, is_active: e.target.value })}
                 >
                 {status.map((status) => (
                   <MenuItem key={status.id} value={status.id}>
@@ -248,6 +271,23 @@ const UserMaster = () => {
                 ))}
               </SingleSelect>
             </Grid>
+          }
+          {user?.client_id == 1 && !modalName &&
+          <Grid item lg={6}>
+            <SingleSelect
+                inputLabel="Client Name"
+                size="small"
+                name="client_id"
+                value={selectedUser?.client_id || ""}
+                //onChange={(e) => setClient({ ...selectedUser, client_id: e.target.value })}
+              >
+              {clients.map((client) => (
+                <MenuItem key={client.id} value={client.id}>
+                  {client.name}
+                </MenuItem>
+              ))}
+            </SingleSelect>
+          </Grid>
           }
           {/* more fields */}
           <Grid item lg={12}>

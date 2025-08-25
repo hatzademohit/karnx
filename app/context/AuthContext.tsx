@@ -12,6 +12,7 @@ interface User {
   name: string;
   email: string;
   client_id?: number;
+  avatar?: any;
 }
 
 interface AuthContextType {

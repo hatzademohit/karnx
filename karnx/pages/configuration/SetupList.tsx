@@ -16,10 +16,10 @@ const SetupList = () => {
                 { pageName: 'User Master', pathName: '/configuration/user-master' },
                 { pageName: 'Role Master', pathName: '/configuration/role-master' },
                 { pageName: 'Permission Master', pathName: '/configuration/permission-master' },
-                { pageName: 'Role & User Has Permission', pathName: '/configuration/' },
+                { pageName: 'Role & User Has Permission', pathName: '/configuration/role-user-permission' },
             ],
-            clinet: [
-                { pageName: 'Client Master', pathName: '/dashboard' },
+            client: [
+                { pageName: 'Client Master', pathName: '/configuration/client-master' },
             ]
         };
     return(
@@ -30,14 +30,9 @@ const SetupList = () => {
                         <PageInfoBox Icon={<SettingsIcon />} Heading='Manage Auth Setup' listData={items.user_role_per} />
                     </Grid>
                     <Grid item lg={4}>
-                        <PageInfoBox Icon={<SettingsIcon />} Heading='Client Setup' listData={items.clinet} />
+                        <PageInfoBox Icon={<SettingsIcon />} Heading='Client Setup' listData={items.client} />
                     </Grid>
-                    <Grid item lg={4}>
-                        <PageInfoBox Icon={<SettingsIcon />} Heading='Heading' listData={items.user_role_per} />
-                    </Grid>
-                    <Grid item lg={4}>
-                        <PageInfoBox Icon={<SettingsIcon />} Heading='Heading' listData={items.user_role_per} />
-                    </Grid>
+                    
                 </Grid>
         </Box>
     )

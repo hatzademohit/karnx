@@ -12,8 +12,9 @@ const RoleMaster = () => {
   const [columns, setColumns] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
   const [addRow, setAddRow] = useState(false);
+  const [modalName, setModalName] = useState<boolean>(false)
   const [deleteModal, setDeleteModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [roles, setRecords] = useState<any[]>([]);
   // Pagination, Search, Sort states
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -21,9 +22,11 @@ const RoleMaster = () => {
   const [search, setSearch] = useState("");
   const [sortModel, setSortModel] = useState<any>([{ field: "name", sort: "asc" }]);
   const { user, setLoader } = useAuth();
+  const [clients, setClient] = useState<any[]>([]);
   const clientId = user?.client_id;
   // Fetch Users
-  const fetchUsers = async () => {
+  const fetchRecords = async () => {
+    setLoader(true)
   try {
     const sortBy = sortModel[0]?.field || "id";
     const order = sortModel[0]?.sort || "asc";
@@ -41,16 +44,18 @@ const RoleMaster = () => {
 
     const json = await res.json();
 
-    const withSrNo = json.data.map((user: any, index: number) => ({ 
-      ...user,
+    const withSrNo = json.data.map((role: any, index: number) => ({ 
+      ...role,
       srNo: page * pageSize + index + 1,     
-      status: user.is_active == 1 ? "Active" : "Inactive",      
+      status: role.is_active == 1 ? "Active" : "Inactive",      
     }));
 
     setData(withSrNo);
     setRowCount(json.total); // from Laravel pagination response
+    setLoader(false)
   } catch (error) {
     console.error("Error fetching users:", error);
+    setLoader(false)
   }
 };
 
@@ -60,7 +65,7 @@ const RoleMaster = () => {
       { headerName: 'Sr.No', field: 'srNo', width: 90 },
       { headerName: 'Name', field: 'name', flex: 1 },
       { headerName: 'Guard Name', field: 'guard_name', flex: 1 },
-      { headerName: 'Description', field: 'description', flex: 1 },
+      //{ headerName: 'Description', field: 'description', flex: 1 },
       { headerName: 'Client', field: 'client_name', flex: 1 },
       { headerName: 'Status', field: 'status', flex: 1 },
       {
@@ -87,54 +92,75 @@ const RoleMaster = () => {
   }, []);
 
   useEffect(() => {
-    fetchUsers();
+    fetchRecords();
+    const fetchClients = async () => {
+      setLoader(true)
+      try {
+        const res = await fetch(`${apiBaseUrl}/clients?client_id=${clientId}`, {
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.token}` }
+        });
+        const data = await res.json();
+        setClient(data.data); // assuming API returns array like [{id:1, name:"Admin"}, ...]
+        setLoader(false)
+      } catch (err) {
+        console.error("Error fetching roles:", err);
+        setLoader(false)
+      }
+    };
+    fetchClients();
   }, [page, pageSize, search, sortModel]);
 
   // CRUD Functions
-  const editRow = (user: any) => {
-    setSelectedUser(user);
+  const editRow = (roles: any) => {
+    setRecords(roles);
     setAddRow(true);
+    setModalName(true)
   };
 
-  const deleteRow = (user: any) => {
-    setSelectedUser(user);
+  const deleteRow = (roles: any) => {
+    setRecords(roles);
     setDeleteModal(true);
   };
 
   const handleSaveUser = async () => {
-    const method = selectedUser ? "PUT" : "POST";
-    const url = selectedUser
-      ? `${apiBaseUrl}/role/${selectedUser.id}`
+    const method = roles?.id ? "PUT" : "POST";
+    const url = roles?.id
+      ? `${apiBaseUrl}/role/${roles?.id}`
       : `${apiBaseUrl}/role`;
 
     const res = await fetch(url, {
       method,
       headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
+          Authorization: `Bearer ${localStorage.token}`, // 👈 your login token
         },
-      body: JSON.stringify(selectedUser),
+      body: JSON.stringify(roles),
     });
 
     if (res.ok) {
-      fetchUsers();
+      fetchRecords();
       setAddRow(false);
+      const data = await res.json();
+      toast.success(data.message || "Record updated successfully");
+    }else{
+      const errorData = await res.json();
+      toast.error(errorData.message || "Something went wrong! Please try again later.");
     }
   };
 
-  const handleDeleteUser = async () => {
+  const handleDeleteRecord = async () => {
     try {
-      const res = await fetch(`${apiBaseUrl}/role/${selectedUser.id}`, {
+      const res = await fetch(`${apiBaseUrl}/role/${roles.id}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
+            Authorization: `Bearer ${localStorage.token}`, // 👈 your login token
           },
       });
       if (res.ok) {
           const data = await res.json();
           toast.success(data.message || "Record deleted successfully");
-          fetchUsers();
+          fetchRecords();
           setDeleteModal(false);
           
       } else {
@@ -165,7 +191,7 @@ const RoleMaster = () => {
         onPageSizeChange={(newSize) => setPageSize(newSize)}
         onSortModelChange={(model) => setSortModel(model)}
         buttonText='Add Role'
-        onClick={() => { setSelectedUser(null); setAddRow(true); }}
+        onClick={() => { setRecords(null); setAddRow(true); setModalName(false) }}
       />
 
       {/* Add / Edit Modal */}
@@ -173,18 +199,35 @@ const RoleMaster = () => {
         open={addRow}
         setOpen={setAddRow}
         dataClose={() => setAddRow(false)}
-        headerText={selectedUser ? "Edit Role" : "Add Role"}
+        // headerText={roles ? "Edit Role" : "Add Role"}
+        headerText={modalName ? "Edit Role" : "Add Role"}
       >
         <Grid container spacing={2}>
           <Grid item lg={6}>
             <CustomTextField
-              inputLabel="Email"
-              placeholder="Enter Email"
-              value={selectedUser?.email || ""}
-              onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
+              inputLabel="Role Name"
+              placeholder="Enter Role Name"
+              value={roles?.name || ""}
+              onChange={(e) => setRecords({ ...roles, name: e.target.value })}
             />
           </Grid>
-          
+          {user?.client_id == 1 && !modalName &&
+          <Grid item lg={6}>
+            <SingleSelect
+                inputLabel="Client Name"
+                size="small"
+                name="client_id"
+                value={roles?.client_id || ""}
+                onChange={(e) => setRecords({ ...roles, client_id: e.target.value })}
+              >
+              {clients && clients?.map((client) => (
+                <MenuItem key={client.id} value={client.id}>
+                  {client.name}
+                </MenuItem>
+              ))}
+            </SingleSelect>
+          </Grid>
+          }
           {/* more fields */}
           <Grid item lg={12}>
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
@@ -203,7 +246,7 @@ const RoleMaster = () => {
       <ConfirmationModal
         setOpen={setDeleteModal}
         open={deleteModal}
-        dataAction={handleDeleteUser}
+        dataAction={handleDeleteRecord}
       />
     </Box>
   );

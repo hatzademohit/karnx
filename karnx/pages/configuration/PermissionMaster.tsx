@@ -1,19 +1,29 @@
 "use client";
 
-import { Box, Button, Grid, IconButton, MenuItem, Tooltip, Typography } from "@mui/material";
-import { ConfirmationModal, CustomModal, CustomTextField, MUIDataGrid, SingleSelect } from "@/components";
+import { Box, Button, Grid, IconButton, Tooltip, Typography } from "@mui/material";
+import { ConfirmationModal, CustomModal, CustomTextField, MUIDataGrid } from "@/components";
 import { useEffect, useState } from "react";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { apiBaseUrl } from '@/karnx/api';
-import { toast } from 'react-toastify';
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
 import { useAuth } from "@/app/context/AuthContext";
+
+interface Permission {
+  id?: number;
+  name?: string;
+  slug?: string;
+  guard_name?: string;
+  srNo?: number;
+}
+
 const PermissionMaster = () => {
   const [columns, setColumns] = useState<any[]>([]);
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Permission[]>([]);
   const [addRow, setAddRow] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [selectedpermission, setSelectedpermission] = useState<any>(null);
+  const [selectedPermission, setSelectedPermission] = useState<Permission>({});
+
   // Pagination, Search, Sort states
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -21,60 +31,62 @@ const PermissionMaster = () => {
   const [search, setSearch] = useState("");
   const [sortModel, setSortModel] = useState<any>([{ field: "name", sort: "asc" }]);
 
-    const { permission, setLoader } = useAuth();
-    const clientId = permission?.client_id;
-  // Fetch permissions
-  const fetchpermissions = async () => {
-  try {
-    const sortBy = sortModel[0]?.field || "id";
-    const order = sortModel[0]?.sort || "asc";
+  const { user, setLoader } = useAuth();
+  const clientId = user?.client_id;
 
-    const res = await fetch(
-      `${apiBaseUrl}/permission?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
-        },
-      }
-    );
+  // Fetch Permissions
+  const fetchPermissions = async () => {
+    setLoader(true);
+    try {
+      const sortBy = sortModel[0]?.field || "id";
+      const order = sortModel[0]?.sort || "asc";
 
-    const json = await res.json();
+      const res = await fetch(
+        `${apiBaseUrl}/permission?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
-    const withSrNo = json.data.map((permission: any, index: number) => ({ 
-      ...permission,
-      srNo: page * pageSize + index + 1      
-    }));
+      const json = await res.json();
 
-    setData(withSrNo);
-    setRowCount(json.total); // from Laravel pagination response
-  } catch (error) {
-    console.error("Error fetching permissions:", error);
-  }
-};
-
+      const withSrNo = json.data.map((perm: Permission, index: number) => ({
+        ...perm,
+        srNo: page * pageSize + index + 1,
+      }));
+      setData(withSrNo);
+      setRowCount(json.total);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error fetching permissions:", error);
+      setLoader(false);
+    }
+  };
 
   useEffect(() => {
     setColumns([
-      { headerName: 'Sr.No', field: 'srNo', width: 90 },
-      { headerName: 'Name', field: 'name', flex: 1 },
-      { headerName: 'Guard Name', field: 'guard_name', flex: 1 },
+      { headerName: "Sr.No", field: "srNo", width: 90 },
+      { headerName: "Name", field: "name", flex: 1 },
+      { headerName: "Guard Name", field: "guard_name", flex: 1 },
       {
-        field: 'action',
-        headerName: 'Action',
+        field: "action",
+        headerName: "Action",
         flex: 1,
         sortable: false,
         renderCell: (params: any) => (
           <>
-            <Tooltip title='Edit Permission'>
+            <Tooltip title="Edit Permission">
               <IconButton size="small" onClick={() => editRow(params.row)}>
-                <EditOutlinedIcon sx={{ color: '#848484', fontSize: '20px' }} />
+                <EditOutlinedIcon sx={{ color: "#848484", fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title='Delete Permission'>
+            <Tooltip title="Delete Permission">
               <IconButton size="small" onClick={() => deleteRow(params.row)}>
-                <DeleteOutlineOutlinedIcon sx={{ color: '#848484', fontSize: '20px' }} />
+                <DeleteOutlineOutlinedIcon sx={{ color: "#848484", fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
           </>
@@ -84,76 +96,79 @@ const PermissionMaster = () => {
   }, []);
 
   useEffect(() => {
-    fetchpermissions();
+    fetchPermissions();
   }, [page, pageSize, search, sortModel]);
 
-  // CRUD Functions
-  const editRow = (permission: any) => {
-    setSelectedpermission(permission);
+  // CRUD
+  const editRow = (perm: Permission) => {
+    setSelectedPermission(perm);
     setAddRow(true);
   };
 
-  const deleteRow = (permission: any) => {
-    setSelectedpermission(permission);
+  const deleteRow = (perm: Permission) => {
+    setSelectedPermission(perm);
     setDeleteModal(true);
   };
 
-  const handleSavepermission = async () => {
-    const method = selectedpermission ? "PUT" : "POST";
-    const url = selectedpermission
-      ? `${apiBaseUrl}/permission/${selectedpermission.id}`
+  const handleSavePermission = async () => {
+    const method = selectedPermission?.id ? "PUT" : "POST";
+    const url = selectedPermission?.id
+      ? `${apiBaseUrl}/permission/${selectedPermission.id}`
       : `${apiBaseUrl}/permission`;
 
     const res = await fetch(url, {
       method,
       headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
-        },
-      body: JSON.stringify(selectedpermission),
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        ...selectedPermission,
+        guard_name: "api", // always api
+        client_id: clientId,
+      }),
     });
 
     if (res.ok) {
-      fetchpermissions();
+      fetchPermissions();
       setAddRow(false);
     }
   };
 
-  const handleDeletepermission = async () => {
+  const handleDeletePermission = async () => {
     try {
-      const res = await fetch(`${apiBaseUrl}/permission/${selectedpermission.id}`, {
+      const res = await fetch(`${apiBaseUrl}/permission/${selectedPermission.id}`, {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
-          },
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       if (res.ok) {
-          const data = await res.json();
-          toast.success(data.message || "Record deleted successfully");
-          fetchpermissions();
-          setDeleteModal(false);
-          
+        const data = await res.json();
+        toast.success(data.message || "Record deleted successfully");
+        fetchPermissions();
+        setDeleteModal(false);
       } else {
         const errorData = await res.json();
-        toast.error(errorData.message || "Failed to delete permission"); // ❌ error toast
+        toast.error(errorData.message || "Failed to delete permission");
       }
     } catch (err) {
       console.error("Error deleting permission:", err);
       toast.error("Something went wrong! Please try again later.");
     }
-
-    
   };
 
   return (
     <Box>
-      <Typography component='h1' variant="h1">Permission Master</Typography>
+      <Typography component="h1" variant="h1">
+        Permission Master
+      </Typography>
 
       <MUIDataGrid
         gridColumns={columns}
         gridRows={data}
-       // paginationMode="server"
+        paginationMode="server"
         sortingMode="server"
         rowCount={rowCount}
         page={page}
@@ -161,8 +176,11 @@ const PermissionMaster = () => {
         onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newSize) => setPageSize(newSize)}
         onSortModelChange={(model) => setSortModel(model)}
-        buttonText='Add Permission'
-        onClick={() => { setSelectedpermission(null); setAddRow(true); }}
+        buttonText="Add Permission"
+        onClick={() => {
+          setSelectedPermission({});
+          setAddRow(true);
+        }}
       />
 
       {/* Add / Edit Modal */}
@@ -170,36 +188,38 @@ const PermissionMaster = () => {
         open={addRow}
         setOpen={setAddRow}
         dataClose={() => setAddRow(false)}
-        headerText={selectedpermission ? "Edit Permission" : "Add Permission"}
+        headerText={selectedPermission?.id ? "Edit Permission" : "Add Permission"}
       >
         <Grid container spacing={2}>
           <Grid item lg={6}>
             <CustomTextField
               inputLabel="Permission Name"
               placeholder="Enter Permission Name"
-              value={selectedpermission?.name || ""}
-              onChange={(e) => setSelectedpermission({ ...selectedpermission, name: e.target.value })}
+              value={selectedPermission?.name || ""}
+              onChange={(e) => setSelectedPermission({ ...selectedPermission, name: e.target.value })}
             />
           </Grid>
           <Grid item lg={6}>
             <CustomTextField
-              inputLabel="Permission Group Name"
+              inputLabel="Permission Group Name (Slug)"
               placeholder="Enter Permission Group Name"
-              value={selectedpermission?.slug || ""}
-              onChange={(e) => setSelectedpermission({ ...selectedpermission, slug: e.target.value })}
+              value={selectedPermission?.slug || ""}
+              onChange={(e) => setSelectedPermission({ ...selectedPermission, slug: e.target.value })}
             />
           </Grid>
           <Grid item lg={6}>
             <CustomTextField
-              value={selectedpermission?.guard_name || "api"}
-              onChange={(e) => setSelectedpermission({ ...selectedpermission, guard_name: e.target.value })}
-              type="hidden"
+              value="api"
+              disabled
+              inputLabel="Guard Name"
+              placeholder="Guard Name"
             />
           </Grid>
-          {/* more fields */}
+
+          {/* Save / Cancel */}
           <Grid item lg={12}>
-            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-              <Button variant="contained" onClick={handleSavepermission}>
+            <Box sx={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+              <Button variant="contained" onClick={handleSavePermission}>
                 Save
               </Button>
               <Button variant="contained" color="error" onClick={() => setAddRow(false)}>
@@ -211,11 +231,7 @@ const PermissionMaster = () => {
       </CustomModal>
 
       {/* Delete Confirmation */}
-      <ConfirmationModal
-        setOpen={setDeleteModal}
-        open={deleteModal}
-        dataAction={handleDeletepermission}
-      />
+      <ConfirmationModal setOpen={setDeleteModal} open={deleteModal} dataAction={handleDeletePermission} />
     </Box>
   );
 };
