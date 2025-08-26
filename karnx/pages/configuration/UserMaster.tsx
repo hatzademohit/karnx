@@ -50,7 +50,7 @@ const UserMaster = () => {
     const withSrNo = json.data.data.map((user: any, index: number) => ({ 
       ...user,
       srNo: page * pageSize + index + 1,
-      gender: user.gender.charAt(0).toUpperCase() + user.gender.slice(1),      
+      gender: user.gender != null ?user.gender.charAt(0).toUpperCase() + user.gender.slice(1):'',      
       status: user.is_active == 1 ? "Active" : "Inactive",
     }));
 
@@ -98,7 +98,7 @@ const UserMaster = () => {
     };
     fetchClients();
   }, []);
-  
+
   useEffect(() => {
     setColumns([
       { headerName: 'Sr.No', field: 'srNo', width: 90 },
@@ -150,8 +150,9 @@ const UserMaster = () => {
   };
 
   const handleSaveUser = async () => {
-    const method = selectedUser ? "PUT" : "POST";
-    const url = selectedUser
+    const isEdit = selectedUser && selectedUser.id; // only edit if id exists
+    const method = isEdit ? "PUT" : "POST";
+    const url = isEdit
       ? `${apiBaseUrl}/user/${selectedUser.id}`
       : `${apiBaseUrl}/user`;
 
@@ -169,6 +170,8 @@ const UserMaster = () => {
       const msg = await res.json();
       toast.success(msg.message);
       setAddRow(false);
+      setSelectedUser(null);
+      setModalName(false);
     }else{
       const errorData = await res.json();
       toast.error(errorData.message || "Something went wrong! Please try again later.");
@@ -246,7 +249,7 @@ const UserMaster = () => {
                 size="small"
                 name="role"
                 value={selectedUser?.role_id || ""}
-                onChange={(e) => setSelectedUser({ ...selectedUser, role: e.target.value })}
+                onChange={(e) => setSelectedUser({ ...selectedUser, role_id: e.target.value })}
               >
               {roles.map((role) => (
                 <MenuItem key={role.id} value={role.id}>
@@ -279,7 +282,7 @@ const UserMaster = () => {
                 size="small"
                 name="client_id"
                 value={selectedUser?.client_id || ""}
-                //onChange={(e) => setClient({ ...selectedUser, client_id: e.target.value })}
+                onChange={(e) => setSelectedUser({ ...selectedUser, client_id: e.target.value })}
               >
               {clients.map((client) => (
                 <MenuItem key={client.id} value={client.id}>

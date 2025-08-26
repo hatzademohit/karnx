@@ -47,9 +47,10 @@ const LoginPage = () => {
             password: data.password,
           });
     
-          const { token, user } = response.data;
-    
+          const { token, user} = response.data;
           localStorage.setItem("token", token);
+          localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
+          localStorage.setItem("role", response.data.role);
           localStorage.setItem('loggedInUser', JSON.stringify(user));
           setAlertMessage(response.data.message);
           setOpenAlert(true);

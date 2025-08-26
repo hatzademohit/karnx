@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import MainLayout from "@/karnx/MainLayout";
 import { PageLoader, AlertMassage } from "@/components";
 import axios from "axios";
-import {apiBaseUrl} from '@/karnx/api';
+import { apiBaseUrl } from '@/karnx/api';
 import { set } from "react-hook-form";
 interface User {
-  userId: number;
+  id: number;
   name: string;
   email: string;
   client_id?: number;
@@ -29,34 +29,40 @@ interface AuthContextType {
   setSeverity?: React.Dispatch<React.SetStateAction<string>>;
   alertMessage?: string;
   setAlertMessage?: React.Dispatch<React.SetStateAction<string>>;
+  hasPermission?: any;
+  role?: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  setUser : () => { },
+  setUser: () => { },
   login: () => { },
   logout: () => { },
   currentTime: null,
   loader: false,
-  setLoader: () => {},
+  setLoader: () => { },
   openAlert: false,
-  setOpenAlert: () => {},
+  setOpenAlert: () => { },
   severity: '',
-  setSeverity: () => {},
+  setSeverity: () => { },
   alertMessage: '',
-  setAlertMessage: () => {}
+  setAlertMessage: () => { },
+  hasPermission: [],
+  role: '',
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [logUser, setLogUser] = useState<User | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [permissions, setPermissions] = useState<any>([]);
+  const [role, setRole] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(false);
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [severity, setSeverity] = useState<string>('success')
   const [alertMessage, setAlertMessage] = useState<string>();
   const router = useRouter();
   const pathname = usePathname();
-  const publicRoutes = [ '/', '/forgot-password', '/reset-password', '/activate-account'];
+  const publicRoutes = ['/', '/forgot-password', '/reset-password', '/activate-account'];
   const fullDate = new Date();
   const formattedTime = `${String(fullDate.getHours()).padStart(2, '0')}:${String(fullDate.getMinutes()).padStart(2, '0')}`;
 
@@ -90,7 +96,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const currentTotalMinutes = fullDate.getHours() * 60 + fullDate.getMinutes();
     const loginTotalMinutes = loginHour * 60 + loginMinute;
     const diffMinutes = currentTotalMinutes - loginTotalMinutes;
-      // Session expired
+    // Session expired
     if (diffMinutes > 60) {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("loginTime");
@@ -110,8 +116,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setTimeout(() => {
       setOpenAlert(false);
-    },5000);
+    }, 5000);
   }, [openAlert]);
+
+  useEffect(() => {
+    const storedPermissions = localStorage.getItem("permissions");
+    if (storedPermissions) {
+      setPermissions(storedPermissions);
+    }
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
+
+  const hasPermission = (permission: string | string[]) => {
+    if (Array.isArray(permission)) {
+      return permission.some((p) => permissions.includes(p));
+    }
+    return permissions.includes(permission);
+  };
 
   const login = (userData: User) => {
     localStorage.setItem("loggedInUser", JSON.stringify(userData));
@@ -125,23 +149,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       method: 'post',
       maxBodyLength: Infinity,
       url: `${apiBaseUrl}/logout`,
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }
     };
 
     axios.request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-      localStorage.removeItem("token");
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("loginTime");
-      window.location.href = '/';
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-    
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        localStorage.removeItem("token");
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("loginTime");
+        localStorage.removeItem("permissions");
+        localStorage.removeItem("role");
+        window.location.href = '/';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     // setTimeout(() => {
     //   window.location.href = '/';
     //   setLoader(false);
@@ -149,10 +175,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout, currentTime:formattedTime, setLoader, openAlert, setOpenAlert, severity
-    , setSeverity, alertMessage, setAlertMessage }}>
-      { loader && <PageLoader /> }
-      { openAlert && <AlertMassage severity={severity} alertText={alertMessage} onClose={() => setOpenAlert(false)} /> }
+    <AuthContext.Provider value={{
+      user, setUser, login, logout, currentTime: formattedTime, setLoader, openAlert, setOpenAlert, severity
+      , setSeverity, alertMessage, setAlertMessage, hasPermission, role
+    }}>
+      {loader && <PageLoader />}
+      {openAlert && <AlertMassage severity={severity} alertText={alertMessage} onClose={() => setOpenAlert(false)} />}
 
       {publicRoutes.includes(pathname) ? (
         children

@@ -165,15 +165,15 @@ const ActivateAccount = () => {
                 render={({ field }) => (
                     <SingleSelect
                     {...field}   // gives value and onChange from react-hook-form
-                    label="Gender"
+                    inputLabel="Gender"
                     size="small"
                     error={!!errors.gender}
                     helperText={errors.gender?.message}
                     >
-                    <MenuItem value="" disabled>Select Gender</MenuItem>
-                    <MenuItem value="male">Male</MenuItem>
-                    <MenuItem value="femail">Female</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
+                    {/* <MenuItem value="" disabled>Select Gender</MenuItem> */}
+                    <MenuItem value="male" key="male" >Male</MenuItem>
+                    <MenuItem value="female" key="female">Female</MenuItem>
+                    <MenuItem value="other" key="other">Other</MenuItem>
                     </SingleSelect>
                 )}
             />

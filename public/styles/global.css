@@ -2,7 +2,8 @@
 @import url('./mediaquery.css');
 
 :root{
-    --active-color: #03045E;
+  --active-color: #03045E;
+  --danger-color: #BC0019;
 }
 
 body{
@@ -39,12 +40,20 @@ button.btn{
   border: 1px solid;
 }
 .btn.btn-blue{
-  max-width: 100%;
   background-color: var(--active-color);
   color: #ffffff;
 }
 .btn.btn-blue:hover{
   border: 1px solid var(--active-color);
+  background-color: transparent;
+  color: #333333;
+}
+.btn.btn-danger{
+  background-color: var(--danger-color);
+  color: #ffffff;
+}
+.btn.btn-danger:hover{
+  border: 1px solid var(--danger-color);
   background-color: transparent;
   color: #333333;
 }
@@ -55,6 +64,7 @@ button.btn{
   width: 100%;
   text-transform: uppercase;
   font-size: 12px;
+  border: 0;
 }
 .btn.btn-status{
   max-width: 150px;
@@ -73,18 +83,18 @@ button.btn{
   background-color: #F59E0B !important;
 }
 .btn.bg-high{
-  background-color: #FEE2E2;
+  background-color: #FEE2E2 !important;
   color: #4D4D4D;
 }
 .btn.bg-pending{
-  background-color: #F59E0B;
+  background-color: #F59E0B !important;
 }
 .btn.bg-medium{
-  background-color: #FEF3C7;
+  background-color: #FEF3C7 !important;
   color: #4D4D4D;
 }
 .btn.bg-low{
-  background-color: #DCFCE7;
+  background-color: #DCFCE7 !important;
   color: #4D4D4D;
 }
 .Toastify .Toastify__toast-container--top-right{

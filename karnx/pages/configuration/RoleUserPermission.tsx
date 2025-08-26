@@ -8,7 +8,6 @@ import {
   Tabs,
   Tab,
   Typography,
-  Paper,
   Checkbox,
   FormControlLabel,
   Select,
@@ -17,6 +16,7 @@ import {
 import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 import { useAuth } from "@/app/context/AuthContext";
+import { SingleSelect } from "@/components";
 
 // ------------------
 // Types (relaxed to tolerate API variations)
@@ -56,7 +56,7 @@ const RoleUserPermission: React.FC = () => {
   const [rawPermissions, setRawPermissions] = useState<RawPermissionRow[]>([]);
   const [permissions, setPermissions] = useState<NormalizedRow[]>([]);
 
-  const { user, setLoader } = useAuth();
+  const { user, setLoader, hasPermission } = useAuth();
   const clientId = user?.client_id ?? ""; // avoid `{}` ending up in the URL
 
   // Build helper maps from modules
@@ -274,62 +274,74 @@ const RoleUserPermission: React.FC = () => {
         Role & User Permission
       </Typography>
 
-      <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} sx={{ mb: "24px" }}>
-        <Tab label="By Role" />
-        <Tab label="By User" />
+      <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} className="custom-tabs" sx={{ mb: "24px" }}>
+        { hasPermission('role permission update') && (
+            <Tab label="By Role" />
+        )}
+
+        { hasPermission('user permission update') && (
+          <Tab label="By User" />
+        )}
       </Tabs>
 
-      <Paper sx={{ p: 2 }}>
+      <Box sx={{ p: 2, border: '1px solid #cccccc' }}>
         {activeTab === 0 ? (
           <Grid container spacing={2} sx={{ mb: 4 }}>
             <Grid item xs={12} md={4}>
-              <Select
+              <SingleSelect
+                inputLabel='Role'
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                fullWidth
-                displayEmpty
+                size='small'
               >
-                <MenuItem value="">Select Role</MenuItem>
                 {roles.map((role) => (
                   <MenuItem key={role.id} value={role.id}>
                     {role.name}
                   </MenuItem>
                 ))}
-              </Select>
+              </SingleSelect>
             </Grid>
           </Grid>
         ) : (
           <Grid container spacing={2} sx={{ mb: 4 }}>
             <Grid item xs={12} md={4}>
-              <Select
+              <SingleSelect
+                inputLabel='User'
                 value={selectedUser}
                 onChange={(e) => setSelectedUser(e.target.value)}
-                fullWidth
-                displayEmpty
+                size='small'
               >
-                <MenuItem value="">Select User</MenuItem>
                 {users.map((u) => (
                   <MenuItem key={u.id} value={u.id}>
                     {u.name}
                   </MenuItem>
                 ))}
-              </Select>
+              </SingleSelect>
             </Grid>
           </Grid>
         )}
 
         {(activeTab === 0 ? selectedRole : selectedUser) ? (
           <Box>
-            <Typography variant="h5" sx={{ mb: 2 }}>
+            <Typography variant="h4" component='h4' sx={{ mb: 2 }}>
               Permissions
             </Typography>
 
-            <Grid container spacing={1}>
+            <Grid container spacing={2}>
               {allModules.map((module) => {
-                const perms = getModulePermissions(module.id);
+                // const perms = getModulePermissions(module.id);
                 const items = (module.permissions || []).map((p) =>
                   typeof p === "string" ? ({ name: p } as PermissionTypeFromModule) : p
                 );
+                const perms = permissions.find((p) => p.module_id === module.id)?.permissions || {};
+
+                // collect all child keys
+                const childKeys = module.permissions.map((p: any) => p.name);
+                const childVals = childKeys.map((k: string) => !!perms[k]);
+
+                // parent state
+                const allChecked = childVals.length > 0 && childVals.every(Boolean);
+                const someChecked = childVals.some(Boolean) && !allChecked;
                 return (
                   <Grid item xs={12} sm={4} md={3} lg={2} key={module.id}>
                     <Box
@@ -341,9 +353,26 @@ const RoleUserPermission: React.FC = () => {
                         background: "#f9f9f9",
                       }}
                     >
-                      <Typography variant="subtitle1"sx={{ mb: 0.7, fontWeight: "bold", borderBottom: "1px solid #c1bebeff",  bottomdisplay: "inline-block", pb: 0.5}}>
-                        {String(module.slug || "Module").replace(/^./, (c) => c.toUpperCase())}
-                      </Typography>
+                      <Box sx={{ mb: 0.7, borderBottom: "1px solid #c1bebeff",  bottomdisplay: "inline-block", pb: 0.5}}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={allChecked}
+                              indeterminate={someChecked}
+                              onChange={(e) => {
+                                setPermissions((prev) =>
+                                  prev.map((p) =>
+                                    p.module_id === module.id ? { ...p,
+                                      permissions: { ...p.permissions, ...Object.fromEntries(childKeys.map((k) => [k, e.target.checked])),},
+                                    } : p
+                                  )
+                                );
+                              }}
+                            />
+                          }
+                          label={module.slug.charAt(0).toUpperCase() + module.slug.slice(1)}
+                        />
+                      </Box>
 
                       {items.map((type) => (
                         <FormControlLabel
@@ -351,12 +380,14 @@ const RoleUserPermission: React.FC = () => {
                           control={
                             <Checkbox
                               checked={!!perms[type.name]}
+                              size="small"
                               onChange={(e) =>
                                 handlePermissionChange(module.id, type.name, e.target.checked)
                               }
                             />
                           }
                           label={type.name.replace(/^./, (c) => c.toUpperCase())}
+                          sx={{ '& span.MuiTypography-root': { fontFamily: 'poppins-lt', fontSize: '14px' } }}
                         />
                       ))}
                     </Box>
@@ -366,7 +397,7 @@ const RoleUserPermission: React.FC = () => {
             </Grid>
 
             <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-              <Button variant="contained" color="primary" onClick={handleSavePermissions}>
+              <Button variant="contained" className="btn btn-blue" onClick={handleSavePermissions}>
                 Save Permissions
               </Button>
             </Box>
@@ -374,7 +405,7 @@ const RoleUserPermission: React.FC = () => {
         ) : (
           <Typography color="text.secondary">Select a role or user to manage permissions.</Typography>
         )}
-      </Paper>
+      </Box>
     </Box>
   );
 };

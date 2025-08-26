@@ -6,12 +6,30 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 
 const Inquiries = () => {
 
+    const [inquiries, setInquiries] = useState([])
     const [inqueryModal, setInqueryModal] = useState(false)
+    const [inqueryContain, setInqueryContain] = useState([])
+
+    const openInqueryModal = (contain) => {
+        setInqueryContain(contain)
+        setInqueryModal(true)
+    }
+
+    useEffect(() => {
+        setInquiries([
+            {inqueryNumber: 'INQ-2024-001', priority: ['NEW', 'MEDIUM PRIORITY'],
+            flightRoute: 'SFO → SEA', client: 'Creative Solutions Inc', date: 'October 25, 2025', passenger: 3, airCraftType: 'Heavy Jet', assign: 'Assigned 3 hours ago', status: ['Accept', 'Reject']},
+            {inqueryNumber: 'INQ-2024-005', priority: ['ACCEPTED', 'HIGH PRIORITY'],
+            flightRoute: 'YYZ → YVR', client: 'Sunshine Travel Co', date: 'March 18, 2025', passenger: 5, airCraftType: 'Ultra Long Range', assign: 'Assigned 6 hours ago', status: []},
+            {inqueryNumber: 'INQ-2024-006', priority: ['REJECTED', 'LOW PRIORITY'],
+            flightRoute: 'MIA → ATL', client: 'Maple Leaf Industries', date: 'March 20, 2025', passenger: 4, airCraftType: 'Light Jet', assign: 'Assigned 2 days ago', status: []},
+        ])
+    }, [])
 
     return(
        <>
@@ -38,66 +56,45 @@ const Inquiries = () => {
                 </Box>
             </Box>
             <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '30px', padding: '24px', borderTop: '1px solid #E6E6E6' }}>
-                    <Box sx={{ display: 'flex', gap: '8px', flexDirection: 'column', width: '100%'}}>
-                        <Box sx={{ display: "flex", gap: '20px', alignItems: 'center' }}>
-                            <Typography>INQ-2024-001</Typography>
-                            <Button variant="contained" className="btn btn-status-rounded bg-blue">New</Button>
-                            <Button variant="contained" className="btn btn-status-rounded bg-high">HIGH PRIORITY</Button>
-                        </Box>
-                        <Box sx={{ display: "flex", gap: '8px', flexDirection: 'column', maxWidth: '840px'}}>
-                            <Typography component='h3' variant="h3">LHR → JFK</Typography>
-                            <Box sx={{ display: "flex", gap: '16px', justifyContent: 'space-between' }}>
-                                <Typography className="fs14">Client: Sterling Enterprises</Typography>
-                                <Typography className="fs14">Date: March 15, 2025</Typography>
-                                <Typography className="fs14">Passengers: 4</Typography>
-                                <Typography className="fs14">Aircraft: Heavy Jet</Typography>
+                {inquiries && inquiries.map((item, index) => (
+                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '30px', padding: '24px', borderTop: '1px solid #E6E6E6' }}>
+                        <Box sx={{ display: 'flex', gap: '8px', flexDirection: 'column', width: '100%'}}>
+                            <Box sx={{ display: "flex", gap: '20px', alignItems: 'center' }}>
+                                <Typography>{item.inqueryNumber}</Typography>
+                                {item?.priority.map((btnText, index) => (
+                                    <Button key={index + btnText} variant="contained" 
+                                        className={`btn btn-status-rounded ${btnText === 'NEW' ? 'bg-blue' : btnText === 'MEDIUM PRIORITY' ? 'bg-medium' : btnText === 'ACCEPTED' ? 'bg-green' : btnText === 'REJECTED' ? 'bg-red' : btnText === 'LOW PRIORITY' ? 'bg-low' : 'bg-high' }`}
+                                    >
+                                    {btnText}</Button>
+                                ))}
                             </Box>
-                            <Typography className='fs12' sx={{color: '#808080'}}>Assigned 2 hours ago</Typography>
-                        </Box>
-                    </Box>
-                    <Box sx={{maxWidth: '470px', width: '100%', display: 'flex', gap: '10px'}}>
-                        <Button variant="contained" className="btn btn-status bg-blue" onClick={ () => setInqueryModal(true)}>
-                            <RemoveRedEyeIcon sx={{mr: '8px'}} /> View Details
-                        </Button>
-                        <Button variant="contained" className="btn btn-status bg-green">
-                            <TaskAltIcon sx={{mr: '8px'}} /> Accept
-                        </Button>
-                        <Button variant="contained" className="btn btn-status bg-red">
-                            <CancelOutlinedIcon sx={{mr: '8px'}} /> Reject
-                        </Button>
-                    </Box>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '30px', padding: '24px', borderTop: '1px solid #E6E6E6' }}>
-                    <Box sx={{ display: 'flex', gap: '8px', flexDirection: 'column', width: '100%'}}>
-                        <Box sx={{ display: "flex", gap: '20px', alignItems: 'center' }}>
-                            <Typography>INQ-2024-001</Typography>
-                            <Button variant="contained" className="btn btn-status-rounded bg-pending">QUOTE PENDING</Button>
-                            <Button variant="contained" className="btn btn-status-rounded bg-medium">MEDIUM PRIORITY</Button>
-                        </Box>
-                        <Box sx={{ display: "flex", gap: '8px', flexDirection: 'column', maxWidth: '840px'}}>
-                            <Typography component='h3' variant="h3">LHR → JFK</Typography>
-                            <Box sx={{ display: "flex", gap: '16px', justifyContent: 'space-between' }}>
-                                <Typography className="fs14">Client: Sterling Enterprises</Typography>
-                                <Typography className="fs14">Date: March 15, 2025</Typography>
-                                <Typography className="fs14">Passengers: 4</Typography>
-                                <Typography className="fs14">Aircraft: Heavy Jet</Typography>
+                            <Box sx={{ display: "flex", gap: '8px', flexDirection: 'column', maxWidth: '840px'}}>
+                                <Typography component='h3' variant="h3">{item.flightRoute}</Typography>
+                                <Box sx={{ display: "flex", gap: '16px', justifyContent: 'space-between' }}>
+                                    <Typography className="fs14">Client: {item.client}</Typography>
+                                    <Typography className="fs14">Date: {item.date}</Typography>
+                                    <Typography className="fs14">Passengers: {item.passenger}</Typography>
+                                    <Typography className="fs14">Aircraft: {item.airCraftType}</Typography>
+                                </Box>
+                                <Typography className='fs12' sx={{color: '#808080'}}>{item.assign}</Typography>
                             </Box>
-                            <Typography className='fs12' sx={{color: '#808080'}}>Assigned 2 hours ago</Typography>
+                        </Box>
+                        <Box sx={{maxWidth: '470px', width: '100%', display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
+                            <Button variant="contained" className="btn btn-status bg-blue" onClick={ () => openInqueryModal(item)}>
+                                <RemoveRedEyeIcon sx={{mr: '8px'}} /> View Details
+                            </Button>
+                            {item?.status.map((sts, index) => (
+                                sts === 'Accept' ? 
+                                <Button key={index + sts} variant="contained" className="btn btn-status bg-green">
+                                    <TaskAltIcon sx={{mr: '8px'}} /> {sts}
+                                </Button> :
+                                <Button variant="contained" className="btn btn-status bg-red">
+                                    <CancelOutlinedIcon sx={{mr: '8px'}} /> Reject
+                                </Button>
+                            ))}
                         </Box>
                     </Box>
-                    <Box sx={{maxWidth: '470px', width: '100%', display: 'flex', gap: '10px'}}>
-                        <Button variant="contained" className="btn btn-status bg-blue" onClick={ () => setInqueryModal(true)}>
-                            <RemoveRedEyeIcon sx={{mr: '8px'}} /> View Details
-                        </Button>
-                        <Button variant="contained" className="btn btn-status bg-yellow">
-                            <EditOutlinedIcon sx={{mr: '8px'}} /> Build Quote
-                        </Button>
-                        <Button variant="contained" className="btn btn-status bg-red">
-                            <CancelOutlinedIcon sx={{mr: '8px'}} /> Reject
-                        </Button>
-                    </Box>
-                </Box>
+                ))}
             </Box>
         </Box>
 

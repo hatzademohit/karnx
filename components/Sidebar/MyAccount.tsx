@@ -68,7 +68,7 @@ export default function MyAccount() {
 
   const [userData, setUserData] = React.useState(null);
 
-  const { logout, user } = useAuth();
+  const { logout, user, role } = useAuth();
   const router = useRouter();
 
   const handleClose = () => {
@@ -141,6 +141,12 @@ export default function MyAccount() {
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography component='h5' variant='h5'>
               { (user?.name) ? user.name : 'Operator'  }
+            </Typography>
+            <Typography>
+              User Role: { role ? role : ''  }
+            </Typography>
+            <Typography>
+              User Id: { (user?.id) ? user.id : ''  }
             </Typography>
           </Box>
         </Box>
