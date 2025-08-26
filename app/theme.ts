@@ -39,6 +39,13 @@ export const karnxTheme = createTheme({
                 }
             }
         },
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    fontFamily: "poppins-lt, sans-serif",
+                },
+            },
+        },
         MuiCssBaseline: {
             styleOverrides: {
                 // ".MuiDataGrid-columnHeaders": {
@@ -80,6 +87,9 @@ export const karnxTheme = createTheme({
                 root: {
                 color: "#333333",
                 "&.Mui-checked": {
+                    color: "#03045E",
+                },
+                "&.MuiCheckbox-indeterminate": {
                     color: "#03045E",
                 },
                 "&.Mui-disabled": {
