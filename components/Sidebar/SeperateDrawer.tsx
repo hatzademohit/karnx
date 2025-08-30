@@ -33,6 +33,7 @@ export default function SeperateDrawer({
     { menu: 'Flight Ops', icon: <FlightIcon />, path: '/flight-ops' },
     { menu: 'Fleet', icon: <BuildOutlinedIcon />, path: '/fleet' },
     { menu: 'Crew', icon: <Groups2OutlinedIcon />, path: '/crew-roster' },
+    { menu: 'New Inquiry', icon: <Groups2OutlinedIcon />, path: '/new-inquiry' },
   ]
 
   return (
