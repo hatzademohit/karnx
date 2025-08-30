@@ -365,7 +365,7 @@ hr.cust-divider{
 .table-append tbody td:first-child{
   padding-left: 0;
 }
-.table-append tbody td:last-child{
+.table-append tbody td:last-child:not([colspan]){
   padding-right: 0;
   max-width: 48px;
   min-width: 48px;
