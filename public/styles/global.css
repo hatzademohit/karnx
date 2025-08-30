@@ -48,6 +48,14 @@ button.btn{
   background-color: transparent;
   color: #333333;
 }
+.btn.btn-outlined:not(.Mui-disabled){
+  border: 1px solid var(--active-color);
+  color: var(--active-color);
+}
+.btn.btn-outlined:hover{
+  background-color: var(--active-color);
+  color: #ffffff;
+}
 .btn.btn-danger{
   background-color: var(--danger-color);
   color: #ffffff;
@@ -346,4 +354,23 @@ hr.cust-divider{
 .MuiPickersLayout-root .MuiDialogActions-root .MuiButtonBase-root:nth-child(2){
   background-color: var(--active-color);
   color: #ffffff;
-} 
+}
+.table-append table{
+  table-layout: fixed;
+}
+.table-append tbody td{
+  padding: 8px;
+  border: 0;
+}
+.table-append tbody td:first-child{
+  padding-left: 0;
+}
+.table-append tbody td:last-child{
+  padding-right: 0;
+  max-width: 48px;
+  min-width: 48px;
+  width: 48px;
+}
+.table-append tbody td:last-child > button{
+  margin-top: 20px;
+}
