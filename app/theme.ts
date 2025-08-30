@@ -75,6 +75,7 @@ export const karnxTheme = createTheme({
                     },
                 },
                 input: {
+                    fontSize: "12px",
                     '&::placeholder': {
                         color: '#CCCCCC',
                         opacity: 1,

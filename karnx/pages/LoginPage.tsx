@@ -38,7 +38,7 @@ const LoginPage = () => {
   const inputChange = () => {
     setInputType(inputType === 'text' ? 'password' : 'text');
   };
- const {setAlertMessage, setLoader, setOpenAlert, setSeverity} = useAuth();
+ const {setAlertMessage, setLoader, setOpenAlert, setSeverity, currentTime} = useAuth();
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
@@ -52,6 +52,7 @@ const LoginPage = () => {
           localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
           localStorage.setItem("role", response.data.role);
           localStorage.setItem('loggedInUser', JSON.stringify(user));
+          // localStorage.setItem('loginTime', currentTime);
           setAlertMessage(response.data.message);
           setOpenAlert(true);
           setSeverity('success');
@@ -69,9 +70,6 @@ const LoginPage = () => {
         } finally {
           setLoader(false);
         }
-    // console.log("Login Data:", data);
-    // localStorage.setItem('loggedInUser', JSON.stringify(data));
-    // window.location.href = '/dashboard';
   };
 
   return (
