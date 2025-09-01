@@ -3,7 +3,7 @@ import { Box, Checkbox, FormControlLabel, Radio, Typography } from "@mui/materia
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import AirplanemodeActiveRoundedIcon from '@mui/icons-material/AirplanemodeActiveRounded';
 import { RadioTabs } from "@/components";
-import { MultiCityFlights, OneWayFlights, RoundTripFlights } from "@/karnx/pages/NewInquiry";
+import { MultiCityFlights, OneWayFlights, RoundTripFlights } from "@/karnx/pages/BookingInquiry";
 const FlightDetails = () =>{
 
     const popularRoutes = [

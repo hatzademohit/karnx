@@ -1,5 +1,5 @@
 "use client"
-import { AppendDeleteTable } from "@/karnx/pages/NewInquiry";
+import { AppendDeleteTable } from "@/karnx/pages/BookingInquiry";
 import { Box, Grid } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { StepperComponent } from '@/components'
-import { ContactSummary, FlightDetails, PassengerAircraft } from '@/karnx/pages/NewInquiry'
+import { ContactSummary, FlightDetails, PassengerAircraft } from '@/karnx/pages/BookingInquiry'
 
 const NewInquiry = () => {
     const steps = [
