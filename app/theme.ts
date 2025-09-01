@@ -73,6 +73,10 @@ export const karnxTheme = createTheme({
                         borderColor: '#03045E',
                         borderWidth: '2px',
                     },
+                    '&.Mui-disabled': {
+                        color: '#333333',
+                        backgroundColor: '#dfdfdf',
+                    },
                 },
                 input: {
                     fontSize: "12px",

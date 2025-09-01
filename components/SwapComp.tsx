@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import SwapHorizRoundedIcon from "@mui/icons-material/SwapHorizRounded";
-import { CustomTextField } from "@/components";
+import { SimpleAutoComplete } from "@/components";
 
 type SwapCompProps = {
   fromLabel?: string;
@@ -11,7 +11,8 @@ type SwapCompProps = {
   toPlaceholder?: string;
   defaultFrom?: string;
   defaultTo?: string;
-  onChange?: (from: string, to: string) => void; // callback to parent
+  options?: string[];
+  onChange?: (from: string, to: string) => void; 
 };
 
 const SwapComp: React.FC<SwapCompProps> = ({
@@ -21,25 +22,28 @@ const SwapComp: React.FC<SwapCompProps> = ({
   toPlaceholder = "Destination airport",
   defaultFrom = "",
   defaultTo = "",
+  options = [],
   onChange,
 }) => {
-  const [fromVal, setFromVal] = useState(defaultFrom);
-  const [toVal, setToVal] = useState(defaultTo);
+  const [fromVal, setFromVal] = useState<string>(defaultFrom);
+  const [toVal, setToVal] = useState<string>(defaultTo);
 
   const handleSwap = () => {
     setFromVal(toVal);
     setToVal(fromVal);
-    onChange?.(toVal, fromVal); // notify parent with swapped values
+    onChange?.(toVal, fromVal);
   };
 
-  const handleFromChange = (val: string) => {
-    setFromVal(val);
-    onChange?.(val, toVal);
+  const handleFromChange = (_: React.SyntheticEvent, val: string | null) => {
+    const newVal = val ?? "";
+    setFromVal(newVal);
+    onChange?.(newVal, toVal);
   };
 
-  const handleToChange = (val: string) => {
-    setToVal(val);
-    onChange?.(fromVal, val);
+  const handleToChange = (_: React.SyntheticEvent, val: string | null) => {
+    const newVal = val ?? "";
+    setToVal(newVal);
+    onChange?.(fromVal, newVal);
   };
 
   return (
@@ -53,14 +57,13 @@ const SwapComp: React.FC<SwapCompProps> = ({
     >
       {/* From Field */}
       <Box sx={{ width: "100%" }}>
-        <CustomTextField
+        <SimpleAutoComplete
           inputLabel={fromLabel}
           placeholder={fromPlaceholder}
+          options={options}
           size="medium"
           value={fromVal}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleFromChange(e.target.value)
-          }
+          onChange={handleFromChange}
         />
       </Box>
 
@@ -91,14 +94,13 @@ const SwapComp: React.FC<SwapCompProps> = ({
 
       {/* To Field */}
       <Box sx={{ width: "100%" }}>
-        <CustomTextField
+        <SimpleAutoComplete
           inputLabel={toLabel}
           placeholder={toPlaceholder}
+          options={options}
           size="medium"
           value={toVal}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleToChange(e.target.value)
-          }
+          onChange={handleToChange}
         />
       </Box>
     </Box>
