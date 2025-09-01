@@ -9,7 +9,7 @@ import { InputLabel, styled } from "@mui/material";
 
 interface CustomDateTimePickerProps {
   label?: string;
-  Datatimelabel?: string;
+  datatimelabel?: string;
   value?: Dayjs | null;
   onChange?: (newValue: Dayjs | null) => void;
   withClock?: boolean; // toggle clock view
@@ -35,7 +35,7 @@ const ClockWrapper = styled("div")(() => ({
 
 export default function CustomDateTimePicker({
   label,
-  Datatimelabel = "Select Date & Time",
+  datatimelabel = "Select Date & Time",
   value,
   onChange,
   withClock = true,
@@ -45,9 +45,9 @@ export default function CustomDateTimePicker({
 }: CustomDateTimePickerProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {Datatimelabel && (
+      {datatimelabel && (
         <InputLabel sx={{ fontFamily: "poppins-semibold", width: "fit-content", color: "#333333" }}>
-          {Datatimelabel}
+          {datatimelabel}
         </InputLabel>
       )}
       <DateTimePicker

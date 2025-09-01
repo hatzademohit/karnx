@@ -57,20 +57,21 @@ const StepperComponent: React.FC<StepperComponentProps> = ({ steps }) => {
       </Box>
 
       {/* Navigation Buttons */}
-      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+      <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
         <Button
-          color="inherit"
           disabled={activeStep === 0}
           onClick={handleBack}
-          sx={{ mr: 1 }}
+          className="btn btn-outlined"
+          sx={{ width: '100%' }}
         >
           Back
         </Button>
-        <Box sx={{ flex: "1 1 auto" }} />
         <Button
           onClick={activeStep === steps.length - 1 ? handleReset : handleNext}
+          className="btn btn-blue"
+          sx={{ width: '100%' }}
         >
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
+          {activeStep === steps.length - 1 ? "Finish" : "Continue"}
         </Button>
       </Box>
     </Box>

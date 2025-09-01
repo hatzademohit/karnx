@@ -1,7 +1,6 @@
 'use client'
 import * as React from "react";
 import { Tabs, Tab, Box } from "@mui/material";
-import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 
 interface RadioTabsProps {
   children: React.ReactNode;
@@ -25,7 +24,7 @@ function TabPanel({
   index: number;
 }) {
   return (
-    <Box role="tabpanel" hidden={value !== index} sx={{ p: 2 }}>
+    <Box role="tabpanel" hidden={value !== index} sx={{mt: '15px'}}>
       {value === index && children}
     </Box>
   );
