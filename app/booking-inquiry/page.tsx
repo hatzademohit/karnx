@@ -1,4 +1,4 @@
-import NewInquiry from "@/karnx/pages/NewInquiry/NewInquiry";
+import NewInquiry from "@/karnx/pages/BookingInquiry/BookingInquiry";
 
 const page = () => {
     return(
