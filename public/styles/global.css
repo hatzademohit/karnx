@@ -105,6 +105,13 @@ button.btn{
   background-color: #DCFCE7 !important;
   color: #4D4D4D;
 }
+button.btn-icon-border{
+  border: 1px solid #e3e3e3;
+  padding: 6px;
+}
+.white-bg-input{
+  background-color: #ffffff;
+}
 .Toastify .Toastify__toast-container--top-right{
   top: 85px;
 }
@@ -373,4 +380,9 @@ hr.cust-divider{
 }
 .table-append tbody td:last-child > button{
   margin-top: 20px;
+}
+.passengers-travelling-info-box{
+  padding: 25px;
+  background-color: #F6F7FF;
+  border-radius: 8px;
 }

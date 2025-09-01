@@ -4,7 +4,7 @@ import { TextField, FormControl, InputLabel, Box } from '@mui/material';
 export interface CustomTextFieldProps {
   name?: string;
   type?: string;
-  value?: string | string[];
+  value?: string | string[] | any;
   asterisk?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -71,7 +71,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           {...props}
           label={displayLabel}
           required={required}
-          placeholder={ placeholder ? placeholder : `Enter ${label}`}
+          placeholder={ placeholder ? placeholder : `Enter ${inputLabel}`}
           className={className}
           inputProps={{ maxLength: maxlength }}
           size={size}        

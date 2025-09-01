@@ -90,7 +90,7 @@ const AppendDeleteTable: React.FC = () => {
             ))}
             <TableRow>
                 <TableCell colSpan={2}>
-                    <SwapComp  onChange={(from, to) => console.log("From:", from, "To:", to)} />
+                    <SwapComp options={["DEL", "BOM", "NGP", "BLR"]} onChange={(from, to) => console.log("From:", from, "To:", to)} />
                 </TableCell>
                 <TableCell colSpan={2}>
                     <CustomDateTimePicker
