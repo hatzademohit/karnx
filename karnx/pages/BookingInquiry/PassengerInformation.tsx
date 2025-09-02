@@ -33,7 +33,7 @@ const PassengerInformation = () => {
                 <Typography variant="h3" sx={{color: '#BC0019'}}>Passenger Information</Typography>
             </Grid>
             {Object.keys(passengers).map((type) => (
-                <Grid item lg={3} md={6} sm={6} xs={12}>
+                <Grid item lg={3} md={6} sm={6} xs={12} key={type}>
                     <Typography sx={{fontFamily: 'poppins-lt', fontSize: '14px', mb: '8px'}}>
                         {type === 'Children' ? 'Children (2-12 yrs)' : type === 'Infants' ? 'Infants (under 2)' : type}
                     </Typography>

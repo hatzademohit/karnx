@@ -17,5 +17,6 @@ import StepperComponent from "./Stepper/StepperComponent";
 import RadioTabs from "./CustomTabs/IconRadioTabs";
 import CustomDateTimePicker from "./DatePicker/CustomDateTimePicker";
 import SwapComp from "./SwapComp";
+import FileSelection from "./FileSelection/FileSelection"
 
-export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp }
+export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection }

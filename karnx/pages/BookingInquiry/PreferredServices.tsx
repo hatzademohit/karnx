@@ -16,11 +16,11 @@ const PreferredServices = () => {
             <Grid item lg={12}>
                 <Typography variant="h3" sx={{color: '#BC0019', my: '15px'}}>Preferred Aircraft & Services</Typography>
             </Grid>
-            {preferredServicesData && preferredServicesData.map((serveice) => (
-                <Grid item lg={4} md={6} sm={6} xs={12}>
+            {preferredServicesData && preferredServicesData.map((services) => (
+                <Grid item lg={4} md={6} sm={6} xs={12} key={services.label}>
                     <Box sx={{border: '1px solid #E6E6E6', padding: '10px 12px'}}>
                         <FormControlLabel 
-                            label={<Box sx={{lineHeight: '16px'}}> {serveice.label} <Typography sx={{fontFamily: 'poppins-lt', color: '#808080', fontSize: '12px'}}> {serveice.subLabel} </Typography></Box>} 
+                            label={<Box sx={{lineHeight: '16px'}}> {services.label} <Typography sx={{fontFamily: 'poppins-lt', color: '#808080', fontSize: '12px'}}> {services.subLabel} </Typography></Box>} 
                             control={<Checkbox />} 
                         />
                     </Box>
