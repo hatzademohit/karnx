@@ -22,7 +22,6 @@ const FlightDetails = () =>{
             setRadioTabActive(0);
         }
         setRadioTabActive(radioTabActive);
-        console.log("Radio tab active value in flight details:", radioTabActive);
     }, [radioTabActive]);
 
     return(
@@ -39,7 +38,13 @@ const FlightDetails = () =>{
                 ))}
             </Box>            
             <Typography variant="h3" sx={{color: '#BC0019', my: '24px'}}>Flight Details</Typography>
-            <RadioTabs defaultValue={radioTabActive} onchange={ (value: number) => { setRadioTabActive(value); console.log("Selected Tab Value:", value) }}>
+            <RadioTabs defaultValue={radioTabActive} onchange={ (value: number) => { setFormData({
+      ...formData,
+      flightDetails: {
+        ...formData.flightDetails,
+        trip_type: value === 0 ? 'one_way' : value === 1 ? 'round_trip' : value === 2 ? 'multi_city' : ''
+        
+      }}); setRadioTabActive(value); }}>
                 <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
                     <OneWayFlights/>
                 </RadioTabs.Tab>
