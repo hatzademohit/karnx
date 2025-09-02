@@ -4,6 +4,8 @@ import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import AirplanemodeActiveRoundedIcon from '@mui/icons-material/AirplanemodeActiveRounded';
 import { RadioTabs } from "@/components";
 import { MultiCityFlights, OneWayFlights, RoundTripFlights } from "@/karnx/pages/BookingInquiry";
+import { useEffect, useState } from "react";
+import { useStep } from "@/app/context/StepProvider";
 const FlightDetails = () =>{
 
     const popularRoutes = [
@@ -13,7 +15,15 @@ const FlightDetails = () =>{
         { from: 'Pune', to: 'Delhi' },
     ]
 
-    
+    const { radioTabActive, setRadioTabActive, formData = { flightDetails: {} }, setFormData } = useStep();
+
+    useEffect(() => {
+        if(radioTabActive === undefined){
+            setRadioTabActive(0);
+        }
+        setRadioTabActive(radioTabActive);
+        console.log("Radio tab active value in flight details:", radioTabActive);
+    }, [radioTabActive]);
 
     return(
         <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px'}}>
@@ -29,7 +39,7 @@ const FlightDetails = () =>{
                 ))}
             </Box>            
             <Typography variant="h3" sx={{color: '#BC0019', my: '24px'}}>Flight Details</Typography>
-            <RadioTabs defaultValue={0}>
+            <RadioTabs defaultValue={radioTabActive} onchange={ (value: number) => { setRadioTabActive(value); console.log("Selected Tab Value:", value) }}>
                 <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
                     <OneWayFlights/>
                 </RadioTabs.Tab>
@@ -46,6 +56,17 @@ const FlightDetails = () =>{
                     sx={{ '& .MuiFormControlLabel-label': { fontFamily: 'poppins-lt', fontSize: '14px' } }}
                     control={<Checkbox size="small" />}
                     label='My dates are flexible'
+                    checked={formData.flightDetails?.is_flexible_dates ?? false}
+                    onChange={(e) => {
+                        setFormData({
+                            ...formData,
+                            flightDetails: {
+                                ...formData.flightDetails,
+                                is_flexible_dates: e.target.checked,
+                            }
+                        });
+                    }}
+
                 />
             </Box>
             <Box sx={{mt: '10px', padding: '16px', border: '1px solid #E6E6E6', backgroundColor: '#F2F2F2', borderRadius: '2px'}}>

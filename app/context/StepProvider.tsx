@@ -6,12 +6,33 @@ const StepContext = createContext({
   airportCity: [],
   formData: {},
   setFormData: {},
+  radioTabActive: 0,
+  setRadioTabActive: (value: number) => {},
 });
+
+type FormDataType = {
+  flightDetails: {
+    trip_type: string;
+    departure_location: string[];
+    arrival_location: string[];
+    departure_time: string[];
+    flexible_range: string;
+    is_flexible_dates: boolean;
+  };
+  passengerInfo: {
+    name: string;
+    age: string;
+  };
+  contactInfo: {
+    email: string;
+    phone: string;
+  };
+};
 
 
 export const StepProvider = ({ children }) => {
   const [airportCity, setairportCity] = useState([]);
-    
+    const [radioTabActive, setRadioTabActive] = useState<number>();
     const fetchAirportCities = async () => {
         try {
           const response = await fetch(`${apiBaseUrl}/form-fields-data/airport-cities`,
@@ -38,12 +59,12 @@ export const StepProvider = ({ children }) => {
       }, []);
 
     // store all form data here
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataType>({
     flightDetails: {
       trip_type: "",
-      departure_location: "",
-      arrival_location: "",
-      departure_time: "",
+      departure_location: [],
+      arrival_location: [],
+      departure_time: [],
       flexible_range: "",
       is_flexible_dates: false
     },
@@ -56,8 +77,13 @@ export const StepProvider = ({ children }) => {
       phone: ""
     }
   });
+
+  useEffect(() => {
+    console.error("Form Data Updated:", formData);
+  }, [formData]);
+  
   return (
-    <StepContext.Provider value={{ airportCity, formData, setFormData }}>
+    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive }}>
       {children}
     </StepContext.Provider>
   );

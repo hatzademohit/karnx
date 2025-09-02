@@ -17,6 +17,8 @@ export interface SimpleAutoCompleteProps{
     disableClearable?: boolean;
     arrowTooltipText?: string;
     inputLabel?: string;
+    required?: boolean;
+
 }
 
 // const options = ['Option 1', 'Option 2'];
@@ -33,6 +35,8 @@ const SimpleAutoComplete:React.FC<SimpleAutoCompleteProps> = ({
     arrowTooltipText = "Open/Close dropdown",
     inputLabel,
     placeholder = `Select ${inputLabel}`,
+    required = false,
+    name
 }) => {
   const [inputValue, setInputValue] = React.useState('');
 
@@ -52,7 +56,7 @@ const SimpleAutoComplete:React.FC<SimpleAutoCompleteProps> = ({
           size={size}
           sx={style}
           disableClearable={disableClearable}
-          renderInput={(params) => <TextField {...params} label={label} variant={variant} placeholder={placeholder} />}
+          renderInput={(params) => <TextField {...params} label={label} variant={variant} placeholder={placeholder} required={required} name={name} />}
           slotProps={{
             popupIndicator: {
               title: arrowTooltipText, // <-- Your custom tooltip text here
