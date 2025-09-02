@@ -34,14 +34,14 @@ const SwapComp: React.FC<SwapCompProps> = ({
     onChange?.(toVal, fromVal);
   };
 
-  const handleFromChange = (_: React.SyntheticEvent, val: string | null) => {
-    const newVal = val ?? "";
+  const handleFromChange = (_: React.SyntheticEvent, val: any | null) => {
+    const newVal:any = val?.code ?? "";
     setFromVal(newVal);
     onChange?.(newVal, toVal);
   };
 
-  const handleToChange = (_: React.SyntheticEvent, val: string | null) => {
-    const newVal = val ?? "";
+  const handleToChange = (_: React.SyntheticEvent, val: any | null) => {
+    const newVal = val?.code ?? "";
     setToVal(newVal);
     onChange?.(fromVal, newVal);
   };

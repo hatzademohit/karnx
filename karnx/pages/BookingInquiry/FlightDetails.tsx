@@ -13,6 +13,8 @@ const FlightDetails = () =>{
         { from: 'Pune', to: 'Delhi' },
     ]
 
+    
+
     return(
         <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px'}}>
             <Typography variant="h3" sx={{color: '#BC0019', mb: '24px'}}>Popular Routes</Typography>
@@ -29,7 +31,7 @@ const FlightDetails = () =>{
             <Typography variant="h3" sx={{color: '#BC0019', my: '24px'}}>Flight Details</Typography>
             <RadioTabs defaultValue={0}>
                 <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
-                    <OneWayFlights />
+                    <OneWayFlights/>
                 </RadioTabs.Tab>
                 <RadioTabs.Tab label="Round Trip" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
                     <RoundTripFlights />
