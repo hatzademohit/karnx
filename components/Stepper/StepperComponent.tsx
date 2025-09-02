@@ -16,9 +16,10 @@ interface StepType {
 
 interface StepperComponentProps {
   steps: StepType[];
+  handleBackClick?: () => void;
 }
 
-const StepperComponent: React.FC<StepperComponentProps> = ({ steps }) => {
+const StepperComponent: React.FC<StepperComponentProps> = ({ steps, handleBackClick }) => {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
@@ -60,7 +61,7 @@ const StepperComponent: React.FC<StepperComponentProps> = ({ steps }) => {
       <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
         <Button
           disabled={activeStep === 0}
-          onClick={handleBack}
+          onClick={ () => { handleBackClick; handleBack() } }
           className="btn btn-outlined"
           sx={{ width: '100%' }}
         >

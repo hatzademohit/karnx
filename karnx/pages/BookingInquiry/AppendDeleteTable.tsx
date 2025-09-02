@@ -5,6 +5,7 @@ import { Add } from "@mui/icons-material";
 import { CustomDateTimePicker, SwapComp } from "@/components";
 import dayjs, { Dayjs } from "dayjs";
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import { useStep } from "@/app/context/StepProvider";
 
 interface RowData {
   id: number;
@@ -19,6 +20,7 @@ const AppendDeleteTable: React.FC = () => {
   const [rows, setRows] = useState<RowData[]>([
     { id: 1, from: 'DELHI', to: 'NGP', date: dayjs("08/30/2025 02:16 PM") },
     { id: 2, from: 'MUB', to: 'PUNE', date: dayjs("08/30/2025 02:16 PM") },
+    { id: 3, from: 'MUB', to: 'PUNE', date: dayjs("08/30/2025 02:16 PM") },
   ]);
 
   const handleAddRow = () => {
@@ -53,6 +55,18 @@ const AppendDeleteTable: React.FC = () => {
     );
   };
 
+  const { airportCity, formData, setFormData } = useStep();
+    // Sync local state with context state, use context as the single source of truth
+    const departureTime = formData.flightDetails?.departure_time[0]
+      ? dayjs(formData.flightDetails.departure_time[0])
+      : dayjs();
+  
+    // Defensive mapping for options
+    const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map(airport => ({
+      label: `${airport.airport_name} (${airport.code}), ${airport.city_name}, ${airport.country_name}`,
+      id: airport.id,
+      code: airport.code,
+    }));
   return (
     <Box>
       <TableContainer className="table-append">

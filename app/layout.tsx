@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider theme={karnxTheme}>
           <AuthProvider>
               <CssBaseline />

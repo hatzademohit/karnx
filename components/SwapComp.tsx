@@ -64,6 +64,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
           size="medium"
           value={fromVal}
           onChange={handleFromChange}
+          name="flightDetails[departure_location[]]"
+          required = {true}
         />
       </Box>
 
@@ -101,6 +103,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
           size="medium"
           value={toVal}
           onChange={handleToChange}
+          name="flightDetails[arrival_location[]]"
+          required={true}
         />
       </Box>
     </Box>

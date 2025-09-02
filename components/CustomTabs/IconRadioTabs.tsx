@@ -6,6 +6,7 @@ interface RadioTabsProps {
   children: React.ReactNode;
   defaultValue?: number;
   centered?: boolean;
+  onchange?: (value: number) => void;
 }
 
 interface RadioTabProps {
@@ -30,10 +31,11 @@ function TabPanel({
   );
 }
 
-function RadioTabs({ children, defaultValue = 0, centered = true }: RadioTabsProps) {
+function RadioTabs({ children, defaultValue = 0, centered = true, onchange }: RadioTabsProps) {
   const [value, setValue] = React.useState(defaultValue);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    onchange && onchange(newValue);
     setValue(newValue);
   };
 

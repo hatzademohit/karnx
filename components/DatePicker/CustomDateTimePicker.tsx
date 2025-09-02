@@ -16,6 +16,8 @@ interface CustomDateTimePickerProps {
   minDateTime?: Dayjs;
   maxDateTime?: Dayjs;
   disabled?: boolean;
+  name?: string;
+  required?: boolean;
 }
 
 // ✅ Styled wrapper that enforces highlight on selected values
@@ -42,6 +44,7 @@ export default function CustomDateTimePicker({
   minDateTime,
   maxDateTime,
   disabled = false,
+  name, required = false,
 }: CustomDateTimePickerProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -53,6 +56,7 @@ export default function CustomDateTimePicker({
       <DateTimePicker
         label={label}
         value={value}
+        name="flightDetails[departure_time[]]"
         onChange={onChange}
         disabled={disabled}
         minDateTime={minDateTime}
