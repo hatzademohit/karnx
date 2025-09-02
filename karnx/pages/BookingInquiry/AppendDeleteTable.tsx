@@ -18,9 +18,8 @@ const AppendDeleteTable: React.FC = () => {
 
   const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [rows, setRows] = useState<RowData[]>([
-    { id: 1, from: 'DELHI', to: 'NGP', date: dayjs("08/30/2025 02:16 PM") },
-    { id: 2, from: 'MUB', to: 'PUNE', date: dayjs("08/30/2025 02:16 PM") },
-    { id: 3, from: 'MUB', to: 'PUNE', date: dayjs("08/30/2025 02:16 PM") },
+    { id: 1, from: '', to: '', date: dayjs("08/30/2025 02:16 PM") },
+    { id: 2, from: '', to: '', date: dayjs("08/30/2025 02:16 PM") },
   ]);
 
   const handleAddRow = () => {
@@ -39,13 +38,13 @@ const AppendDeleteTable: React.FC = () => {
     setRows(rows.filter((row) => row.id !== id));
   };
 
-  const handleSwapChange = (id: number, from: string, to: string) => {
-    setRows(
-      rows.map((row) =>
-        row.id === id ? { ...row, from, to } : row
-      )
-    );
-  };
+  // const handleSwapChange = (id: number, from: string, to: string) => {
+  //   setRows(
+  //     rows.map((row) =>
+  //       row.id === id ? { ...row, from, to } : row
+  //     )
+  //   );
+  // };
 
   const handleDateChange = (id: number, value: Dayjs | null) => {
     setRows(
@@ -54,42 +53,67 @@ const AppendDeleteTable: React.FC = () => {
       )
     );
   };
-
   const { airportCity, formData, setFormData } = useStep();
-    // Sync local state with context state, use context as the single source of truth
-    const departureTime = formData.flightDetails?.departure_time[0]
-      ? dayjs(formData.flightDetails.departure_time[0])
-      : dayjs();
-  
-    // Defensive mapping for options
-    const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map(airport => ({
-      label: `${airport.airport_name} (${airport.code}), ${airport.city_name}, ${airport.country_name}`,
-      id: airport.id,
-      code: airport.code,
-    }));
+
+  // Defensive mapping for options
+  const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map(airport => ({
+    label: `${airport.airport_name} (${airport.code}), ${airport.city_name}, ${airport.country_name}`,
+    id: airport.id,
+    code: airport.code,
+  }));
+  const setAtIndex = (arr: any[], index: number, value: any) => {
+    const copy = [...arr];
+    copy[index] = value;
+    return copy;
+  };
+  const handleSwapChange = (rowIndex: number, fromCode: string, toCode: string) => {
+    setFormData({
+      ...formData,
+      flightDetails: {
+        ...formData.flightDetails,
+        departure_location: setAtIndex(formData.flightDetails?.departure_location || [], rowIndex, fromCode),
+        arrival_location: setAtIndex(formData.flightDetails?.arrival_location || [], rowIndex, toCode),
+      }
+    });
+  };
+  const addIndex = rows.length;
   return (
     <Box>
       <TableContainer className="table-append">
         <Table size="small">
           <TableBody>
-            {rows.map((row) => (
+            {rows.map((row, index) => (
               <TableRow key={row.id}>
                 <TableCell colSpan={2}>
                   <SwapComp
-                    defaultFrom={row.from}
-                    defaultTo={row.to}
-                    onChange={(from, to) =>
-                      handleSwapChange(row.id, from, to)
-                    }
+                    options={airportOptions}
+                    defaultFrom={formData.flightDetails?.departure_location?.[index] || ""}
+                    defaultTo={formData.flightDetails?.arrival_location?.[index] || ""}
+                    onChange={(fromCode, toCode) => handleSwapChange(index, fromCode, toCode)}
                   />
                 </TableCell>
                 <TableCell>
                   <CustomDateTimePicker
                     datatimelabel="Departure Date & Time"
-                    value={row.date}
-                    onChange={(value) =>
-                      handleDateChange(row.id, value)
+                    value={
+                      formData.flightDetails?.departure_time
+                        ? dayjs(formData.flightDetails.departure_time[index])
+                        : null
                     }
+                    onChange={(newValue) => {
+                      console.log(setAtIndex, newValue , 'setAtIndex')
+                      setFormData({
+                        ...formData,
+                        flightDetails: {
+                          ...formData.flightDetails,
+                          departure_time: setAtIndex(
+                            formData.flightDetails?.departure_time || [],
+                            index,
+                            newValue ? dayjs(newValue).toISOString() : null
+                          )
+                        }
+                      });
+                    }}
                     withClock
                   />
                 </TableCell>
@@ -101,24 +125,46 @@ const AppendDeleteTable: React.FC = () => {
                   </IconButton>
                 </TableCell>
               </TableRow>
+
             ))}
             <TableRow>
-                <TableCell colSpan={2}>
-                    <SwapComp options={["DEL", "BOM", "NGP", "BLR"]} onChange={(from, to) => console.log("From:", from, "To:", to)} />
-                </TableCell>
-                <TableCell colSpan={2}>
-                    <CustomDateTimePicker
-                        datatimelabel="Return Date & Time"
-                        value={date}
-                        onChange={setDate}
-                        withClock
-                    />
-                </TableCell>
+              <TableCell colSpan={2}>
+                <SwapComp
+                  options={airportOptions}
+                  defaultFrom={formData.flightDetails?.departure_location?.[addIndex] || ""}
+                  defaultTo={formData.flightDetails?.arrival_location?.[addIndex] || ""}
+                  onChange={(fromCode, toCode) => handleSwapChange(addIndex, fromCode, toCode)}
+                />
+              </TableCell>
+              <TableCell colSpan={2} >
+                <CustomDateTimePicker
+                  datatimelabel="Return Date & Time"
+                  value={
+                      formData.flightDetails?.departure_time
+                        ? dayjs(formData.flightDetails.departure_time[addIndex])
+                        : null
+                    }
+                    onChange={(newValue) => {
+                      setFormData({
+                        ...formData,
+                        flightDetails: {
+                          ...formData.flightDetails,
+                          departure_time: setAtIndex(
+                            formData.flightDetails?.departure_time || [],
+                            addIndex,
+                            newValue ? dayjs(newValue).toISOString() : null
+                          )
+                        }
+                      });
+                    }}
+                  withClock
+                />
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant="contained" startIcon={<Add />} onClick={handleAddRow} className="btn btn-blue" sx={{mt: '14px'}}>
+      <Button variant="contained" startIcon={<Add />} onClick={handleAddRow} className="btn btn-blue" sx={{ mt: '14px' }}>
         Add Stop
       </Button>
     </Box>

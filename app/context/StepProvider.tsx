@@ -7,9 +7,9 @@ type FlightDetailsType = {
   trip_type: string;
   departure_location: string[];
   arrival_location: string[];
-  departure_time: string[] | any;
+  departure_time: string[];
   flexible_range: string;
-  is_flexible_dates: boolean | any;
+  is_flexible_dates: boolean;
 };
 
 type PassengerInfoType = {
