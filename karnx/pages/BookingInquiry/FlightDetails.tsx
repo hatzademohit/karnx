@@ -57,12 +57,12 @@ const FlightDetails = () =>{
                     control={<Checkbox size="small" />}
                     label='My dates are flexible'
                     checked={formData.flightDetails?.is_flexible_dates ?? false}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         setFormData({
                             ...formData,
                             flightDetails: {
                                 ...formData.flightDetails,
-                                is_flexible_dates: e.target.checked,
+                                is_flexible_dates: e.target?.checked,
                             }
                         });
                     }}

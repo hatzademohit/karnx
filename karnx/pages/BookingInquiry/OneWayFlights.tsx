@@ -3,9 +3,14 @@ import { CustomDateTimePicker, SwapComp } from "@/components";
 import { Box, Grid } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { useStep } from '@/app/context/StepProvider';
+import { useEffect } from "react";
 
 const OneWayFlights = () => {
   const { airportCity, formData, setFormData } = useStep();
+
+  useEffect(() =>{
+    console.log(formData, 'formData')
+  }, [formData])
 
   const departureTime = Array.isArray(formData?.flightDetails?.departure_time) && formData.flightDetails.departure_time[0]
     ? dayjs(formData.flightDetails.departure_time[0])

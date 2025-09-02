@@ -1,71 +1,95 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { Box, FormControl, InputLabel } from '@mui/material';
+"use client";
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import { Box, FormControl, InputLabel } from "@mui/material";
 
-export interface SimpleAutoCompleteProps{
-    variant?: any;
-    label?: string;
-    children?: any;
-    name?: string;
-    size?: any;
-    value?: any;
-    placeholder?: string;
-    onChange?:any
-    style?: any;
-    options?: any;
-    disableClearable?: boolean;
-    arrowTooltipText?: string;
-    inputLabel?: string;
-    required?: boolean;
-
+export interface SimpleAutoCompleteProps {
+  variant?: any;
+  label?: string;
+  children?: any;
+  name?: string;
+  size?: any;
+  value?: any;
+  placeholder?: string;
+  onChange?: any;
+  style?: any;
+  options?: any[];
+  disableClearable?: boolean;
+  arrowTooltipText?: string;
+  inputLabel?: string;
+  required?: boolean;
 }
 
-// const options = ['Option 1', 'Option 2'];
-
-const SimpleAutoComplete:React.FC<SimpleAutoCompleteProps> = ({
-    variant,
-    label, 
-    size,
-    value,
-    onChange,
-    style,
-    options,
-    disableClearable,
-    arrowTooltipText = "Open/Close dropdown",
-    inputLabel,
-    placeholder = `Select ${inputLabel}`,
-    required = false,
-    name
+const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
+  variant,
+  label,
+  size,
+  value,
+  onChange,
+  style,
+  options = [],
+  disableClearable,
+  arrowTooltipText = "Open/Close dropdown",
+  inputLabel,
+  placeholder = `Select ${inputLabel}`,
+  required = false,
+  name,
 }) => {
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState("");
 
   return (
-    <Box sx={{width: '100%'}}>
-      { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel}</InputLabel> }
+    <Box sx={{ width: "100%" }}>
+      {inputLabel && (
+        <InputLabel
+          sx={{
+            fontFamily: "poppins-semibold",
+            width: "fit-content",
+            color: "#333333",
+          }}
+        >
+          {inputLabel}
+        </InputLabel>
+      )}
       <FormControl fullWidth>
         <Autocomplete
           value={value}
           onChange={onChange}
-          inputValue={inputValue}
+          inputValue={value?.code ? value?.code : inputValue}
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);
           }}
-          id="controllable-states-demo"
           options={options}
           size={size}
           sx={style}
           disableClearable={disableClearable}
-          renderInput={(params) => <TextField {...params} label={label} variant={variant} placeholder={placeholder} required={required} name={name} />}
+          getOptionLabel={(option) =>
+            typeof option === "string" ? option : option?.label ?? ""
+          }
+          isOptionEqualToValue={(option, val) =>
+            typeof option === "string" || typeof val === "string"
+              ? option === val
+              : option.code === val.code
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={label}
+              variant={variant}
+              placeholder={placeholder}
+              required={required}
+              name={name}
+            />
+          )}
           slotProps={{
             popupIndicator: {
-              title: arrowTooltipText, // <-- Your custom tooltip text here
+              title: arrowTooltipText,
             },
           }}
         />
       </FormControl>
     </Box>
   );
-}
+};
 
 export default SimpleAutoComplete;

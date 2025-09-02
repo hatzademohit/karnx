@@ -31,7 +31,7 @@ const RoundTripFlights = () =>{
                 <Grid item lg={8} md={8}>
                     <SwapComp
                         options={airportOptions}
-                        defaultFrom={formData.flightDetails?.departure_location}
+                        defaultFrom={formData?.flightDetails?.departure_location}
                         defaultTo={formData.flightDetails?.arrival_location}
                         onChange={(fromCode: string, toCode: string) => {
                         setFormData({
@@ -93,7 +93,7 @@ const RoundTripFlights = () =>{
                             ...formData,
                             flightDetails: {
                                 ...formData.flightDetails,
-                                arrivalTime: newValue ? dayjs(newValue).toISOString() : null,
+                                departure_time: newValue ? dayjs(newValue).toISOString() : null,
                             }
                             });
                         }}

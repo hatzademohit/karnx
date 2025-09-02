@@ -9,8 +9,8 @@ type SwapCompProps = {
   fromPlaceholder?: string;
   toLabel?: string;
   toPlaceholder?: string;
-  defaultFrom?: string;
-  defaultTo?: string;
+  defaultFrom?: string | any;
+  defaultTo?: string | any;
   options?: string[];
   onChange?: (from: string, to: string) => void; 
 };
@@ -20,8 +20,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
   fromPlaceholder = "Departure airport",
   toLabel = "To",
   toPlaceholder = "Destination airport",
-  defaultFrom = "",
-  defaultTo = "",
+  defaultFrom = null,
+  defaultTo = null,
   options = [],
   onChange,
 }) => {
@@ -35,13 +35,13 @@ const SwapComp: React.FC<SwapCompProps> = ({
   };
 
   const handleFromChange = (_: React.SyntheticEvent, val: any | null) => {
-    const newVal:any = val?.code ?? "";
+    const newVal:any = val ?? "";
     setFromVal(newVal);
     onChange?.(newVal, toVal);
   };
 
   const handleToChange = (_: React.SyntheticEvent, val: any | null) => {
-    const newVal = val?.code ?? "";
+    const newVal = val ?? "";
     setToVal(newVal);
     onChange?.(fromVal, newVal);
   };

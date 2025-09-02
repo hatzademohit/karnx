@@ -2,63 +2,48 @@
 import { apiBaseUrl } from "@/karnx/api";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-const StepContext = createContext({
-  airportCity: [],
-  formData: {},
-  setFormData: {},
-  radioTabActive: 0,
-  setRadioTabActive: (value: number) => {},
-});
-
-type FormDataType = {
-  flightDetails: {
-    trip_type: string;
-    departure_location: string[];
-    arrival_location: string[];
-    departure_time: string[];
-    flexible_range: string;
-    is_flexible_dates: boolean;
-  };
-  passengerInfo: {
-    name: string;
-    age: string;
-  };
-  contactInfo: {
-    email: string;
-    phone: string;
-  };
+// ---- TYPES ----
+type FlightDetailsType = {
+  trip_type: string;
+  departure_location: string[];
+  arrival_location: string[];
+  departure_time: string[] | any;
+  flexible_range: string;
+  is_flexible_dates: boolean | any;
 };
 
+type PassengerInfoType = {
+  name: string;
+  age: string;
+};
 
-export const StepProvider = ({ children }) => {
-  const [airportCity, setairportCity] = useState([]);
-    const [radioTabActive, setRadioTabActive] = useState<number>();
-    const fetchAirportCities = async () => {
-        try {
-          const response = await fetch(`${apiBaseUrl}/form-fields-data/airport-cities`,
-                        {
-                            method: "GET",
-                            headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.token}`, // 👈 your login token
-                            },
-                        }
-                );
-          const data = await response.json();
-          //console.log(data.data);
-          const fetchCities = data.data;//.map((city: any) => [{"label":city.code, "id":city.id}]); 
-          //console.log(fetchCities);
-          setairportCity(fetchCities);
-        } catch (error) {
-          console.error('Error fetching airport cities:', error);
-        }
-      };
+type ContactInfoType = {
+  email: string;
+  phone: string;
+};
 
-     useEffect(() => {
-        fetchAirportCities();
-      }, []);
+export type FormDataType = {
+  flightDetails: FlightDetailsType;
+  passengerInfo: PassengerInfoType;
+  contactInfo: ContactInfoType;
+};
 
-    // store all form data here
+type StepContextType = {
+  airportCity: any[];
+  formData: FormDataType;
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
+  radioTabActive: number;
+  setRadioTabActive: React.Dispatch<React.SetStateAction<number>>;
+};
+
+// ---- CONTEXT ----
+const StepContext = createContext<StepContextType | undefined>(undefined);
+
+// ---- PROVIDER ----
+export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [airportCity, setAirportCity] = useState<any[]>([]);
+  const [radioTabActive, setRadioTabActive] = useState<number>(0);
+
   const [formData, setFormData] = useState<FormDataType>({
     flightDetails: {
       trip_type: "",
@@ -66,22 +51,38 @@ export const StepProvider = ({ children }) => {
       arrival_location: [],
       departure_time: [],
       flexible_range: "",
-      is_flexible_dates: false
+      is_flexible_dates: false,
     },
     passengerInfo: {
       name: "",
-      age: ""
+      age: "",
     },
     contactInfo: {
       email: "",
-      phone: ""
-    }
+      phone: "",
+    },
   });
 
+  const fetchAirportCities = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/form-fields-data/airport-cities`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.token}`, // your login token
+        },
+      });
+      const data = await response.json();
+      setAirportCity(data.data || []);
+    } catch (error) {
+      console.error("Error fetching airport cities:", error);
+    }
+  };
+
   useEffect(() => {
-    console.error("Form Data Updated:", formData);
-  }, [formData]);
-  
+    fetchAirportCities();
+  }, []);
+
   return (
     <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive }}>
       {children}
@@ -89,4 +90,11 @@ export const StepProvider = ({ children }) => {
   );
 };
 
-export const useStep = () => useContext(StepContext);
+// ---- HOOK ----
+export const useStep = () => {
+  const context = useContext(StepContext);
+  if (!context) {
+    throw new Error("useStep must be used within a StepProvider");
+  }
+  return context;
+};
