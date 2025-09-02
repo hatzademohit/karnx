@@ -6,5 +6,7 @@ import RoundTripFlights from "./RoundTripFlights";
 import MultiCityFlights from "./MultiCityFlights";
 import AppendDeleteTable from "./AppendDeleteTable";
 import PassengerInformation from "./PassengerInformation";
+import PreferredServices from "./PreferredServices";
+import CrewRequirements from "./CrewRequirements";
 
-export { ContactSummary, FlightDetails, PassengerAircraft, OneWayFlights, MultiCityFlights, RoundTripFlights, AppendDeleteTable, PassengerInformation }
+export { ContactSummary, FlightDetails, PassengerAircraft, OneWayFlights, MultiCityFlights, RoundTripFlights, AppendDeleteTable, PassengerInformation, PreferredServices, CrewRequirements }

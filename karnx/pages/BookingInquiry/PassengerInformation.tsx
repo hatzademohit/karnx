@@ -120,8 +120,23 @@ const PassengerInformation = () => {
                                 <FormControlLabel label={assistance} control={<Checkbox size="small" />} />
                             </Grid>
                         ))}
+                        <Grid item lg={4} md={4} sm={6} xs={6}>
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <FormControlLabel label='Other' control={<Checkbox size="small" />} />
+                                <CustomTextField placeholder="Enter" className='white-bg-input' />
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Box>
+            </Grid>
+            <Grid item lg={4} md={4} sm={6} xs={12}>
+                <CustomTextField inputLabel="Checked Bags" value={0} />
+            </Grid>
+            <Grid item lg={4} md={4} sm={6} xs={12}>
+                <CustomTextField inputLabel="Carry -on Bags" value={0} />
+            </Grid>
+            <Grid item lg={4} md={4} sm={6} xs={12}>
+                <CustomTextField inputLabel="Oversized Items" placeholder="e.g., golf clubs, skis, etc." />
             </Grid>
         </>
     )

@@ -26,13 +26,13 @@ const SimpleAutoComplete:React.FC<SimpleAutoCompleteProps> = ({
     label, 
     size,
     value,
-    placeholder,
     onChange,
     style,
     options,
     disableClearable,
     arrowTooltipText = "Open/Close dropdown",
-    inputLabel
+    inputLabel,
+    placeholder = `Select ${inputLabel}`,
 }) => {
   const [inputValue, setInputValue] = React.useState('');
 
