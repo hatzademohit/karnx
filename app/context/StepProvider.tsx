@@ -4,28 +4,28 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 // ---- TYPES ----
 type FlightDetailsType = {
-  trip_type: string;
-  departure_location: string[];
-  arrival_location: string[];
-  departure_time: string[];
-  flexible_range: string;
-  is_flexible_dates: boolean;
+  trip_type?: string;
+  departure_location?: string[];
+  arrival_location?: string[];
+  departure_time?: string[];
+  flexible_range?: string;
+  is_flexible_dates?: boolean;
 };
 
 type PassengerInfoType = {
-  name: string;
-  age: string;
+  name?: string;
+  age?: string;
 };
 
 type ContactInfoType = {
-  email: string;
-  phone: string;
+  email?: string;
+  phone?: string;
 };
 
 export type FormDataType = {
-  flightDetails: FlightDetailsType;
-  passengerInfo: PassengerInfoType;
-  contactInfo: ContactInfoType;
+  flightDetails?: FlightDetailsType;
+  passengerInfo?: PassengerInfoType;
+  contactInfo?: ContactInfoType;
 };
 
 type StepContextType = {

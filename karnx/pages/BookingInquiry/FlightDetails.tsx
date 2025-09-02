@@ -39,12 +39,13 @@ const FlightDetails = () =>{
             </Box>            
             <Typography variant="h3" sx={{color: '#BC0019', my: '24px'}}>Flight Details</Typography>
             <RadioTabs defaultValue={radioTabActive} onchange={ (value: number) => { setFormData({
-      ...formData,
-      flightDetails: {
-        ...formData.flightDetails,
-        trip_type: value === 0 ? 'one_way' : value === 1 ? 'round_trip' : value === 2 ? 'multi_city' : ''
-        
-      }}); setRadioTabActive(value); }}>
+                ...formData,
+                flightDetails: {
+                    ...formData.flightDetails,
+                    trip_type: value === 0 ? 'one_way' : value === 1 ? 'round_trip' : value === 2 ? 'multi_city' : ''
+                    
+                }}); setRadioTabActive(value);
+            }}>
                 <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
                     <OneWayFlights/>
                 </RadioTabs.Tab>
@@ -61,7 +62,7 @@ const FlightDetails = () =>{
                     sx={{ '& .MuiFormControlLabel-label': { fontFamily: 'poppins-lt', fontSize: '14px' } }}
                     control={<Checkbox size="small" />}
                     label='My dates are flexible'
-                    checked={formData.flightDetails?.is_flexible_dates ?? false}
+                    checked={formData?.flightDetails?.is_flexible_dates ?? false}
                     onChange={(e:any) => {
                         setFormData({
                             ...formData,
