@@ -78,8 +78,8 @@ const RoundTripFlights = () => {
                     <CustomDateTimePicker
                         datatimelabel="Return Date & Time"
                         value={
-                            formData.flightDetails?.arrival_time?.[0]
-                                ? dayjs(formData.flightDetails.arrival_time[0])
+                            formData.flightDetails?.departure_time?.[0]
+                                ? dayjs(formData.flightDetails.departure_time[0])
                                 : null
                         }
                         onChange={(newValue) => {
@@ -87,8 +87,8 @@ const RoundTripFlights = () => {
                                 ...formData,
                                 flightDetails: {
                                     ...formData.flightDetails,
-                                    arrival_time: setAtIndex(
-                                        formData.flightDetails?.arrival_time || [],
+                                    departure_time: setAtIndex(
+                                        formData.flightDetails?.departure_time || [],
                                         0,
                                         newValue ? dayjs(newValue).toISOString() : null
                                     )
