@@ -8,4 +8,6 @@ module.exports = {
   images: {
     domains: ['127.0.0.1'], // Add all hostnames you load images from
   },
+    
+  reactStrictMode: false,
 }

@@ -13,13 +13,55 @@ type FlightDetailsType = {
 };
 
 type PassengerInfoType = {
-  name?: string;
-  age?: string;
+  passanger_info_adults?: string;
+  passanger_info_children?: string;
+  passanger_info_infants?: string;
+  passenger_info_total?: string;
+  is_traveling_pets?: boolean;
+  is_medical_assistance_req?: boolean;
+  checked_bag?: number;
+  carry_bag?: number;
+  oversized_items?: string;
+  travel_purpose_ids?: number;
+  is_catering_service_req?: boolean;  
+  pet_travels?: {
+        pet_type?: string;
+        pet_size?: string;
+        additional_notes?: string;
+      };
+  medical_assistance?: {
+    medical_assist_id?: number;
+    other_requirements?: string;
+  };
+  aircraft_preference?: {
+    aircraft_pref_id?: number;
+  };
+  crew_requirements?: {
+    cabin_crew_pref_id?: number;
+    pilot_experience_id?: number;
+    medical_crew_id?: number;
+    language_skills_id?: number;
+    concierge_skills_id?: number;
+    additional_notes?: string;
+  };
+  catering_services?: {
+    dietary_required?: string[];
+    allergy_notes?: string;
+    drink_preferences?: string;
+    custom_services?: string;
+
+  };
+
 };
 
 type ContactInfoType = {
-  email?: string;
-  phone?: string;
+  contact_information?: {
+    contact_name?: string;
+    contact_email?: string;    
+    contact_number?: string;
+    contact_phone?: string;
+    special_requirements?: string;
+  };
 };
 
 export type FormDataType = {
@@ -54,12 +96,53 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
       is_flexible_dates: false,
     },
     passengerInfo: {
-      name: "",
-      age: "",
+      passanger_info_adults: "",
+      passanger_info_children: "",
+      passanger_info_infants: "",
+      passenger_info_total: "",
+      is_traveling_pets: false,
+      is_medical_assistance_req: false,
+      checked_bag: 0,
+      carry_bag: 0,
+      oversized_items: "",
+      travel_purpose_ids: 0,
+      is_catering_service_req: false,
+      pet_travels: {
+        pet_type: "",
+        pet_size: "",
+        additional_notes: "",
+      },
+      medical_assistance: {
+        medical_assist_id: 0,
+        other_requirements: "",
+      },
+      aircraft_preference:{
+        aircraft_pref_id: 0,
+      
+      },
+      crew_requirements: {
+        cabin_crew_pref_id: 0,
+        pilot_experience_id: 0,
+        medical_crew_id: 0,
+        language_skills_id: 0,
+        concierge_skills_id: 0,
+        additional_notes: ""
+      },
+      catering_services: {
+        dietary_required: [],
+        allergy_notes: "",
+        drink_preferences: "",
+        custom_services: "",
+      }
+      
     },
     contactInfo: {
-      email: "",
-      phone: "",
+      contact_information: {
+        contact_name: "",
+        contact_email: "",
+        contact_phone: "",
+        special_requirements: "",
+      },
     },
   });
 

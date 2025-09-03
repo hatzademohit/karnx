@@ -21,10 +21,19 @@ const PassengerInformation = () => {
         [type]:
             action === "inc"
             ? prev[type] + 1
-            : prev[type] > 0
-            ? prev[type] - 1
-            : 0, // prevent negative
+            : type === "Adults"
+            ? Math.max(1, prev[type] - 1) // Adults min 1
+            : Math.max(0, prev[type] - 1), // Others min 0
         }));
+    };
+
+    const handleSpecialAssistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        if (checked) {
+            setSpecialAssistance((prev) => [...prev, value]);
+        } else {
+            setSpecialAssistance((prev) => prev.filter((item) => item !== value));
+        }
     };
 
     return(
