@@ -65,7 +65,7 @@ const StepperComponent: React.FC<StepperComponentProps> = ({ steps, handleBackCl
           className="btn btn-outlined"
           sx={{ width: '100%' }}
         >
-          Back
+          Previous Step
         </Button>
         <Button
           onClick={activeStep === steps.length - 1 ? handleReset : handleNext}
