@@ -42,7 +42,7 @@ const FlightDetails = () =>{
                 ...formData,
                 flightDetails: {
                     ...formData.flightDetails,
-                    trip_type: value === 0 ? 'one_way' : value === 1 ? 'round_trip' : value === 2 ? 'multi_city' : ''
+                    trip_type: value === 0 ? 'one_way' : value === 1 ? 'round_trip' : value === 2 ? 'multi_city' : 'one_way'
                     
                 }}); setRadioTabActive(value);
             }}>

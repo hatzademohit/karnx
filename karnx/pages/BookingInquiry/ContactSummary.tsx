@@ -1,9 +1,9 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { CustomTextField } from "@/components";
 import { useState } from "react";
-
+import { useStep } from "@/app/context/StepProvider";
 const ContactSummary = ()=> {
-
+    const { formData, setFormData } = useStep();
     return(
         <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px'}}>
             <Grid container spacing={2}>

@@ -13,9 +13,9 @@ type FlightDetailsType = {
 };
 
 type PassengerInfoType = {
-  passanger_info_adults?: string;
-  passanger_info_children?: string;
-  passanger_info_infants?: string;
+  passanger_info_adults?: number;
+  passanger_info_children?: number;
+  passanger_info_infants?: number;
   passenger_info_total?: string;
   is_traveling_pets?: boolean;
   is_medical_assistance_req?: boolean;
@@ -33,15 +33,9 @@ type PassengerInfoType = {
     medical_assist_id?: number;
     other_requirements?: string;
   };
-  aircraft_preference?: {
-    aircraft_pref_id?: number;
-  };
+  aircraft_preference?: string[];
   crew_requirements?: {
-    cabin_crew_pref_id?: number;
-    pilot_experience_id?: number;
-    medical_crew_id?: number;
-    language_skills_id?: number;
-    concierge_skills_id?: number;
+    services?: { [key: string]: number }[];
     additional_notes?: string;
   };
   catering_services?: {
@@ -72,10 +66,15 @@ export type FormDataType = {
 
 type StepContextType = {
   airportCity: any[];
+  medicalSupOptions: any[];
   formData: FormDataType;
   setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
   radioTabActive: number;
-  setRadioTabActive: React.Dispatch<React.SetStateAction<number>>;
+  setRadioTabActive: React.Dispatch<React.SetStateAction<number>>;  
+  aircraftTypeOptions?: any[];
+  crewRequirementOptions?: any[];
+  travelingPurposeOption?: any[];
+  cateringDietaryOptions?: any[];
 };
 
 // ---- CONTEXT ----
@@ -84,6 +83,11 @@ const StepContext = createContext<StepContextType | undefined>(undefined);
 // ---- PROVIDER ----
 export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [airportCity, setAirportCity] = useState<any[]>([]);
+  const [medicalSupOptions, setMedicalSupOptions] = useState<any[]>([]);
+  const [aircraftTypeOptions, setAircraftTypeOptions] = useState<any[]>([]);
+  const [crewRequirementOptions, setCrewRequirementOptions] = useState<any[]>([]);
+  const [travelingPurposeOption, setTravelingPurposeOptions] = useState<any[]>([]);
+  const [cateringDietaryOptions, setCateringDietaryOptions] = useState<any[]>([]);
   const [radioTabActive, setRadioTabActive] = useState<number>(0);
 
   const [formData, setFormData] = useState<FormDataType>({
@@ -96,9 +100,9 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
       is_flexible_dates: false,
     },
     passengerInfo: {
-      passanger_info_adults: "",
-      passanger_info_children: "",
-      passanger_info_infants: "",
+      passanger_info_adults: 1,
+      passanger_info_children: 0,
+      passanger_info_infants: 0,
       passenger_info_total: "",
       is_traveling_pets: false,
       is_medical_assistance_req: false,
@@ -116,16 +120,9 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
         medical_assist_id: 0,
         other_requirements: "",
       },
-      aircraft_preference:{
-        aircraft_pref_id: 0,
-      
-      },
+      aircraft_preference:[],
       crew_requirements: {
-        cabin_crew_pref_id: 0,
-        pilot_experience_id: 0,
-        medical_crew_id: 0,
-        language_skills_id: 0,
-        concierge_skills_id: 0,
+        services: [],
         additional_notes: ""
       },
       catering_services: {
@@ -162,12 +159,96 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const fetchMedicalAssistanceOptions = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/form-fields-data/medical-supports`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.token}`, // your login token  
+        },
+      });
+      const data = await response.json();
+      setMedicalSupOptions(data.data || []);
+    } catch (error) {
+      console.error("Error fetching medical assistance options:", error);
+    }
+  };
+
+  const fetchAirCraftTypes = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/form-fields-data/aircraft-types`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.token}`, // your login token
+        },
+      });      
+      const data = await response.json();
+      setAircraftTypeOptions(data.data || []);
+    } catch (error) {
+      console.error("Error fetching aircraft options:", error);
+    }
+  };
+
+  const fetchCrewRequirements = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/form-fields-data/crew-requirements`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.token}`, // your login token
+        },
+      });      
+      const data = await response.json();
+      setCrewRequirementOptions(data.data || []);
+    } catch (error) {
+      console.error("Error fetching crew requirements:", error);
+    }
+  };
+  const fetchTravelingPurpose = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/form-fields-data/travel-purposes`, {
+        method: "GET",
+        headers: {  
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.token}`, // your login token
+        },
+      });      
+      const data = await response.json();
+      setTravelingPurposeOptions(data.data || []);
+    } catch (error) {
+      console.error("Error fetching traveling purpose options:", error);  
+    }    
+  };
+
+  const fetchCateringDietaryOptions = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/form-fields-data/catering-dietary`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.token}`, // your login token
+        },
+      });      
+      const data = await response.json();
+      setCateringDietaryOptions(data.data || []);
+    } catch (error) {
+      console.error("Error fetching catering dietary options:", error);
+    }
+  };
+
   useEffect(() => {
     fetchAirportCities();
+    fetchMedicalAssistanceOptions();
+    fetchAirCraftTypes();
+    fetchCrewRequirements(); 
+    fetchTravelingPurpose();
+    fetchCateringDietaryOptions();
   }, []);
 
   return (
-    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive }}>
+    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions }}>
       {children}
     </StepContext.Provider>
   );
