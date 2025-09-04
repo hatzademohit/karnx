@@ -2,6 +2,7 @@
 import { Grid, Typography, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useStep } from '@/app/context/StepProvider';
+import { CustomTextField, SingleSelect } from "@/components";
 
 const CrewRequirements = () => {
     const { formData, setFormData, crewRequirementOptions } = useStep();
@@ -71,32 +72,26 @@ const CrewRequirements = () => {
             </Grid>
             {crewRequirementOptions && crewRequirementOptions.map((crew) => (
                 <Grid size={{ lg: 4, md: 6, sm: 6, xs:12 }} key={crew.var_key}>
-                    <FormControl fullWidth>
-                        <InputLabel>{crew.inputLabel}</InputLabel>
-                        <Select
-                            label={crew.inputLabel}
+                        <SingleSelect
+                            inputLabel={crew.inputLabel}
                             value={serviceSelections[crew.var_key] ?? ""}
                             onChange={e => handleDropdownChange(crew.var_key, Number(e.target.value))}
                         >
-                            <MenuItem value="" disabled>Select...</MenuItem>
                             {crew.options.map(opt => (
                                 <MenuItem value={opt.id} key={opt.id}>{opt.name}</MenuItem>
                             ))}
-                        </Select>
-                    </FormControl>
+                        </SingleSelect>
                 </Grid>
             ))}
 
             <Grid size={{ lg: 4, md: 6, sm: 6, xs:12 }}>
-                <TextField
-                    label="Additional Notes"
-                    variant="outlined"
-                    fullWidth
+                <CustomTextField
+                    inputLabel="Additional Notes"
                     value={notes}
                     onChange={handleNotesChange}
                     size="medium"
-                    multiline
-                    rows={2}
+                    // multiline
+                    // rows={2}
                 />
             </Grid>
         </>

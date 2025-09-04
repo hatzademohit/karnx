@@ -25,6 +25,7 @@ export interface CustomTextFieldProps {
   InputProps?: any;
   id?: string;
   inputLabel?: string;
+  multiline?: number
 }
 
 const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
@@ -49,6 +50,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
   InputProps,
   id,
   inputLabel,
+  multiline,
   ...props
 }, ref) => {
   const displayLabel = asterisk ? `${label} *` : label;
@@ -79,6 +81,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           InputProps={InputProps}
           autoComplete='off'
           id={id}
+          // multiline={multiline}
         />
       </Box>
   );
