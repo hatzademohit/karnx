@@ -14,7 +14,7 @@ export const headerHeight = 70;
 const closeDrawerWidth = 48;
 
 interface MainProps {
-  theme: Theme;
+  theme?: Theme;
   open: boolean;
 }
 
@@ -71,7 +71,7 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 interface AppBarProps {
-  theme: Theme;
+  theme?: Theme;
   open: boolean;
 }
 
@@ -95,7 +95,7 @@ export const AppBar = styled(MuiAppBar, {
 }));
 
 interface DrawerProps {
-  theme: Theme;
+  theme?: Theme;
   open: boolean;
 }
 

@@ -23,6 +23,7 @@ export interface MUIDataGridProps{
   pageSize?: any;
   onPageSizeChange?: any;
   onSortModelChange?: any;
+  paginationMode?: any;
 }
 
 const MUIDataGrid:React.FC<MUIDataGridProps> = ({
@@ -43,6 +44,7 @@ const MUIDataGrid:React.FC<MUIDataGridProps> = ({
   pageSize = 10,
   onPageSizeChange,
   onSortModelChange,
+  paginationMode
 }) => {
 const [searchText, setSearchText] = useState("");
 
@@ -108,6 +110,7 @@ const handleExportExcel = () => {
       <DataGrid
         rows={filteredRows}
         columns={gridColumns}
+        paginationMode={paginationMode}
         initialState={{
           pagination: {
             paginationModel: { page: page, pageSize: pageSize },

@@ -9,13 +9,13 @@ const DocumentUploadReview = () => {
 
     return(
         <>
-            <Grid item lg={12}>
+            <Grid size={{ xs: 12 }}>
                 <Typography variant="h3" sx={{color: '#BC0019', mb: '15px'}}>Document Upload & Review</Typography>
             </Grid>
-            <Grid item lg={12}>
+            <Grid size={{ xs: 12 }}>
                 <FileSelection onFileSelect={(files) => console.log(files)} />
             </Grid>
-            <Grid item lg={12}>
+            <Grid size={{ xs: 12 }}>
                 <Typography variant="h4" sx={{ mb: '8px'}}>Required Documents</Typography>
                 <FormControl>
                     {requiredDocument && requiredDocument.map((require) => (

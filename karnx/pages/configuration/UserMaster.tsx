@@ -214,7 +214,7 @@ const UserMaster = () => {
       <MUIDataGrid
         gridColumns={columns}
         gridRows={data}
-       // paginationMode="server"
+        paginationMode="server"
         sortingMode="server"
         rowCount={rowCount}
         page={page}
@@ -234,7 +234,7 @@ const UserMaster = () => {
         headerText={modalName ? "Edit User" : "Add User"}
       >
         <Grid container spacing={2}>
-          <Grid item lg={6}>
+          <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
             <CustomTextField
               inputLabel="Email"
               placeholder="Enter Email"
@@ -243,7 +243,7 @@ const UserMaster = () => {
               InputProps={{ readOnly: modalName }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
             <SingleSelect   // gives value and onChange from react-hook-form
                 inputLabel="Role"
                 size="small"
@@ -259,7 +259,7 @@ const UserMaster = () => {
             </SingleSelect>
           </Grid>
           { modalName &&  
-            <Grid item lg={6}>
+            <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
               <SingleSelect
                   inputLabel="Status"
                   size="small"
@@ -276,7 +276,7 @@ const UserMaster = () => {
             </Grid>
           }
           {user?.client_id == 1 && !modalName &&
-          <Grid item lg={6}>
+          <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
             <SingleSelect
                 inputLabel="Client Name"
                 size="small"
@@ -293,7 +293,7 @@ const UserMaster = () => {
           </Grid>
           }
           {/* more fields */}
-          <Grid item lg={12}>
+          <Grid size={{ xs: 12 }}>
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
               <Button variant="contained" onClick={handleSaveUser}>
                 Save

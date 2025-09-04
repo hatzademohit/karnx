@@ -14,7 +14,7 @@ import { Badge, Icon, IconButton, Tooltip } from '@mui/material';
 
 interface SeperateAppBarProps {
   open: boolean;
-  theme: any;
+  theme?: any;
 }
 const SeperateAppBar: FC<SeperateAppBarProps> = ({
   open,
@@ -31,7 +31,6 @@ const router = useRouter()
         position="fixed"
         open={open}
         sx={{ backgroundColor: '#ffffff', zIndex : '99999', boxShadow: '0px 1px 3px 1px rgba(0, 0, 0, 0.15)' }}
-        theme={theme}
       >
         <Toolbar className="toolbar" sx={{minHeight: `${headerHeight}px !important`}}>
           <Typography noWrap component="div" sx={{ display: 'flex', width: drawerWidth, margin: '-6px 0 -2px -25px', padding: '6px 0 3px 25px' }}>

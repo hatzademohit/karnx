@@ -67,7 +67,7 @@ const MasterScreen = () => {
             
             <CustomModal open={addRow} setOpen={setAddRow} dataClose={() => setAddRow(false)} headerText="Add Row">
                <Grid container spacing={2}>
-                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                         <CustomTextField
                             inputLabel="User Name"
                             placeholder="Enter User Name"
@@ -75,7 +75,7 @@ const MasterScreen = () => {
                             size="small"
                         />
                     </Grid>
-                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                         <CustomTextField
                             inputLabel="Email"
                             placeholder="Enter Email"
@@ -83,7 +83,7 @@ const MasterScreen = () => {
                             size="small"
                         />
                     </Grid>
-                    <Grid item lg={12}>
+                    <Grid size={{ xs: 12 }}>
                         <Box sx={{display: 'flex', gap: '10px', justifyContent: 'flex-end'}}>
                             <Button variant="contained" className="btn btn-status bg-green" onClick={() => setAddRow(false)}>
                                 Save

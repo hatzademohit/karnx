@@ -3,25 +3,13 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Button,
   IconButton,
-  Paper,
   Box,
-  Tooltip,
 } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import Draggable from 'react-draggable';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-
-function PaperComponent(props: any) {
-  return (
-    <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'} bounds="parent">
-      <Paper {...props} />
-    </Draggable>
-  );
-}
 
 export interface ModalCompProps {
   headerText?: any;
@@ -31,15 +19,8 @@ export interface ModalCompProps {
   fbText?: string;
   dataAction?: any;
   dataClose?: any;
-  testConnection?: any;
-  testConnectionClick?: any;
-  className?: string;
-  style?: any;
-  actionBtnDisabled?: boolean;
-  scrollPosition?: boolean;
-  showTooltipText?: string;
-  hideTooltipText?: string;
   isFooterButton?: boolean;
+  className?: string;
 }
 
 const CustomModal: React.FC<ModalCompProps> = ({
@@ -50,42 +31,23 @@ const CustomModal: React.FC<ModalCompProps> = ({
   fbText,
   dataAction,
   dataClose,
-  testConnection,
-  testConnectionClick,
-  actionBtnDisabled = false,
-  scrollPosition,
   className,
-  showTooltipText,
   isFooterButton = false
 }) => {
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-
-  const handleScroll = () => {
-    setTimeout(() => {
-      scrollRef.current?.scrollTo({
-        behavior: 'smooth',
-        top: scrollPosition === true ? 0 : scrollRef.current.scrollHeight,
-      });
-    }, 300);
-  };
-
-  React.useEffect(() => {
-    scrollRef.current?.scrollTo({ behavior: 'smooth', top: 0 });
-  }, [open]);
 
   return (
     <Dialog
       open={open}
-      onClose={(event, reason) => {
-        if (reason === 'backdropClick') {
-          return;
-        }
-        if (reason === 'escapeKeyDown') {
-          return;
-        }
-        dataClose
-      }}
-      PaperComponent={PaperComponent}
+      onClose={ () => setOpen(false)}
+      // onClose={(event, reason) => {
+      //   if (reason === 'backdropClick') {
+      //     return;
+      //   }
+      //   if (reason === 'escapeKeyDown') {
+      //     return;
+      //   }
+      //   dataClose
+      // }}
       aria-labelledby="draggable-dialog-title"
       className='dialog-modal'
     >
@@ -100,7 +62,7 @@ const CustomModal: React.FC<ModalCompProps> = ({
             <CancelOutlinedIcon sx={{fontSize: '27px'}} />
           </IconButton>
         </DialogTitle>
-        <DialogContent ref={scrollRef} className='modal-body'>
+        <DialogContent className='modal-body'>
           {children}
         </DialogContent>
         {/* <DialogActions className='modal-footer'>

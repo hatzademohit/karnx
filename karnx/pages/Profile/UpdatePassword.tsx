@@ -71,10 +71,10 @@ const UpdatePassword = () => {
         Update Password
       </Typography>
       <Grid container justifyContent="center" alignItems="center">
-        <Grid item xs={12} sm={8} md={6} lg={5}>
+		<Grid size={{lg: 5, md: 6, sm: 8, xs: 12}}>
           <Paper elevation={3} style={{ padding: "2rem", borderRadius: "10px" }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12}}>
                 <CustomTextField
                   inputLabel="Old Password"
                   placeholder="Enter Old Password"
@@ -93,7 +93,7 @@ const UpdatePassword = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12}}>
                 <CustomTextField
                   inputLabel="New Password"
                   placeholder="Enter New Password"
@@ -112,7 +112,7 @@ const UpdatePassword = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12}}>
                 <CustomTextField
                   inputLabel="Confirm Password"
                   placeholder="Enter Confirm Password"
@@ -131,8 +131,8 @@ const UpdatePassword = () => {
                 />
               </Grid>
 
-              <Grid item xs={12}>
-                <Button variant="contained" onClick={handleSubmit}>
+              <Grid size={{ xs: 12}}>
+                <Button variant="contained" className="btn btn-blue" onClick={handleSubmit}>
                   Update Password
                 </Button>
               </Grid>

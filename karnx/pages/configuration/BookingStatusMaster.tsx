@@ -165,8 +165,6 @@ const BookingStatusMaster = () => {
   return (
     <Box>
       <Typography component='h1' variant="h1" sx={{ color: '#03045E', mb: '24px' }}>Booking Status Master</Typography>
-
-    
       <MUIDataGrid
         gridColumns={columns}
         gridRows={data}
@@ -199,8 +197,7 @@ const BookingStatusMaster = () => {
         headerText={modalName ? "Edit Booking Status" : "Add Booking Status"}
       >
         <Grid container spacing={2}>
-          
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Booking Status Name"
               placeholder="Enter Booking Status Name"
@@ -209,7 +206,7 @@ const BookingStatusMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Description"
               size="small"
@@ -218,7 +215,7 @@ const BookingStatusMaster = () => {
               onChange={(e) => setSelectedBookingStatus({ ...selectedBookingStatus, description: e.target.value })}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Notification Template"
               placeholder="Enter Notification Template"
@@ -227,7 +224,7 @@ const BookingStatusMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Status Color Code"
               placeholder="Enter Phone"
@@ -239,7 +236,7 @@ const BookingStatusMaster = () => {
           </Grid>
           
           {modalName &&
-            <Grid item lg={6}>
+            <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
               <SingleSelect
                 inputLabel="Status"
                 size="small"
@@ -255,7 +252,7 @@ const BookingStatusMaster = () => {
               </SingleSelect>
             </Grid>
           }
-          <Grid item lg={12}>
+          <Grid size={{ lg: 12, md: 12 }}>
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
               <Button variant="contained" onClick={handleSaveBookingStatus}>
                 Save

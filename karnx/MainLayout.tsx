@@ -23,7 +23,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className, children }) => {
   return (
     <>
       <Sidebarheader>
-        <Main theme={theme} open={open} className={`main-content ${className}`}>
+        <Main open={open} className={`main-content ${className}`}>
           {children}
         </Main>
         <ToastContainer position="top-right" autoClose={3000} newestOnTop  closeOnClick  pauseOnFocusLoss pauseOnHover />

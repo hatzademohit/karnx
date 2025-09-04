@@ -10,10 +10,10 @@ const CateringExtraServices = () => {
 
     return(
         <>
-            <Grid item lg={12}>
+            <Grid size={{ xs: 12 }}>
                 <Typography variant="h3" sx={{color: '#BC0019', mt: '15px'}}>Catering & Extra Services</Typography>
             </Grid>
-            <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                 <FormControlLabel label='Catering Required' control={<Checkbox checked={showServices} size="small" onChange={ (e) => setshowServices(e.target?.checked) }/>} />
                 {showServices && 
                     <React.Fragment>
@@ -27,7 +27,7 @@ const CateringExtraServices = () => {
                 }
             </Grid>
             {showServices && 
-                <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
                         <CustomTextField
                             inputLabel="Allergies & Dietary Restrictions"

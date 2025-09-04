@@ -285,41 +285,37 @@ const RoleUserPermission: React.FC = () => {
       </Tabs>
 
       <Box sx={{ p: 2, border: '1px solid #cccccc' }}>
-        {activeTab === 0 ? (
-          <Grid container spacing={2} sx={{ mb: 4 }}>
-            <Grid item xs={12} md={4}>
-              <SingleSelect
-                inputLabel='Role'
-                value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
-                size='small'
-              >
-                {roles.map((role) => (
-                  <MenuItem key={role.id} value={role.id}>
-                    {role.name}
-                  </MenuItem>
-                ))}
-              </SingleSelect>
+		<Grid container spacing={2} sx={{ mb: 4 }}>
+			<Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
+				{activeTab === 0 ? (
+					<SingleSelect
+						inputLabel='Role'
+						value={selectedRole}
+						onChange={(e) => setSelectedRole(e.target.value)}
+						size='small'
+					>
+						{roles.map((role) => (
+						<MenuItem key={role.id} value={role.id}>
+							{role.name}
+						</MenuItem>
+						))}
+					</SingleSelect>
+				) : (
+					<SingleSelect
+						inputLabel='User'
+						value={selectedUser}
+						onChange={(e) => setSelectedUser(e.target.value)}
+						size='small'
+					>
+						{users.map((u) => (
+						<MenuItem key={u.id} value={u.id}>
+							{u.name}
+						</MenuItem>
+						))}
+					</SingleSelect>
+				)}
             </Grid>
           </Grid>
-        ) : (
-          <Grid container spacing={2} sx={{ mb: 4 }}>
-            <Grid item xs={12} md={4}>
-              <SingleSelect
-                inputLabel='User'
-                value={selectedUser}
-                onChange={(e) => setSelectedUser(e.target.value)}
-                size='small'
-              >
-                {users.map((u) => (
-                  <MenuItem key={u.id} value={u.id}>
-                    {u.name}
-                  </MenuItem>
-                ))}
-              </SingleSelect>
-            </Grid>
-          </Grid>
-        )}
 
         {(activeTab === 0 ? selectedRole : selectedUser) ? (
           <Box>
@@ -343,7 +339,7 @@ const RoleUserPermission: React.FC = () => {
                 const allChecked = childVals.length > 0 && childVals.every(Boolean);
                 const someChecked = childVals.some(Boolean) && !allChecked;
                 return (
-                  <Grid item xs={12} sm={4} md={3} lg={2} key={module.id}>
+                  <Grid size={{ lg: 2, md: 3, sm: 4, xs: 12 }}>
                     <Box
                       sx={{
                         border: "1px solid #ddd",

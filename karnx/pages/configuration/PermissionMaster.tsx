@@ -75,7 +75,6 @@ const PermissionMaster = () => {
       {
         field: "action",
         headerName: "Action",
-        flex: 1,
         sortable: false,
         renderCell: (params: any) => (
           <>
@@ -173,7 +172,7 @@ const PermissionMaster = () => {
         rowCount={rowCount}
         page={page}
         pageSize={pageSize}
-        onPageChange={(newPage) => setPage(newPage)}
+        // onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newSize) => setPageSize(newSize)}
         onSortModelChange={(model) => setSortModel(model)}
         buttonText="Add Permission"
@@ -191,7 +190,7 @@ const PermissionMaster = () => {
         headerText={selectedPermission?.id ? "Edit Permission" : "Add Permission"}
       >
         <Grid container spacing={2}>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Permission Name"
               placeholder="Enter Permission Name"
@@ -199,7 +198,7 @@ const PermissionMaster = () => {
               onChange={(e) => setSelectedPermission({ ...selectedPermission, name: e.target.value })}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Permission Group Name (Slug)"
               placeholder="Enter Permission Group Name"
@@ -207,7 +206,7 @@ const PermissionMaster = () => {
               onChange={(e) => setSelectedPermission({ ...selectedPermission, slug: e.target.value })}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               value="api"
               disabled
@@ -217,7 +216,7 @@ const PermissionMaster = () => {
           </Grid>
 
           {/* Save / Cancel */}
-          <Grid item lg={12}>
+          <Grid size={{ lg: 12, md: 12 }}>
             <Box sx={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
               <Button variant="contained" onClick={handleSavePermission}>
                 Save

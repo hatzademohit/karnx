@@ -100,7 +100,7 @@ const Inquiries = () => {
 
         <CustomModal open={inqueryModal} setOpen={setInqueryModal} dataClose={() => setInqueryModal(false)} headerText="Inquiry Details - INQ-2024-001">
             <Grid container spacing={2}>
-                <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                     <Typography component='h4' variant="h4" sx={{mb: '12px'}}>Flight Details</Typography>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
                         <Box sx={{display: 'flex', gap: '8px', alignItems: 'center'}}>
@@ -113,7 +113,7 @@ const Inquiries = () => {
                         </Box>
                     </Box>
                 </Grid>
-                <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                     <Typography component='h4' variant="h4" sx={{mb: '12px'}}>Client Information</Typography>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
                         <Box sx={{display: 'flex', gap: '8px', alignItems: 'center'}}>
@@ -126,7 +126,7 @@ const Inquiries = () => {
                         </Box>
                     </Box>
                 </Grid>
-                <Grid item lg={12}>
+                <Grid size={{ xs: 12 }}>
                    <Box sx={{display: 'flex', justifyContent: 'flex-end', alignItems: "center", gap: '10px'}} className='modal-footer'>
                         <Button variant="contained" className="btn btn-status bg-green" onClick={ () => setInqueryModal(false)}>
                             <TaskAltIcon sx={{mr: '8px', fontSize: '14px'}} /> Accept Inquiry

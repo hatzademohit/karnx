@@ -90,90 +90,82 @@ const MyProfile = () => {
       <Typography component="h1" variant="h1">
         Update Profile
       </Typography>
-    <Grid container justifyContent="center" alignItems="center">
-      <Grid item xs={12} sm={8} md={6} lg={5}>
-        <Paper elevation={3} style={{ padding: "2rem", borderRadius: "10px" }}>
+		<Grid container justifyContent="center" alignItems="center">
+          <Grid size={{lg: 5, md: 6, sm: 8, xs: 12}}>
+        	<Paper elevation={3} style={{ padding: "2rem", borderRadius: "10px" }}>
+			<Grid container spacing={2}>
+				<Grid size={{ xs: 12 }} sx={{ textAlign: "center" }}>
+				<Avatar
+					src={profile.avatar ? fileStorageUrl + profile.avatar : "/default-avatar.png"}
+					alt="avatar"
+					sx={{ width: 100, height: 100, margin: "auto" }}
+				/>
+				<input type="file" accept="image/*" onChange={handleFileChange} />
+				</Grid>
 
-          <Grid container spacing={2}>
-            {/* Avatar */}
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <Avatar
-                src={profile.avatar ? fileStorageUrl + profile.avatar : "/default-avatar.png"}
-                alt="avatar"
-                sx={{ width: 100, height: 100, margin: "auto" }}
-              />
-              <input type="file" accept="image/*" onChange={handleFileChange} />
-            </Grid>
+				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+					<CustomTextField
+						inputLabel="Name"
+						name="name"
+						value={profile.name}
+						onChange={handleChange}
+					/>
+				</Grid>
 
-            {/* Name */}
-            <Grid item xs={12} sm={6}>
-              <CustomTextField
-            
-                inputLabel="Name"
-                name="name"
-                value={profile.name}
-                onChange={handleChange}
-              />
-            </Grid>
+				{/* Email */}
+				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+					<CustomTextField
+						inputLabel="Email"
+						name="email"
+						value={profile.email}
+						onChange={handleChange}
+					/>
+				</Grid>
 
-            {/* Email */}
-            <Grid item xs={12} sm={6}>
-              <CustomTextField
-                
-                inputLabel="Email"
-                name="email"
-                value={profile.email}
-                onChange={handleChange}
-              />
-            </Grid>
+				{/* Phone */}
+				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+					<CustomTextField
+						inputLabel="Phone"
+						name="phone"
+						value={profile.phone}
+						onChange={handleChange}
+					/>
+				</Grid>
 
-            {/* Phone */}
-            <Grid item xs={12} sm={6}>
-              <CustomTextField
-                
-                inputLabel="Phone"
-                name="phone"
-                value={profile.phone}
-                onChange={handleChange}
-              />
-            </Grid>
+				{/* DOB */}
+				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+					<CustomTextField
+						type="date"
+						inputLabel="Date of Birth"
+						name="dob"
+						value={profile.dob}
+						onChange={handleChange}
+						// InputinputLabelProps={{ shrink: true }}
+					/>
+				</Grid>
 
-            {/* DOB */}
-            <Grid item xs={12} sm={6}>
-              <CustomTextField
-                
-                type="date"
-                inputLabel="Date of Birth"
-                name="dob"
-                value={profile.dob}
-                onChange={handleChange}
-                InputinputLabelProps={{ shrink: true }}
-              />
-            </Grid>
+				{/* Gender */}
+				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+					<CustomTextField
+						inputLabel="Gender"
+						name="gender"
+						value={profile.gender}
+						onChange={handleChange}
+					/>
+				</Grid>
 
-            {/* Gender */}
-            <Grid item xs={12} sm={6}>
-              <CustomTextField
-                
-                inputLabel="Gender"
-                name="gender"
-                value={profile.gender}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            {/* Submit Button */}
-            <Grid item xs={12}>
-              <Button
-                
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-              >
-                Update Profile
-              </Button>
-            </Grid>
-          </Grid>
+				{/* Submit Button */}
+				<Grid size={{ xs: 12 }}>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleSubmit}
+						className="btn btn-blue"
+					>
+						Update Profile
+					</Button>
+				</Grid>
+			</Grid>
         </Paper>
       </Grid>
     </Grid>

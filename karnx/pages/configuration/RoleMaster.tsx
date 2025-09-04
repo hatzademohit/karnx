@@ -8,13 +8,20 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { apiBaseUrl } from '@/karnx/api';
 import { toast } from 'react-toastify';
 import { useAuth } from "@/app/context/AuthContext";
+
+interface RoleProps{
+  name: string;
+  id: string;
+  client_id: number;
+}
+
 const RoleMaster = () => {
   const [columns, setColumns] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
   const [addRow, setAddRow] = useState(false);
   const [modalName, setModalName] = useState<boolean>(false)
   const [deleteModal, setDeleteModal] = useState(false);
-  const [roles, setRecords] = useState<any[]>([]);
+  const [roles, setRecords] = useState<RoleProps>();
   // Pagination, Search, Sort states
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -170,9 +177,7 @@ const RoleMaster = () => {
     } catch (err) {
       console.error("Error deleting user:", err);
       toast.error("Something went wrong! Please try again later.");
-    }
-
-    
+    }    
   };
 
   return (
@@ -187,7 +192,7 @@ const RoleMaster = () => {
         rowCount={rowCount}
         page={page}
         pageSize={pageSize}
-        onPageChange={(newPage) => setPage(newPage)}
+        // onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newSize) => setPageSize(newSize)}
         onSortModelChange={(model) => setSortModel(model)}
         buttonText='Add Role'
@@ -199,11 +204,10 @@ const RoleMaster = () => {
         open={addRow}
         setOpen={setAddRow}
         dataClose={() => setAddRow(false)}
-        // headerText={roles ? "Edit Role" : "Add Role"}
         headerText={modalName ? "Edit Role" : "Add Role"}
       >
         <Grid container spacing={2}>
-          <Grid item lg={6}>
+         <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Role Name"
               placeholder="Enter Role Name"
@@ -212,7 +216,7 @@ const RoleMaster = () => {
             />
           </Grid>
           {user?.client_id == 1 && !modalName &&
-          <Grid item lg={6}>
+         <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <SingleSelect
                 inputLabel="Client Name"
                 size="small"
@@ -229,7 +233,7 @@ const RoleMaster = () => {
           </Grid>
           }
           {/* more fields */}
-          <Grid item lg={12}>
+          <Grid size={{ lg: 12, md: 12 }}>
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
               <Button variant="contained" onClick={handleSaveUser}>
                 Save

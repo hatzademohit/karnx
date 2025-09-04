@@ -9,10 +9,10 @@ const CrewRequirements = () => {
 
     return(
         <>
-            <Grid item lg={12}>
+            <Grid size={{ xs: 12 }}>
                 <Typography variant="h3" sx={{color: '#BC0019', my: '15px'}}>Crew Requirements </Typography>
             </Grid>
-            <Grid item lg={4} md={6} sm={6} xs={12}>
+            <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
                 <SingleSelectRadio 
                     inputLabel='Cabin Crew Preference'
                     options={['No Preference', 'Only Female Hostess', 'Only Male Host', 'Mixed Crew']}
@@ -20,7 +20,7 @@ const CrewRequirements = () => {
                     onChange={setCrewPreference}
                 />
             </Grid>
-            <Grid item lg={4} md={6} sm={6} xs={12}>
+            <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
                 <SingleSelectRadio 
                     inputLabel='Pilot Experience Level'
                     options={['No Preference', 'Standard Licensed Pilot', 'Senior Pilot (5+ years charter experience)', 'Instructor-Level Pilot (10+ years experience)']}
@@ -28,7 +28,7 @@ const CrewRequirements = () => {
                     onChange={setCrewPreference}
                 />
             </Grid>
-            <Grid item lg={4} md={6} sm={6} xs={12}>
+            <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
                 <SingleSelectRadio 
                     inputLabel='Pilot Experience Level'
                     options={['Medical / Specialized Crew', 'Doctor Onboard', 'SNurse Onboard', 'Medical Assistant (stretcher/wheelchair cases)']}
@@ -36,13 +36,13 @@ const CrewRequirements = () => {
                     onChange={setCrewPreference}
                 />
             </Grid>
-            <Grid item lg={4} md={6} sm={6} xs={12}>
+            <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
                 <SimpleAutoComplete
                     inputLabel='Languages Spoken'
                     options={['ENG', 'MAR', 'HID']}
                 />
             </Grid>
-            <Grid item lg={4} md={6} sm={6} xs={12}>
+            <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
                 <SingleSelectRadio 
                     inputLabel='VIP/Concierge Crew Skills'
                     options={['Not Required', 'Celebrity/VIP Handling', 'Security Trained Crew', 'Etiquette-Trained Host/Hostess', 'Multilingual Concierge']}
@@ -50,7 +50,7 @@ const CrewRequirements = () => {
                     onChange={setCrewPreference}
                 />
             </Grid>
-            <Grid item lg={4} md={6} sm={6} xs={12}>
+            <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
                 <CustomTextField 
                     inputLabel="Additional Notes"
                     size='medium'

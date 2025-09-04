@@ -12,10 +12,10 @@ const PurposeofTravel = () => {
 
     return(
         <>
-            <Grid item lg={12}>
+            <Grid size={{ xs: 12 }}>
                 <Typography variant="h3" sx={{color: '#BC0019', mt: '15px'}}>Purpose of Travel</Typography>
             </Grid>
-            <Grid item lg={12}>
+            <Grid size={{ xs: 12 }}>
                 <FormControl>
                     <RadioGroup
                         defaultValue="no"

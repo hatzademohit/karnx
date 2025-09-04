@@ -6,7 +6,12 @@ module.exports = {
     REACT_APP_API_WEB_URL: 'https://vmmtapi.valethi.com' 
   },
   images: {
-    domains: ['127.0.0.1'], // Add all hostnames you load images from
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1', // replace with your actual domain
+      },
+    ],
   },
     
   reactStrictMode: false,

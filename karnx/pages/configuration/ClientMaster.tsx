@@ -77,7 +77,6 @@ const ClientMaster = () => {
       {
         field: 'action',
         headerName: 'Action',
-        flex: 0.6,
         sortable: false,
         renderCell: (params: any) => (
           <>
@@ -194,7 +193,7 @@ const ClientMaster = () => {
         <Grid container spacing={2}>
           {/* Disabled on Edit */}
           {/* {modalName && (
-            <Grid item lg={6}>
+            <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
               <CustomTextField
                 inputLabel="ID"
                 placeholder="ID"
@@ -203,7 +202,7 @@ const ClientMaster = () => {
               />
             </Grid>
           )} */}
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Client Name"
               placeholder="Enter Client Name"
@@ -212,7 +211,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <SingleSelect
               inputLabel="Type"
               size="small"
@@ -226,7 +225,7 @@ const ClientMaster = () => {
               <MenuItem value="Portal Admin">Portal Admin</MenuItem>
             </SingleSelect>
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Contact Person"
               placeholder="Enter Contact Person"
@@ -235,7 +234,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Phone"
               placeholder="Enter Phone"
@@ -244,7 +243,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Email"
               placeholder="Enter Email"
@@ -253,7 +252,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Address Line 1"
               placeholder="Enter Address Line 1"
@@ -262,7 +261,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Address Line 2"
               placeholder="Enter Address Line 2"
@@ -271,7 +270,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Area"
               placeholder="Enter Area"
@@ -280,7 +279,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="City"
               placeholder="Enter City"
@@ -289,7 +288,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="State"
               placeholder="Enter State"
@@ -298,7 +297,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Country"
               placeholder="Enter Country"
@@ -307,7 +306,7 @@ const ClientMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Pincode"
               placeholder="Enter Pincode"
@@ -317,7 +316,7 @@ const ClientMaster = () => {
             />
           </Grid>
           {modalName &&
-            <Grid item lg={6}>
+            <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
               <SingleSelect
                 inputLabel="Status"
                 size="small"
@@ -333,7 +332,7 @@ const ClientMaster = () => {
               </SingleSelect>
             </Grid>
           }
-          <Grid item lg={12}>
+          <Grid size={{ lg: 12, md: 12 }}>
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
               <Button variant="contained" onClick={handleSaveClient}>
                 Save

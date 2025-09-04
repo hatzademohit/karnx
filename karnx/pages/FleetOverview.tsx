@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const FleetOverview = () => {
 
-    interface flightOperationsDataProps{
+    interface flightOverviewDataProps{
         flightNumber?: string;
         status?: string;
         type?: string;
@@ -12,10 +12,10 @@ const FleetOverview = () => {
         mainntenance?: string;
     }
 
-    const [flightOperationsData, setFlightOperationsData] = useState<flightOperationsDataProps[]>([])
+    const [flightOverviewData, setFlightOverviewData] = useState<flightOverviewDataProps[]>([])
 
     useEffect(() => {
-        setFlightOperationsData([
+        setFlightOverviewData([
             {flightNumber: 'G-KRNX', status: 'ON TIME', type: 'Gulfstream G650', location: 'LHR', mainntenance: '45 hrs'},
             {flightNumber: 'G-WING', status: 'SCHEDULED', type: 'Global 7500', location: 'En Route CDG-DXB', mainntenance: '120 hrs'},
             {flightNumber: 'N123KX', status: 'MAINTENANCE', type: 'Citation XLS+', location: 'LAX Hangar', mainntenance: 'In Progress'},
@@ -31,8 +31,8 @@ const FleetOverview = () => {
                 <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Fleet Overview</Typography>
             </Box>
             <Grid container spacing={2}>
-                {flightOperationsData && flightOperationsData.map((item, index) => (
-                    <Grid item lg={4} md={6} sm={12} xs={12} key={index}>
+                {flightOverviewData && flightOverviewData.map((item, index) => (
+                    <Grid size={{ lg: 4, md: 6, sm: 12, xs: 12 }} key={index}>
                         <Box sx={{border: '1px solid #E6E6E6', padding: '18px'}}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>

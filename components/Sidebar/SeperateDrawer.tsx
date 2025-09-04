@@ -2,7 +2,7 @@
 import React from 'react'
 import { DrawerHeader } from '../Sidebar/Sidebarheader';
 import { Drawer } from '../Sidebar/Sidebarheader';
-import { IconButton, Divider, List, ListItemButton, ListItemIcon, ListItemText, ListItem } from '@mui/material';
+import { List, ListItemButton, ListItemIcon, ListItemText, ListItem } from '@mui/material';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
 
 interface SeperateDrawerProps {
   open: boolean;
-  theme: any;
+  theme?: any;
   handleDrawerOpen?: () => void;
 }
 
@@ -42,7 +42,6 @@ export default function SeperateDrawer({
         className={`sidebar ${open ? "open-sidebar" : "close-sidebar"}`}
         variant="permanent"
         open={open}
-        theme={theme}
         sx={{ position: 'absolute' }}
       >
         <DrawerHeader />

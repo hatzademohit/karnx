@@ -1,17 +1,13 @@
 "use client";
 
-import { Box, Button, Grid, IconButton, Tooltip, Typography } from "@mui/material";
-import { ConfirmationModal, CustomModal, CustomTextField, MUIDataGrid } from "@/components";
+import { Box, Grid, Typography } from "@mui/material";
 import PageInfoBox from "@/components/PageInfoBox/PageInfoBox";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useAuth } from "@/app/context/AuthContext";
 const SetupList = () => {   
 
     const { hasPermission } = useAuth();
-    // const user_role_per = [
-    //     { pageName: 'User Master', pathName: '/dashboard' },
-    //     { pageName: 'Dashboard', pathName: '/dashboard' },
-    //  ];
+    
      const items = {
             user_role_per: [
                 { pageName: 'User Master', pathName: '/configuration/user-master', permission: 'user read' },
@@ -32,18 +28,18 @@ const SetupList = () => {
             <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Configuration List</Typography>
                 <Grid container spacing={2}>
                     {items.user_role_per.filter((item) => hasPermission(item.permission)).length > 0 && (
-                    <Grid item lg={3}>
+                    <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <PageInfoBox Icon={<SettingsIcon />} Heading='Manage Auth Setup' listData={items.user_role_per.filter(item => hasPermission(item.permission)) } />
                     </Grid>
                     )}
                     {items.client.filter((item) => hasPermission(item.permission)).length > 0 && (
-                    <Grid item lg={3}>
+                    <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <PageInfoBox Icon={<SettingsIcon />} Heading='Client Setup' listData={items.client.filter(item => hasPermission(item.permission))} />
                     </Grid>
                     )}
 
                     {items.booking_status.filter((item) => hasPermission(item.permission)).length > 0 && (
-                    <Grid item lg={3}>
+                    <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <PageInfoBox Icon={<SettingsIcon />} Heading='Booking Status Setup' listData={items.booking_status.filter(item => hasPermission(item.permission))} />
                     </Grid>
                     )}

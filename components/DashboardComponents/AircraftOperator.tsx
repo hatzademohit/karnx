@@ -20,14 +20,14 @@ const AircraftOperator = () => {
     return(
         <Grid container spacing={3}>
             {cardInfoData && cardInfoData.map((item, index) => (
-                <Grid item lg={2.4} md={3} sm={6} xs={12} key={index}>
+                <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index}>
                     <InfoCard InfoNumber={item.count} InfoText={item.label} InfoIcon={item.icon}/>
                 </Grid>
             ))}
-            <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                 <RecentInquiries />
             </Grid>
-            <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                 <Next24Hours />
             </Grid>
         </Grid>

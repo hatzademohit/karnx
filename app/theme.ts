@@ -1,5 +1,12 @@
 'use client'
 import { createTheme } from '@mui/material/styles';
+import mediaQuery from "css-mediaquery"; // Add this dependency
+
+function createSsrMatchMedia(width: number) {
+  return (query: string) => ({
+    matches: mediaQuery.match(query, { width }),
+  });
+}
 
 export const karnxTheme = createTheme({
     
@@ -31,6 +38,11 @@ export const karnxTheme = createTheme({
         },
     },
     components:{
+        MuiUseMediaQuery: {
+            defaultProps: {
+                ssrMatchMedia: createSsrMatchMedia(1024),
+            },
+        },
         MuiButton:{
             styleOverrides:{
                 root:{
