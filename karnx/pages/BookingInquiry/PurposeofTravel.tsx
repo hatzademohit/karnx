@@ -1,14 +1,21 @@
 'use client'
 import { FormControl, FormControlLabel, FormGroup, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-
+import { useStep } from "@/app/context/StepProvider";
 const PurposeofTravel = () => {
 
-    const [travelPurpose, setTravelPurpose] = useState([])
+    const [travelPurpose, setTravelPurpose] = useState<any>()
+    const { formData, setFormData, travelingPurposeOption } = useStep();
 
     useEffect(() => {
-        setTravelPurpose(['Business / Corporate', 'Leisure / Vacation', 'Emergency / Medical', 'Event / Group Charter'])
-    }, [])
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+                passengerInfo: {
+                    ...prevFormData.passengerInfo,
+                    travel_purpose_ids: travelPurpose,
+                }
+        }));
+    }, [travelPurpose]);
 
     return(
         <>
@@ -22,8 +29,8 @@ const PurposeofTravel = () => {
                         name="travel-purpose"
                     >
                         <FormGroup>
-                            {travelPurpose && travelPurpose.map((purpose) => (
-                                <FormControlLabel key={purpose} value={purpose} control={<Radio size="small" />} label={purpose} />
+                            {travelingPurposeOption && travelingPurposeOption.map((purpose) => (
+                                <FormControlLabel key={purpose.id} value={purpose.id} control={<Radio size="small"  onChange={(e) => setTravelPurpose(e.target.value)}/>} label={purpose.name} />
                             ))}
                         </FormGroup>
                     </RadioGroup>
