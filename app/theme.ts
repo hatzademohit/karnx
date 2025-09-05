@@ -102,16 +102,29 @@ export const karnxTheme = createTheme({
         MuiCheckbox: {
             styleOverrides: {
                 root: {
-                color: "#333333",
-                "&.Mui-checked": {
-                    color: "#03045E",
+                    color: "#333333",
+                    "&.Mui-checked": {
+                        color: "#03045E",
+                    },
+                    "&.MuiCheckbox-indeterminate": {
+                        color: "#03045E",
+                    },
+                    "&.Mui-disabled": {
+                        color: "#cccccc",
+                    },
                 },
-                "&.MuiCheckbox-indeterminate": {
-                    color: "#03045E",
-                },
-                "&.Mui-disabled": {
-                    color: "#cccccc",
-                },
+            },
+        },
+        MuiRadio: {
+            styleOverrides: {
+                root: {
+                    color: "#333333",
+                    "&.Mui-checked": {
+                        color: "#03045E",
+                    },
+                    "&.Mui-disabled": {
+                        color: "#cccccc",
+                    },
                 },
             },
         },

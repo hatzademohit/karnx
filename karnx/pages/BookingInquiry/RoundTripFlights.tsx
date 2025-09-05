@@ -7,7 +7,7 @@ import { useStep } from '@/app/context/StepProvider';
 const RoundTripFlights = () => {
 
     const [date, setDate] = useState<Dayjs | null>(dayjs());
-    const { airportCity, formData, setFormData } = useStep();
+    const { airportCity, formData, setFormData, stepsError } = useStep();
 
     // Defensive mapping for options
     const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map(airport => ({
@@ -39,16 +39,23 @@ const RoundTripFlights = () => {
                         defaultFrom={formData.flightDetails?.departure_location?.[0] || ""}
                         defaultTo={formData.flightDetails?.arrival_location?.[0] || ""}
                         onChange={(fromCode, toCode) => handleSwapChange(0, fromCode, toCode)}
+                        fromError={stepsError.departure_location && true}
+                        fromHelpertext={stepsError.departure_location}
+                        toError={stepsError.arrival_location && true}
+                        toHelpertext={stepsError.arrival_location}
                     />
                 </Grid>
                 <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
                     <CustomDateTimePicker
                         datatimelabel="Departure Date & Time"
+                        required={true}
                         value={
                             formData.flightDetails?.departure_time?.[0]
                                 ? dayjs(formData.flightDetails.departure_time[0])
                                 : null
                         }
+                        error={stepsError?.departure_time && true}
+                        helperText={stepsError?.departure_time}
                         onChange={(newValue) => {
                             setFormData({
                                 ...formData,
@@ -72,11 +79,18 @@ const RoundTripFlights = () => {
                         defaultFrom={formData.flightDetails?.departure_location?.[1] || ""}
                         defaultTo={formData.flightDetails?.arrival_location?.[1] || ""}
                         onChange={(fromCode, toCode) => handleSwapChange(1, fromCode, toCode)}
+                        fromError={stepsError.departure_location && true}
+                        fromHelpertext={stepsError.departure_location}
+                        toError={stepsError.arrival_location && true}
+                        toHelpertext={stepsError.arrival_location}
                     />
                 </Grid>
                 <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
                     <CustomDateTimePicker
                         datatimelabel="Return Date & Time"
+                        required={true}
+                        error={stepsError?.departure_time && true}
+                        helperText={stepsError?.departure_time}
                         value={
                             formData.flightDetails?.departure_time?.[1]
                                 ? dayjs(formData.flightDetails.departure_time[1])

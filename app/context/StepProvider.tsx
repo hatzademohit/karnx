@@ -1,14 +1,12 @@
 "use client";
 import { apiBaseUrl } from "@/karnx/api";
-import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 // ---- TYPES ----
 type FlightDetailsType = {
   trip_type?: string;
-  departure_location?: any[];
-  arrival_location?: any[];
+  departure_location?: string[];
+  arrival_location?: string[];
   departure_time?: string[];
   flexible_range?: string;
   is_flexible_dates?: boolean;
@@ -24,7 +22,7 @@ type PassengerInfoType = {
   checked_bag?: number;
   carry_bag?: number;
   oversized_items?: string;
-  travel_purpose_id?: number;
+  travel_purpose_ids?: number;
   is_catering_service_req?: boolean;  
   pet_travels?: {
         pet_type?: string;
@@ -72,12 +70,11 @@ type StepContextType = {
   formData: FormDataType;
   setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
   radioTabActive: number;
-  setRadioTabActive: React.Dispatch<React.SetStateAction<number>>;
+  setRadioTabActive: React.Dispatch<React.SetStateAction<number>>;  
   aircraftTypeOptions?: any[];
   crewRequirementOptions?: any[];
   travelingPurposeOption?: any[];
   cateringDietaryOptions?: any[];
-  storeBookingInquiryData: (data: FormDataType) => Promise<any>;
 };
 
 // ---- CONTEXT ----
@@ -92,7 +89,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [travelingPurposeOption, setTravelingPurposeOptions] = useState<any[]>([]);
   const [cateringDietaryOptions, setCateringDietaryOptions] = useState<any[]>([]);
   const [radioTabActive, setRadioTabActive] = useState<number>(0);
-  const router = useRouter();
+
   const [formData, setFormData] = useState<FormDataType>({
     flightDetails: {
       trip_type: "",
@@ -112,7 +109,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
       checked_bag: 0,
       carry_bag: 0,
       oversized_items: "",
-      travel_purpose_id: 0,
+      travel_purpose_ids: 0,
       is_catering_service_req: false,
       pet_travels: {
         pet_type: "",
@@ -250,30 +247,8 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchCateringDietaryOptions();
   }, []);
 
-  const storeBookingInquiryData = async (data: FormDataType) => {
-    try{
-      const response = await fetch(`${apiBaseUrl}/booking-inquiries`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // your login token
-        },
-        body: JSON.stringify(formData),
-      });
-      const result = await response.json();
-      if(!response.ok) {
-        toast.error(result.message || "Failed to submit booking inquiry.");
-      }else{
-        toast.success(result.message || "Booking inquiry submitted successfully!");
-        router.push('/inquiries');
-      }
-    } catch (error) {
-      toast.error(error.message || "Failed to submit booking inquiry.");
-      console.error("Error storing booking inquiry data:", error);
-    }
-  }
   return (
-    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, storeBookingInquiryData }}>
+    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions }}>
       {children}
     </StepContext.Provider>
   );

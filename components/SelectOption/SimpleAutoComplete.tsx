@@ -2,7 +2,7 @@
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Box, FormControl, InputLabel } from "@mui/material";
+import { Box, FormControl, InputLabel, Typography } from "@mui/material";
 
 export interface SimpleAutoCompleteProps {
   variant?: any;
@@ -19,6 +19,8 @@ export interface SimpleAutoCompleteProps {
   arrowTooltipText?: string;
   inputLabel?: string;
   required?: boolean;
+  error?: boolean;
+  helperText?: string;
 }
 
 const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
@@ -35,6 +37,8 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
   placeholder = `Select ${inputLabel}`,
   required = false,
   name,
+  error,
+  helperText
 }) => {
   const [inputValue, setInputValue] = React.useState("");
 
@@ -48,7 +52,7 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
             color: "#333333",
           }}
         >
-          {inputLabel}
+          {inputLabel} { required === true ? <Typography component='span' sx={{color: '#BC0019'}}>*</Typography> : ''}
         </InputLabel>
       )}
       <FormControl fullWidth>
@@ -79,6 +83,8 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
               placeholder={placeholder}
               required={required}
               name={name}
+              error={error}
+              helperText={helperText}
             />
           )}
           slotProps={{

@@ -5,7 +5,7 @@ import { ContactSummary, FlightDetails, PassengerAircraft } from '@/karnx/pages/
 import { useStep } from "@/app/context/StepProvider";
 
 const NewInquiry = () => {
-    const steps = [
+  const steps = [
     {
       subtitle: "Flight Details",
       component: <FlightDetails />,
@@ -20,12 +20,12 @@ const NewInquiry = () => {
     },
   ];
 
-  const { radioTabActive, setRadioTabActive } = useStep();
-
+  	const { handleBackClick, handleNextClick, activeStep, setActiveStep } = useStep()
+ 
     return(
         <Box>
             <Typography component='h1' variant="h1" sx={{ color: '#03045E', mb: '30px' }}>Create New Inquiry</Typography>
-            <StepperComponent steps={steps} handleBackClick={() => console.log(radioTabActive)} />
+            <StepperComponent steps={steps} activeStep={activeStep} handleNextClick={() => handleNextClick()} handleBackClick={() => handleBackClick()} />
         </Box>
     )
 }
