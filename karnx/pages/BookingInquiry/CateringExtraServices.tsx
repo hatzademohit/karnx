@@ -4,10 +4,10 @@ import { Box, Checkbox, FormControlLabel, FormGroup, Grid, Typography } from "@m
 import React, { useEffect, useState } from "react";
 import { useStep } from "@/app/context/StepProvider";
 const CateringExtraServices = () => {
-
-    const [isServicesReq, setshowServices] = useState(false);
-    //const [specialRequirements, setSpecialRequirements] = useState(['Vegetarian', 'Vegan', 'Gluten Free', 'Kosher', 'Halal', 'Diabetic'])
     const { formData, setFormData, cateringDietaryOptions } = useStep();
+    const [isServicesReq, setshowServices] = useState(formData?.passengerInfo?.is_catering_service_req || false);
+    //const [specialRequirements, setSpecialRequirements] = useState(['Vegetarian', 'Vegan', 'Gluten Free', 'Kosher', 'Halal', 'Diabetic'])
+    
 
     useEffect(() => {
         if(isServicesReq === false){
@@ -68,7 +68,8 @@ const CateringExtraServices = () => {
                         <FormGroup>
                             {cateringDietaryOptions && cateringDietaryOptions.map((requirement) => (
                                 <FormControlLabel key={requirement.id} control={<Checkbox size="small" />} label={requirement.name} 
-                                value={formData?.passengerInfo?.catering_services?.dietary_required?.includes(requirement.id)}    
+                                value={requirement.id}
+                                checked={formData?.passengerInfo?.catering_services?.dietary_required?.includes(requirement.id) || false}  
                                 onChange={(e) => { handleCheckboxChange(requirement.id) } }
                                 />
                             ))}

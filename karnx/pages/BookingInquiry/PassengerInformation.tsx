@@ -19,19 +19,24 @@ const PassengerInformation = () => {
     const [specialAssistance, setSpecialAssistance] = useState(medicalSupOptions);
 
     // Pet-related state
-    const [isTravellingWithPets, setIsTravellingWithPets] = useState(false);
-    const [petType, setPetType] = useState("");
-    const [petSize, setPetSize] = useState("");
-    const [petAdditionalNotes, setPetAdditionalNotes] = useState("");
+    const [isTravellingWithPets, setIsTravellingWithPets] = useState(formData?.passengerInfo?.is_traveling_pets || false);
+    const [petType, setPetType] = useState(formData?.passengerInfo?.pet_travels?.pet_type || '');
+    const [petSize, setPetSize] = useState(formData?.passengerInfo?.pet_travels?.pet_size || '');
+    const [petAdditionalNotes, setPetAdditionalNotes] = useState(formData?.passengerInfo?.pet_travels?.additional_notes || '');
 
     // Medical Assistance state
-    const [isMedicalAssistanceReq, setIsMedicalAssistanceReq] = useState(false);
-    const [selectedAssistance, setSelectedAssistance] = useState<number[]>([]);
+    const [isMedicalAssistanceReq, setIsMedicalAssistanceReq] = useState(formData?.passengerInfo?.is_medical_assistance_req || false);
+    const [selectedAssistance, setSelectedAssistance] = useState(
+      formData?.passengerInfo?.medical_assistance?.medical_assist_id
+        ? Object.values(formData.passengerInfo.medical_assistance.medical_assist_id)
+        : []
+);
 
     //Bags state
-    const [checkedBags, setCheckedBags] = useState<any>(0);
-    const [carryOnBags, setCarryOnBags] = useState<any>(0);
-    const [oversizedItems, setOversizedItems] = useState("");
+    const [checkedBags, setCheckedBags] = useState<any>(formData?.passengerInfo?.checked_bag || 0);
+    const [carryOnBags, setCarryOnBags] = useState<any>(formData?.passengerInfo?.carry_bag || 0);
+    const [oversizedItems, setOversizedItems] = useState(formData?.passengerInfo?.oversized_items || '');
+    const [otherAssistance, setOtherAssistance] = useState(formData?.passengerInfo?.medical_assistance?.other_requirements || '');
     // Sync passengers, pets, and medical assistance into formData
     useEffect(() => {
         setFormData((prev: any) => ({
@@ -43,22 +48,19 @@ const PassengerInformation = () => {
                 passanger_info_infants: passengers.Infants,
                 passenger_info_total: passengers.Adults + passengers.Children + passengers.Infants,
                 is_traveling_pets: isTravellingWithPets,
-                pet_travels: isTravellingWithPets ? {
+                pet_travels: isTravellingWithPets && {
                     pet_type: petType,
                     pet_size: petSize,
                     additional_notes: petAdditionalNotes
-                } : {
-                    pet_type: '',
-                    pet_size: '',
-                    additional_notes: ''
                 },
                 is_medical_assistance_req: isMedicalAssistanceReq,
                 medical_assistance: isMedicalAssistanceReq
-                  ? { medical_assist_id: Object.fromEntries(selectedAssistance.map((id, idx) => [idx, id])) }
-                  : { medical_assist_id: {} }
+                  ? { medical_assist_id: Object.fromEntries(selectedAssistance.map((id, idx) => [idx, id])), other_requirements: otherAssistance }
+                  : { medical_assist_id: {}, other_requirements: otherAssistance },
+                
             }
         }));
-    }, [passengers, isTravellingWithPets, petType, petSize, petAdditionalNotes, isMedicalAssistanceReq, selectedAssistance, setFormData]);
+    }, [passengers, isTravellingWithPets, petType, petSize, petAdditionalNotes, isMedicalAssistanceReq, selectedAssistance, otherAssistance, setFormData]);
 
     // Clear the pet fields in local state if "no" is selected
     useEffect(() => {
@@ -68,7 +70,6 @@ const PassengerInformation = () => {
             setPetAdditionalNotes('');
         }
     }, [isTravellingWithPets]);
-
     // Clear medical assistance if "no" is selected
     useEffect(() => {
       if (!isMedicalAssistanceReq) {
@@ -76,14 +77,7 @@ const PassengerInformation = () => {
       }
     }, [isMedicalAssistanceReq]);
 
-    // Clear the pet fields in local state if "no" is selected
-    useEffect(() => {
-        if (!isTravellingWithPets) {
-            setPetType('');
-            setPetSize('');
-            setPetAdditionalNotes('');
-        }
-    }, [isTravellingWithPets]);
+   
     // Sync bags info into formData
     useEffect(() => {
         setFormData((prev: any) => ({
@@ -124,7 +118,8 @@ const PassengerInformation = () => {
         return copy;
     };
 
-    console.log(formData, 'formData');
+    const handleOtherAssistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => setOtherAssistance(event.target.value); // Update   otherAssistance
+    
     return(
         <>
             <Grid size={{ xs: 12 }}>
@@ -246,7 +241,7 @@ const PassengerInformation = () => {
                                   />
                                   {assistance.id === 6 &&
                                       /* If 'Other' is selected, show a text field for additional notes */
-                                      <CustomTextField placeholder="Enter" className='white-bg-input' />
+                                      <CustomTextField placeholder="Enter" className='white-bg-input' value={otherAssistance} onChange={e => handleOtherAssistanceChange(e)} />
                                   }
                               </Grid>
                           ))}
