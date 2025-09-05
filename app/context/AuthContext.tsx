@@ -31,6 +31,7 @@ interface AuthContextType {
   setAlertMessage?: React.Dispatch<React.SetStateAction<string>>;
   hasPermission?: any;
   role?: string;
+  karnxToken?: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -49,11 +50,13 @@ const AuthContext = createContext<AuthContextType>({
   setAlertMessage: () => { },
   hasPermission: [],
   role: '',
+  karnxToken: ''
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [logUser, setLogUser] = useState<User | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [karnxToken, setKarnxToken] = useState<string>()
   const [permissions, setPermissions] = useState<any>([]);
   const [role, setRole] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(false);
@@ -70,6 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const storedUser = localStorage.getItem("loggedInUser");
     const storedLoginTime = localStorage.getItem("loginTime");
     const isPublicRoute = publicRoutes.includes(pathname);
+    
     if (!storedUser && !isPublicRoute) {
       router.push("/");
       return;
@@ -110,6 +114,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (logUser) {
       setUser(logUser);
+      setKarnxToken(localStorage.getItem("token"))
     }
   }, [logUser]);
 
@@ -177,7 +182,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={{
       user, setUser, login, logout, currentTime: formattedTime, setLoader, openAlert, setOpenAlert, severity
-      , setSeverity, alertMessage, setAlertMessage, hasPermission, role
+      , setSeverity, alertMessage, setAlertMessage, hasPermission, role, karnxToken
     }}>
       {loader && <PageLoader />}
       {openAlert && <AlertMassage severity={severity} alertText={alertMessage} onClose={() => setOpenAlert(false)} />}

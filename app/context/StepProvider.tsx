@@ -1,6 +1,7 @@
 "use client";
 import { apiBaseUrl } from "@/karnx/api";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useApi } from "@/karnx/Hooks/useApi";
 
 // ---- TYPES ----
 type FlightDetailsType = {
@@ -82,12 +83,6 @@ const StepContext = createContext<StepContextType | undefined>(undefined);
 
 // ---- PROVIDER ----
 export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [airportCity, setAirportCity] = useState<any[]>([]);
-  const [medicalSupOptions, setMedicalSupOptions] = useState<any[]>([]);
-  const [aircraftTypeOptions, setAircraftTypeOptions] = useState<any[]>([]);
-  const [crewRequirementOptions, setCrewRequirementOptions] = useState<any[]>([]);
-  const [travelingPurposeOption, setTravelingPurposeOptions] = useState<any[]>([]);
-  const [cateringDietaryOptions, setCateringDietaryOptions] = useState<any[]>([]);
   const [radioTabActive, setRadioTabActive] = useState<number>(0);
 
   const [formData, setFormData] = useState<FormDataType>({
@@ -143,100 +138,29 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
     },
   });
 
-  const fetchAirportCities = async () => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/form-fields-data/airport-cities`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // your login token
-        },
-      });
-      const data = await response.json();
-      setAirportCity(data.data || []);
-    } catch (error) {
-      console.error("Error fetching airport cities:", error);
-    }
-  };
+  const { data: airportCity, refetch: fetchAirportCities } = useApi<any[]>(
+    `${apiBaseUrl}/form-fields-data/airport-cities`
+  );
 
-  const fetchMedicalAssistanceOptions = async () => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/form-fields-data/medical-supports`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // your login token  
-        },
-      });
-      const data = await response.json();
-      setMedicalSupOptions(data.data || []);
-    } catch (error) {
-      console.error("Error fetching medical assistance options:", error);
-    }
-  };
+  const { data: medicalSupOptions, refetch: fetchMedicalAssistanceOptions } = useApi<any[]>(
+    `${apiBaseUrl}/form-fields-data/medical-supports`
+  );
 
-  const fetchAirCraftTypes = async () => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/form-fields-data/aircraft-types`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // your login token
-        },
-      });      
-      const data = await response.json();
-      setAircraftTypeOptions(data.data || []);
-    } catch (error) {
-      console.error("Error fetching aircraft options:", error);
-    }
-  };
+  const { data: aircraftTypeOptions, refetch: fetchAirCraftTypes } = useApi<any[]>(
+    `${apiBaseUrl}/form-fields-data/aircraft-types`
+  );
 
-  const fetchCrewRequirements = async () => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/form-fields-data/crew-requirements`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // your login token
-        },
-      });      
-      const data = await response.json();
-      setCrewRequirementOptions(data.data || []);
-    } catch (error) {
-      console.error("Error fetching crew requirements:", error);
-    }
-  };
-  const fetchTravelingPurpose = async () => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/form-fields-data/travel-purposes`, {
-        method: "GET",
-        headers: {  
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // your login token
-        },
-      });      
-      const data = await response.json();
-      setTravelingPurposeOptions(data.data || []);
-    } catch (error) {
-      console.error("Error fetching traveling purpose options:", error);  
-    }    
-  };
+  const { data: crewRequirementOptions, refetch: fetchCrewRequirements } = useApi<any[]>(
+    `${apiBaseUrl}/form-fields-data/crew-requirements`
+  );
 
-  const fetchCateringDietaryOptions = async () => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/form-fields-data/catering-dietary`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // your login token
-        },
-      });      
-      const data = await response.json();
-      setCateringDietaryOptions(data.data || []);
-    } catch (error) {
-      console.error("Error fetching catering dietary options:", error);
-    }
-  };
+  const { data: travelingPurposeOption, refetch: fetchTravelingPurpose } = useApi<any[]>(
+    `${apiBaseUrl}/form-fields-data/travel-purposes`
+  );
+    
+  const { data: cateringDietaryOptions, refetch: fetchCateringDietaryOptions } = useApi<any[]>(
+    `${apiBaseUrl}/form-fields-data/catering-dietary`
+  );
 
   useEffect(() => {
     fetchAirportCities();
