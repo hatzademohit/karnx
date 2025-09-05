@@ -22,7 +22,7 @@ type PassengerInfoType = {
   checked_bag?: number;
   carry_bag?: number;
   oversized_items?: string;
-  travel_purpose_id?: number;
+  travel_purpose_ids?: number;
   is_catering_service_req?: boolean;  
   pet_travels?: {
         pet_type?: string;
@@ -109,7 +109,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
       checked_bag: 0,
       carry_bag: 0,
       oversized_items: "",
-      travel_purpose_id: 0,
+      travel_purpose_ids: 0,
       is_catering_service_req: false,
       pet_travels: {
         pet_type: "",

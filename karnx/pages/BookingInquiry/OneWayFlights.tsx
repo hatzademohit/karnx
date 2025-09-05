@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 const OneWayFlights = () => {
-  const { airportCity, formData, setFormData, stepsError } = useStep();
+  const { airportCity, formData, setFormData } = useStep();
 
   // ✅ React Hook Form Setup
   const { control, trigger, setValue, formState: { errors } } = useForm({

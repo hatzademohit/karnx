@@ -45,7 +45,7 @@ const AppendDeleteTable: React.FC = () => {
       )
     );
   };
-  const { airportCity, formData, setFormData, stepsError } = useStep();
+  const { airportCity, formData, setFormData } = useStep();
 
   // Defensive mapping for options
   const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map(airport => ({
@@ -82,10 +82,10 @@ const AppendDeleteTable: React.FC = () => {
                     defaultFrom={formData.flightDetails?.departure_location?.[index] || ""}
                     defaultTo={formData.flightDetails?.arrival_location?.[index] || ""}
                     onChange={(fromCode, toCode) => handleSwapChange(index, fromCode, toCode)}
-                    fromError={stepsError.departure_location && true}
-                    fromHelpertext={stepsError.departure_location}
-                    toError={stepsError.arrival_location && true}
-                    toHelpertext={stepsError.arrival_location}
+                    // fromError={stepsError.departure_location && true}
+                    // fromHelpertext={stepsError.departure_location}
+                    // toError={stepsError.arrival_location && true}
+                    // toHelpertext={stepsError.arrival_location}
                   />
                 </TableCell>
                 <TableCell>
@@ -97,8 +97,8 @@ const AppendDeleteTable: React.FC = () => {
                         ? dayjs(formData.flightDetails.departure_time[index])
                         : null
                     }
-                    error={stepsError?.departure_time && true}
-                    helperText={stepsError?.departure_time}
+                    // error={stepsError?.departure_time && true}
+                    // helperText={stepsError?.departure_time}
                     onChange={(newValue) => {
                       setFormData({
                         ...formData,
@@ -132,18 +132,18 @@ const AppendDeleteTable: React.FC = () => {
                   defaultFrom={formData.flightDetails?.departure_location?.[addIndex] || ""}
                   defaultTo={formData.flightDetails?.arrival_location?.[addIndex] || ""}
                   onChange={(fromCode, toCode) => handleSwapChange(addIndex, fromCode, toCode)}
-                  fromError={stepsError.departure_location && true}
-                  fromHelpertext={stepsError.departure_location}
-                  toError={stepsError.arrival_location && true}
-                  toHelpertext={stepsError.arrival_location}
+                  // fromError={stepsError.departure_location && true}
+                  // fromHelpertext={stepsError.departure_location}
+                  // toError={stepsError.arrival_location && true}
+                  // toHelpertext={stepsError.arrival_location}
                 />
               </TableCell>
               <TableCell colSpan={2} >
                 <CustomDateTimePicker
                   datatimelabel="Return Date & Time"
                   required={true}
-                  error={formData.flightDetails?.departure_time?.[addIndex] && true}
-                  helperText={stepsError?.departure_time}
+                  // error={formData.flightDetails?.departure_time?.[addIndex] && true}
+                  // helperText={stepsError?.departure_time}
                   value={
                       formData.flightDetails?.departure_time
                         ? dayjs(formData.flightDetails.departure_time[addIndex])
