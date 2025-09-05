@@ -154,6 +154,7 @@ const PassengerInformation = () => {
                     inputLabel="Total Passengers"
                     value={passengers.Adults + passengers.Children + passengers.Infants}
                     disabled={true}
+                    required={true}
                 />
             </Grid>
             <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>

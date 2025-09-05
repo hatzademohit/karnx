@@ -12,7 +12,11 @@ type SwapCompProps = {
   defaultFrom?: string | any;
   defaultTo?: string | any;
   options?: string[];
-  onChange?: (from: string, to: string) => void; 
+  onChange?: (from: string, to: string) => void;
+  fromError?: boolean;
+  fromHelpertext?: string;
+  toError?: boolean;
+  toHelpertext?: string;
 };
 
 const SwapComp: React.FC<SwapCompProps> = ({
@@ -24,6 +28,10 @@ const SwapComp: React.FC<SwapCompProps> = ({
   defaultTo = null,
   options = [],
   onChange,
+  fromError,
+  fromHelpertext,
+  toError,
+  toHelpertext
 }) => {
   const [fromVal, setFromVal] = useState<string>(defaultFrom);
   const [toVal, setToVal] = useState<string>(defaultTo);
@@ -66,6 +74,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
           onChange={handleFromChange}
           name="flightDetails[departure_location[]]"
           required = {true}
+          error={fromError}
+          helperText={fromHelpertext}
         />
       </Box>
 
@@ -75,9 +85,10 @@ const SwapComp: React.FC<SwapCompProps> = ({
           position: "absolute",
           width: "40px",
           height: "40px",
-          inset: 0,
           margin: "auto",
-          top: "18px",
+          top: "28px",
+          left: 0,
+          right: 0
         }}
       >
         <IconButton
@@ -105,6 +116,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
           onChange={handleToChange}
           name="flightDetails[arrival_location[]]"
           required={true}
+          error={toError}
+          helperText={toHelpertext}
         />
       </Box>
     </Box>

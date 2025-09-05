@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { TextField, FormControl, InputLabel, Box } from '@mui/material';
+import { TextField, FormControl, InputLabel, Box, Typography } from '@mui/material';
 
 export interface CustomTextFieldProps {
   name?: string;
@@ -56,7 +56,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
   const displayLabel = asterisk ? `${label} *` : label;
   return (
       <Box sx={{width: '100%'}}>
-        { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel}</InputLabel> }
+        { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel} { required === true ? <Typography component='span' sx={{color: '#BC0019'}}>*</Typography> : ''}</InputLabel> }
         <TextField
           fullWidth
           inputRef={ref}

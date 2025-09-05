@@ -7,7 +7,6 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { useStep } from "@/app/context/StepProvider";
 
 interface StepType {
   title?: string;
@@ -23,16 +22,9 @@ interface StepperComponentProps {
 const StepperComponent: React.FC<StepperComponentProps> = ({ steps, handleBackClick }) => {
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const { formData, storeBookingInquiryData } = useStep();
-
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
   const handleReset = () => setActiveStep(0);
-
-  const handleFinish = async () => {
-    await storeBookingInquiryData(formData);
-   // handleReset();
-  };
 
   return (
     <Box sx={{ width: "100%", '& .MuiStepLabel-iconContainer.Mui-active svg': {color: '#BC0019'}, '& .MuiStepLabel-iconContainer.Mui-completed svg': {color: '#03045E'} }}>
@@ -76,11 +68,11 @@ const StepperComponent: React.FC<StepperComponentProps> = ({ steps, handleBackCl
           Previous Step
         </Button>
         <Button
-          onClick={activeStep === steps.length - 1 ? handleFinish : handleNext}
+          onClick={activeStep === steps.length - 1 ? handleReset : handleNext}
           className="btn btn-blue"
           sx={{ width: '100%' }}
         >
-          {activeStep === steps.length - 1 ? "Submit Inquiry to Admin" : "Continue"}
+          {activeStep === steps.length - 1 ? "Finish" : "Continue"}
         </Button>
       </Box>
     </Box>

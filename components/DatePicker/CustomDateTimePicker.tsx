@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { Dayjs } from "dayjs";
-import { InputLabel, styled } from "@mui/material";
+import { InputLabel, styled, Typography } from "@mui/material";
 
 interface CustomDateTimePickerProps {
   label?: string;
@@ -18,6 +18,8 @@ interface CustomDateTimePickerProps {
   disabled?: boolean;
   name?: string;
   required?: boolean;
+  error?: boolean;
+  helperText?: string;
 }
 
 // ✅ Styled wrapper that enforces highlight on selected values
@@ -44,13 +46,16 @@ export default function CustomDateTimePicker({
   minDateTime,
   maxDateTime,
   disabled = false,
-  name, required = false,
+  name, 
+  required = false,
+  error = false,
+  helperText
 }: CustomDateTimePickerProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {datatimelabel && (
         <InputLabel sx={{ fontFamily: "poppins-semibold", width: "fit-content", color: "#333333" }}>
-          {datatimelabel}
+          {datatimelabel} { required === true ? <Typography component='span' sx={{color: '#BC0019'}}>*</Typography> : ''}
         </InputLabel>
       )}
       <DateTimePicker
@@ -81,7 +86,10 @@ export default function CustomDateTimePicker({
               }
         }
         slotProps={{
-          textField: { size: "medium", fullWidth: true, variant: "outlined" },
+          textField: { 
+            size: "medium", fullWidth: true, variant: "outlined",
+            error: error,  helperText: helperText,
+          },
 		  layout: {
 			sx: {
 				"& .MuiClockNumber-root": {
