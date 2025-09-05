@@ -37,6 +37,7 @@ const PassengerInformation = () => {
     const [carryOnBags, setCarryOnBags] = useState<any>(formData?.passengerInfo?.carry_bag || 0);
     const [oversizedItems, setOversizedItems] = useState(formData?.passengerInfo?.oversized_items || '');
     const [otherAssistance, setOtherAssistance] = useState(formData?.passengerInfo?.medical_assistance?.other_requirements || '');
+    
     // Sync passengers, pets, and medical assistance into formData
     useEffect(() => {
         setFormData((prev: any) => ({
@@ -118,7 +119,7 @@ const PassengerInformation = () => {
         return copy;
     };
 
-    const handleOtherAssistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => setOtherAssistance(event.target.value); // Update   otherAssistance
+    //const handleOtherAssistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => setOtherAssistance(event.target.value); // Update   otherAssistance
     
     return(
         <>
@@ -241,7 +242,7 @@ const PassengerInformation = () => {
                                   />
                                   {assistance.id === 6 &&
                                       /* If 'Other' is selected, show a text field for additional notes */
-                                      <CustomTextField placeholder="Enter" className='white-bg-input' value={otherAssistance} onChange={e => handleOtherAssistanceChange(e)} />
+                                      <CustomTextField placeholder="Enter" className='white-bg-input' value={otherAssistance} onChange={e => setOtherAssistance(e.target.value) } />
                                   }
                               </Grid>
                           ))}
