@@ -1,6 +1,6 @@
 'use client'
-import { Box, Button, Grid, IconButton, InputAdornment, Typography } from "@mui/material";
-import { CustomModal, CustomTextField } from "@/components";
+import { Box, Button, Grid, IconButton, InputAdornment, Tooltip, Typography } from "@mui/material";
+import { CustomModal, CustomTextField, MUIDataGrid } from "@/components";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -8,94 +8,91 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useEffect, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
+import FlightIcon from '@mui/icons-material/Flight';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 
 const Inquiries = () => {
 
-    const [inquiries, setInquiries] = useState([])
     const [inqueryModal, setInqueryModal] = useState(false)
-    const [inqueryContain, setInqueryContain] = useState([])
+    const [columns, setColumns] = useState([])
+    const [data, setData] = useState([])
 
-    const openInqueryModal = (contain) => {
-        setInqueryContain(contain)
-        setInqueryModal(true)
-    }
-
-    useEffect(() => {
-        setInquiries([
-            {inqueryNumber: 'INQ-2024-001', priority: ['NEW', 'MEDIUM PRIORITY'],
-            flightRoute: 'SFO → SEA', client: 'Creative Solutions Inc', date: 'October 25, 2025', passenger: 3, airCraftType: 'Heavy Jet', assign: 'Assigned 3 hours ago', status: ['Accept', 'Reject']},
-            {inqueryNumber: 'INQ-2024-005', priority: ['ACCEPTED', 'HIGH PRIORITY'],
-            flightRoute: 'YYZ → YVR', client: 'Sunshine Travel Co', date: 'March 18, 2025', passenger: 5, airCraftType: 'Ultra Long Range', assign: 'Assigned 6 hours ago', status: []},
-            {inqueryNumber: 'INQ-2024-006', priority: ['REJECTED', 'LOW PRIORITY'],
-            flightRoute: 'MIA → ATL', client: 'Maple Leaf Industries', date: 'March 20, 2025', passenger: 4, airCraftType: 'Light Jet', assign: 'Assigned 2 days ago', status: []},
-        ])
-    }, [])
+     useEffect(() => {
+            setColumns([
+                { headerName: 'Inquiry ID', flex: 1, field: 'inquiryId', minWidth: 125, renderCell: (params) => (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', height: '100%' }}>
+                            <IconButton size="small" className="table-icon-btn"> <FlightIcon /> </IconButton>
+                            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography className="fs14"> { params.row.inquiryId } </Typography>
+                                <Typography component='span' sx={{ fontSize: '10px', color: '#6B7280' }}>{ params.row.inquiryDate }</Typography>
+                            </Box>
+                        </Box>
+                    ),
+                },
+                { headerName: 'Client', flex: 1, field: 'client', minWidth: 230, renderCell: (params) => (
+                        <Box sx={{ alignContent: 'center', height: '100%' }}>
+                            <Typography className="fs14"> { params.row.clientName } </Typography>
+                            <Typography className="fs12" sx={{ color: '#808080' }}> { params.row.clientEmail } </Typography>
+                        </Box>
+                    ),
+                },
+                { headerName: 'Route', flex: 1, field: 'route', minWidth: 115, renderCell: (params) => (
+                        <Box>
+                            <FlightIcon sx={{ fontSize: '14px' }} /> {params.row.route}
+                        </Box>
+                    ),
+                },
+                { headerName: 'Dates', flex: 1, field: 'date', minWidth: 148 },
+                { headerName: 'Passangers', flex: 1, field: 'passangers', minWidth: 138, renderCell: (params) => (
+                        <Box sx={{ textAlign: 'center' }}> <GroupOutlinedIcon sx={{ fontSize: '14px' }} />  { params.row.passangers } </Box>
+                    ),
+                },
+                { headerName: 'Aircraft', flex: 1, field: 'aircraft' },
+                { headerName: 'Status',
+                    field: 'status',
+                    renderCell: (params) => (
+                        <Button variant="contained" className="btn btn-status-rounded bg-green">
+                            {params.row.status}
+                        </Button>
+                    ),
+                },
+                { headerName: 'Operators', flex: 1, field: 'operators' },
+                { headerName: 'Value', flex: 1, field: 'value' },
+                { headerName: 'Action',
+                    field: 'action',
+                    sortable: false,
+                    filterable: false,
+                    width: 150,
+                    maxWidth: 150,
+                    minWidth: 150,
+                    renderCell: (params) => (
+                    <>
+                        <Tooltip title='Edit User' arrow placement="top">
+                             <Button variant="contained" className="btn btn-status bg-blue">
+                                <RemoveRedEyeIcon sx={{mr: '8px'}} /> View Details
+                            </Button>
+                        </Tooltip>
+                    </>
+                    ),
+                },
+            ])
+    
+            setData([
+                { id: 1, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
+                { id: 2, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
+                { id: 3, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
+            ])
+        }, [])
 
     return(
        <>
-        <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Inquiries</Typography>
-        <Box sx={{ padding: '24px 0 0 ', border: '1px solid #E6E6E6'  }}>
-            <Box sx={{ padding: '0 24px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography component='h4' variant="h4">Assigned Inquiries</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <CustomTextField 
-                        variant='outlined' 
-                        size='small' 
-                        placeholder="Search"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <IconButton>
-                        <FilterAltOutlinedIcon />
-                    </IconButton>
-                </Box>
-            </Box>
-            <Box>
-                {inquiries && inquiries.map((item, index) => (
-                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '30px', padding: '24px', borderTop: '1px solid #E6E6E6' }}>
-                        <Box sx={{ display: 'flex', gap: '8px', flexDirection: 'column', width: '100%'}}>
-                            <Box sx={{ display: "flex", gap: '20px', alignItems: 'center' }}>
-                                <Typography>{item.inqueryNumber}</Typography>
-                                {item?.priority.map((btnText, index) => (
-                                    <Button key={index + btnText} variant="contained" 
-                                        className={`btn btn-status-rounded ${btnText === 'NEW' ? 'bg-blue' : btnText === 'MEDIUM PRIORITY' ? 'bg-medium' : btnText === 'ACCEPTED' ? 'bg-green' : btnText === 'REJECTED' ? 'bg-red' : btnText === 'LOW PRIORITY' ? 'bg-low' : 'bg-high' }`}
-                                    >
-                                    {btnText}</Button>
-                                ))}
-                            </Box>
-                            <Box sx={{ display: "flex", gap: '8px', flexDirection: 'column', maxWidth: '840px'}}>
-                                <Typography component='h3' variant="h3">{item.flightRoute}</Typography>
-                                <Box sx={{ display: "flex", gap: '16px', justifyContent: 'space-between' }}>
-                                    <Typography className="fs14">Client: {item.client}</Typography>
-                                    <Typography className="fs14">Date: {item.date}</Typography>
-                                    <Typography className="fs14">Passengers: {item.passenger}</Typography>
-                                    <Typography className="fs14">Aircraft: {item.airCraftType}</Typography>
-                                </Box>
-                                <Typography className='fs12' sx={{color: '#808080'}}>{item.assign}</Typography>
-                            </Box>
-                        </Box>
-                        <Box sx={{maxWidth: '470px', width: '100%', display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
-                            <Button variant="contained" className="btn btn-status bg-blue" onClick={ () => openInqueryModal(item)}>
-                                <RemoveRedEyeIcon sx={{mr: '8px'}} /> View Details
-                            </Button>
-                            {item?.status.map((sts, index) => (
-                                sts === 'Accept' ? 
-                                <Button key={index + sts} variant="contained" className="btn btn-status bg-green">
-                                    <TaskAltIcon sx={{mr: '8px'}} /> {sts}
-                                </Button> :
-                                <Button variant="contained" className="btn btn-status bg-red">
-                                    <CancelOutlinedIcon sx={{mr: '8px'}} /> Reject
-                                </Button>
-                            ))}
-                        </Box>
-                    </Box>
-                ))}
-            </Box>
+        <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Charter Inquiries</Typography>
+        <Box sx={{ padding: '24px', border: '1px solid #E6E6E6' }}>
+            <MUIDataGrid 
+                gridColumns={columns}
+				gridRows={data}
+                rowHeight={70}
+            />
         </Box>
 
         <CustomModal open={inqueryModal} setOpen={setInqueryModal} dataClose={() => setInqueryModal(false)} headerText="Inquiry Details - INQ-2024-001">
