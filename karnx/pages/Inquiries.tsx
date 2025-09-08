@@ -44,12 +44,17 @@ const Inquiries = () => {
                 },
                 { headerName: 'Dates', flex: 1, field: 'date', minWidth: 148 },
                 { headerName: 'Passangers', flex: 1, field: 'passangers', minWidth: 138, renderCell: (params) => (
-                        <Box sx={{ textAlign: 'center' }}> <GroupOutlinedIcon sx={{ fontSize: '14px' }} />  { params.row.passangers } </Box>
+                        <Box sx={{ textAlign: 'center' }}> 
+                            <GroupOutlinedIcon sx={{ fontSize: '14px' }} />  { params.row.passangers } 
+                        </Box>
                     ),
                 },
                 { headerName: 'Aircraft', flex: 1, field: 'aircraft' },
                 { headerName: 'Status',
                     field: 'status',
+                    minWidth: 130,
+                    width: 130,
+                    maxWidth: 130,
                     renderCell: (params) => (
                         <Button variant="contained" className="btn btn-status-rounded bg-green">
                             {params.row.status}
@@ -66,13 +71,9 @@ const Inquiries = () => {
                     maxWidth: 150,
                     minWidth: 150,
                     renderCell: (params) => (
-                    <>
-                        <Tooltip title='Edit User' arrow placement="top">
-                             <Button variant="contained" className="btn btn-status bg-blue">
-                                <RemoveRedEyeIcon sx={{mr: '8px'}} /> View Details
-                            </Button>
-                        </Tooltip>
-                    </>
+                        <Button variant="contained" onClick={ () => console.log(params?.row?.inquiryId)} className="btn btn-status bg-blue">
+                            <RemoveRedEyeIcon sx={{mr: '8px'}} /> View Details
+                        </Button>
                     ),
                 },
             ])

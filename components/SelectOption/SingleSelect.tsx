@@ -2,7 +2,7 @@ import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Box, FormHelperText, MenuItem } from '@mui/material';
+import { Box, FormHelperText, MenuItem, Typography } from '@mui/material';
  
 export interface SelectProps {
     variant?: any;
@@ -48,14 +48,19 @@ const SingleSelect: React.FC<SelectProps> = ({
                 name={name}
                 onChange={onChange}
                 sx={ style }
-                error={error}                
-                placeholder={`Select ${inputLabel}`}
+                error={error}
                 MenuProps={{
                     PaperProps: {
                         style: {
                             maxHeight: 250,
                         },
                     },
+                }}
+                renderValue={(selected) => {
+                    if (!selected) {
+                        return <Typography sx={{fontSize: '12px'}}>{`Select ${inputLabel}`}</Typography>;
+                    }
+                    return selected;
                 }}
             >
                 <MenuItem value="" disabled> {`Select ${inputLabel}`}</MenuItem>

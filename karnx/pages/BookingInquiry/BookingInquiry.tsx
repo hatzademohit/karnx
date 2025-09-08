@@ -20,7 +20,7 @@ const NewInquiry = () => {
     },
   ];
 
-  	const { handleBackClick, handleNextClick, activeStep, setActiveStep } = useStep()
+  	const { handleBackClick, handleNextClick, activeStep } = useStep()
  
     return(
         <Box>

@@ -17,21 +17,22 @@ interface StepType {
 
 interface StepperComponentProps {
   steps: StepType[];
+  activeStep?: number;
+  handleNextClick?: () => void;
   handleBackClick?: () => void;
 }
 
-const StepperComponent: React.FC<StepperComponentProps> = ({ steps, handleBackClick }) => {
-  const [activeStep, setActiveStep] = React.useState(0);
+const StepperComponent: React.FC<StepperComponentProps> = ({ steps, activeStep, handleNextClick, handleBackClick }) => {
+  // const [activeStep, setActiveStep] = React.useState(0);
 
   const { formData, storeBookingInquiryData } = useStep();
 
-  const handleNext = () => setActiveStep((prev) => prev + 1);
-  const handleBack = () => setActiveStep((prev) => prev - 1);
-  const handleReset = () => setActiveStep(0);
+  // const handleNext = () => setActiveStep((prev) => prev + 1);
+  // const handleBack = () => setActiveStep((prev) => prev - 1);
+  // const handleReset = () => setActiveStep(0);
 
   const handleFinish = async () => {
     await storeBookingInquiryData(formData);
-   // handleReset();
   };
 
   return (
@@ -69,14 +70,14 @@ const StepperComponent: React.FC<StepperComponentProps> = ({ steps, handleBackCl
       <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
         <Button
           disabled={activeStep === 0}
-          onClick={ () => { handleBackClick; handleBack() } }
+          onClick={ () => handleBackClick() }
           className="btn btn-outlined"
           sx={{ width: '100%' }}
         >
           Previous Step
         </Button>
         <Button
-          onClick={activeStep === steps.length - 1 ? handleFinish : handleNext}
+          onClick={activeStep === steps.length - 1 ? handleFinish : handleNextClick}
           className="btn btn-blue"
           sx={{ width: '100%' }}
         >

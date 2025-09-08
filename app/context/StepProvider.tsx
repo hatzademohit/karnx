@@ -79,6 +79,10 @@ type StepContextType = {
   travelingPurposeOption?: any[];
   cateringDietaryOptions?: any[];
   storeBookingInquiryData: (data: FormDataType) => Promise<any>;
+  handleBackClick?: any;
+  handleNextClick?: any; 
+  activeStep?: number;
+  setActiveStep?: any
 };
 
 // ---- CONTEXT ----
@@ -87,6 +91,8 @@ const StepContext = createContext<StepContextType | undefined>(undefined);
 // ---- PROVIDER ----
 export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [radioTabActive, setRadioTabActive] = useState<number>(0);
+  const [activeStep, setActiveStep] = React.useState(0);
+
   const router = useRouter();
   const [formData, setFormData] = useState<FormDataType>({
     flightDetails: {
@@ -196,8 +202,13 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error("Error storing booking inquiry data:", error);
     }
   }
+
+  const handleNextClick = () => setActiveStep((prev) => prev + 1);
+  const handleBackClick = () => setActiveStep((prev) => prev - 1);
+
+
   return (
-    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, storeBookingInquiryData }}>
+    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, storeBookingInquiryData, handleBackClick, handleNextClick, activeStep, setActiveStep }}>
       {children}
     </StepContext.Provider>
   );

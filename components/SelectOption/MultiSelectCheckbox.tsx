@@ -3,9 +3,9 @@ import { OutlinedInput, InputLabel, SelectChangeEvent, FormControl, Select, Menu
 
 interface MultiSelectCheckboxProps {
   label?: string;
-  options: string[];
-  value: string[];
-  onChange: (value: string[]) => void;
+  options: any;
+  value: any;
+  onChange: (value: any) => void;
   width?: number | string;
 }
 
