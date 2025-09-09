@@ -3,10 +3,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { AppBar } from '../Sidebar/Sidebarheader';
 import Myaccount from './MyAccount';
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { drawerWidth } from '../Sidebar/Sidebarheader';
 import { headerHeight } from '../Sidebar/Sidebarheader';
-import karnxLogo from "@/public/imgs/karnx_logo.svg";
 import Image from "next/image";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -21,7 +20,6 @@ const SeperateAppBar: FC<SeperateAppBarProps> = ({
   theme,
 }) => {
 
-const pathname = usePathname()
 const router = useRouter()
   
   return (
@@ -34,7 +32,7 @@ const router = useRouter()
       >
         <Toolbar className="toolbar" sx={{minHeight: `${headerHeight}px !important`}}>
           <Typography noWrap component="div" sx={{ display: 'flex', width: drawerWidth, margin: '-6px 0 -2px -25px', padding: '6px 0 3px 25px' }}>
-            <Image src={karnxLogo} alt='img-not-found' style={{ width: 'auto', height: '50px' }} />
+            <Image src={theme.custom.logo} alt='img-not-found' style={{ width: 'auto', height: '50px' }} />
           </Typography>
           <Typography
             noWrap

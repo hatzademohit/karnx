@@ -1,11 +1,8 @@
 "use client";
 
 import { Box, Button, Typography, MenuItem } from "@mui/material";
-import loginBg from "@/public/imgs/loginbg.png";
-import karnxLogo from "@/public/imgs/karnx_logo.svg";
 import Image from "next/image";
 import { CustomTextField } from "@/components";
-import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";
@@ -44,7 +41,7 @@ const ActivateAccount = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const email = searchParams.get("email");
-  const {setAlertMessage, setLoader, setOpenAlert, setSeverity} = useAuth();
+  const {setAlertMessage, setLoader, setOpenAlert, setSeverity, theme} = useAuth();
   const onSubmit = async (data: ResetFormInputs) => {
     try {
       const response = await axios.post(`${apiBaseUrl}/activate-account`, {
@@ -80,11 +77,11 @@ const ActivateAccount = () => {
   return (
     <Box className="login-page">
       <Box className="img-section">
-        <Image src={loginBg} alt="img-not-found" />
+        <Image src={theme.custom.loginBg} alt="img-not-found" />
       </Box>
 
       <Box className="input-section">
-        <Image className="img-fluid" src={karnxLogo} alt="logo" />
+        <Image className="img-fluid" src={theme.custom.logo} alt="logo" />
         <Typography component="h3" variant="h3" sx={{ width: "100%" }}>
           Activate Your Account  
             <Typography 

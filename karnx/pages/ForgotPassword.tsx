@@ -1,8 +1,6 @@
 "use client";
 
 import { Box, Button, Typography } from "@mui/material";
-import loginBg from "@/public/imgs/loginbg.png";
-import karnxLogo from "@/public/imgs/karnx_logo.svg";
 import Image from "next/image";
 import { CustomTextField } from "@/components";
 import Link from "next/link";
@@ -26,7 +24,7 @@ const ForgotPassword = () => {
     },
   });
 
-  const {setAlertMessage, setLoader, setOpenAlert, setSeverity} = useAuth();
+  const {setAlertMessage, setLoader, setOpenAlert, setSeverity, theme} = useAuth();
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       const response = await axios.post(`${apiBaseUrl}/forgot-password`, {
@@ -55,15 +53,19 @@ const ForgotPassword = () => {
   return (
     <Box className="login-page">
       <Box className="img-section">
-        <Image src={loginBg} alt="img-not-found" />
+        <Image src={theme.custom.loginBg} alt="img-not-found" />
       </Box>
 
       <Box className="input-section">
-        <Image className="img-fluid" src={karnxLogo} alt="logo" />
-        <Typography component="h3" variant="h3" sx={{ width: "100%" }}>
-          Reset Your Password
-          <br/><small>Enter your email address and we'll send you a link to reset your password</small>
-        </Typography>
+        <Image className="img-fluid" src={theme.custom.logo} alt="logo" />
+        <Box>
+          <Typography component="h3" variant="h3" sx={{ width: "100%" }}>
+            Reset Your Password
+          </Typography>
+          <Typography className="fs14">
+            Enter your email address and we'll send you a link to reset your password
+          </Typography>
+        </Box>
 
         <Typography component='form' sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: '28px'}} onSubmit={handleSubmit(onSubmit)}>
           
