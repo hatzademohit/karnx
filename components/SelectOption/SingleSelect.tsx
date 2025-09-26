@@ -66,7 +66,7 @@ const SingleSelect: React.FC<SelectProps> = ({
                 <MenuItem value="" disabled> {`Select ${inputLabel}`}</MenuItem>
                 {children}
             </Select>
-            <FormHelperText> { helperText } </FormHelperText>
+            <FormHelperText sx={{color: '#d32f2f', margin: '2px'}}> { helperText } </FormHelperText>
         </FormControl>
        
     </>

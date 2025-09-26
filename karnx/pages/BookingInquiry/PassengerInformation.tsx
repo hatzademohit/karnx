@@ -5,197 +5,139 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { useEffect, useState } from "react";
 import { CustomTextField } from "@/components";
 import { useStep } from '@/app/context/StepProvider';
+import { Controller, useFormContext } from "react-hook-form";
 
 const PassengerInformation = () => {
+    const [specialAssistance, setSpecialAssistance] = useState<any[]>([]);
+    const { medicalSupOptions } = useStep();
+    const { control, watch, setValue, formState: { errors } } = useFormContext();
 
-    const { formData, setFormData, medicalSupOptions } = useStep();
+    const adults = watch("adults") || 1;
+    const children = watch("children") || 0;
+    const infants = watch("infants") || 0;
 
-    const [passengers, setPassengers] = useState({
-        Adults: formData?.passengerInfo.passanger_info_adults || 1,
-        Children: formData?.passengerInfo.passanger_info_children || 0,
-        Infants: formData?.passengerInfo.passanger_info_infants || 0,
-    });
-
-    const [specialAssistance, setSpecialAssistance] = useState(medicalSupOptions);
-
-    // Pet-related state
-    const [isTravellingWithPets, setIsTravellingWithPets] = useState(formData?.passengerInfo?.is_traveling_pets || false);
-    const [petType, setPetType] = useState(formData?.passengerInfo?.pet_travels?.pet_type || '');
-    const [petSize, setPetSize] = useState(formData?.passengerInfo?.pet_travels?.pet_size || '');
-    const [petAdditionalNotes, setPetAdditionalNotes] = useState(formData?.passengerInfo?.pet_travels?.additional_notes || '');
-
-    // Medical Assistance state
-    const [isMedicalAssistanceReq, setIsMedicalAssistanceReq] = useState(formData?.passengerInfo?.is_medical_assistance_req || false);
-    const [selectedAssistance, setSelectedAssistance] = useState(
-      formData?.passengerInfo?.medical_assistance?.medical_assist_id
-        ? Object.values(formData.passengerInfo.medical_assistance.medical_assist_id)
-        : []
-);
-
-    //Bags state
-    const [checkedBags, setCheckedBags] = useState<any>(formData?.passengerInfo?.checked_bag || 0);
-    const [carryOnBags, setCarryOnBags] = useState<any>(formData?.passengerInfo?.carry_bag || 0);
-    const [oversizedItems, setOversizedItems] = useState(formData?.passengerInfo?.oversized_items || '');
-    const [otherAssistance, setOtherAssistance] = useState(formData?.passengerInfo?.medical_assistance?.other_requirements || '');
-    
-    // Sync passengers, pets, and medical assistance into formData
     useEffect(() => {
-        setFormData((prev: any) => ({
-            ...prev,
-            passengerInfo: {
-                ...prev.passengerInfo,
-                passanger_info_adults: passengers.Adults,
-                passanger_info_children: passengers.Children,
-                passanger_info_infants: passengers.Infants,
-                passenger_info_total: passengers.Adults + passengers.Children + passengers.Infants,
-                is_traveling_pets: isTravellingWithPets,
-                pet_travels: isTravellingWithPets && {
-                    pet_type: petType,
-                    pet_size: petSize,
-                    additional_notes: petAdditionalNotes
-                },
-                is_medical_assistance_req: isMedicalAssistanceReq,
-                medical_assistance: isMedicalAssistanceReq
-                  ? { medical_assist_id: Object.fromEntries(selectedAssistance.map((id, idx) => [idx, id])), other_requirements: otherAssistance }
-                  : { medical_assist_id: {}, other_requirements: otherAssistance },
-                
-            }
-        }));
-    }, [passengers, isTravellingWithPets, petType, petSize, petAdditionalNotes, isMedicalAssistanceReq, selectedAssistance, otherAssistance, setFormData]);
+        setSpecialAssistance(medicalSupOptions || []);
+    }, [medicalSupOptions]);
 
-    // Clear the pet fields in local state if "no" is selected
     useEffect(() => {
-        if (!isTravellingWithPets) {
-            setPetType('');
-            setPetSize('');
-            setPetAdditionalNotes('');
-        }
-    }, [isTravellingWithPets]);
-    // Clear medical assistance if "no" is selected
-    useEffect(() => {
-      if (!isMedicalAssistanceReq) {
-        setSelectedAssistance([]);
-      }
-    }, [isMedicalAssistanceReq]);
+        setValue("totalPassengers", adults + children + infants);
+    }, [adults, children, infants, setValue])
 
-   
-    // Sync bags info into formData
-    useEffect(() => {
-        setFormData((prev: any) => ({
-            ...prev,
-            passengerInfo: {
-                ...prev.passengerInfo,
-                checked_bag: checkedBags,
-                carry_bag: carryOnBags,
-                oversized_items: oversizedItems
-            }
-        }));
-      }, [checkedBags, carryOnBags, oversizedItems]);
+    const [otherAssistance, setOtherAssistance] = useState<any>();
 
-    const handleChange = (type: keyof typeof passengers, action: "inc" | "dec") => {
-        setPassengers((prev) => ({
-            ...prev,
-            [type]:
-                action === "inc"
-                    ? prev[type] + 1
-                    : type === "Adults"
-                        ? Math.max(1, prev[type] - 1)
-                        : Math.max(0, prev[type] - 1),
-        }));
+    const handleChange = (name: string, action: "inc" | "dec", min = 0) => {
+        const currentValue = watch(name) || 0;
+        const newValue = action === "inc" ? currentValue + 1 : Math.max(min, currentValue - 1);
+        setValue(name, newValue);
     };
-
-    const handleSpecialAssistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value, checked } = event.target;
-        if (checked) {
-            setSpecialAssistance((prev) => [...prev, value]);
-        } else {
-            setSpecialAssistance((prev) => prev.filter((item) => item !== value));
-        }
-    };
-    
-    const setAtIndex = (arr: any[], index: number, value: any) => {
-        const copy = [...arr];
-        copy[index] = value;
-        return copy;
-    };
-
-    //const handleOtherAssistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => setOtherAssistance(event.target.value); // Update   otherAssistance
     
     return(
         <>
             <Grid size={{ xs: 12 }}>
                 <Typography variant="h3" sx={{color: '#BC0019'}}>Passenger Information</Typography>
             </Grid>
-            {Object.keys(passengers).map((type) => (
-                <Grid size={{ lg: 3, md: 6, sm: 6, xs: 12 }} key={type}>
-                    <Typography sx={{fontFamily: 'poppins-lt', fontSize: '14px', mb: '8px'}}>
-                        {type === 'Children' ? 'Children (2-12 yrs)' : type === 'Infants' ? 'Infants (under 2)' : type}
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <IconButton
-                            className="btn-icon-border"
-                            onClick={() => handleChange(type as keyof typeof passengers, "dec")}
-                        >
-                            <RemoveRoundedIcon />
-                        </IconButton>
-                        <Typography component="h5" variant="h5">
-                            {passengers[type as keyof typeof passengers]}
-                        </Typography>
-                        <IconButton
-                            className="btn-icon-border"
-                            onClick={() => handleChange(type as keyof typeof passengers, "inc")}
-                        >
-                            <AddRoundedIcon />
-                        </IconButton>
-                    </Box>
+            {[
+                { name: "adults", label: "Adults", min: 1 },
+                { name: "children", label: "Children (2-12 yrs)", min: 0 },
+                { name: "infants", label: "Infants (under 2)", min: 0 },
+            ].map(({ name, label, min }) => (
+                <Grid size={{ lg: 3, md: 6, sm: 6, xs: 12 }} key={name}>
+                <Typography sx={{ fontFamily: "poppins-lt", fontSize: "14px", mb: "8px" }}>{label}</Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <IconButton className="btn-icon-border" onClick={() => handleChange(name, "dec", min)}>
+                        <RemoveRoundedIcon />
+                    </IconButton>
+                    <Controller
+                        name={name}
+                        control={control}
+                        defaultValue={min}
+                        render={({ field }) => <Typography component="h5" variant="h5">{field.value}</Typography>}
+                    />
+                    <IconButton className="btn-icon-border" onClick={() => handleChange(name, "inc")}>
+                        <AddRoundedIcon />
+                    </IconButton>
+                </Box>
                 </Grid>
             ))}
             <Grid size={{ lg: 3, md: 6, sm: 6, xs: 12 }}> 
-                <CustomTextField 
-                    inputLabel="Total Passengers"
-                    value={passengers.Adults + passengers.Children + passengers.Infants}
-                    disabled={true}
-                    required={true}
+                <Controller
+                    name="totalPassengers"
+                    control={control}
+                    render={({ field }) => (
+                        <CustomTextField
+                            inputLabel="Total Passengers"
+                            {...field}
+                            value={field.value || 0}
+                            disabled
+                            error={!!errors.totalPassengers}    
+                            helperText={errors.totalPassengers?.message as string}
+                        />
+                    )}
                 />
             </Grid>
             <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
                 <Box className='passengers-travelling-info-box'>
-                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Travelling With Pets</Typography>
+                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Travelling With Pets <Typography component="span" sx={{color: 'red'}}>*</Typography></Typography>
                     <FormControl>
-                        <RadioGroup row
-                            name="travelling-with-pets"
-                            value={isTravellingWithPets ? "yes" : "no"}
-                            onChange={e => setIsTravellingWithPets(e.target.value === "yes")}
-                        >
-                            <FormControlLabel value="yes" control={<Radio size="small" />} label="Yes" />
-                            <FormControlLabel value="no" control={<Radio size="small" />} label="No" />
-                        </RadioGroup>
+                       <Controller
+                            name="isTravellingWithPets"
+                            control={control}
+                            render={({ field }) => (
+                                <RadioGroup row value={field.value ? "yes" : "no"} onChange={e => field.onChange(e.target.value === "yes")}>
+                                    <FormControlLabel value="yes" control={<Radio size="small" />} label="Yes" />
+                                    <FormControlLabel value="no" control={<Radio size="small" />} label="No" />
+                                </RadioGroup>
+                            )}
+                        />
                     </FormControl>
-                    {isTravellingWithPets && (
+                    {watch("isTravellingWithPets") && (
                         <Grid container spacing={2}>
                             <Grid size={{ lg: 4, md: 4, sm: 6, xs:12 }}>
-                                <CustomTextField
-                                    inputLabel="Pet Type"
-                                    className='white-bg-input'
-                                    value={petType}
-                                    onChange={e => setPetType(e.target.value)}
+                                <Controller
+                                    name="petType"
+                                    control={control}
+                                    render={({ field, fieldState }) => (
+                                    <CustomTextField
+                                        inputLabel="Pet Type"
+                                        className="white-bg-input"
+                                        {...field}
+                                        error={!!fieldState.error}
+                                        helperText={fieldState.error?.message}
+                                    />
+                                    )}
+                                />
+                            </Grid>
+
+                            <Grid size={{ lg: 4, md: 4, sm: 6, xs:12 }}>
+                                <Controller
+                                    name="petSize"
+                                    control={control}
+                                    render={({ field, fieldState }) => (
+                                    <CustomTextField
+                                        inputLabel="Pet Size"
+                                        placeholder="Enter Pet Weight"
+                                        className="white-bg-input"
+                                        {...field}
+                                        error={!!fieldState.error}
+                                        helperText={fieldState.error?.message}
+                                    />
+                                    )}
                                 />
                             </Grid>
                             <Grid size={{ lg: 4, md: 4, sm: 6, xs:12 }}>
-                                <CustomTextField
-                                    inputLabel="Pet Size"
-                                    placeholder="Enter Pet Weight"
-                                    className='white-bg-input'
-                                    value={petSize}
-                                    onChange={e => setPetSize(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid size={{ lg: 4, md: 4, sm: 6, xs:12 }}>
-                                <CustomTextField
-                                    inputLabel="Special Requirements..."
-                                    className='white-bg-input'
-                                    value={petAdditionalNotes}
-                                    onChange={e => setPetAdditionalNotes(e.target.value)}
+                                <Controller
+                                    name="petAdditionalNotes"
+                                    control={control}
+                                    render={({ field, fieldState }) => (
+                                    <CustomTextField
+                                        inputLabel="Special Requirements..."
+                                        className="white-bg-input"
+                                        {...field}
+                                        error={!!fieldState.error}
+                                        helperText={fieldState.error?.message}
+                                    />
+                                    )}
                                 />
                             </Grid>
                         </Grid>
@@ -204,18 +146,20 @@ const PassengerInformation = () => {
             </Grid>
             <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
                 <Box className='passengers-travelling-info-box'>
-                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Medical needs or assistance required</Typography>
+                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Medical needs or assistance required <Typography component="span" sx={{color: 'red'}}>*</Typography></Typography>
                     <FormControl>
-                        <RadioGroup row
-                            name="medical-needs"
-                            value={isMedicalAssistanceReq ? "yes" : "no"}
-                            onChange={e => setIsMedicalAssistanceReq(e.target.value === "yes")}
-                        >
-                            <FormControlLabel value="yes" control={<Radio size="small" />} label="Yes" />
-                            <FormControlLabel value="no" control={<Radio size="small" />} label="No" />
-                        </RadioGroup>
+                        <Controller
+                            name="isMedicalAssistanceReq"
+                            control={control}
+                            render={({ field }) => (
+                                <RadioGroup row value={field.value ? "yes" : "no"} onChange={e => field.onChange(e.target.value === "yes")}>
+                                    <FormControlLabel value="yes" control={<Radio size="small" />} label="Yes" />
+                                    <FormControlLabel value="no" control={<Radio size="small" />} label="No" />
+                                </RadioGroup>
+                            )}
+                        />
                     </FormControl>
-                    {isMedicalAssistanceReq && (
+                    {watch('isMedicalAssistanceReq') && (
                       <Grid container spacing={1}>
                             <Grid size={{ lg: 12, md: 12, sm: 12, xs:12 }}>
                               <Typography component='h4' variant="h4" sx={{mt: '10px'}}>Special Assistance</Typography>
@@ -225,25 +169,24 @@ const PassengerInformation = () => {
                           </Grid>
                           {specialAssistance && specialAssistance.map((assistance) => (
                               <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }} key={assistance.id}>
-                                  <FormControlLabel
-                                      label={assistance.name}
-                                      control={
-                                          <Checkbox
-                                              size="small"
-                                              checked={selectedAssistance.includes(assistance.id)}
-                                              onChange={e => {
-                                                  if (e.target.checked) {
-                                                      setSelectedAssistance(prev => [...prev, assistance.id]);
-                                                  } else {
-                                                      setSelectedAssistance(prev => prev.filter(id => id !== assistance.id));
-                                                  }
-                                              }}
-                                          />
-                                      }
-                                  />
+                                <Controller
+                                    name={`specialAssistance.${assistance.id}`}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FormControlLabel
+                                            label={assistance.name}
+                                            control={
+                                                <Checkbox
+                                                    size="small"
+                                                    checked={field.value || false}
+                                                    onChange={(e) => field.onChange(e.target.checked)}
+                                                />
+                                            }
+                                        />
+                                    )}
+                                />
                                   {assistance.id === 6 &&
-                                      /* If 'Other' is selected, show a text field for additional notes */
-                                      <CustomTextField placeholder="Enter" className='white-bg-input' value={otherAssistance} onChange={e => setOtherAssistance(e.target.value) } />
+                                    <CustomTextField placeholder="Enter" className='white-bg-input' value={otherAssistance} onChange={e => setOtherAssistance(e.target.value) } />
                                   }
                               </Grid>
                           ))}
@@ -252,13 +195,47 @@ const PassengerInformation = () => {
                 </Box>
             </Grid>
             <Grid size={{ lg: 4, md: 4, sm: 6, xs:12 }}>
-                <CustomTextField inputLabel="Checked Bags" value={checkedBags} onChange={e => setCheckedBags(e.target.value) } />
+                <Controller
+                    name="checkedBags"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <CustomTextField
+                            inputLabel="Checked Bags"
+                            {...field}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
             </Grid>
             <Grid size={{ lg: 4, md: 4, sm: 6, xs:12 }}>
-                <CustomTextField inputLabel="Carry -on Bags" value={carryOnBags} onChange={e => setCarryOnBags(e.target.value)} />
+                <Controller
+                    name="carryOnBags"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <CustomTextField
+                            inputLabel="Carry -on Bags"
+                            {...field}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
             </Grid>
             <Grid size={{ lg: 4, md: 4, sm: 6, xs:12 }}>
-                <CustomTextField inputLabel="Oversized Items" value={oversizedItems} onChange={e => setOversizedItems(e.target.value)} placeholder="e.g., golf clubs, skis, etc." />
+                <Controller
+                    name="overSizedItems"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <CustomTextField
+                            inputLabel="Oversized Items"
+                            placeholder="e.g., golf clubs, skis, etc."
+                            {...field}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
             </Grid>
         </>
     )

@@ -60,8 +60,7 @@ export default function CustomDateTimePicker({
       )}
       <DateTimePicker
         label={label}
-        value={value}
-        name="flightDetails[departure_time[]]"
+        // value={value}
         onChange={onChange}
         disabled={disabled}
         minDateTime={minDateTime}

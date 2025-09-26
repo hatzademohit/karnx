@@ -67,7 +67,7 @@ const StepperComponent: React.FC<StepperComponentProps> = ({ steps, activeStep, 
       </Box>
 
       {/* Navigation Buttons */}
-      <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
+      {/* <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
         <Button
           disabled={activeStep === 0}
           onClick={ () => handleBackClick() }
@@ -83,7 +83,7 @@ const StepperComponent: React.FC<StepperComponentProps> = ({ steps, activeStep, 
         >
           {activeStep === steps.length - 1 ? "Submit Inquiry to Admin" : "Continue"}
         </Button>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

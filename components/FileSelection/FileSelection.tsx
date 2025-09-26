@@ -20,7 +20,7 @@ const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect }) => {
     useDropzone({ onDrop });
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" sx={{width: '100%'}} gap={2}>
+    <Box display="flex" flexDirection="column" alignItems="center" sx={{width: '100%'}} gap={1}>
       <Paper
         {...getRootProps()}
         elevation={isDragActive ? 6 : 2}
@@ -51,14 +51,14 @@ const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect }) => {
       </Paper>
 
       {acceptedFiles.length > 0 && (
-        <Box width="100%" maxWidth={500}>
-          <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
+        <Box width="100%" sx={{ display: 'flex', alignItems: 'center', gap: '10px'}}>
+          <Typography variant="subtitle1" fontWeight="medium">
             Selected files:
           </Typography>
           <List dense>
             {acceptedFiles.map((file, i) => (
               <ListItem key={i} sx={{ p: 0 }}>
-                <ListItemText primary={file.name} />
+                <ListItemText primary={file.name} sx={{ '& .MuiListItemText-primary': { color: '#555555', fontFamily: 'poppins-lt' }}} />
               </ListItem>
             ))}
           </List>
