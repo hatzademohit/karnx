@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import { apiBaseUrl } from '@/karnx/api';
 
 const Inquiries = () => {
 
@@ -56,7 +57,7 @@ const Inquiries = () => {
                     width: 130,
                     maxWidth: 130,
                     renderCell: (params) => (
-                        <Button variant="contained" className="btn btn-status-rounded bg-green">
+                        <Button variant="contained" className="btn btn-status-rounded" style={{ backgroundColor: params.row.status_color  }}>
                             {params.row.status}
                         </Button>
                     ),
@@ -78,13 +79,31 @@ const Inquiries = () => {
                 },
             ])
     
-            setData([
-                { id: 1, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
-                { id: 2, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
-                { id: 3, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
-            ])
-        }, [])
-
+        //     setData([
+        //         { id: 1, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
+        //         { id: 2, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
+        //         { id: 3, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
+        //     ])
+        // }, [])
+        }, []);
+    const fetchInquiries = async () => {
+            try {
+                const response = await fetch(`${apiBaseUrl}/booking-inquiries`, {    
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.token}`,
+                    },
+                });
+                const data = await response.json();
+                setData(data.data);
+            } catch (error) {
+                console.error("Error fetching inquiries:", error);
+            }    
+        };
+        useEffect(() => {
+            fetchInquiries();
+        }, []);
     return(
        <>
         <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Charter Inquiries</Typography>
