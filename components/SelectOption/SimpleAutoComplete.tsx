@@ -59,7 +59,7 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
         <Autocomplete
           value={value}
           onChange={onChange}
-          inputValue={value?.code ? value?.code : inputValue}
+          inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);
           }}

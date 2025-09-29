@@ -6,7 +6,7 @@ import MainLayout from "@/karnx/MainLayout";
 import { PageLoader, AlertMassage } from "@/components";
 import axios from "axios";
 import { apiBaseUrl } from '@/karnx/api';
-import { set } from "react-hook-form";
+import { useTheme } from "@mui/material/styles";
 interface User {
   id: number;
   name: string;
@@ -32,6 +32,7 @@ interface AuthContextType {
   hasPermission?: any;
   role?: string;
   karnxToken?: string;
+  theme?: any;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -50,7 +51,8 @@ const AuthContext = createContext<AuthContextType>({
   setAlertMessage: () => { },
   hasPermission: [],
   role: '',
-  karnxToken: ''
+  karnxToken: '',
+  theme: null,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -124,6 +126,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, 5000);
   }, [openAlert]);
 
+  const theme = useTheme()
+
   useEffect(() => {
     const storedPermissions = localStorage.getItem("permissions");
     if (storedPermissions) {
@@ -182,7 +186,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={{
       user, setUser, login, logout, currentTime: formattedTime, setLoader, openAlert, setOpenAlert, severity
-      , setSeverity, alertMessage, setAlertMessage, hasPermission, role, karnxToken
+      , setSeverity, alertMessage, setAlertMessage, hasPermission, role, karnxToken, theme
     }}>
       {loader && <PageLoader />}
       {openAlert && <AlertMassage severity={severity} alertText={alertMessage} onClose={() => setOpenAlert(false)} />}

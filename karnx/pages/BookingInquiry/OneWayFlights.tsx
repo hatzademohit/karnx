@@ -1,20 +1,12 @@
 "use client"
 import { CustomDateTimePicker, SwapComp } from "@/components";
 import { Box, Grid } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs";
 import { useStep } from '@/app/context/StepProvider';
 import { useEffect } from "react";
+import { Controller } from "react-hook-form";
 
-const OneWayFlights = () => {
-  const { airportCity, formData, setFormData } = useStep();
-
-  useEffect(() =>{
-    console.log(formData, 'formData')
-  }, [formData])
-
-  const departureTime = Array.isArray(formData?.flightDetails?.departure_time) && formData.flightDetails.departure_time[0]
-    ? dayjs(formData.flightDetails.departure_time[0])
-    : dayjs();
+const OneWayFlights = ({ control, errors, setValue }: any) => {
+  const { airportCity } = useStep();
 
   // Defensive mapping for options
   const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map(airport => ({
@@ -23,65 +15,57 @@ const OneWayFlights = () => {
     code: airport.code,
   }));
 
-  // Ensure defaultFrom and defaultTo are arrays, passing the 0th element or undefined
-  const defaultFrom = Array.isArray(formData.flightDetails?.departure_location)
-    ? formData.flightDetails.departure_location[0]
-    : formData.flightDetails?.departure_location;
-
-  const defaultTo = Array.isArray(formData.flightDetails?.arrival_location)
-    ? formData.flightDetails.arrival_location[0]
-    : formData.flightDetails?.arrival_location;
-
-  const setAtIndex = (arr: any[], index: number, value: any) => {
-    const copy = [...arr];
-    copy[index] = value;
-    return copy;
-  };
-  const handleSwapChange = (rowIndex: number, fromCode: string, toCode: string) => {
-    setFormData({
-      ...formData,
-      flightDetails: {
-        ...formData.flightDetails,
-        departure_location: setAtIndex(formData.flightDetails?.departure_location || [], rowIndex, fromCode),
-        arrival_location: setAtIndex(formData.flightDetails?.arrival_location || [], rowIndex, toCode),
-      }
-    });
-  };
   return (
-    <Box sx={{ border: '1px solid #E5E7EB', boxShadow: '0px 10px 15px -3px #0000001A', padding: '20px', borderRadius: '10px' }}>
+    <Box sx={{ border: "1px solid #E5E7EB", padding: "20px", borderRadius: "10px" }}>
       <Grid container spacing={2}>
         <Grid size={{ lg: 8, md: 8, sm: 12, xs: 12 }}>
-          <SwapComp
-            options={airportOptions}
-            defaultFrom={formData.flightDetails?.departure_location?.[0] || ""}
-            defaultTo={formData.flightDetails?.arrival_location?.[0] || ""}
-            onChange={(fromCode, toCode) => handleSwapChange(0, fromCode, toCode)}
+          <Controller
+            name="oneWayfrom"
+            control={control}
+            render={({ field }) => (
+              <Controller
+                name="oneWayto"
+                control={control}
+                render={({ field: toField }) => (
+                  <SwapComp
+                    options={airportOptions}
+                    fromValue={field.value}
+                    toValue={toField.value}
+                    onFromChange={(val: any) =>
+                      setValue("oneWayfrom", val?.code, { shouldValidate: true, shouldDirty: true })
+                    }
+                    onToChange={(val: any) =>
+                      setValue("oneWayto", val?.code, { shouldValidate: true, shouldDirty: true })
+                    }
+                    onSwap={(from, to) => {
+                      setValue("oneWayfrom", from, { shouldValidate: true, shouldDirty: true });
+                      setValue("oneWayto", to, { shouldValidate: true, shouldDirty: true });
+                    }}
+                    fromError={!!errors.oneWayfrom}
+                    fromHelpertext={errors.oneWayfrom?.message}
+                    toError={!!errors.oneWayto}
+                    toHelpertext={errors.oneWayto?.message}
+                  />
+                )}
+              />
+            )}
           />
         </Grid>
-        <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
-          <CustomDateTimePicker
-            datatimelabel="Departure Date & Time"
-            value={
-              formData.flightDetails?.departure_time?.[0]
-                ? dayjs(formData.flightDetails.departure_time[0])
-                : null
-            }
-            onChange={(newValue) => {
-              setFormData({
-                ...formData,
-                flightDetails: {
-                  ...formData.flightDetails,
-                  departure_time: setAtIndex(
-                    formData.flightDetails?.departure_time || [],
-                    0,
-                    newValue ? dayjs(newValue).toISOString() : null
-                  )
-                }
-              });
-            }}
-            withClock
-          />
 
+        <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
+          <Controller
+            name="oneWaydepartureDate"
+            control={control}
+            render={({ field }) => (
+              <CustomDateTimePicker
+                {...field}
+                datatimelabel="Departure Date & Time"
+                withClock
+                error={!!errors.oneWaydepartureDate}
+                helperText={errors.oneWaydepartureDate?.message}
+              />
+            )}
+          />
         </Grid>
       </Grid>
     </Box>

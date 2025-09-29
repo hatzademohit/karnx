@@ -1,67 +1,18 @@
 'use client'
-import { Grid, Typography, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Grid, Typography, MenuItem } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useStep } from '@/app/context/StepProvider';
 import { CustomTextField, SingleSelect } from "@/components";
+import { useFormContext, Controller } from "react-hook-form";
 
 const CrewRequirements = () => {
-    const { formData, setFormData, crewRequirementOptions } = useStep();
+    const { crewRequirementOptions } = useStep();
+    const [crewReqRequirement, setCrewRequirement] = useState<any[]>([]);
+    const { control, formState: { errors } } = useFormContext();
 
-    // Now storing as { [var_key]: id }
-    const [serviceSelections, setServiceSelections] = useState<{ [key: string]: number }>({});
-    const [notes, setNotes] = useState("");
-
-    // Initialize from formData only on mount
     useEffect(() => {
-        // If previously saved in array-of-object format, convert to our selection object
-        if (formData?.passengerInfo?.crew_requirements?.services) {
-            const arr = formData.passengerInfo.crew_requirements.services;
-            const obj: { [key: string]: number } = {};
-            if (Array.isArray(arr)) {
-                arr.forEach(item => {
-                    // item is { var_key: id }
-                    const key = Object.keys(item)[0];
-                    obj[key] = item[key];
-                });
-            }
-            setServiceSelections(obj);
-        }
-        if (formData?.passengerInfo?.crew_requirements?.additional_notes) {
-            setNotes(formData.passengerInfo.crew_requirements.additional_notes);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // Update the form context whenever serviceSelections or notes change
-    useEffect(() => {
-        // Convert serviceSelections {key: id, ...} => [ {key: id}, ... ]
-        const servicesArr = Object.entries(serviceSelections)
-            .filter(([key, value]) => value !== undefined && value !== null && value > 0)
-            .map(([key, value]) => ({ [key]: value }));
-
-            setFormData(prevData => ({
-                ...prevData,
-                passengerInfo: {
-                    ...prevData.passengerInfo,
-                    crew_requirements: {
-                        services: servicesArr,
-                        additional_notes: notes
-                    }
-                }
-            }));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serviceSelections, notes]);
-
-    const handleDropdownChange = (var_key: string, selectedId: number) => {
-        setServiceSelections(prev => ({
-            ...prev,
-            [var_key]: selectedId
-        }));
-    };
-
-    const handleNotesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNotes(e.target.value);
-    };
+        setCrewRequirement(crewRequirementOptions || []);
+    }, [crewRequirementOptions]);
 
     return (
         <>
@@ -70,28 +21,44 @@ const CrewRequirements = () => {
                     Crew Requirements
                 </Typography>
             </Grid>
-            {crewRequirementOptions && crewRequirementOptions.map((crew) => (
+
+            {crewReqRequirement.map((crew) => (
                 <Grid size={{ lg: 4, md: 6, sm: 6, xs:12 }} key={crew.var_key}>
-                        <SingleSelect
-                            inputLabel={crew.inputLabel}
-                            value={serviceSelections[crew.var_key] ?? ""}
-                            onChange={e => handleDropdownChange(crew.var_key, Number(e.target.value))}
-                        >
-                            {crew.options.map(opt => (
-                                <MenuItem value={opt.id} key={opt.id}>{opt.name}</MenuItem>
-                            ))}
-                        </SingleSelect>
+                    <Controller
+                        name={`crewRequirements.${crew.var_key}`}
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <SingleSelect
+                                inputLabel={crew.inputLabel}
+                                value={field.value || ""}
+                                {...field}
+                                error={!!errors.crewRequirements?.[crew.var_key]}
+                                helperText={errors.crewRequirements?.[crew.var_key]?.message}
+                            >
+                                {crew.options.map(opt => (
+                                    <MenuItem value={opt.name} key={opt.id}>{opt.name}</MenuItem>
+                                ))}
+                            </SingleSelect>
+                        )}
+                    />
                 </Grid>
             ))}
 
             <Grid size={{ lg: 4, md: 6, sm: 6, xs:12 }}>
-                <CustomTextField
-                    inputLabel="Additional Notes"
-                    value={notes}
-                    onChange={handleNotesChange}
-                    size="medium"
-                    // multiline
-                    // rows={2}
+                <Controller
+                    name="additionalNotes"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                        <CustomTextField
+                            inputLabel="Additional Notes"
+                            size="medium"
+                            {...field}
+                            error={!!errors.additionalNotes}
+                            helperText={errors.additionalNotes?.message as string}
+                        />
+                    )}
                 />
             </Grid>
         </>

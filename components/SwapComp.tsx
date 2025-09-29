@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import SwapHorizRoundedIcon from "@mui/icons-material/SwapHorizRounded";
 import { SimpleAutoComplete } from "@/components";
@@ -9,10 +8,12 @@ type SwapCompProps = {
   fromPlaceholder?: string;
   toLabel?: string;
   toPlaceholder?: string;
-  defaultFrom?: string | any;
-  defaultTo?: string | any;
   options?: string[];
-  onChange?: (from: string, to: string) => void;
+  fromValue: string;
+  toValue: string;
+  onFromChange: (val: string) => void;
+  onToChange: (val: string) => void;
+  onSwap?: (from: string, to: string) => void;
   fromError?: boolean;
   fromHelpertext?: string;
   toError?: boolean;
@@ -24,34 +25,22 @@ const SwapComp: React.FC<SwapCompProps> = ({
   fromPlaceholder = "Departure airport",
   toLabel = "To",
   toPlaceholder = "Destination airport",
-  defaultFrom = null,
-  defaultTo = null,
   options = [],
-  onChange,
+  fromValue,
+  toValue,
+  onFromChange,
+  onToChange,
+  onSwap,
   fromError,
   fromHelpertext,
   toError,
   toHelpertext
 }) => {
-  const [fromVal, setFromVal] = useState<string>(defaultFrom);
-  const [toVal, setToVal] = useState<string>(defaultTo);
-
+  
   const handleSwap = () => {
-    setFromVal(toVal);
-    setToVal(fromVal);
-    onChange?.(toVal, fromVal);
-  };
-
-  const handleFromChange = (_: React.SyntheticEvent, val: any | null) => {
-    const newVal:any = val ?? "";
-    setFromVal(newVal);
-    onChange?.(newVal, toVal);
-  };
-
-  const handleToChange = (_: React.SyntheticEvent, val: any | null) => {
-    const newVal = val ?? "";
-    setToVal(newVal);
-    onChange?.(fromVal, newVal);
+    onFromChange(toValue);
+    onToChange(fromValue);
+    onSwap?.(toValue, fromValue);
   };
 
   return (
@@ -70,10 +59,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
           placeholder={fromPlaceholder}
           options={options}
           size="medium"
-          value={fromVal}
-          onChange={handleFromChange}
-          name="flightDetails[departure_location[]]"
-          required = {true}
+          value={fromValue}
+          onChange={(_: any, val: any) => onFromChange(val ?? "")}
           error={fromError}
           helperText={fromHelpertext}
         />
@@ -112,10 +99,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
           placeholder={toPlaceholder}
           options={options}
           size="medium"
-          value={toVal}
-          onChange={handleToChange}
-          name="flightDetails[arrival_location[]]"
-          required={true}
+          value={toValue}
+          onChange={(_: any, val: any) => onToChange(val ?? "")}
           error={toError}
           helperText={toHelpertext}
         />

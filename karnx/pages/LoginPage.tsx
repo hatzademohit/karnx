@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, Typography } from "@mui/material";
-import loginBg from "@/public/imgs/loginbg.png";
-import karnxLogo from "@/public/imgs/karnx_logo.svg";
+import { Box, Button, IconButton, InputAdornment, Typography } from "@mui/material";
 import Image from "next/image";
 import { CustomTextField } from "@/components";
 import Link from "next/link";
@@ -38,7 +36,7 @@ const LoginPage = () => {
   const inputChange = () => {
     setInputType(inputType === 'text' ? 'password' : 'text');
   };
- const {setAlertMessage, setLoader, setOpenAlert, setSeverity, currentTime} = useAuth();
+ const {setAlertMessage, setLoader, setOpenAlert, setSeverity, currentTime, theme} = useAuth();
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
@@ -75,11 +73,11 @@ const LoginPage = () => {
   return (
     <Box className="login-page">
       <Box className="img-section">
-        <Image src={loginBg} alt="img-not-found" />
+        <Image src={theme.custom.loginBg} alt="img-not-found" />
       </Box>
 
       <Box className="input-section">
-        <Image className="img-fluid" src={karnxLogo} alt="logo" />
+        <Image className="img-fluid" src={theme.custom.logo} alt="logo" />
         <Typography component="h3" variant="h3" sx={{ width: "100%" }}>
           Login to your account
         </Typography>

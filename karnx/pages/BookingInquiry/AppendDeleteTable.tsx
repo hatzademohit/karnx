@@ -1,175 +1,182 @@
 "use client";
 import React, { useState } from "react";
-import { Box, Table, TableBody, TableCell, TableContainer, TableRow, IconButton, Button } from "@mui/material";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  IconButton,
+  Button,
+} from "@mui/material";
 import { Add } from "@mui/icons-material";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { CustomDateTimePicker, SwapComp } from "@/components";
-import dayjs, { Dayjs } from "dayjs";
-import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import { Controller } from "react-hook-form";
 import { useStep } from "@/app/context/StepProvider";
+import dayjs from "dayjs";
 
-interface RowData {
-  id: number;
-  from: string;
-  to: string;
-  date: Dayjs | null;
+interface AppendDeleteTableProps {
+  control: any;
+  setValue: any;
+  errors: any;
 }
 
-const AppendDeleteTable: React.FC = () => {
+const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps) => {
+  const [rows, setRows] = useState<number[]>([1, 2]); // Just store row IDs
+  const { airportCity } = useStep();
 
-  const [date, setDate] = useState<Dayjs | null>(dayjs());
-  const [rows, setRows] = useState<RowData[]>([
-    { id: 1, from: '', to: '', date: dayjs("08/30/2025 02:16 PM") },
-    { id: 2, from: '', to: '', date: dayjs("08/30/2025 02:16 PM") },
-  ]);
-
-  const handleAddRow = () => {
-    setRows([
-      ...rows,
-      {
-        id: Date.now(),
-        from: "",
-        to: "",
-        date: dayjs(), // each row gets its own date
-      },
-    ]);
-  };
-
-  const handleDeleteRow = (id: number) => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
-
-  const handleDateChange = (id: number, value: Dayjs | null) => {
-    setRows(
-      rows.map((row) =>
-        row.id === id ? { ...row, date: value } : row
-      )
-    );
-  };
-  const { airportCity, formData, setFormData } = useStep();
-
-  // Defensive mapping for options
-  const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map(airport => ({
+  const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map((airport) => ({
     label: `${airport.airport_name} (${airport.code}), ${airport.city_name}, ${airport.country_name}`,
     id: airport.id,
     code: airport.code,
   }));
-  const setAtIndex = (arr: any[], index: number, value: any) => {
-    const copy = [...arr];
-    copy[index] = value;
-    return copy;
-  };
-  const handleSwapChange = (rowIndex: number, fromCode: string, toCode: string) => {
-    setFormData({
-      ...formData,
-      flightDetails: {
-        ...formData.flightDetails,
-        departure_location: setAtIndex(formData.flightDetails?.departure_location || [], rowIndex, fromCode),
-        arrival_location: setAtIndex(formData.flightDetails?.arrival_location || [], rowIndex, toCode),
-      }
-    });
-  };
-  const addIndex = rows.length;
+
+  // Add new row
+  const handleAddRow = () => setRows((prev) => [...prev, Date.now()]);
+
+  // Delete row
+  const handleDeleteRow = (id: number) => setRows((prev) => prev.filter((r) => r !== id));
+
   return (
     <Box>
       <TableContainer className="table-append">
         <Table size="small">
           <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={row.id}>
+            {rows.map((rowId, index) => (
+              <TableRow key={rowId}>
                 <TableCell colSpan={2}>
-                  <SwapComp
-                    options={airportOptions}
-                    defaultFrom={formData.flightDetails?.departure_location?.[index] || ""}
-                    defaultTo={formData.flightDetails?.arrival_location?.[index] || ""}
-                    onChange={(fromCode, toCode) => handleSwapChange(index, fromCode, toCode)}
-                    // fromError={stepsError.departure_location && true}
-                    // fromHelpertext={stepsError.departure_location}
-                    // toError={stepsError.arrival_location && true}
-                    // toHelpertext={stepsError.arrival_location}
+                  {/* From-To using Controller */}
+                  <Controller
+                    name={`multiCity[${index}].multiCityfrom`}
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Controller
+                        name={`multiCity[${index}].multiCityto`}
+                        control={control}
+                        defaultValue=""
+                        render={({ field: toField }) => (
+                          <SwapComp
+                            options={airportOptions}
+                            fromValue={field.value}
+                            toValue={toField.value}
+                            onFromChange={(val: any) =>
+                              setValue(`multiCity[${index}].multiCityfrom`, val?.code)
+                            }
+                            onToChange={(val: any) =>
+                              setValue(`multiCity[${index}].multiCityto`, val?.code)
+                            }
+                            onSwap={(from, to) => {
+                              setValue(`multiCity[${index}].multiCityfrom`, from);
+                              setValue(`multiCity[${index}].multiCityto`, to);
+                            }}
+                            fromError={!!errors?.multiCity?.[index]?.multiCityfrom}
+                            fromHelpertext={errors?.multiCity?.[index]?.multiCityfrom?.message}
+                            toError={!!errors?.multiCity?.[index]?.multiCityto}
+                            toHelpertext={errors?.multiCity?.[index]?.multiCityto?.message}
+                          />
+                        )}
+                      />
+                    )}
                   />
                 </TableCell>
+
                 <TableCell>
-                  <CustomDateTimePicker
-                    datatimelabel="Departure Date & Time"
-                    required={true}
-                    value={
-                      formData.flightDetails?.departure_time
-                        ? dayjs(formData.flightDetails.departure_time[index])
-                        : null
-                    }
-                    // error={stepsError?.departure_time && true}
-                    // helperText={stepsError?.departure_time}
-                    onChange={(newValue) => {
-                      setFormData({
-                        ...formData,
-                        flightDetails: {
-                          ...formData.flightDetails,
-                          departure_time: setAtIndex(
-                            formData.flightDetails?.departure_time || [],
-                            index,
-                            newValue ? dayjs(newValue).toISOString() : null
-                          )
-                        }
-                      });
-                    }}
-                    withClock
+                  {/* Date using Controller */}
+                  <Controller
+                    name={`multiCity[${index}].multiCitydepartureDate`}
+                    control={control}
+                    defaultValue={null}
+                    render={({ field }) => (
+                      <CustomDateTimePicker
+                        datatimelabel="Departure Date & Time"
+                        required={true}
+                        withClock
+                        value={field.value}
+                        onChange={(val: any) => field.onChange(val)}
+                        error={!!errors?.multiCity?.[index]?.multiCitydepartureDate}
+                        helperText={errors?.multiCity?.[index]?.multiCitydepartureDate?.message}
+                      />
+                    )}
                   />
                 </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    onClick={() => handleDeleteRow(row.id)}
-                  >
-                    <ClearRoundedIcon />
-                  </IconButton>
+
+                <TableCell align="center" sx={{position: 'relative'}}>
+                  <Box sx={{ position: 'absolute', top: '35px' }}>
+                      <IconButton onClick={() => handleDeleteRow(rowId)}>
+                        <ClearRoundedIcon />
+                      </IconButton>
+                  </Box>
                 </TableCell>
               </TableRow>
-
             ))}
             <TableRow>
-              <TableCell colSpan={2}>
-                <SwapComp
-                  options={airportOptions}
-                  defaultFrom={formData.flightDetails?.departure_location?.[addIndex] || ""}
-                  defaultTo={formData.flightDetails?.arrival_location?.[addIndex] || ""}
-                  onChange={(fromCode, toCode) => handleSwapChange(addIndex, fromCode, toCode)}
-                  // fromError={stepsError.departure_location && true}
-                  // fromHelpertext={stepsError.departure_location}
-                  // toError={stepsError.arrival_location && true}
-                  // toHelpertext={stepsError.arrival_location}
-                />
-              </TableCell>
-              <TableCell colSpan={2} >
-                <CustomDateTimePicker
-                  datatimelabel="Return Date & Time"
-                  required={true}
-                  // error={formData.flightDetails?.departure_time?.[addIndex] && true}
-                  // helperText={stepsError?.departure_time}
-                  value={
-                      formData.flightDetails?.departure_time
-                        ? dayjs(formData.flightDetails.departure_time[addIndex])
-                        : null
-                    }
-                    onChange={(newValue) => {
-                      setFormData({
-                        ...formData,
-                        flightDetails: {
-                          ...formData.flightDetails,
-                          departure_time: setAtIndex(
-                            formData.flightDetails?.departure_time || [],
-                            addIndex,
-                            newValue ? dayjs(newValue).toISOString() : null
-                          )
-                        }
-                      });
-                    }}
-                  withClock
-                />
-              </TableCell>
-            </TableRow>
+                <TableCell colSpan={2}>
+                  {/* From-To using Controller */}
+                  <Controller
+                    name="multiCityfromReturn"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Controller
+                        name="multiCitytoReturn"
+                        control={control}
+                        defaultValue=""
+                        render={({ field: toField }) => (
+                          <SwapComp
+                            options={airportOptions}
+                            fromValue={field.value}
+                            toValue={toField.value}
+                            onFromChange={(val: any) => setValue("multiCityfromReturn", val?.code)}
+                            onToChange={(val: any) => setValue("multiCitytoReturn", val?.code)}
+                            onSwap={(from, to) => {
+                              setValue("multiCityfromReturn", from);
+                              setValue("multiCitytoReturn", to);
+                            }}
+                            fromError={!!errors?.multiCityfromReturn}
+                            fromHelpertext={errors?.multiCityfromReturn?.message}
+                            toError={!!errors?.multiCitytoReturn}
+                            toHelpertext={errors?.multiCitytoReturn?.message}
+                          />
+                        )}
+                      />
+                    )}
+                  />
+                </TableCell>
+
+                <TableCell colSpan={2}>
+                  {/* Date using Controller */}
+                  <Controller
+                    name="multiCityreturnDate"
+                    control={control}
+                    defaultValue={null}
+                    render={({ field }) => (
+                      <CustomDateTimePicker
+                        datatimelabel="Return Date & Time"
+                        required={true}
+                        withClock
+                        value={field.value}
+                        onChange={(val: any) => field.onChange(val)}
+                        error={!!errors?.multiCityreturnDate}
+                        helperText={errors?.multiCityreturnDate?.message}
+                      />
+                    )}
+                  />
+                </TableCell>
+              </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant="contained" startIcon={<Add />} onClick={handleAddRow} className="btn btn-blue" sx={{ mt: '14px' }}>
+
+      <Button
+        variant="contained"
+        startIcon={<Add />}
+        onClick={handleAddRow}
+        className="btn btn-blue"
+        sx={{ mt: "14px" }}
+      >
         Add Stop
       </Button>
     </Box>

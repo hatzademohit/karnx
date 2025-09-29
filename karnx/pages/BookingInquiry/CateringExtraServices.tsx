@@ -3,140 +3,123 @@ import { CustomTextField } from "@/components";
 import { Box, Checkbox, FormControlLabel, FormGroup, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useStep } from "@/app/context/StepProvider";
+import { Controller, useFormContext } from "react-hook-form";
 const CateringExtraServices = () => {
-    const { formData, setFormData, cateringDietaryOptions } = useStep();
-    const [isServicesReq, setshowServices] = useState(formData?.passengerInfo?.is_catering_service_req || false);
-    //const [specialRequirements, setSpecialRequirements] = useState(['Vegetarian', 'Vegan', 'Gluten Free', 'Kosher', 'Halal', 'Diabetic'])
-    
+    const { cateringDietaryOptions } = useStep();
+    const { control, watch, formState: { errors } } = useFormContext();
+    const [cateringDietary, setCateringDietary] = useState<any[]>([]);
 
     useEffect(() => {
-        if(isServicesReq === false){
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                passengerInfo: {
-                    ...prevFormData.passengerInfo,
-                    is_catering_service_req: isServicesReq,
-                    catering_services: {
-                        ...prevFormData.passengerInfo.catering_services,
-                        dietary_required: [],
-                        allergy_notes: '',
-                        drink_preferences: '',
-                        custom_services: ''
-                    }
-                }
-            }));
-        } else {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                passengerInfo: {
-                    ...prevFormData.passengerInfo,
-                    is_catering_service_req: isServicesReq,
-                }
-            }));
-        }
-    }, [isServicesReq]);
-
-    const handleCheckboxChange = (id : string) => {
-        setFormData(prevData => {
-            const selected = prevData.passengerInfo.catering_services?.dietary_required || [];
-            const updated = selected.includes(id)
-                ? selected.filter(val => val !== id) // uncheck
-                : [...selected, id]; // check
-
-            return {
-                ...prevData,
-                passengerInfo: {
-                    ...prevData.passengerInfo,  
-                    catering_services: {
-                        ...prevData.passengerInfo?.catering_services,
-                        dietary_required: updated
-                    }                  
-                }
-            };
-        });
-    };  
+        setCateringDietary(cateringDietaryOptions || []);
+    }, [cateringDietaryOptions, errors]);
+    
     return(
         <>
             <Grid size={{ xs: 12 }}>
                 <Typography variant="h3" sx={{color: '#BC0019', mt: '15px'}}>Catering & Extra Services</Typography>
             </Grid>
             <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-                <FormControlLabel label='Catering Required' control={<Checkbox checked={isServicesReq} size="small" onChange={ (e) => setshowServices(e.target?.checked) }/>} />
-                {isServicesReq && 
+                <FormControlLabel
+                    label="Catering Required"
+                    control={
+                        <Controller
+                        name="isCateringRequired"
+                        control={control}
+                        render={({ field }) => (
+                            <Checkbox
+                                size="small"
+                                checked={field.value || false}
+                                onChange={(e) => field.onChange(e.target.checked)}
+                            />
+                        )}
+                        />
+                    }
+                />
+                {watch("isCateringRequired") && (
                     <React.Fragment>
                         <Typography variant="h3" sx={{ my: '15px' }}>Special Dietary Requirements</Typography>
-                        <FormGroup>
-                            {cateringDietaryOptions && cateringDietaryOptions.map((requirement) => (
-                                <FormControlLabel key={requirement.id} control={<Checkbox size="small" />} label={requirement.name} 
-                                value={requirement.id}
-                                checked={formData?.passengerInfo?.catering_services?.dietary_required?.includes(requirement.id) || false}  
-                                onChange={(e) => { handleCheckboxChange(requirement.id) } }
-                                />
-                            ))}
-                        </FormGroup>
+                       {errors.cateringDietary && (
+                            <Typography color="error" className="fs12" sx={{ mt: 1 }}>
+                                {errors.cateringDietary.message as string}
+                            </Typography>
+                        )}
+                        <Controller
+                            name="cateringDietary"
+                            control={control}
+                            render={({ field }) => (
+                                <FormGroup>
+                                {cateringDietary.map((requirement) => (
+                                    <FormControlLabel
+                                        key={requirement.id}
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={field.value?.includes(requirement.id) || false}
+                                                onChange={(e) => {
+                                                    const newValue = e.target.checked
+                                                    ? [...(field.value || []), requirement.id]
+                                                    : field.value?.filter((id: string) => id !== requirement.id);
+                                                    field.onChange(newValue);
+                                                }}
+                                            />
+                                        }
+                                        label={requirement.name}
+                                    />
+                                ))}
+                                </FormGroup>
+                            )}
+                        />
                     </React.Fragment>
-                }
+                )}
             </Grid>
-            {isServicesReq && 
+            {watch("isCateringRequired") && (
                 <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
-                        <CustomTextField
-                            inputLabel="Allergies & Dietary Restrictions"
-                            placeholder="List any allergies or restrictions..."
-                            size="medium"
-                            value={formData?.passengerInfo?.catering_services?.allergy_notes || ''}
-                            onChange={(e) => {
-                                setFormData((prevFormData) => ({
-                                    ...prevFormData,
-                                    passengerInfo: {
-                                        ...prevFormData.passengerInfo,
-                                        catering_services: {
-                                            ...prevFormData.passengerInfo?.catering_services,
-                                            allergy_notes: e.target.value
-                                        }
-                                    }
-                                }));
-                            } }
+                        <Controller
+                            name="allergies"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <CustomTextField
+                                    inputLabel="Allergies & Dietary Restrictions"
+                                    placeholder="List any allergies or restrictions..."
+                                    size="medium"
+                                    {...field}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                />
+                            )}
                         />
-                        <CustomTextField
-                            inputLabel="Drink Preferences"
-                            placeholder="Wine Preferences, non-alcoholic drinks, etc..."
-                            size="medium"
-                            value={formData?.passengerInfo?.catering_services?.drink_preferences || ''}
-                            onChange={(e) => {
-                                setFormData((prevFormData) => ({
-                                    ...prevFormData,
-                                    passengerInfo: {
-                                        ...prevFormData.passengerInfo,
-                                        catering_services: {
-                                            ...prevFormData.passengerInfo?.catering_services,
-                                            drink_preferences: e.target.value
-                                        }
-                                    }
-                                }));
-                            } }
+                        <Controller
+                            name="drinkPreferences"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <CustomTextField
+                                    inputLabel="Drink Preferences"
+                                    placeholder="Wine Preferences, non-alcoholic drinks, etc..."
+                                    size="medium"
+                                    {...field}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                />
+                            )}
                         />
-                        <CustomTextField
-                            inputLabel="Custom Services"
-                            placeholder="Any other special requests... "
-                            size="medium"
-                            value={formData?.passengerInfo?.catering_services?.custom_services || ''}
-                            onChange={(e) => {
-                                setFormData((prevFormData) => ({
-                                    ...prevFormData,
-                                    passengerInfo: {
-                                        ...prevFormData.passengerInfo,
-                                        catering_services: {
-                                            ...prevFormData.passengerInfo?.catering_services,
-                                            custom_services: e.target.value
-                                        }
-                                    }
-                                }));
-                            } }
+                         <Controller
+                            name="customServices"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <CustomTextField
+                                    inputLabel="Custom Services"
+                                    placeholder="Any other special requests..."
+                                    size="medium"
+                                    {...field}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                />
+                            )}
                         />
                     </Box>
                 </Grid>
-            }
+            )}
         </>
     )
 }
