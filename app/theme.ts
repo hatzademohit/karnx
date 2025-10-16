@@ -5,24 +5,24 @@ import karnxLogo from "@/public/imgs/karnx_logo.svg";
 import loginBackground from "@/public/imgs/loginbg.png";
 
 function createSsrMatchMedia(width: number) {
-  return (query: string) => ({
-    matches: mediaQuery.match(query, { width }),
-  });
+    return (query: string) => ({
+        matches: mediaQuery.match(query, { width }),
+    });
 }
 
 declare module "@mui/material/styles" {
-  interface Theme {
-    custom: {
-      logo: string;
-      loginBg: any;
-    };
-  }
-  interface ThemeOptions {
-    custom?: {
-      logo?: string;
-      loginBg?: any;
-    };
-  }
+    interface Theme {
+        custom: {
+            logo: string;
+            loginBg: any;
+        };
+    }
+    interface ThemeOptions {
+        custom?: {
+            logo?: string;
+            loginBg?: any;
+        };
+    }
 }
 
 export const karnxTheme = createTheme({
@@ -31,7 +31,7 @@ export const karnxTheme = createTheme({
         logo: karnxLogo,
         loginBg: loginBackground
     },
-    
+
     typography: {
         fontFamily: 'poppins',
         h1: {
@@ -59,15 +59,15 @@ export const karnxTheme = createTheme({
             fontFamily: 'poppins-semibold'
         },
     },
-    components:{
+    components: {
         MuiUseMediaQuery: {
             defaultProps: {
                 ssrMatchMedia: createSsrMatchMedia(1024),
             },
         },
-        MuiButton:{
-            styleOverrides:{
-                root:{
+        MuiButton: {
+            styleOverrides: {
+                root: {
                     textTransform: 'capitalize',
                     fontFamily: 'poppins-lt',
                 }

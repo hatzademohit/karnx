@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { karnxTheme } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./context/AuthContext";
+import { AssistantProvider } from "./context/AssistantContext";
+import AssistantWidget from "@/components/Assistant/AssistantWidget";
 import '@/public/styles/global.css'
 
 export const metadata: Metadata = {
@@ -21,8 +23,11 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <ThemeProvider theme={karnxTheme}>
           <AuthProvider>
+            <AssistantProvider>
               <CssBaseline />
               {children}
+              <AssistantWidget />
+            </AssistantProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
