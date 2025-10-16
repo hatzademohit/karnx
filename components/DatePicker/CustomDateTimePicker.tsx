@@ -89,29 +89,29 @@ export default function CustomDateTimePicker({
             size: "medium", fullWidth: true, variant: "outlined",
             error: error,  helperText: helperText,
           },
-		  layout: {
-			sx: {
-				"& .MuiClockNumber-root": {
-					fontFamily: 'poppins',
-				},
-				"& .MuiClockNumber-root.Mui-selected": {
-					backgroundColor: "#BC0019",
-					color: "#fff",
-				},
-					"& .MuiClockPointer-root": {
-					backgroundColor: "#BC0019", 
-					fontFamily: 'poppins',
-				},
-				"& .MuiClockPointer-thumb": {
-					borderColor: "#BC0019",
-					backgroundColor: "#BC0019",
-					fontFamily: 'poppins',
-				},
-				"& .MuiClock-pin": {
-					backgroundColor: "#BC0019",
-				},
-			},
-		},
+          layout: {
+            sx: {
+              "& .MuiClockNumber-root": {
+                fontFamily: 'poppins',
+              },
+              "& .MuiClockNumber-root.Mui-selected": {
+                backgroundColor: "#BC0019",
+                color: "#fff",
+              },
+                "& .MuiClockPointer-root": {
+                backgroundColor: "#BC0019", 
+                fontFamily: 'poppins',
+              },
+              "& .MuiClockPointer-thumb": {
+                borderColor: "#BC0019",
+                backgroundColor: "#BC0019",
+                fontFamily: 'poppins',
+              },
+              "& .MuiClock-pin": {
+                backgroundColor: "#BC0019",
+              },
+            },
+          },
         }}
       />
     </LocalizationProvider>

@@ -2,14 +2,13 @@
 import { Box, Button, Checkbox, FormControlLabel, Radio, Typography } from "@mui/material"
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import AirplanemodeActiveRoundedIcon from '@mui/icons-material/AirplanemodeActiveRounded';
-import { RadioTabs } from "@/components";
+import { RadioTabs, DateRangePickerInput } from "@/components";
 import { MultiCityFlights, OneWayFlights, RoundTripFlights } from "@/karnx/pages/BookingInquiry";
 import { useEffect, useMemo } from "react";
 import { useStep } from "@/app/context/StepProvider";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { oneWaySchema, roundTripSchema, multiCitySchema } from "./ValidationSchema";
-
 const FlightDetails = () =>{
 
     const { radioTabActive, setRadioTabActive, activeStep, handleBackClick, handleNextClick, formData, setFormData  } = useStep();
@@ -20,7 +19,7 @@ const FlightDetails = () =>{
         return multiCitySchema;
     }, [radioTabActive]);
 
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm<any>({
+    const { control, handleSubmit, formState: { errors }, setValue, watch } = useForm<any>({
         resolver: yupResolver(schema as any),
         mode: "onChange",
         defaultValues: {
@@ -116,10 +115,22 @@ const FlightDetails = () =>{
                             />
                         )}
                     />
-
                 </Box>
-                <Box sx={{mt: '10px', padding: '16px', border: '1px solid #E6E6E6', backgroundColor: '#F2F2F2', borderRadius: '2px'}}>
-                    <Typography sx={{ fontFamily: 'poppins-lt', fontSize: '14px' }}>Please specify a range, e.g., 08 March 2025 to 24 March 2025</Typography>
+                <Box className="specify-range" sx={{mt: '10px', padding: '10px 16px', border: '1px solid #E6E6E6', backgroundColor: '#F2F2F2', borderRadius: '2px'}}>
+                   <Box sx={{ fontFamily: 'poppins-lt', fontSize: '14px', display: 'flex', alignItems: 'center' }}>
+                        Please specify a range, e.g., 
+                            <Controller
+                                name="flexibleRange"
+                                control={control}
+                                render={({ field }) => (
+                                    <DateRangePickerInput
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        disabled={!watch("isFlexibleDates")}
+                                    />
+                                )}
+                            />
+                    </Box>
                 </Box>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>

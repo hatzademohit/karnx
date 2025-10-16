@@ -400,3 +400,19 @@ hr.cust-divider{
   background-color: #F6F7FF;
   border-radius: 8px;
 }
+.specify-range .date-range-picker{
+  width: 250px;
+}
+.specify-range .date-range-picker .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline,
+.specify-range .date-range-picker .MuiOutlinedInput-root,
+.specify-range .date-range-picker .MuiOutlinedInput-root input {
+  border: 0;
+  background: transparent;
+  -webkit-text-fill-color: #333333;
+  opacity: 1;
+  font-size: 14px;
+  font-family: 'poppins-lt';
+}
+.specify-range .date-range-picker .MuiOutlinedInput-root input{
+  padding: 5px;
+}
