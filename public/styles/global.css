@@ -6,13 +6,25 @@
   --red-color: #BC0019;
 }
 
-body{
+body:has(.login-page){
   line-height: 0;
 }
 
 .img-fluid{
   max-width: 100%;
   height: auto;
+}
+
+.w-100{
+  width: 100%;
+}
+
+.h-100{
+  height: 100%;
+}
+
+.object-cover{
+  object-fit: cover;
 }
 
 .MuiTooltip-popper {
@@ -193,6 +205,12 @@ button.table-icon-btn:hover{
             text-decoration: none;
         }
     }
+}
+
+.activate-account .input-section{
+  overflow: auto;
+  justify-content: flex-start;
+  padding-block: 20px;
 }
 
 /* sidebar css */

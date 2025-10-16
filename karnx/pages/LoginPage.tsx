@@ -73,8 +73,15 @@ const LoginPage = () => {
   return (
     <Box className="login-page">
       <Box className="img-section">
-        <Image src={theme.images.loginBg} alt="img-not-found" />
-        {/* <video src={theme.images.loginBg} /> */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-100 h-100 object-cover"
+        >
+          <source src={theme?.images?.loginBg} type="video/mp4" />
+        </video>
       </Box>
 
       <Box className="input-section">
@@ -83,7 +90,7 @@ const LoginPage = () => {
           Login to your account
         </Typography>
 
-        <Typography component='form' sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: '28px'}} onSubmit={handleSubmit(onSubmit)}>
+        <Typography component='form' sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: '16px'}} onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="userId"
             control={control}
