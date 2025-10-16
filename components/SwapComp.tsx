@@ -2,6 +2,7 @@
 import { Box, IconButton } from "@mui/material";
 import SwapHorizRoundedIcon from "@mui/icons-material/SwapHorizRounded";
 import { SimpleAutoComplete } from "@/components";
+import { useAuth } from "@/app/context/AuthContext";
 
 type SwapCompProps = {
   fromLabel?: string;
@@ -36,6 +37,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
   toError,
   toHelpertext
 }) => {
+
+  const {theme} = useAuth();
   
   const handleSwap = () => {
     onFromChange(toValue);
@@ -82,10 +85,10 @@ const SwapComp: React.FC<SwapCompProps> = ({
           onClick={handleSwap}
           sx={{
             border: "1px solid #e6e6e6",
-            color: "#03045E",
+            color: theme?.common?.blueColor,
             backgroundColor: "#ffffff",
             zIndex: 9,
-            "&:hover": { backgroundColor: "#03045E", color: "#ffffff" },
+            "&:hover": { backgroundColor: theme?.common?.blueColor, color: "#ffffff" },
           }}
         >
           <SwapHorizRoundedIcon />

@@ -4,6 +4,7 @@ import { DateRange, Range } from "react-date-range";
 import { format } from "date-fns/format";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { useAuth } from "@/app/context/AuthContext";
 
 interface DateRangePickerInputProps {
   label?: string;
@@ -18,6 +19,7 @@ const DateRangePickerInput: React.FC<DateRangePickerInputProps> = ({
   onChange,
   disabled = false,
 }) => {
+  const { theme } = useAuth()
   const [range, setRange] = useState<Range[]>([
     {
       startDate: value?.startDate || new Date(),
@@ -78,10 +80,10 @@ const DateRangePickerInput: React.FC<DateRangePickerInputProps> = ({
             ranges={range}
             onChange={(item) => setRange([item.selection])}
             moveRangeOnFirstSelection={false}
-            rangeColors={["#03045E"]}
+            rangeColors={[theme?.common?.blueColor]}
           />
           <Box textAlign="right">
-            <Button sx={{backgroundColor: '#03045E'}} variant="contained" size="small" onClick={handleClose}>
+            <Button sx={{backgroundColor: theme?.common?.blueColor}} variant="contained" size="small" onClick={handleClose}>
               OK
             </Button>
           </Box>

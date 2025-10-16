@@ -31,7 +31,7 @@ const ContactSummary = ()=> {
             <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px'}}>
                 <Grid container spacing={2}>
                     <Grid size={{ xs: 12 }}>
-                        <Typography variant="h3" sx={{color: '#BC0019'}}>Contact Information</Typography>
+                        <Typography variant="h3" sx={{color: theme?.common?.redColor}}>Contact Information</Typography>
                     </Grid>
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Controller
@@ -95,7 +95,7 @@ const ContactSummary = ()=> {
                         />
                     </Grid>
                     <Grid size={{ xs: 12 }}>
-                        <Typography variant="h3" sx={{color: '#BC0019', mt: '14px'}}>Inquiry Summary</Typography>
+                        <Typography variant="h3" sx={{color: theme?.common?.redColor, mt: '14px'}}>Inquiry Summary</Typography>
                     </Grid>
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Box sx={{display: 'flex', gap: '10px'}}>

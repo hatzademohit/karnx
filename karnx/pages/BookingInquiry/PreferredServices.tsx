@@ -13,7 +13,7 @@ const PreferredServices = () => {
     return (
         <>
            <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: '#BC0019', my: '15px' }}>Preferred Aircraft & Services</Typography>
+                <Typography variant="h3" sx={{ color: theme?.common?.redColor, my: '15px' }}>Preferred Aircraft & Services</Typography>
                 {errors.preferredServices && (
                     <Typography color="error" className="fs12" sx={{ mt: 1 }}>
                         {errors.preferredServices.root.message as string}

@@ -35,7 +35,7 @@ const PassengerInformation = () => {
     return(
         <>
             <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{color: '#BC0019'}}>Passenger Information</Typography>
+                <Typography variant="h3" sx={{color: theme?.common?.redColor}}>Passenger Information</Typography>
             </Grid>
             {[
                 { name: "adults", label: "Adults", min: 1 },

@@ -8,6 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import { useStep } from "@/app/context/StepProvider";
+import { useAuth } from "@/app/context/AuthContext";
 
 interface StepType {
   title?: string;
@@ -23,20 +24,12 @@ interface StepperComponentProps {
 }
 
 const StepperComponent: React.FC<StepperComponentProps> = ({ steps, activeStep, handleNextClick, handleBackClick }) => {
-  // const [activeStep, setActiveStep] = React.useState(0);
 
   const { formData, storeBookingInquiryData } = useStep();
-
-  // const handleNext = () => setActiveStep((prev) => prev + 1);
-  // const handleBack = () => setActiveStep((prev) => prev - 1);
-  // const handleReset = () => setActiveStep(0);
-
-  const handleFinish = async () => {
-    await storeBookingInquiryData(formData);
-  };
+  const {theme} = useAuth();
 
   return (
-    <Box sx={{ width: "100%", '& .MuiStepLabel-iconContainer.Mui-active svg': {color: '#BC0019'}, '& .MuiStepLabel-iconContainer.Mui-completed svg': {color: '#03045E'} }}>
+    <Box sx={{ width: "100%", '& .MuiStepLabel-iconContainer.Mui-active svg': {color: theme?.common?.redColor}, '& .MuiStepLabel-iconContainer.Mui-completed svg': {color: theme?.common?.blueColor} }}>
       {/* Stepper Header */}
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (

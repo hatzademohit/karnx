@@ -14,7 +14,7 @@ const ConfirmationModal = ({ open, dataAction, setOpen, heading="Are You Sure?",
         aria-describedby="keep-mounted-modal-description"
       >
         <Box className='custom-modal' sx={{padding: '30px', maxWidth: "450px !important", backgroundColor: '#ffffff', position: 'absolute', inset: 0, textAlign: 'center', margin: 'auto', border: '1px solid #cccccc', height: 'fit-content', borderRadius: '4px', '& .btn': {maxWidth: '150px', width: '100%', height: '42px' }}}>
-          <Typography component='h4' variant='h4' sx={{mb: '20px', color: '#BC0019'}}>{heading}</Typography>
+          <Typography component='h4' variant='h4' sx={{mb: '20px', color: theme?.common?.redColor}}>{heading}</Typography>
           <Typography sx={{mb: '20px', fontFamily: 'poppins-lt'}}>{subHeading}</Typography>
           <Box 
             sx={{

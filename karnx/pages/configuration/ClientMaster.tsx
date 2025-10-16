@@ -25,7 +25,7 @@ const ClientMaster = () => {
   const [search, setSearch] = useState("");
   const [sortModel, setSortModel] = useState<any>([{ field: "name", sort: "asc" }]);
 
-  const { setLoader } = useAuth();
+  const { setLoader, theme } = useAuth();
 
   // Fetch Clients
   const fetchClients = async () => {
@@ -82,12 +82,12 @@ const ClientMaster = () => {
           <>
             <Tooltip title='Edit Client' arrow placement="top">
               <IconButton size="small" onClick={() => editRow(params.row)}>
-                <EditOutlinedIcon sx={{ color: '#03045E', fontSize: '20px' }} />
+                <EditOutlinedIcon sx={{ color: theme?.common?.blueColor, fontSize: '20px' }} />
               </IconButton>
             </Tooltip>
             <Tooltip title='Delete Client' arrow placement="top">
               <IconButton size="small" onClick={() => deleteRow(params.row)}>
-                <DeleteOutlineOutlinedIcon sx={{ color: '#BC0019', fontSize: '20px' }} />
+                <DeleteOutlineOutlinedIcon sx={{ color: theme?.common?.redColor, fontSize: '20px' }} />
               </IconButton>
             </Tooltip>
           </>
@@ -167,7 +167,7 @@ const ClientMaster = () => {
 
   return (
     <Box>
-      <Typography component='h1' variant="h1" sx={{ color: '#03045E', mb: '24px' }}>Client Master</Typography>
+      <Typography component='h1' variant="h1" sx={{ color: theme?.heading?.color, mb: theme?.heading?.marginBottom }}>Client Master</Typography>
 
       <MUIDataGrid
         gridColumns={columns}

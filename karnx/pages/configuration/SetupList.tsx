@@ -6,7 +6,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { useAuth } from "@/app/context/AuthContext";
 const SetupList = () => {   
 
-    const { hasPermission } = useAuth();
+    const { hasPermission, theme } = useAuth();
     
      const items = {
             user_role_per: [
@@ -25,7 +25,7 @@ const SetupList = () => {
         
     return(
         <Box>
-            <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Configuration List</Typography>
+            <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color, mb: theme?.heading?.marginBottom}}>Configuration List</Typography>
                 <Grid container spacing={2}>
                     {items.user_role_per.filter((item) => hasPermission(item.permission)).length > 0 && (
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>

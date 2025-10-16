@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { Dayjs } from "dayjs";
-import { InputLabel, styled, Typography } from "@mui/material";
+import { InputLabel, styled, Typography, useTheme } from "@mui/material";
 
 interface CustomDateTimePickerProps {
   label?: string;
@@ -23,17 +23,17 @@ interface CustomDateTimePickerProps {
 }
 
 // ✅ Styled wrapper that enforces highlight on selected values
-const ClockWrapper = styled("div")(() => ({
+const ClockWrapper = styled("div")(({ theme }) => ({
   "& .MuiClockNumber-root.Mui-selected": {
     backgroundColor: "#BC0019 !important",
     color: "#fff !important",
   },
   "& .MuiClockPointer-root": {
-    backgroundColor: "#BC0019", // line color
+    backgroundColor: theme?.common?.redColor, // line color
   },
   "& .MuiClockPointer-thumb": {
-    borderColor: "#BC0019",     // outline
-    backgroundColor: "#BC0019", // pointer dot
+    borderColor: theme?.common?.redColor,     // outline
+    backgroundColor: theme?.common?.redColor, // pointer dot
   },
 }));
 
@@ -51,11 +51,14 @@ export default function CustomDateTimePicker({
   error = false,
   helperText
 }: CustomDateTimePickerProps) {
+
+const theme = useTheme()
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {datatimelabel && (
         <InputLabel sx={{ fontFamily: "poppins-semibold", width: "fit-content", color: "#333333" }}>
-          {datatimelabel} { required === true ? <Typography component='span' sx={{color: '#BC0019'}}>*</Typography> : ''}
+          {datatimelabel} { required === true ? <Typography component='span' sx={{color: theme?.common?.redColor}}>*</Typography> : ''}
         </InputLabel>
       )}
       <DateTimePicker
@@ -95,20 +98,20 @@ export default function CustomDateTimePicker({
                 fontFamily: 'poppins',
               },
               "& .MuiClockNumber-root.Mui-selected": {
-                backgroundColor: "#BC0019",
+                backgroundColor: theme?.common?.redColor,
                 color: "#fff",
               },
                 "& .MuiClockPointer-root": {
-                backgroundColor: "#BC0019", 
+                backgroundColor: theme?.common?.redColor, 
                 fontFamily: 'poppins',
               },
               "& .MuiClockPointer-thumb": {
-                borderColor: "#BC0019",
-                backgroundColor: "#BC0019",
+                borderColor: theme?.common?.redColor,
+                backgroundColor: theme?.common?.redColor,
                 fontFamily: 'poppins',
               },
               "& .MuiClock-pin": {
-                backgroundColor: "#BC0019",
+                backgroundColor: theme?.common?.redColor,
               },
             },
           },

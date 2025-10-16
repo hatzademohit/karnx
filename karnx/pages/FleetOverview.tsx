@@ -1,4 +1,5 @@
 'use client'
+import { useAuth } from "@/app/context/AuthContext";
 import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -25,10 +26,13 @@ const FleetOverview = () => {
     const viewDetails = (details) => {
         console.log(details)
     }
+
+    const {theme} = useAuth();
+
     return(
         <>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Fleet Overview</Typography>
+                <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color, mb: theme?.heading?.marginBottom}}>Fleet Overview</Typography>
             </Box>
             <Grid container spacing={2}>
                 {flightOverviewData && flightOverviewData.map((item, index) => (
@@ -36,7 +40,7 @@ const FleetOverview = () => {
                         <Box sx={{border: '1px solid #E6E6E6', padding: '18px'}}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                                    <Typography component='h4' variant="h4" sx={{color: '#03045E'}}>{item.flightNumber }</Typography>
+                                    <Typography component='h4' variant="h4" sx={{color: theme?.common?.blueColor}}>{item.flightNumber }</Typography>
                                      <Button variant="contained" className={`btn btn-status-rounded ${item.status === 'ON TIME' ? 'bg-green' : item.status === 'MAINTENANCE' ? 'bg-yellow' : ''}`}>{item.status}</Button>
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>

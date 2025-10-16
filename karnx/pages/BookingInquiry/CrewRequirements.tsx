@@ -17,7 +17,7 @@ const CrewRequirements = () => {
     return (
         <>
             <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: '#BC0019', my: '15px' }}>
+                <Typography variant="h3" sx={{ color: theme?.common?.redColor, my: '15px' }}>
                     Crew Requirements
                 </Typography>
             </Grid>

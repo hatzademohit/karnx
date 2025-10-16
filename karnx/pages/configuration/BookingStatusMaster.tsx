@@ -25,7 +25,7 @@ const BookingStatusMaster = () => {
   const [search, setSearch] = useState("");
   const [sortModel, setSortModel] = useState<any>([{ field: "name", sort: "asc" }]);
 
-  const { setLoader, hasPermission } = useAuth();
+  const { setLoader, hasPermission, theme } = useAuth();
 
   // Fetch BookingStatuss
   const fetchBookingStatus = async () => {
@@ -76,14 +76,14 @@ const BookingStatusMaster = () => {
           { hasPermission('booking status update') && (
             <Tooltip title='Edit Booking Status' arrow placement="top">
               <IconButton size="small" onClick={() => editRow(params.row)}>
-                <EditOutlinedIcon sx={{ color: '#03045E', fontSize: '20px' }} />
+                <EditOutlinedIcon sx={{ color: theme?.common?.blueColor, fontSize: '20px' }} />
               </IconButton>
             </Tooltip>
           )}
           { hasPermission('booking status delete') && (
             <Tooltip title='Delete Booking Status' arrow placement="top">
               <IconButton size="small" onClick={() => deleteRow(params.row)}>
-                <DeleteOutlineOutlinedIcon sx={{ color: '#BC0019', fontSize: '20px' }} />
+                <DeleteOutlineOutlinedIcon sx={{ color: theme?.common?.redColor, fontSize: '20px' }} />
               </IconButton>
             </Tooltip>
           )}
@@ -164,7 +164,7 @@ const BookingStatusMaster = () => {
 
   return (
     <Box>
-      <Typography component='h1' variant="h1" sx={{ color: '#03045E', mb: '24px' }}>Booking Status Master</Typography>
+      <Typography component='h1' variant="h1" sx={{ color: theme?.heading?.color, mb: theme?.heading?.marginBottom }}>Booking Status Master</Typography>
       <MUIDataGrid
         gridColumns={columns}
         gridRows={data}

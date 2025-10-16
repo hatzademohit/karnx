@@ -62,11 +62,11 @@ const ResetPassword = () => {
   return (
     <Box className="login-page">
       <Box className="img-section">
-        <Image src={theme.custom.loginBg} alt="img-not-found" />
+        <Image src={theme.images.loginBg} alt="img-not-found" />
       </Box>
 
       <Box className="input-section">
-        <Image className="img-fluid" src={theme.custom.logo} alt="logo" />
+        <Image className="img-fluid" src={theme.images.logo} alt="logo" />
         <Typography component="h3" variant="h3" sx={{ width: "100%" }}>
           Reset Your Password
         </Typography>

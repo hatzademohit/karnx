@@ -9,8 +9,10 @@ import { useStep } from "@/app/context/StepProvider";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { oneWaySchema, roundTripSchema, multiCitySchema } from "./ValidationSchema";
-const FlightDetails = () =>{
+import { useAuth } from "@/app/context/AuthContext";
 
+const FlightDetails = () =>{
+    const {theme} = useAuth();
     const { radioTabActive, setRadioTabActive, activeStep, handleBackClick, handleNextClick, formData, setFormData  } = useStep();
 
     const schema = useMemo(() => {
@@ -73,7 +75,7 @@ const FlightDetails = () =>{
     return(
         <>
             <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px'}}>
-                <Typography variant="h3" sx={{color: '#BC0019', mb: '24px'}}>Popular Routes</Typography>
+                <Typography variant="h3" sx={{color: theme?.common?.redColor, mb: '24px'}}>Popular Routes</Typography>
                 <Box sx={{ display: 'flex', gap: '24px'}}>
                     {popularRoutes && popularRoutes.map((route, index) => (
                         <Box key={index + route.from} sx={{border: '1px solid #E6E6E6', padding: '12px 18px', display: 'flex', alignItems: 'center', gap: '16px', width: 'fit-content'}}>
@@ -84,7 +86,7 @@ const FlightDetails = () =>{
                         </Box>
                     ))}
                 </Box>
-                <Typography variant="h3" sx={{color: '#BC0019', my: '24px'}}>Flight Details</Typography>
+                <Typography variant="h3" sx={{color: theme?.common?.redColor, my: '24px'}}>Flight Details</Typography>
                 <RadioTabs defaultValue={radioTabActive} onchange={ (value: number) => { setRadioTabActive(value)}}>
                     <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
                         <OneWayFlights control={control} errors={errors} setValue={setValue} />

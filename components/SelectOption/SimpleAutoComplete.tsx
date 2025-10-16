@@ -52,7 +52,7 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
             color: "#333333",
           }}
         >
-          {inputLabel} { required === true ? <Typography component='span' sx={{color: '#BC0019'}}>*</Typography> : ''}
+          {inputLabel} { required === true ? <Typography component='span' sx={{color: theme?.common?.redColor}}>*</Typography> : ''}
         </InputLabel>
       )}
       <FormControl fullWidth>

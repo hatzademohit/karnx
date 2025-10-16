@@ -12,24 +12,48 @@ function createSsrMatchMedia(width: number) {
 
 declare module "@mui/material/styles" {
   interface Theme {
-    custom: {
+    images: {
       logo: string;
       loginBg: any;
     };
+    heading: {
+        color: string;
+        marginBottom: string
+    };
+    common: {
+        blueColor: string;
+        redColor: string;
+    }
   }
   interface ThemeOptions {
-    custom?: {
+    images?: {
       logo?: string;
       loginBg?: any;
     };
+    heading: {
+        color: string;
+        marginBottom: string
+    };
+    common: {
+        blueColor: string;
+        redColor: string;
+    }
   }
 }
 
 export const karnxTheme = createTheme({
 
-    custom: {
+    images: {
         logo: karnxLogo,
         loginBg: loginBackground
+    },
+    heading: {
+        color: '#03045E',
+        marginBottom: '30px'
+    },
+    common: {
+        blueColor: '#03045E',
+        redColor: '#BC0019',
     },
     
     typography: {

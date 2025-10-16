@@ -15,7 +15,7 @@ const PurposeofTravel = () => {
     return (
         <>
             <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: '#BC0019', mt: '15px' }}>Purpose of Travel</Typography>
+                <Typography variant="h3" sx={{ color: theme?.common?.redColor, mt: '15px' }}>Purpose of Travel</Typography>
                 {errors.travelPurpose && (
                     <Typography color="error" className="fs12" sx={{ mt: 1 }}>
                         {errors.travelPurpose.message as string}

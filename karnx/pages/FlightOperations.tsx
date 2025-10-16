@@ -5,9 +5,12 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useEffect, useState } from "react";
 import FlightStepper from "@/components/Stepper/FlightStepper";
 import SearchIcon from '@mui/icons-material/Search';
+import { useAuth } from "@/app/context/AuthContext";
 
 const FlightOperations = () => {
 
+    const {theme} = useAuth();
+ 
     interface flightOperationsDataProps{
         flightNumber?: string;
         flightSatus?: string;
@@ -39,7 +42,7 @@ const FlightOperations = () => {
     return(
         <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Flight Operations</Typography>
+                <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color, mb: theme?.heading?.marginBottom}}>Flight Operations</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <CustomTextField 
                         variant='outlined' 
@@ -68,7 +71,7 @@ const FlightOperations = () => {
                                     <Button variant="contained" className={`btn btn-status-rounded ${item.flightSatus === 'ON TIME' ? 'bg-green' : item.flightSatus === 'DELAYED' ? 'bg-red' : ''}`}>{item.flightSatus}</Button>
                                 </Box>
                                 <Box>
-                                    <Typography component='h3' variant="h3" sx={{ color: '#03045E' }}>{item.route}</Typography>
+                                    <Typography component='h3' variant="h3" sx={{ color: theme?.common?.blueColor }}>{item.route}</Typography>
                                     <Typography className="fs14">{item.departure}</Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
@@ -99,7 +102,7 @@ const FlightOperations = () => {
                 <Grid container spacing={2}>
                     <Grid size={{ lg: 8, md: 8, sm: 12, xs: 12 }}>
                         <Box sx={{mb: '20px'}}>
-                            <Typography component='h4' variant="h4" sx={{ color: '#03045E', mb: '12px' }}>Flight Details</Typography>
+                            <Typography component='h4' variant="h4" sx={{ color: theme?.common?.blueColor, mb: '12px' }}>Flight Details</Typography>
                             <Box sx={{backgroundColor: '#F6F7FF', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', borderRadius: '4px'}}>
                                 <Box sx={{display: 'flex', gap: '8px', alignItems: 'center'}}>
                                     <Typography component='h5' variant="h5" sx={{color: '#4D4D4D'}}>Route:</Typography>
@@ -120,7 +123,7 @@ const FlightOperations = () => {
                             </Box>
                         </Box>
                         <Box sx={{mb: '20px'}}>
-                            <Typography component='h4' variant="h4" sx={{ color: '#03045E', mb: '12px' }}>Client Information</Typography>
+                            <Typography component='h4' variant="h4" sx={{ color: theme?.common?.blueColor, mb: '12px' }}>Client Information</Typography>
                             <Box sx={{backgroundColor: '#F6F7FF', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', borderRadius: '4px'}}>
                                 <Box sx={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between'}}>
                                     <Typography className="fs14">{detailModalData?.crew}</Typography>
@@ -129,7 +132,7 @@ const FlightOperations = () => {
                             </Box>
                         </Box>
                         <Box>
-                            <Typography component='h4' variant="h4" sx={{ color: '#03045E', mb: '12px' }}>Flight Status</Typography>
+                            <Typography component='h4' variant="h4" sx={{ color: theme?.common?.blueColor, mb: '12px' }}>Flight Status</Typography>
                             <Box sx={{backgroundColor: '#F6F7FF', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', borderRadius: '4px'}}>
                                 <Box sx={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between'}}>
                                     <FlightStepper />
@@ -139,7 +142,7 @@ const FlightOperations = () => {
                     </Grid>
                     <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
                        <Box>
-                            <Typography component='h4' variant="h4" sx={{ color: '#03045E', mb: '12px' }}>Quick Actions</Typography>
+                            <Typography component='h4' variant="h4" sx={{ color: theme?.common?.blueColor, mb: '12px' }}>Quick Actions</Typography>
                             <Box sx={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
                                 <Button variant="contained" className="btn btn-blue" sx={{width: '100%'}}>Update Status</Button>
                                 <Button variant="contained" className="btn btn-blue" sx={{width: '100%'}}>Contact Client</Button>

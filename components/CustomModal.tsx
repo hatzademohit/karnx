@@ -55,7 +55,7 @@ const CustomModal: React.FC<ModalCompProps> = ({
         <DialogTitle className='modal-header' component='h2' variant='h2'>
           {headerText}
           <IconButton
-            sx={{ ml: 'auto', color: '#808080', '&:hover': {backgroundColor: '#ffffff', color: '#03045E'} }}
+            sx={{ ml: 'auto', color: '#808080', '&:hover': {backgroundColor: '#ffffff', color: theme?.common?.blueColor} }}
             size="small"
             onClick={dataClose}
           >

@@ -13,7 +13,7 @@ const RecentInquiries = () => {
     return(
         <Box className='card'>
             <Box className='card-header'>
-                <Typography component='h3' variant="h3" sx={{color: '#BC0019'}}>Recent Inquiries</Typography>
+                <Typography component='h3' variant="h3" sx={{color: theme?.common?.redColor}}>Recent Inquiries</Typography>
                 <Button className="btn" variant="text" size="small">View All</Button>
             </Box>
             <Box className='bellow-header-part'>
@@ -38,10 +38,10 @@ const RecentInquiries = () => {
             <Box className="card-body" sx={{display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '260px' }}>
                 { cardContainData && cardContainData.map((item, index) => (
                     <Box className="card-contain" key={index}>
-                        <Typography component='h3' variant="h3" sx={{color: '#03045E'}}>{item.headhing}</Typography>
+                        <Typography component='h3' variant="h3" sx={{color: theme?.common?.blueColor}}>{item.headhing}</Typography>
                         <Box>
                             <Typography sx={{fontSize: '14px'}}>{item.headhing}</Typography>
-                            <Typography sx={{fontSize: '10px', color: '#03045E'}}>{item.assign}</Typography>
+                            <Typography sx={{fontSize: '10px', color: theme?.common?.blueColor}}>{item.assign}</Typography>
                         </Box>
                         <Button className={`btn btn-status-rounded ${item.status === 'QUOTE PENDING' && 'bg-yellow'}`} variant="contained">{item.status}</Button>
                     </Box>

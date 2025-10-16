@@ -56,7 +56,7 @@ const RoleUserPermission: React.FC = () => {
   const [rawPermissions, setRawPermissions] = useState<RawPermissionRow[]>([]);
   const [permissions, setPermissions] = useState<NormalizedRow[]>([]);
 
-  const { user, setLoader, hasPermission } = useAuth();
+  const { user, setLoader, hasPermission, theme } = useAuth();
   const clientId = user?.client_id ?? ""; // avoid `{}` ending up in the URL
 
   // Build helper maps from modules
@@ -270,7 +270,7 @@ const RoleUserPermission: React.FC = () => {
 
   return (
     <Box>
-      <Typography component="h1" variant="h1" sx={{ color: "#03045E", mb: "18px" }}>
+      <Typography component="h1" variant="h1" sx={{ color: theme?.heading?.color, mb: theme?.heading?.marginBottom }}>
         Role & User Permission
       </Typography>
 

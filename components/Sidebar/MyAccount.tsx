@@ -111,7 +111,7 @@ export default function MyAccount() {
         {
           user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{ borderRadius: '50%', objectFit: 'cover' }} /> : 
           <Typography component="span" sx={{ backgroundColor: '#F6F7FF', padding: '6px', borderRadius: '50%', width: '40px', height: '40px' }}>
-            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: '#03045E' }} />
+            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: theme?.common?.blueColor }} />
           </Typography>
         }
         <Typography sx={{display: 'flex', flexDirection: 'column', textAlign: 'start'}}>
@@ -135,7 +135,7 @@ export default function MyAccount() {
           {
           user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{borderRadius: '50%', objectFit: 'cover' }} /> : 
           <Typography component="span">
-            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: '#03045E' }} />
+            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: theme?.common?.blueColor }} />
           </Typography>
         }
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>

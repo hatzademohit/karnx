@@ -2,9 +2,10 @@
 import { Box, Typography } from "@mui/material";
 import { SimpleTable } from "@/components";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/app/context/AuthContext";
 
 const CrewRoster = () => {
-    
+    const { theme } = useAuth()
     const [columns, setcolumns] = useState<any>([])
     const [data, setData] = useState([])
 
@@ -27,7 +28,7 @@ const CrewRoster = () => {
 
     return(
         <Box>
-            <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Crew Roster</Typography>
+            <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color, mb: theme?.heading?.marginBottom}}>Crew Roster</Typography>
              <SimpleTable
                 tableHeader={columns}
                 tableData={data}

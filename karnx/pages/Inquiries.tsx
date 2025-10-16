@@ -11,9 +11,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { apiBaseUrl } from '@/karnx/api';
+import { useAuth } from "@/app/context/AuthContext";
 
 const Inquiries = () => {
-
+    const {theme} = useAuth();
     const [inqueryModal, setInqueryModal] = useState(false)
     const [columns, setColumns] = useState([])
     const [data, setData] = useState([])
@@ -106,7 +107,7 @@ const Inquiries = () => {
         }, []);
     return(
        <>
-        <Typography component='h1' variant="h1" sx={{color: '#03045E', mb: '24px'}}>Charter Inquiries</Typography>
+        <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color, mb: theme?.heading?.marginBottom}}>Charter Inquiries</Typography>
         <Box sx={{ padding: '24px', border: '1px solid #E6E6E6' }}>
             <MUIDataGrid 
                 gridColumns={columns}
