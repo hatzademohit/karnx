@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import { CustomTextField } from "@/components";
 import { useStep } from '@/app/context/StepProvider';
 import { Controller, useFormContext } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
 
 const PassengerInformation = () => {
+    const {theme} = useAuth()
     const [specialAssistance, setSpecialAssistance] = useState<any[]>([]);
     const { medicalSupOptions } = useStep();
     const { control, watch, setValue, formState: { errors } } = useFormContext();

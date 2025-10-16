@@ -2,8 +2,12 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { Button, Typography } from '@mui/material';
+import { useAuth } from '@/app/context/AuthContext';
 
 const ConfirmationModal = ({ open, dataAction, setOpen, heading="Are You Sure?", subHeading="You won't be able to revet this!"}) =>   {
+
+  const {theme} = useAuth()
+
   return (
     <>
       <Modal

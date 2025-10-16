@@ -3,6 +3,7 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Box, FormControl, InputLabel, Typography } from "@mui/material";
+import { useAuth } from "@/app/context/AuthContext";
 
 export interface SimpleAutoCompleteProps {
   variant?: any;
@@ -40,6 +41,7 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
   error,
   helperText
 }) => {
+    const {theme} = useAuth()
   const [inputValue, setInputValue] = React.useState("");
 
   return (

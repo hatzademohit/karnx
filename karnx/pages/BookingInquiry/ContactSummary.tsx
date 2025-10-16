@@ -4,8 +4,10 @@ import { useStep } from "@/app/context/StepProvider";
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { contactSummarySchema, contactSummarySchemaType  } from "./ValidationSchema";
+import { useAuth } from "@/app/context/AuthContext";
 
 const ContactSummary = ()=> {
+    const {theme} = useAuth()
     const { formData, setFormData, aircraftTypeOptions,  activeStep, handleBackClick, handleFinish } = useStep();
     
     const methods = useForm<any>({

@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { TextField, FormControl, InputLabel, Box, Typography } from '@mui/material';
+import { useAuth } from '@/app/context/AuthContext';
 
 export interface CustomTextFieldProps {
   name?: string;
@@ -53,6 +54,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
   multiline,
   ...props
 }, ref) => {
+  const {theme} = useAuth()
   const displayLabel = asterisk ? `${label} *` : label;
   return (
       <Box sx={{width: '100%'}}>

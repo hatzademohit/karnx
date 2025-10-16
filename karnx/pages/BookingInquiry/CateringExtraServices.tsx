@@ -4,7 +4,9 @@ import { Box, Checkbox, FormControlLabel, FormGroup, Grid, Typography } from "@m
 import React, { useEffect, useState } from "react";
 import { useStep } from "@/app/context/StepProvider";
 import { Controller, useFormContext } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
 const CateringExtraServices = () => {
+    const {theme} = useAuth()
     const { cateringDietaryOptions } = useStep();
     const { control, watch, formState: { errors } } = useFormContext();
     const [cateringDietary, setCateringDietary] = useState<any[]>([]);

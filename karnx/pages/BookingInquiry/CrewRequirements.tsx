@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { useStep } from '@/app/context/StepProvider';
 import { CustomTextField, SingleSelect } from "@/components";
 import { useFormContext, Controller } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
 
 const CrewRequirements = () => {
+    const {theme} = useAuth()
     const { crewRequirementOptions } = useStep();
     const [crewReqRequirement, setCrewRequirement] = useState<any[]>([]);
     const { control, formState: { errors } } = useFormContext();

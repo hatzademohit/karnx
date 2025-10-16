@@ -10,6 +10,7 @@ import {
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import { useAuth } from '@/app/context/AuthContext';
 
 export interface ModalCompProps {
   headerText?: any;
@@ -34,7 +35,7 @@ const CustomModal: React.FC<ModalCompProps> = ({
   className,
   isFooterButton = false
 }) => {
-
+  const {theme} = useAuth();
   return (
     <Dialog
       open={open}

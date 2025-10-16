@@ -2,7 +2,9 @@ import { Box, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material
 import { useStep } from '@/app/context/StepProvider';
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
 const PreferredServices = () => {
+    const {theme} = useAuth()
     const { aircraftTypeOptions } = useStep();
     const [preferredServicesData, setPreferredServicesData] = useState([]);
     const { control, formState: { errors } } = useFormContext();

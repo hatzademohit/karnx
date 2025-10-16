@@ -1,10 +1,12 @@
 'use client'
+import { useAuth } from "@/app/context/AuthContext";
 import { FileSelection } from "@/components";
 import { Checkbox, FormControl, FormControlLabel, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 const DocumentUploadReview = () => {
+    const {theme} = useAuth()
     const { control, formState: { errors } } = useFormContext();
 
     const [requiredDocument, setRequiredDocument] = useState(['Valid passport or ID for all passengers', 'Medical certificates (if medical needs indicated)', 'Pet documentation (if pets traveling)'])

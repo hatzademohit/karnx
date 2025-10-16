@@ -1,8 +1,10 @@
 import { Box, Button, Divider, Typography } from "@mui/material"
 import { MultiSelectCheckbox, SingleSelectRadio } from "@/components"
 import { useState } from "react";
+import { useAuth } from "@/app/context/AuthContext";
 
 const RecentInquiries = () => {
+    const {theme} = useAuth()
     const [assignAt, setassignAt] = useState<string>("");
     const [status, setstatus] = useState<string[]>([]);
 

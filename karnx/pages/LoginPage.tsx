@@ -74,6 +74,7 @@ const LoginPage = () => {
     <Box className="login-page">
       <Box className="img-section">
         <Image src={theme.images.loginBg} alt="img-not-found" />
+        {/* <video src={theme.images.loginBg} /> */}
       </Box>
 
       <Box className="input-section">

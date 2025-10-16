@@ -1,3 +1,4 @@
+import { useAuth } from "@/app/context/AuthContext";
 import { Box, IconButton, Typography } from "@mui/material";
 import React from "react";
 
@@ -7,6 +8,7 @@ interface InfoCardProps{
     InfoIcon?: any;
 }
 const InfoCard:React.FC<InfoCardProps> = ({ InfoNumber, InfoText, InfoIcon }) => {
+    const {theme} = useAuth()
     return(
         <Box className='info-card'>
             <Box>

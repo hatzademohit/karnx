@@ -1,7 +1,9 @@
+import { useAuth } from "@/app/context/AuthContext"
 import { Box, Button, Typography } from "@mui/material"
 
 const Next24Hours = () => {
 
+    const {theme} = useAuth()
     const cardContainData = [
         {headhing: 'LHR → JFK', text: 'Today 14:30 • G650 (G-KRNX)', assign: 'Capt. Johnson, FO Smith', status: 'ON TIME'},
         {headhing: 'CDG → DXB', text: 'Tomorrow 09:15 • Global 7500 (G-WING)', assign: 'Capt. Brown, FO Wilson', status: 'DELAYED'},

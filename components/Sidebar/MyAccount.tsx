@@ -68,7 +68,7 @@ export default function MyAccount() {
 
   const [userData, setUserData] = React.useState(null);
 
-  const { logout, user, role } = useAuth();
+  const { logout, user, role, theme } = useAuth();
   const router = useRouter();
 
   const handleClose = () => {

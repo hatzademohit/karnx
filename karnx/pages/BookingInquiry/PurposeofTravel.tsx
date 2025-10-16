@@ -3,7 +3,9 @@ import { FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography } fr
 import { useEffect, useState } from "react";
 import { useStep } from "@/app/context/StepProvider";
 import { Controller, useFormContext } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
 const PurposeofTravel = () => {
+    const {theme} = useAuth()
         const { travelingPurposeOption } = useStep();
         const [travelingPurpose, setTravelingPurpose] = useState<any[]>([]);
         const { control, formState: { errors } } = useFormContext();
