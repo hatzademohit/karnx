@@ -10,7 +10,7 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";
-import {apiBaseUrl} from '@/karnx/api';
+import { apiBaseUrl } from '@/karnx/api';
 
 interface LoginFormInputs {
   userId: string;
@@ -36,44 +36,44 @@ const LoginPage = () => {
   const inputChange = () => {
     setInputType(inputType === 'text' ? 'password' : 'text');
   };
- const {setAlertMessage, setLoader, setOpenAlert, setSeverity, currentTime, theme} = useAuth();
+  const { setAlertMessage, setLoader, setOpenAlert, setSeverity, currentTime, theme } = useAuth();
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-          const response = await axios.post(`${apiBaseUrl}/login`, {
-            email: data.userId,
-            password: data.password,
-          });
-    
-          const { token, user} = response.data;
-          localStorage.setItem("token", token);
-          localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
-          localStorage.setItem("role", response.data.role);
-          localStorage.setItem('loggedInUser', JSON.stringify(user));
-          // localStorage.setItem('loginTime', currentTime);
-          setAlertMessage(response.data.message);
-          setOpenAlert(true);
-          setSeverity('success');
-          window.location.href = "/dashboard";
-        } catch (error: any) {
-          if (error.response) {
-            setAlertMessage(error.response.data.message || "Invalid credentials");
-            setOpenAlert(true);
-            setSeverity('error');
-          } else {
-            setAlertMessage("Something went wrong. Please try again.");
-            setOpenAlert(true);
-            setSeverity('error');
-          }
-        } finally {
-          setLoader(false);
-        }
+      const response = await axios.post(`${apiBaseUrl}/login`, {
+        email: data.userId,
+        password: data.password,
+      });
+
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
+      localStorage.setItem("role", response.data.role);
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      // localStorage.setItem('loginTime', currentTime);
+      setAlertMessage(response.data.message);
+      setOpenAlert(true);
+      setSeverity('success');
+      window.location.href = "/dashboard";
+    } catch (error: any) {
+      if (error.response) {
+        setAlertMessage(error.response.data.message || "Invalid credentials");
+        setOpenAlert(true);
+        setSeverity('error');
+      } else {
+        setAlertMessage("Something went wrong. Please try again.");
+        setOpenAlert(true);
+        setSeverity('error');
+      }
+    } finally {
+      setLoader(false);
+    }
   };
 
   return (
     <Box className="login-page">
       <Box className="img-section">
-        <video
+        {/* <video
           autoPlay
           loop
           muted
@@ -81,7 +81,8 @@ const LoginPage = () => {
           className="w-100 h-100 object-cover"
         >
           <source src={theme?.images?.loginBg} type="video/mp4" />
-        </video>
+        </video> */}
+        <Image src={theme?.images?.loginBg} alt="img-not-found" />
       </Box>
 
       <Box className="input-section">
@@ -90,7 +91,7 @@ const LoginPage = () => {
           Login to your account
         </Typography>
 
-        <Typography component='form' sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: '16px'}} onSubmit={handleSubmit(onSubmit)}>
+        <Typography component='form' sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }} onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="userId"
             control={control}
@@ -125,7 +126,7 @@ const LoginPage = () => {
                   variant="outlined"
                   size="small"
                   error={!!errors.password}
-                  helperText={errors.password?.message}                  
+                  helperText={errors.password?.message}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">

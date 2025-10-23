@@ -2,6 +2,7 @@
 import { createTheme } from '@mui/material/styles';
 import mediaQuery from "css-mediaquery"; // Add this dependency
 import karnxLogo from "@/public/imgs/karnx_logo.svg";
+import loginBackground from "@/public/imgs/loginbg.png";
 
 function createSsrMatchMedia(width: number) {
     return (query: string) => ({
@@ -10,41 +11,44 @@ function createSsrMatchMedia(width: number) {
 }
 
 declare module "@mui/material/styles" {
-  interface Theme {
-    images: {
-      logo: string;
-      loginBg: any;
-    };
-    heading: {
-        color: string;
-        marginBottom: string
-    };
-    common: {
-        blueColor: string;
-        redColor: string;
+    interface Theme {
+        images: {
+            logo: string;
+            loginBg: any;
+            loginBgVideo: any;
+        };
+        heading: {
+            color: string;
+            marginBottom: string
+        };
+        common: {
+            blueColor: string;
+            redColor: string;
+        }
     }
-  }
-  interface ThemeOptions {
-    images?: {
-      logo?: string;
-      loginBg?: any;
-    };
-    heading: {
-        color: string;
-        marginBottom: string
-    };
-    common: {
-        blueColor: string;
-        redColor: string;
+    interface ThemeOptions {
+        images?: {
+            logo?: string;
+            loginBg?: any;
+            loginBgVideo?: any;
+        };
+        heading: {
+            color: string;
+            marginBottom: string
+        };
+        common: {
+            blueColor: string;
+            redColor: string;
+        }
     }
-  }
 }
 
 export const karnxTheme = createTheme({
 
     images: {
         logo: karnxLogo,
-        loginBg: '/videos/karnXwings.mp4'
+        loginBg: loginBackground,
+        loginBgVideo: '/videos/karnXwings.mp4'
     },
     heading: {
         color: '#03045E',
@@ -54,7 +58,7 @@ export const karnxTheme = createTheme({
         blueColor: '#03045E',
         redColor: '#BC0019',
     },
-    
+
     typography: {
         fontFamily: 'poppins',
         h1: {
