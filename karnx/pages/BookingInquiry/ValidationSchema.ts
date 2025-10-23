@@ -4,16 +4,38 @@ import * as yup from "yup";
 export const oneWaySchema = yup.object({
   oneWayfrom: yup.string().nullable().required("Departure is required"),
   oneWayto: yup.string().nullable().required("Destination is required"),
-  oneWaydepartureDate: yup.date().nullable().required("Departure date is required"),
+  oneWaydepartureDate: yup.string().when("isFlexibleDates", {
+    is: true,
+    then: schema => schema.notRequired(),
+    otherwise: schema => schema.required("Departure date is required"),
+  }),
+  flexibleRange: yup.string().nullable().when('isFlexibleDates', {
+    is: false,
+    then: schema => schema.notRequired(),
+    otherwise: schema => schema.required("Please enter specifics"),
+  })
 });
 
 export const roundTripSchema = yup.object({
   roundTripfrom: yup.string().required("Departure is required"),
   roundTripto: yup.string().required("Destination is required"),
-  roundTripdepartureDate: yup.date().nullable().required("Departure date is required"),
+  roundTripdepartureDate: yup.string().when("isFlexibleDates", {
+    is: true,
+    then: schema => schema.notRequired(),
+    otherwise: schema => schema.required("Departure date is required"),
+  }),
   roundTripfromReturn: yup.string().required("Departure is required"),
   roundTriptoReturn: yup.string().required("Destination is required"),
-  roundTripreturnDate: yup.date().nullable().required("Return date is required"),
+  roundTripreturnDate: yup.string().when("isFlexibleDates", {
+    is: true,
+    then: schema => schema.notRequired(),
+    otherwise: schema => schema.required("Return date is required"),
+  }),
+  flexibleRange: yup.string().nullable().when('isFlexibleDates', {
+    is: false,
+    then: schema => schema.notRequired(),
+    otherwise: schema => schema.required("Please enter specifics"),
+  })
 });
 
 export const multiCitySchema = yup.object({
@@ -26,7 +48,16 @@ export const multiCitySchema = yup.object({
   ),
   multiCityfromReturn: yup.string().required("Departure is required"),
   multiCitytoReturn: yup.string().required("Destination is required"),
-  multiCityreturnDate: yup.date().nullable().required("Return date is required"),
+  multiCityreturnDate: yup.string().when("isFlexibleDates", {
+    is: true,
+    then: schema => schema.notRequired(),
+    otherwise: schema => schema.required("Return date is required"),
+  }),
+  flexibleRange: yup.string().nullable().when('isFlexibleDates', {
+    is: false,
+    then: schema => schema.notRequired(),
+    otherwise: schema => schema.required("Please enter specifics"),
+  })
 });
 
 export type passengerAircraftSchemaType = {
@@ -106,11 +137,11 @@ export const passengerAircraftSchema = yup.object().shape({
   ),
   // 
   crewRequirements: yup.object().shape({
-    cabin_crew_pref_id: yup.string().required('Cabin Crew Preference is required.'),
-    pilot_experience_id: yup.string().required('Pilot Experience Level is required.'),
-    medical_crew_id: yup.string().required('Medical/Specilized Crew is required.'),
-    language_skills_id: yup.string().required('Languages Spoken is required.'),
-    concierge_skills_id: yup.string().required('VIP/Concierge Crew Skills is required.'),
+    cabin_crew_pref_id: yup.string(),
+    pilot_experience_id: yup.string(),
+    medical_crew_id: yup.string(),
+    language_skills_id: yup.string(),
+    concierge_skills_id: yup.string(),
   }),
   additionalNotes: yup.string().required("Please enter additional notes"),
   // 

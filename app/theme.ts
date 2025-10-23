@@ -2,6 +2,8 @@
 import { createTheme } from '@mui/material/styles';
 import mediaQuery from "css-mediaquery"; // Add this dependency
 import karnxLogo from "@/public/imgs/karnx_logo.svg";
+// import loginBackground from "@/public/videos/karnXwings.mp4";
+// import loginBackground from "@/public/imgs/loginbg.png";
 
 function createSsrMatchMedia(width: number) {
     return (query: string) => ({

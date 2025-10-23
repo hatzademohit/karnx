@@ -1,8 +1,8 @@
 'use client'
-import { Box, Button, Checkbox, FormControlLabel, Radio, Typography } from "@mui/material"
+import { Box, Button, Checkbox, FormControlLabel, Radio, TextField, Typography } from "@mui/material"
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import AirplanemodeActiveRoundedIcon from '@mui/icons-material/AirplanemodeActiveRounded';
-import { RadioTabs, DateRangePickerInput } from "@/components";
+import { RadioTabs, DateRangePickerInput, CustomTextField } from "@/components";
 import { MultiCityFlights, OneWayFlights, RoundTripFlights } from "@/karnx/pages/BookingInquiry";
 import { useEffect, useMemo } from "react";
 import { useStep } from "@/app/context/StepProvider";
@@ -24,6 +24,7 @@ const FlightDetails = () =>{
     const { control, handleSubmit, formState: { errors }, setValue, watch } = useForm<any>({
         resolver: yupResolver(schema as any),
         mode: "onChange",
+        shouldUnregister: false,
         defaultValues: {
             flexibleRange: formData?.flexibleRange || '',
             isFlexibleDates: formData?.isFlexibleDates || false,
@@ -118,7 +119,26 @@ const FlightDetails = () =>{
                         )}
                     />
                 </Box>
-                <Box className="specify-range" sx={{mt: '10px', padding: '10px 16px', border: '1px solid #E6E6E6', backgroundColor: '#F2F2F2', borderRadius: '2px'}}>
+                {watch("isFlexibleDates") && 
+                    <Controller
+                        name="flexibleRange"
+                        control={control}
+                        render={({ field }) => (
+                           <CustomTextField
+                                size="medium"
+                                inputLabel="Specifics"
+                                placeholder="Enter Specifics"
+                                {...field}
+                                error={!!errors.flexibleRange}
+                                helperText={errors?.flexibleRange?.message as string}
+                           />
+                        )}
+                    />
+                }
+                <Box sx={{ fontFamily: 'poppins-lt', fontSize: '14px', display: 'flex', alignItems: 'center', mt: '10px' }}>
+                    Please specify a range, e.g. 18-09-2025 to 25-09-2025
+                </Box>
+                {/* <Box sx={{mt: '10px', padding: '10px 16px', border: '1px solid #E6E6E6', backgroundColor: '#F2F2F2', borderRadius: '2px'}}>
                    <Box sx={{ fontFamily: 'poppins-lt', fontSize: '14px', display: 'flex', alignItems: 'center' }}>
                         Please specify a range, e.g., 
                             <Controller
@@ -133,7 +153,7 @@ const FlightDetails = () =>{
                                 )}
                             />
                     </Box>
-                </Box>
+                </Box> */}
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
                 <Button
