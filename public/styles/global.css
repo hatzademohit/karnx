@@ -169,6 +169,20 @@ button.table-icon-btn:hover{
   background-color: #ffffff;
   z-index: 1;
 }
+.MuiDialog-container > .MuiPaper-root:has(.modal-footer){
+  max-height: unset;
+}
+.custom-modal .modal-body:has(.modal-footer){
+  max-height: calc(100vh - 115px);
+  overflow: auto;
+  padding-bottom: 0;
+}
+.custom-modal .modal-body .modal-footer{
+  position: sticky;
+  bottom: 0;
+  background-color: #ffffff;
+  padding-inline: 0;
+}
 .modal-footer .btn-status{
   max-width: 160px;
   width: 100%;

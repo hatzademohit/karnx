@@ -1,15 +1,15 @@
 'use client'
 import { CustomTabs } from "@/components";
 import { Box, Typography } from "@mui/material"
-import { AircraftOwner, AircraftOperator, TravelAgent, GHS } from '@/components/DashboardComponents'
+import { KXManager, AircraftOperator, TravelAgent, GHS } from '@/components/DashboardComponents'
 
 const Dashboard = () => {
     return(
         <Box>            
             <Typography component='h1' variant="h1" sx={{mb: '10px'}}>Dashboard</Typography>
             <CustomTabs defaultValue={0}>
-                <CustomTabs.Tab label="Aircraft Owner">
-                    <AircraftOwner />
+                <CustomTabs.Tab label="KX Manager">
+                    <KXManager />
                 </CustomTabs.Tab>
                 <CustomTabs.Tab label="Aircraft Operator">
                     <AircraftOperator />

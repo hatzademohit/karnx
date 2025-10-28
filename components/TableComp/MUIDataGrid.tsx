@@ -89,21 +89,11 @@ const handleExportExcel = () => {
           sx= {{ maxWidth: '250px', width: '100%', ml: 'auto' }}
           size= 'small'
           className='input-search'
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end" onClick={ () => setSearchText('')}>
-                <Tooltip title='Clear Filter' arrow placement="top">
-                  <IconButton size='small'>
-                    <CloseIcon />
-                  </IconButton>
-                </Tooltip>
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+                startAdornment: <SearchIcon sx={{color: "rgba(0, 0, 0, 0.54)"}} />,
+                endAdornment: <IconButton size="small" onClick={ () => setSearchText('')}><CloseIcon sx={{color: "rgba(0, 0, 0, 0.54)"}} /></IconButton>,
+            },
           }}
         />
       </Box>

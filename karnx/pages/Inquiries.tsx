@@ -85,13 +85,6 @@ const Inquiries = () => {
                 ),
             },
         ])
-
-        //     setData([
-        //         { id: 1, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
-        //         { id: 2, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
-        //         { id: 3, inquiryId: 'INQ-001', inquiryDate: '1/14/2025', clientName: 'Harrison Industries', clientEmail: 'harrison.industries@company.com', route: 'SFO → SEA', date: 'October 25, 2025', passangers: 6, aircraft: 'Ultra Long-Range', status: 'Confirmed', operators: '2/2 responses', value: '$45,000' },
-        //     ])
-        // }, [])
     }, []);
     const fetchInquiries = async () => {
         try {
@@ -119,9 +112,7 @@ const Inquiries = () => {
                     gridColumns={columns}
                     gridRows={data}
                     rowHeight={70}
-                    
                 />
-                Charter Inquiries
             </Box>
             
             <CustomModal open={inqueryModal} setOpen={setInqueryModal} dataClose={() => setInqueryModal(false)} headerText="Inquiry Details - INQ-2024-001">

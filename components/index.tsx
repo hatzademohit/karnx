@@ -19,5 +19,7 @@ import CustomDateTimePicker from "./DatePicker/CustomDateTimePicker";
 import SwapComp from "./SwapComp";
 import FileSelection from "./FileSelection/FileSelection"
 import DateRangePickerInput from "./DatePicker/DateRangePickerInput";
+import CardDataGrid from "./TableComp/CardDataGrid";
+import TabLayout from "./CustomTabs/TabLayout";
 
-export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput }
+export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout };

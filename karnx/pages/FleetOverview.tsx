@@ -2,22 +2,16 @@
 import { useAuth } from "@/app/context/AuthContext";
 import MUIDataGrid from "@/components/TableComp/MUIDataGrid";
 import {
-  Avatar,
   Box,
   Button,
-  Dialog,
   DialogActions,
-  DialogContent,
-  DialogTitle,
   Grid,
   IconButton,
   Stack,
   TextField,
-  Tooltip,
   Typography,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,6 +23,7 @@ import { GridColDef, GridSortModel } from "@mui/x-data-grid";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { apiBaseUrl } from "../api";
 import { toast } from "react-toastify";
+import { CustomModal, CustomTextField, SingleSelect, CardDataGrid } from "@/components";
 
 const MAX_IMAGES = 5;
 type Status = string;
@@ -439,79 +434,79 @@ const FleetOverview = () => {
   };
 
   // Columns
-  const columns: GridColDef[] = useMemo(
-    () => [
-      {
-        field: "imageUrls",
-        headerName: "Image",
-        width: 110,
-        sortable: false,
-        filterable: false,
-        renderCell: (params) => {
-          const first = (params.row.imageUrls && params.row.imageUrls[0]) || "";
-          return (
-            <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-              <Avatar
-                variant="rounded"
-                src={first}
-                alt={params.row.asset_name}
-                sx={{ width: 90, height: 56, borderRadius: 1 }}
-              />
-            </Box>
-          );
-        },
-      },
-      {
-        field: "client_id",
-        headerName: "Client",
-        width: 180,
-        valueGetter: (params) => {
-          const row = params?.row as any;
-          return row?.client?.name ?? row?.client_id ?? "";
-        },
-      },
-      { field: "asset_name", headerName: "Asset Name", flex: 1, minWidth: 180 },
-      { field: "registration_no", headerName: "Registration No", minWidth: 160 },
-      { field: "aircraft_model", headerName: "Aircraft Model", minWidth: 160 },
-      { field: "aircraft_type", headerName: "Aircraft Type", minWidth: 140 },
-      { field: "capacity", headerName: "Capacity", minWidth: 110, type: "number" },
-      { field: "cabin_size", headerName: "Cabin Size", minWidth: 140 },
-      { field: "status", headerName: "Status", minWidth: 120 },
-      {
-        field: "actions",
-        headerName: "Actions",
-        width: 160,
-        sortable: false,
-        filterable: false,
-        renderCell: (params) => (
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Tooltip title="View" arrow>
-              <IconButton size="small" onClick={() => handleView(params.row)}>
-                <VisibilityIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Edit" arrow>
-              <IconButton size="small" onClick={() => handleEdit(params.row)}>
-                <EditIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            {/*<Tooltip title="Delete" arrow>
-              <IconButton size="small" color="error" onClick={() => handleDelete(params.row)}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>*/}
-          </Stack>
-        ),
-      },
-    ],
-    []
-  );
+  // const columns: GridColDef[] = useMemo(
+  //   () => [
+  //     {
+  //       field: "imageUrls",
+  //       headerName: "Image",
+  //       width: 110,
+  //       sortable: false,
+  //       filterable: false,
+  //       renderCell: (params) => {
+  //         const first = (params.row.imageUrls && params.row.imageUrls[0]) || "";
+  //         return (
+  //           <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+  //             <Avatar
+  //               variant="rounded"
+  //               src={first}
+  //               alt={params.row.asset_name}
+  //               sx={{ width: 90, height: 56, borderRadius: 1 }}
+  //             />
+  //           </Box>
+  //         );
+  //       },
+  //     },
+  //     {
+  //       field: "client_id",
+  //       headerName: "Client",
+  //       width: 180,
+  //       valueGetter: (params) => {
+  //         const row = params?.row as any;
+  //         return row?.client?.name ?? row?.client_id ?? "";
+  //       },
+  //     },
+  //     { field: "asset_name", headerName: "Asset Name", flex: 1, minWidth: 180 },
+  //     { field: "registration_no", headerName: "Registration No", minWidth: 160 },
+  //     { field: "aircraft_model", headerName: "Aircraft Model", minWidth: 160 },
+  //     { field: "aircraft_type", headerName: "Aircraft Type", minWidth: 140 },
+  //     { field: "capacity", headerName: "Capacity", minWidth: 110, type: "number" },
+  //     { field: "cabin_size", headerName: "Cabin Size", minWidth: 140 },
+  //     { field: "status", headerName: "Status", minWidth: 120 },
+  //     {
+  //       field: "actions",
+  //       headerName: "Actions",
+  //       width: 120,
+  //       sortable: false,
+  //       filterable: false,
+  //       renderCell: (params) => (
+  //         <Stack direction="row" spacing={1} alignItems="center" height='100%'>
+  //           <Tooltip title="View" arrow>
+  //             <IconButton size="small" onClick={() => handleView(params.row)}>
+  //               <VisibilityIcon fontSize="small" />
+  //             </IconButton>
+  //           </Tooltip>
+  //           <Tooltip title="Edit" arrow>
+  //             <IconButton size="small" onClick={() => handleEdit(params.row)}>
+  //               <EditIcon fontSize="small" />
+  //             </IconButton>
+  //           </Tooltip>
+  //           {/*<Tooltip title="Delete" arrow>
+  //             <IconButton size="small" color="error" onClick={() => handleDelete(params.row)}>
+  //               <DeleteIcon fontSize="small" />
+  //             </IconButton>
+  //           </Tooltip>*/}
+  //         </Stack>
+  //       ),
+  //     },
+  //   ],
+  //   []
+  // );
 
   // Show-entries select
   /*const pageSizeSelector = (
     <FormControl size="small" sx={{ minWidth: 160 }}>
       <InputLabel id="show-entries-label">Show entries</InputLabel>
-      <Select
+      <SingleSelect
         labelId="show-entries-label"
         id="show-entries"
         label="Show entries"
@@ -529,7 +524,7 @@ const FleetOverview = () => {
         <MenuItem value={50}>50</MenuItem>
         <MenuItem value={100}>100</MenuItem>
         <MenuItem value={"all"}>All</MenuItem>
-      </Select>
+      </SingleSelect>
     </FormControl>
   );*/
 
@@ -540,7 +535,7 @@ const FleetOverview = () => {
           Fleet Master
         </Typography>
 
-        <MUIDataGrid
+        {/* <MUIDataGrid
           gridColumns={columns}
           gridRows={fleetRows}
           // Toolbar
@@ -565,206 +560,194 @@ const FleetOverview = () => {
             setSortModel(model);
             setPage(0);
           }}
+        /> */}
+        <CardDataGrid 
+          buttonText="Add Fleet" 
+          onClick={handleOpenAdd}
+          editClick={handleEdit}
+          viewClick={handleView}
+          data={fleetRows} 
         />
       </Box>
 
       {/* Add/Edit Dialog */}
-      <Dialog open={openForm} onClose={() => setOpenForm(false)} fullWidth maxWidth="md">
-        <DialogTitle>{isEdit ? "Edit Fleet" : "Add Fleet"}</DialogTitle>
-        <DialogContent dividers>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
-              {/* Each item takes 6 out of 12 columns = 2 per row */}
-              <Grid item xs={12} sm={6}>
-                <FormControl size="medium">
-                  <InputLabel id="client-label">Client</InputLabel>
-                  <Select
-                    labelId="client-label"
-                    label="Client"
-                    value={form.client_id || 0}
-                    onChange={(e) => handleFormChange("client_id", Number(e.target.value))}
-                  >
-                    <MenuItem value={0} disabled>
-                      Select Client
+      <CustomModal open={openForm} setOpen={setOpenForm} dataClose={() => setOpenForm(false)} headerText={isEdit ? "Edit Fleet" : "Add Fleet"} className="modal-lg">
+        <Stack spacing={2} sx={{ mt: 1 }}>
+          <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
+            {/* Each item takes 6 out of 12 columns = 2 per row */}
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+                <SingleSelect
+                  inputLabel="Client"
+                  value={form.client_id || 0}
+                  onChange={(e) => handleFormChange("client_id", Number(e.target.value))}
+                  size='small'
+                >
+                  {clients.map((c) => (
+                    <MenuItem key={c.id} value={c.id}>
+                      {c.name}
                     </MenuItem>
-                    {clients.map((c) => (
-                      <MenuItem key={c.id} value={c.id}>
-                        {c.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                  ))}
+                </SingleSelect>
+            </Grid>
+
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+              <CustomTextField
+                inputLabel="Asset Name"
+                value={form.asset_name}
+                onChange={(e) => handleFormChange("asset_name", e.target.value)}
+                size="small"
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+              <CustomTextField
+                inputLabel="Asset Type"
+                value={form.asset_type}
+                onChange={(e) => handleFormChange("asset_type", e.target.value)}
+                size="small"
+              />
+            </Grid>
+
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+              <CustomTextField
+                inputLabel="Aircraft Model"
+                value={form.aircraft_model}
+                onChange={(e) => handleFormChange("aircraft_model", e.target.value)}
+                size="small"
+              />
+            </Grid>
+
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+              <CustomTextField
+                inputLabel="Aircraft Type"
+                value={form.aircraft_type}
+                onChange={(e) => handleFormChange("aircraft_type", e.target.value)}
+                size="small"
+              />
+            </Grid>
+
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+              <CustomTextField
+                inputLabel="Registration No"
+                value={form.registration_no}
+                onChange={(e) => handleFormChange("registration_no", e.target.value)}
+                size="small"
+              />
+            </Grid>
+
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+              <CustomTextField
+                inputLabel="Capacity"
+                type="number"
+                value={form.capacity}
+                onChange={(e) => handleFormChange("capacity", Number(e.target.value) || 0)}
+                size="small"
+              />
+            </Grid>
+
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+              <CustomTextField
+                inputLabel="Cabin Size"
+                value={form.cabin_size}
+                onChange={(e) => handleFormChange("cabin_size", e.target.value)}
+                size="small"
+              />
+            </Grid>
+
+            <Grid size={{lg: 4, md: 6, sm: 12}}>
+                <SingleSelect
+                  inputLabel="Status"
+                  value={form.status}
+                  onChange={(e) => handleFormChange("status", e.target.value as Status)}
+                  size='small'
+                >
+                  <MenuItem value="Active">Active</MenuItem>
+                  <MenuItem value="Inactive">Inactive</MenuItem>
+                  <MenuItem value="Maintenance">Maintenance</MenuItem>
+                </SingleSelect>
+            </Grid>
+
+            {/* Full-width Details */}
+            <Grid size={{lg: 12, md: 12, sm: 12}}>
+              <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>Details</InputLabel>
+                <FormControl fullWidth>
+                  <TextField
+                    value={form.details}
+                    onChange={(e) => handleFormChange("details", e.target.value)}
+                    size="small"
+                    multiline
+                    minRows={3}
+                  />
                 </FormControl>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Asset Name"
-                  value={form.asset_name}
-                  onChange={(e) => handleFormChange("asset_name", e.target.value)}
-
-                  size="medium"
-                />
-              </Grid>
             </Grid>
-            <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Asset Type"
-                  value={form.asset_type}
-                  onChange={(e) => handleFormChange("asset_type", e.target.value)}
-                  fullWidth
-                  size="medium"
-                />
-              </Grid>
+          </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Aircraft Model"
-                  value={form.aircraft_model}
-                  onChange={(e) => handleFormChange("aircraft_model", e.target.value)}
-                  fullWidth
-                  size="medium"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Aircraft Type"
-                  value={form.aircraft_type}
-                  onChange={(e) => handleFormChange("aircraft_type", e.target.value)}
-                  fullWidth
-                  size="medium"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Registration No"
-                  value={form.registration_no}
-                  onChange={(e) => handleFormChange("registration_no", e.target.value)}
-                  fullWidth
-                  size="medium"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Capacity"
-                  type="number"
-                  value={form.capacity}
-                  onChange={(e) => handleFormChange("capacity", Number(e.target.value) || 0)}
-                  fullWidth
-                  size="medium"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Cabin Size"
-                  value={form.cabin_size}
-                  onChange={(e) => handleFormChange("cabin_size", e.target.value)}
-                  fullWidth
-                  size="medium"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth size="medium">
-                  <InputLabel id="status-label">Status</InputLabel>
-                  <Select
-                    labelId="status-label"
-                    label="Status"
-                    value={form.status}
-                    onChange={(e) => handleFormChange("status", e.target.value as Status)}
-                  >
-                    <MenuItem value="Active">Active</MenuItem>
-                    <MenuItem value="Inactive">Inactive</MenuItem>
-                    <MenuItem value="Maintenance">Maintenance</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              {/* Full-width Details */}
-              <Grid item xs={12}>
-                <TextField
-                  label="Details"
-                  value={form.details}
-                  onChange={(e) => handleFormChange("details", e.target.value)}
-                  fullWidth
-                  size="medium"
-                  multiline
-                  minRows={3}
-                />
-              </Grid>
-            </Grid>
-
-            {/* Image upload section */}
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems="center">
-              <Button
-                variant="outlined"
-                startIcon={<AddPhotoAlternateOutlinedIcon />}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                Select Images
-              </Button>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {form.imageUrls?.length || 0}/{MAX_IMAGES} selected
-              </Typography>
-            </Stack>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              hidden
-              onChange={handleFilesSelected}
-            />
-
-            <Grid container spacing={1}>
-              {(form.imageUrls || []).map((u, idx) => (
-                <Grid item xs={6} sm={4} md={3} key={`${u}-${idx}`}>
-                  <Box
-                    sx={{
-                      position: "relative",
-                      borderRadius: 1,
-                      overflow: "hidden",
-                      border: "1px solid #E6E6E6",
-                      height: 120,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      bgcolor: "#f8f8f8",
-                    }}
-                  >
-                    <img
-                      src={u}
-                      alt={`fleet-${idx}`}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                    <IconButton
-                      size="medium"
-                      onClick={() => removeImageAt(idx)}
-                      sx={{
-                        position: "absolute",
-                        top: 4,
-                        right: 4,
-                        bgcolor: "rgba(0,0,0,0.5)",
-                        color: "#fff",
-                        "&:hover": { bgcolor: "rgba(0,0,0,0.7)" },
-                      }}
-                      aria-label="Remove image"
-                    >
-                      <CloseRoundedIcon fontsize="medium" />
-                    </IconButton>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
+          {/* Image upload section */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems="center">
+            <Button
+              variant="outlined"
+              startIcon={<AddPhotoAlternateOutlinedIcon />}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              Select Images
+            </Button>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {form.imageUrls?.length || 0}/{MAX_IMAGES} selected
+            </Typography>
           </Stack>
 
-        </DialogContent>
-        <DialogActions>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+            onChange={handleFilesSelected}
+          />
+
+          <Grid container spacing={1}>
+            {(form.imageUrls || []).map((u, idx) => (
+              <Grid size={{lg: 4, md: 6, sm: 12}} key={`${u}-${idx}`}>
+                <Box
+                  sx={{
+                    position: "relative",
+                    borderRadius: 1,
+                    overflow: "hidden",
+                    border: "1px solid #E6E6E6",
+                    height: 120,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    bgcolor: "#f8f8f8",
+                  }}
+                >
+                  <img
+                    src={u}
+                    alt={`fleet-${idx}`}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                  <IconButton
+                    size="small"
+                    onClick={() => removeImageAt(idx)}
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      right: 4,
+                      bgcolor: "rgba(0,0,0,0.5)",
+                      color: "#fff",
+                      "&:hover": { bgcolor: "rgba(0,0,0,0.7)" },
+                    }}
+                    aria-label="Remove image"
+                  >
+                    <CloseRoundedIcon sx={{ fontSize: 'inherit' }} />
+                  </IconButton>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Stack>
+        <DialogActions className="modal-footer" sx={{mt: 2}}>
           <Button onClick={() => setOpenForm(false)} disabled={saving}>
             Cancel
           </Button>
@@ -772,17 +755,14 @@ const FleetOverview = () => {
             {saving ? "Saving..." : "Save"}
           </Button>
         </DialogActions>
-      </Dialog>
+      </CustomModal>
 
-      {/* View Dialog */}
-      <Dialog open={openView} onClose={() => setOpenView(false)} fullWidth maxWidth="md">
-        <DialogTitle>Fleet Details</DialogTitle>
-        <DialogContent dividers>
+      <CustomModal open={openView} setOpen={setOpenView} dataClose={() => setOpenView(false)} headerText={`Fleet Details`} className="modal-lg">
           {viewRow && (
             <Stack spacing={2}>
               <Grid container spacing={1}>
                 {(viewRow.imageUrls || []).map((u, idx) => (
-                  <Grid item xs={6} sm={4} md={3} key={`${u}-${idx}`}>
+                  <Grid size={{lg: 4, md: 6, sm: 12}} key={`${u}-${idx}`}>
                     <Box
                       sx={{
                         borderRadius: 1,
@@ -806,71 +786,68 @@ const FleetOverview = () => {
               </Grid>
 
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Client"
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField
+                    inputLabel="Client"
                     value={viewRow.client?.name ?? viewRow.client_id}
-                    fullWidth
                     InputProps={{ readOnly: true }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField label="Asset Name" value={viewRow.asset_name} fullWidth InputProps={{ readOnly: true }} />
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField inputLabel="Asset Name" value={viewRow.asset_name} InputProps={{ readOnly: true }} />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField label="Asset Type" value={viewRow.asset_type} fullWidth InputProps={{ readOnly: true }} />
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField inputLabel="Asset Type" value={viewRow.asset_type} InputProps={{ readOnly: true }} />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Aircraft Model"
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField
+                    inputLabel="Aircraft Model"
                     value={viewRow.aircraft_model}
-                    fullWidth
                     InputProps={{ readOnly: true }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Aircraft Type"
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField
+                    inputLabel="Aircraft Type"
                     value={viewRow.aircraft_type}
-                    fullWidth
                     InputProps={{ readOnly: true }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Registration No"
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField
+                    inputLabel="Registration No"
                     value={viewRow.registration_no}
-                    fullWidth
                     InputProps={{ readOnly: true }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField label="Capacity" value={viewRow.capacity} fullWidth InputProps={{ readOnly: true }} />
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField inputLabel="Capacity" value={viewRow.capacity} InputProps={{ readOnly: true }} />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField label="Cabin Size" value={viewRow.cabin_size} fullWidth InputProps={{ readOnly: true }} />
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField inputLabel="Cabin Size" value={viewRow.cabin_size} InputProps={{ readOnly: true }} />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField label="Status" value={viewRow.status} fullWidth InputProps={{ readOnly: true }} />
+                <Grid size={{lg: 4, md: 6, sm: 12}}>
+                  <CustomTextField inputLabel="Status" value={viewRow.status} InputProps={{ readOnly: true }} />
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Details"
-                    value={viewRow.details || ""}
-                    fullWidth
-                    multiline
-                    minRows={3}
-                    InputProps={{ readOnly: true }}
-                  />
+                <Grid size={{lg: 12, md: 12, sm: 12}}>
+                  <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>Details</InputLabel>
+                  <FormControl fullWidth>
+                    <TextField
+                      value={viewRow.details || ""}
+                      size="small"
+                      multiline
+                      minRows={3}
+                      InputProps={{ readOnly: true }}
+                    />
+                  </FormControl>
                 </Grid>
               </Grid>
             </Stack>
           )}
-        </DialogContent>
-        <DialogActions>
+        <DialogActions className="modal-footer" sx={{mt: 2}}>
           <Button onClick={() => setOpenView(false)}>Close</Button>
         </DialogActions>
-      </Dialog>
+      </CustomModal>
     </>
   );
 };
