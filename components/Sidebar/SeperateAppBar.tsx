@@ -3,13 +3,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { AppBar } from '../Sidebar/Sidebarheader';
 import Myaccount from './MyAccount';
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { drawerWidth } from '../Sidebar/Sidebarheader';
 import { headerHeight } from '../Sidebar/Sidebarheader';
 import Image from "next/image";
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import { Badge, Icon, IconButton, Tooltip } from '@mui/material';
+import { Badge, Box, Button, IconButton, Tooltip } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 
 interface SeperateAppBarProps {
   open: boolean;
@@ -21,6 +24,7 @@ const SeperateAppBar: FC<SeperateAppBarProps> = ({
 }) => {
 
 const router = useRouter()
+const pathname = usePathname();
   
   return (
     <>
@@ -40,6 +44,13 @@ const router = useRouter()
             sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: '8px', minHeight: `${headerHeight}px !important`}}
             className='icons-div'
           >
+            {pathname === '/dashboard' &&
+              <Box sx={{ display: 'flex', gap: '8px', '& .btn': { width: '160px' }, '& svg': { mr: '4px' } }}>
+                <Button className='btn btn-danger'><AddIcon /> New Inquiry</Button>
+                <Button className='btn btn-blue'><TelegramIcon /> Send Reminder</Button>
+                <Button className='btn btn-outlined'><TextSnippetOutlinedIcon sx={{ fontSize: '20px' }} /> Generate Report</Button>
+              </Box>
+            }
             <IconButton sx={{color: 'rgba(3, 4, 94, 1)'}}>
               <Badge badgeContent={3} color="primary" sx={{'& .MuiBadge-badge': {backgroundColor: 'rgba(188, 0, 25, 1)'} }}>
                 <NotificationsNoneIcon />

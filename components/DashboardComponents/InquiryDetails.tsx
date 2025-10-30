@@ -4,7 +4,7 @@ import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutl
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { TabLayout } from "@/components";
-import { InquiryDetailsTab } from "@/components/DashboardComponents";
+import { InquiryDetailsTab, OperatorsTab, QuoteTabs } from "@/components/DashboardComponents";
 
 const InquiryDetails = ({ inquiryData }: any) => {
   const theme = useTheme();
@@ -18,12 +18,12 @@ const InquiryDetails = ({ inquiryData }: any) => {
     {
       label: "Operators (2)",
       icon: <SettingsOutlinedIcon fontSize="small" />,
-      content: <>operators tab content</>,
+      content: <OperatorsTab />,
     },
     {
       label: "Quotes (3)",
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
-      content: <>quote tab content</>,
+      content: <QuoteTabs />,
     },
   ];
 

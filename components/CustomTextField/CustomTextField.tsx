@@ -25,7 +25,7 @@ export interface CustomTextFieldProps {
   sx?:{};
   InputProps?: any;
   id?: string;
-  inputLabel?: string;
+  inputLabel?: any;
   multiline?: number
 }
 
