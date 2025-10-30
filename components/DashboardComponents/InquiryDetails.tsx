@@ -9,8 +9,9 @@ import { InquiryDetailsTab, OperatorsTab, QuoteTabs } from "@/components/Dashboa
 export interface InquiryDetailsProps {
   inquiryData: any;
   hideOperatorTabs?: boolean;
+  itsTravelAgent?: boolean;
 }
-const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperatorTabs }) => {
+const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperatorTabs, itsTravelAgent }) => {
   const theme = useTheme();
 
   const tabs = [
@@ -22,16 +23,16 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
     ...(!hideOperatorTabs
     ? [
         {
-          label: "Operators (2)",
+          label: "Operators (0)",
           icon: <SettingsOutlinedIcon fontSize="small" />,
           content: <OperatorsTab />,
         },
       ]
     : []),
     {
-      label: "Quotes (3)",
+      label: "Quotes (0)",
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
-      content: <QuoteTabs />,
+      content: <QuoteTabs travelTab={itsTravelAgent} />,
     },
   ];
 

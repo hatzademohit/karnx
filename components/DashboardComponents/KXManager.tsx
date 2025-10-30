@@ -12,6 +12,7 @@ import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { apiBaseUrl } from '@/karnx/api';
 import { useRouter, useSearchParams } from "next/navigation";
+import { useApi } from '@/karnx/Hooks/useApi';
 
 const KXManager = () => {
 
@@ -26,25 +27,13 @@ const KXManager = () => {
         { count: 10, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
     ])    
     const [columns, setColumns] = useState([])
-    const [data, setData] = useState([])
+    // const [data, setData] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
     const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
 
-    const fetchInquiries = async () => {
-        try {
-            const response = await fetch(`${apiBaseUrl}/booking-inquiries`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.token}`,
-                },
-            });
-            const data = await response.json();
-            setData(data.data);
-        } catch (error) {
-            console.error("Error fetching inquiries:", error);
-        }
-    };
+    const { data, refetch: fetchInquiries } = useApi<any[]>(
+        `${apiBaseUrl}/booking-inquiries`
+    );
 
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)

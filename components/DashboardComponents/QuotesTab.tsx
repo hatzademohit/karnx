@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField } from "@mui/material";
-import CustomModal from "../CustomModal";
+import { CustomModal, CustomTextField, CreateNewQuoteStepper } from "@/components";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { useForm } from "react-hook-form";
-import { CustomTextField } from "../CustomTextField/CustomTextField";
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -14,7 +13,11 @@ interface RejectionFormData {
 interface PriceFormData {
   commissionPercentage: string;
 }
-const QuoteTabs = () => {
+
+export interface QuoteTabsProps{
+	travelTab?: boolean;
+}
+const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 
 	const theme = useTheme();
 
@@ -162,6 +165,7 @@ const QuoteTabs = () => {
 	});
 	const [rejectionModal, setRejectionModal] = useState<boolean>(false);
 	const [travelAgentModal, setTravelAgentModal] = useState<boolean>(false);
+	const [createNewQuote, setCreateNewQuote] = useState<boolean>(false);
 
 	const openQuoteDetails = (quote: any) => {
 		// setViewedQuote(quote);
@@ -275,106 +279,120 @@ const QuoteTabs = () => {
 		</TableRow>
 	);
 
+	const addQuote = () => {
+		setCreateNewQuote(true)
+	}
+
 	return (
 		<>
-			{/* if qoutes is available */}
-			{quotes.length >= 1 ? 
-				<Box>
-					<Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
-						<Box>
-							<Typography variant="h4">
-								Quote Comparison
-							</Typography>
-							<Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
-								{quotes?.length || 0} quotes received for this inquiry
+			{!createNewQuote && (
+				quotes?.length >= 1 ? (
+					<Box>
+						<Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
+							<Box>
+								<Typography variant="h4">
+									Quote Comparison
+								</Typography>
+								<Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
+									{quotes?.length || 0} quotes received for this inquiry
+								</Typography>
+							</Box>
+							<Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
+								Best Quote Price: 1,00,00,000
 							</Typography>
 						</Box>
-						<Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
-							Best Quote Price: 1,00,00,000
-						</Typography>
-					</Box>
-					<Divider sx={{ my: 2 }} />
-					{/* Table */}
-					<Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
-						<Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
-							<TableHead>
-								<TableRow sx={{ '& th': { borderColor: '#eee' } }}>
-									<TableCell sx={{ position: 'sticky', left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
-										<Typography variant="h4">
-											Specifications
-										</Typography>
-									</TableCell>
-									{quotes.map((quote) => {
-										const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
-										return (
-										<TableCell key={quote.id} data-disabled={isDisabled}>
-											<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
-												<img src={quote.image} alt={quote.name} style={{ maxWidth: '300px', height: 'auto' }} />
-												<Typography variant="h4">
-													{quote.name}
-												</Typography>
-												<Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
-													View Details
-												</Button>
-											</Box>
+						<Divider sx={{ my: 2 }} />
+						{/* Table */}
+						<Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
+							<Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
+								<TableHead>
+									<TableRow sx={{ '& th': { borderColor: '#eee' } }}>
+										<TableCell sx={{ position: 'sticky', left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
+											<Typography variant="h4">
+												Specifications
+											</Typography>
 										</TableCell>
-									)})}
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{renderRow("Rating", "rating")}
-								{renderRow("Aircraft", "aircraft")}
-								{renderRow("Price", "price")}
-								{renderRow("Flight Time", "flightTime")}
-								{renderRow("Base Fare", "baseFare")}
-								{renderRow("Fuel", "fuel")}
-								{renderRow("Taxes & Fees", "taxes")}
-								{renderRow("Catering", "catering")}
-								{renderRow("Key Amenities", "keyAmenities", true)}
-								{renderRow("Included Service", "includedService", true)}
-								<TableRow>
-									<TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: 'sticky', left: 0, zIndex: 1 }}>
-										<Typography variant="h5">Select</Typography>
-									</TableCell>
-									{quotes.map((q) => {
-										const isAccepted = acceptedQuoteId === q.id;
-										const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
-										return (
-											<TableCell key={q.id} data-disabled={isDisabled}>
-												<Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-													<Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id)}>
-														{isAccepted ? "Quote Accepted" : "Accept Quote"}
+										{quotes.map((quote) => {
+											const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
+											return (
+											<TableCell key={quote.id} data-disabled={isDisabled}>
+												<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
+													<img src={quote.image} alt={quote.name} style={{ maxWidth: '300px', height: 'auto' }} />
+													<Typography variant="h4">
+														{quote.name}
+													</Typography>
+													<Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
+														View Details
 													</Button>
-													{!isAccepted && (
-														<Button className="btn btn-danger w-100" onClick={ () => rejectQuote(q.id)} disabled={isDisabled}>
-															Reject Quote
-														</Button>
-													)}
 												</Box>
 											</TableCell>
-										);
-									})}
-								</TableRow>
-							</TableBody>
-						</Table>
+										)})}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{renderRow("Rating", "rating")}
+									{renderRow("Aircraft", "aircraft")}
+									{renderRow("Price", "price")}
+									{renderRow("Flight Time", "flightTime")}
+									{renderRow("Base Fare", "baseFare")}
+									{renderRow("Fuel", "fuel")}
+									{renderRow("Taxes & Fees", "taxes")}
+									{renderRow("Catering", "catering")}
+									{renderRow("Key Amenities", "keyAmenities", true)}
+									{renderRow("Included Service", "includedService", true)}
+									<TableRow>
+										<TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: 'sticky', left: 0, zIndex: 1 }}>
+											<Typography variant="h5">Select</Typography>
+										</TableCell>
+										{quotes.map((q) => {
+											const isAccepted = acceptedQuoteId === q.id;
+											const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+											return (
+												<TableCell key={q.id} data-disabled={isDisabled}>
+													<Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+														<Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id)}>
+															{isAccepted ? "Quote Accepted" : "Accept Quote"}
+														</Button>
+														{!isAccepted && (
+															<Button className="btn btn-danger w-100" onClick={ () => rejectQuote(q.id)} disabled={isDisabled}>
+																Reject Quote
+															</Button>
+														)}
+													</Box>
+												</TableCell>
+											);
+										})}
+									</TableRow>
+								</TableBody>
+							</Table>
+						</Box>
+						<Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
+							<Button variant="outlined" className="btn btn-outlined">
+								Close
+							</Button>
+							<Button className="btn btn-blue" onClick={() => quoteSendToTravelAgent()}>
+								Send To Travel Agent
+							</Button>
+						</Box>
 					</Box>
-					<Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
-						<Button variant="outlined" className="btn btn-outlined">
-							Close
-						</Button>
-						<Button className="btn btn-blue" onClick={() => quoteSendToTravelAgent()}>
-							Send To Travel Agent
-						</Button>
+				):(
+					<Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
+						<AttachMoneyIcon sx={{ fontSize: '35px', color: '#808080' }} />
+						<Typography variant="h4">No quotes received yet</Typography>
+						{travelTab == false ?
+							<>
+								<Typography color="text.secondary">Quotes will appear here once you submit their proposals.</Typography>
+								<Button className='btn btn-danger' onClick={addQuote}><AddIcon sx={{ mr: '4px' }} /> Add Quote</Button>
+							</> :
+							<>
+								<Typography color="text.secondary">Quotes will appear here once operators submit their proposals.</Typography>
+								<Typography color="text.secondary" sx={{ fontSize: '12px' }}>Expected response time: 2-4 hours</Typography>
+							</>
+						}
 					</Box>
-				</Box>
-			:
-				<Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
-					<AttachMoneyIcon />
-					<Typography variant="h4">No quotes received yet</Typography>
-					<Typography color="text.secondary">Quotes will appear here once you submit their proposals.</Typography>
-					<Button className='btn btn-danger'><AddIcon sx={{ mr: '4px' }} /> Add Quote</Button>
-				</Box>
-			}
+				)
+			)}
+			{createNewQuote && <CreateNewQuoteStepper />}
 			{/* Quote Details Modal */}
 			<CustomModal headerText='Quote Details' open={viewQuoteDetails} setOpen={setViewQuoteDetails} dataClose={() => setViewQuoteDetails(false)} className="modal-lg">
 				<Grid container spacing={2}>
