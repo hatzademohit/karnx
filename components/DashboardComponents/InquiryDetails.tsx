@@ -6,7 +6,11 @@ import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlin
 import { TabLayout } from "@/components";
 import { InquiryDetailsTab, OperatorsTab, QuoteTabs } from "@/components/DashboardComponents";
 
-const InquiryDetails = ({ inquiryData }: any) => {
+export interface InquiryDetailsProps {
+  inquiryData: any;
+  hideOperatorTabs?: boolean;
+}
+const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperatorTabs }) => {
   const theme = useTheme();
 
   const tabs = [
@@ -15,11 +19,15 @@ const InquiryDetails = ({ inquiryData }: any) => {
       icon: <InsertDriveFileOutlinedIcon fontSize="small" />,
       content: <InquiryDetailsTab inquiryTabData={inquiryData} />,
     },
-    {
-      label: "Operators (2)",
-      icon: <SettingsOutlinedIcon fontSize="small" />,
-      content: <OperatorsTab />,
-    },
+    ...(!hideOperatorTabs
+    ? [
+        {
+          label: "Operators (2)",
+          icon: <SettingsOutlinedIcon fontSize="small" />,
+          content: <OperatorsTab />,
+        },
+      ]
+    : []),
     {
       label: "Quotes (3)",
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
@@ -28,7 +36,7 @@ const InquiryDetails = ({ inquiryData }: any) => {
   ];
 
   return (
-    <Box sx={{ paddingBlock: 3 }}>
+    <Box sx={{ padding: 2, border: '1px solid #E6E6E6' }}>
       {/* Header */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
         <Box>

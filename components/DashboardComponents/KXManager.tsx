@@ -11,8 +11,12 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { apiBaseUrl } from '@/karnx/api';
+import { useRouter, useSearchParams } from "next/navigation";
 
 const KXManager = () => {
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [cardInfoData, setCardInfoData] = useState([
         { count: 2, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today', icon: <ErrorOutlineIcon /> },
@@ -20,11 +24,11 @@ const KXManager = () => {
         { count: 12, label: 'Client Decisions', status: 'Pending Review', desc: '2 expiring soon', icon: <AlarmOnIcon /> },
         { count: 3, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue', icon: <CheckCircleOutlineIcon /> },
         { count: 10, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
-    ])
-    const theme = useTheme();
+    ])    
     const [columns, setColumns] = useState([])
     const [data, setData] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
+    const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
 
     const fetchInquiries = async () => {
         try {
@@ -43,8 +47,8 @@ const KXManager = () => {
     };
 
     const viewInquiryDetails = (inquiryRow) => {
+        setShowDetailsTabs(true)
         setInqueryData(inquiryRow);
-        console.log("Inquiry Details:", inquiryRow);
     }
 
     useEffect(() => {
@@ -91,7 +95,7 @@ const KXManager = () => {
                 width: 130,
                 maxWidth: 130,
                 renderCell: (params) => (
-                    <Button variant="contained" className="btn btn-status-rounded" style={{ backgroundColor: params.row.status_color }}>
+                    <Button variant="contained" className="btn btn-status-rounded" sx={{ backgroundColor: params.row.status_color }}>
                         {params.row.status}
                     </Button>
                 ),
@@ -121,32 +125,34 @@ const KXManager = () => {
 
     return(
         <>
-            <Grid container spacing={3}>
-                {cardInfoData && cardInfoData.map((item, index) => (
-                    <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index}>
-                        <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} InfoIcon={item.icon}/>
+            {!showDetailsTabs &&
+                <Grid container spacing={3}>
+                    {cardInfoData && cardInfoData.map((item, index) => (
+                        <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index}>
+                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} InfoIcon={item.icon}/>
+                        </Grid>
+                    ))}
+                    <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+                        <ActivityTimeLine />
                     </Grid>
-                ))}
-                <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-                    <ActivityTimeLine />
+                    <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+                        <PriorityTasks />
+                    </Grid>
+                    <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
+                        <Box sx={{ padding: '24px', border: '1px solid #E6E6E6' }}>
+                            <MUIDataGrid
+                                headingText="Charter Inquiries"
+                                gridColumns={columns}
+                                gridRows={data}
+                                rowHeight={70}
+                            />
+                        </Box>
+                    </Grid>
                 </Grid>
-                <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-                    <PriorityTasks />
-                </Grid>
-                <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
-                    <Box sx={{ padding: '24px', border: '1px solid #E6E6E6' }}>
-                        <Typography component='h3' variant="h3" sx={{color: theme?.common?.redColor}}>Charter Inquiries</Typography>
-                        <MUIDataGrid
-                            gridColumns={columns}
-                            gridRows={data}
-                            rowHeight={70}
-                        />
-                    </Box>
-                </Grid>
-            </Grid>
-
-            {/* inquery detail */}
-            <InquiryDetails inquiryData={inqueryData} />
+            }
+            {showDetailsTabs &&
+                <InquiryDetails inquiryData={inqueryData} />
+            }
             
         </>
     )

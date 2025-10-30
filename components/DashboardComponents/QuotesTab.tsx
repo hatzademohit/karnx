@@ -5,6 +5,8 @@ import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { useForm } from "react-hook-form";
 import { CustomTextField } from "../CustomTextField/CustomTextField";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AddIcon from '@mui/icons-material/Add';
 
 interface RejectionFormData {
 	message: string;
@@ -16,125 +18,126 @@ const QuoteTabs = () => {
 
 	const theme = useTheme();
 
-	const [quotes, setQuotes] = useState([
-		{
-			id: 1,
-			name: "Platinum Jets International",
-			rating: 4.8,
-			aircraft: "Bombardier Global 7500",
-			aircraftInfo: "2021 • 19 seats",
-			price: "1,00,00,000",
-			validity: "Valid until 31-Aug-2025",
-			flightTime: "8h 30m",
-			returnTime: "8h 45m",
-			baseFare: "75,00,000",
-			fuel: "16,00,000",
-			taxes: "8,00,000",
-			catering: "1,00,000",
-			keyAmenities: "Four living spaces, Full kitchen, Master suite, Shower, Ka-band Wi-Fi",
-			includedService: "Gourmet catering, Ground handling, Flight planning, Crew accommodation, Ground transportation",
-			image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-		},
-		{
-			id: 2,
-			name: "Elite Aviation Services",
-			rating: 3.7,
-			aircraft: "Gulfstream G650",
-			aircraftInfo: "2019 • 14 seats",
-			price: "1,10,00,000",
-			validity: "Valid until 05-Sept-2025",
-			flightTime: "8h 30m",
-			returnTime: "8h 45m",
-			baseFare: "83,00,000",
-			fuel: "17,00,000",
-			taxes: "9,00,000",
-			catering: "1,00,000",
-			keyAmenities:
-				"Full galley, Private bedroom, Conference area, Satellite phone, High-speed Wi-Fi",
-			includedService:
-				"Catering, Ground handling, Flight planning, Crew accommodation",
-			image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-		},
-		{
-			id: 3,
-			name: "JetSet Experience",
-			rating: 4.9,
-			aircraft: "Dassault Falcon 8X",
-			aircraftInfo: "2022 • 12 seats",
-			price: "1,04,00,000",
-			validity: "Valid until 20-Mar-2026",
-			flightTime: "6h 30m",
-			returnTime: "6h 35m",
-			baseFare: "95,00,000",
-			fuel: "25,00,000",
-			taxes: "10,00,000",
-			catering: "2,00,000",
-			keyAmenities:
-				"Luxury interior, High-speed internet, Foldable table, Private bathroom",
-			includedService:
-				"Gourmet service, Exclusive travel itineraries, Concierge service",
-			image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-		},
-		{
-			id: 4,
-			name: "JetSet Experience",
-			rating: 4.9,
-			aircraft: "Dassault Falcon 8X",
-			aircraftInfo: "2022 • 12 seats",
-			price: "1,04,00,000",
-			validity: "Valid until 20-Mar-2026",
-			flightTime: "6h 30m",
-			returnTime: "6h 35m",
-			baseFare: "95,00,000",
-			fuel: "25,00,000",
-			taxes: "10,00,000",
-			catering: "2,00,000",
-			keyAmenities: "Luxury interior, High-speed internet, Foldable table, Private bathroom",
-			includedService: "Gourmet service, Exclusive travel itineraries, Concierge service",
-			image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-		},
-		{
-			id: 5,
-			name: "JetSet Experience",
-			rating: 4.9,
-			aircraft: "Dassault Falcon 8X",
-			aircraftInfo: "2022 • 12 seats",
-			price: "1,04,00,000",
-			validity: "Valid until 20-Mar-2026",
-			flightTime: "6h 30m",
-			returnTime: "6h 35m",
-			baseFare: "95,00,000",
-			fuel: "25,00,000",
-			taxes: "10,00,000",
-			catering: "2,00,000",
-			keyAmenities:
-				"Luxury interior, High-speed internet, Foldable table, Private bathroom",
-			includedService:
-				"Gourmet service, Exclusive travel itineraries, Concierge service",
-			image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-		},
-		{
-			id: 6,
-			name: "JetSet Experience",
-			rating: 4.9,
-			aircraft: "Dassault Falcon 8X",
-			aircraftInfo: "2022 • 12 seats",
-			price: "1,04,00,000",
-			validity: "Valid until 20-Mar-2026",
-			flightTime: "6h 30m",
-			returnTime: "6h 35m",
-			baseFare: "95,00,000",
-			fuel: "25,00,000",
-			taxes: "10,00,000",
-			catering: "2,00,000",
-			keyAmenities:
-				"Luxury interior, High-speed internet, Foldable table, Private bathroom",
-			includedService:
-				"Gourmet service, Exclusive travel itineraries, Concierge service",
-			image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-		},
-	]);
+	// const [quotes, setQuotes] = useState([
+	// 	{
+	// 		id: 1,
+	// 		name: "Platinum Jets International",
+	// 		rating: 4.8,
+	// 		aircraft: "Bombardier Global 7500",
+	// 		aircraftInfo: "2021 • 19 seats",
+	// 		price: "1,00,00,000",
+	// 		validity: "Valid until 31-Aug-2025",
+	// 		flightTime: "8h 30m",
+	// 		returnTime: "8h 45m",
+	// 		baseFare: "75,00,000",
+	// 		fuel: "16,00,000",
+	// 		taxes: "8,00,000",
+	// 		catering: "1,00,000",
+	// 		keyAmenities: "Four living spaces, Full kitchen, Master suite, Shower, Ka-band Wi-Fi",
+	// 		includedService: "Gourmet catering, Ground handling, Flight planning, Crew accommodation, Ground transportation",
+	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		name: "Elite Aviation Services",
+	// 		rating: 3.7,
+	// 		aircraft: "Gulfstream G650",
+	// 		aircraftInfo: "2019 • 14 seats",
+	// 		price: "1,10,00,000",
+	// 		validity: "Valid until 05-Sept-2025",
+	// 		flightTime: "8h 30m",
+	// 		returnTime: "8h 45m",
+	// 		baseFare: "83,00,000",
+	// 		fuel: "17,00,000",
+	// 		taxes: "9,00,000",
+	// 		catering: "1,00,000",
+	// 		keyAmenities:
+	// 			"Full galley, Private bedroom, Conference area, Satellite phone, High-speed Wi-Fi",
+	// 		includedService:
+	// 			"Catering, Ground handling, Flight planning, Crew accommodation",
+	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		name: "JetSet Experience",
+	// 		rating: 4.9,
+	// 		aircraft: "Dassault Falcon 8X",
+	// 		aircraftInfo: "2022 • 12 seats",
+	// 		price: "1,04,00,000",
+	// 		validity: "Valid until 20-Mar-2026",
+	// 		flightTime: "6h 30m",
+	// 		returnTime: "6h 35m",
+	// 		baseFare: "95,00,000",
+	// 		fuel: "25,00,000",
+	// 		taxes: "10,00,000",
+	// 		catering: "2,00,000",
+	// 		keyAmenities:
+	// 			"Luxury interior, High-speed internet, Foldable table, Private bathroom",
+	// 		includedService:
+	// 			"Gourmet service, Exclusive travel itineraries, Concierge service",
+	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		name: "JetSet Experience",
+	// 		rating: 4.9,
+	// 		aircraft: "Dassault Falcon 8X",
+	// 		aircraftInfo: "2022 • 12 seats",
+	// 		price: "1,04,00,000",
+	// 		validity: "Valid until 20-Mar-2026",
+	// 		flightTime: "6h 30m",
+	// 		returnTime: "6h 35m",
+	// 		baseFare: "95,00,000",
+	// 		fuel: "25,00,000",
+	// 		taxes: "10,00,000",
+	// 		catering: "2,00,000",
+	// 		keyAmenities: "Luxury interior, High-speed internet, Foldable table, Private bathroom",
+	// 		includedService: "Gourmet service, Exclusive travel itineraries, Concierge service",
+	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		name: "JetSet Experience",
+	// 		rating: 4.9,
+	// 		aircraft: "Dassault Falcon 8X",
+	// 		aircraftInfo: "2022 • 12 seats",
+	// 		price: "1,04,00,000",
+	// 		validity: "Valid until 20-Mar-2026",
+	// 		flightTime: "6h 30m",
+	// 		returnTime: "6h 35m",
+	// 		baseFare: "95,00,000",
+	// 		fuel: "25,00,000",
+	// 		taxes: "10,00,000",
+	// 		catering: "2,00,000",
+	// 		keyAmenities:
+	// 			"Luxury interior, High-speed internet, Foldable table, Private bathroom",
+	// 		includedService:
+	// 			"Gourmet service, Exclusive travel itineraries, Concierge service",
+	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
+	// 	},
+	// 	{
+	// 		id: 6,
+	// 		name: "JetSet Experience",
+	// 		rating: 4.9,
+	// 		aircraft: "Dassault Falcon 8X",
+	// 		aircraftInfo: "2022 • 12 seats",
+	// 		price: "1,04,00,000",
+	// 		validity: "Valid until 20-Mar-2026",
+	// 		flightTime: "6h 30m",
+	// 		returnTime: "6h 35m",
+	// 		baseFare: "95,00,000",
+	// 		fuel: "25,00,000",
+	// 		taxes: "10,00,000",
+	// 		catering: "2,00,000",
+	// 		keyAmenities:
+	// 			"Luxury interior, High-speed internet, Foldable table, Private bathroom",
+	// 		includedService:
+	// 			"Gourmet service, Exclusive travel itineraries, Concierge service",
+	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
+	// 	},
+	// ]);
 
+	const [quotes, setQuotes] = useState([])
 	const [viewQuoteDetails, setViewQuoteDetails] = useState<boolean>(false);
 	const [acceptedQuoteId, setAcceptedQuoteId] = useState<Number>(null);
 	const [viewedQuote, setViewedQuote] = useState<any>({
@@ -205,16 +208,15 @@ const QuoteTabs = () => {
 		},
 	});
 
-  const travelAgentSubmit = (data: PriceFormData) => {
-    console.log("Submitted Data:", data);
-    console.log("Quote ID:", viewedQuote?.id);
-    // TODO: add API call or business logic here
-  };
+	const travelAgentSubmit = (data: PriceFormData) => {
+		console.log("Submitted Data:", data);
+		console.log("Quote ID:", viewedQuote?.id);
+	};
 
-  const handleCancel = () => {
-    console.log("Cancelled quote id:", viewedQuote?.id);
-    travelAgentReset();
-  };
+	const handleCancel = () => {
+		console.log("Cancelled quote id:", viewedQuote?.id);
+		travelAgentReset();
+	};
 
 	const renderRow = (label: string, key: keyof typeof quotes[0], isRich?: boolean) => (
 		<TableRow>
@@ -275,94 +277,104 @@ const QuoteTabs = () => {
 
 	return (
 		<>
-			{/* Header */}
-			<Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
+			{/* if qoutes is available */}
+			{quotes.length >= 1 ? 
 				<Box>
-					<Typography variant="h4">
-						Quote Comparison
-					</Typography>
-					<Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
-						3 quotes received for this inquiry
-					</Typography>
-				</Box>
-				<Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
-					Best Quote Price: 1,00,00,000
-				</Typography>
-			</Box>
-			<Divider sx={{ my: 2 }} />
-			{/* Table */}
-			<Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
-				<Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
-					<TableHead>
-						<TableRow sx={{ '& th': { borderColor: '#eee' } }}>
-							<TableCell sx={{ position: 'sticky', left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
-								<Typography variant="h4">
-									Specifications
-								</Typography>
-							</TableCell>
-							{quotes.map((quote) => {
-								const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
-								return (
-								<TableCell key={quote.id} data-disabled={isDisabled}>
-									<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
-										<img src={quote.image} alt={quote.name} style={{ maxWidth: '300px', height: 'auto' }} />
+					<Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
+						<Box>
+							<Typography variant="h4">
+								Quote Comparison
+							</Typography>
+							<Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
+								{quotes?.length || 0} quotes received for this inquiry
+							</Typography>
+						</Box>
+						<Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
+							Best Quote Price: 1,00,00,000
+						</Typography>
+					</Box>
+					<Divider sx={{ my: 2 }} />
+					{/* Table */}
+					<Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
+						<Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
+							<TableHead>
+								<TableRow sx={{ '& th': { borderColor: '#eee' } }}>
+									<TableCell sx={{ position: 'sticky', left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
 										<Typography variant="h4">
-											{quote.name}
+											Specifications
 										</Typography>
-										<Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
-											View Details
-										</Button>
-									</Box>
-								</TableCell>
-							)})}
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{renderRow("Rating", "rating")}
-						{renderRow("Aircraft", "aircraft")}
-						{renderRow("Price", "price")}
-						{renderRow("Flight Time", "flightTime")}
-						{renderRow("Base Fare", "baseFare")}
-						{renderRow("Fuel", "fuel")}
-						{renderRow("Taxes & Fees", "taxes")}
-						{renderRow("Catering", "catering")}
-						{renderRow("Key Amenities", "keyAmenities", true)}
-						{renderRow("Included Service", "includedService", true)}
-						<TableRow>
-							<TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: 'sticky', left: 0, zIndex: 1 }}>
-								<Typography variant="h5">Select</Typography>
-							</TableCell>
-							{quotes.map((q) => {
-								const isAccepted = acceptedQuoteId === q.id;
-								const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
-								return (
-									<TableCell key={q.id} data-disabled={isDisabled}>
-										<Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-											<Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id)}>
-												{isAccepted ? "Quote Accepted" : "Accept Quote"}
-											</Button>
-											{!isAccepted && (
-												<Button className="btn btn-danger w-100" onClick={ () => rejectQuote(q.id)} disabled={isDisabled}>
-													Reject Quote
-												</Button>
-											)}
-										</Box>
 									</TableCell>
-								);
-							})}
-						</TableRow>
-					</TableBody>
-				</Table>
-			</Box>
-			<Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
-				<Button variant="outlined" className="btn btn-outlined">
-					Close
-				</Button>
-				<Button className="btn btn-blue" onClick={() => quoteSendToTravelAgent()}>
-					Send To Travel Agent
-				</Button>
-			</Box>
-
+									{quotes.map((quote) => {
+										const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
+										return (
+										<TableCell key={quote.id} data-disabled={isDisabled}>
+											<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
+												<img src={quote.image} alt={quote.name} style={{ maxWidth: '300px', height: 'auto' }} />
+												<Typography variant="h4">
+													{quote.name}
+												</Typography>
+												<Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
+													View Details
+												</Button>
+											</Box>
+										</TableCell>
+									)})}
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{renderRow("Rating", "rating")}
+								{renderRow("Aircraft", "aircraft")}
+								{renderRow("Price", "price")}
+								{renderRow("Flight Time", "flightTime")}
+								{renderRow("Base Fare", "baseFare")}
+								{renderRow("Fuel", "fuel")}
+								{renderRow("Taxes & Fees", "taxes")}
+								{renderRow("Catering", "catering")}
+								{renderRow("Key Amenities", "keyAmenities", true)}
+								{renderRow("Included Service", "includedService", true)}
+								<TableRow>
+									<TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: 'sticky', left: 0, zIndex: 1 }}>
+										<Typography variant="h5">Select</Typography>
+									</TableCell>
+									{quotes.map((q) => {
+										const isAccepted = acceptedQuoteId === q.id;
+										const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+										return (
+											<TableCell key={q.id} data-disabled={isDisabled}>
+												<Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+													<Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id)}>
+														{isAccepted ? "Quote Accepted" : "Accept Quote"}
+													</Button>
+													{!isAccepted && (
+														<Button className="btn btn-danger w-100" onClick={ () => rejectQuote(q.id)} disabled={isDisabled}>
+															Reject Quote
+														</Button>
+													)}
+												</Box>
+											</TableCell>
+										);
+									})}
+								</TableRow>
+							</TableBody>
+						</Table>
+					</Box>
+					<Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
+						<Button variant="outlined" className="btn btn-outlined">
+							Close
+						</Button>
+						<Button className="btn btn-blue" onClick={() => quoteSendToTravelAgent()}>
+							Send To Travel Agent
+						</Button>
+					</Box>
+				</Box>
+			:
+				<Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
+					<AttachMoneyIcon />
+					<Typography variant="h4">No quotes received yet</Typography>
+					<Typography color="text.secondary">Quotes will appear here once you submit their proposals.</Typography>
+					<Button className='btn btn-danger'><AddIcon sx={{ mr: '4px' }} /> Add Quote</Button>
+				</Box>
+			}
 			{/* Quote Details Modal */}
 			<CustomModal headerText='Quote Details' open={viewQuoteDetails} setOpen={setViewQuoteDetails} dataClose={() => setViewQuoteDetails(false)} className="modal-lg">
 				<Grid container spacing={2}>

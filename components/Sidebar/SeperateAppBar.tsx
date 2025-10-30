@@ -46,7 +46,7 @@ const pathname = usePathname();
           >
             {pathname === '/dashboard' &&
               <Box sx={{ display: 'flex', gap: '8px', '& .btn': { width: '160px' }, '& svg': { mr: '4px' } }}>
-                <Button className='btn btn-danger'><AddIcon /> New Inquiry</Button>
+                <Button className='btn btn-danger' onClick={() => router.push('/booking-inquiry')}><AddIcon /> New Inquiry</Button>
                 <Button className='btn btn-blue'><TelegramIcon /> Send Reminder</Button>
                 <Button className='btn btn-outlined'><TextSnippetOutlinedIcon sx={{ fontSize: '20px' }} /> Generate Report</Button>
               </Box>

@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography, useTheme } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import { exportToExcel } from './ExportExcel'
 
 export interface MUIDataGridProps{
+  headingText?: string;
   gridColumns?: any;
   gridRows?: any;
   onClick?: () => void;
@@ -27,6 +28,7 @@ export interface MUIDataGridProps{
 }
 
 const MUIDataGrid:React.FC<MUIDataGridProps> = ({
+  headingText,
   gridColumns,
   gridRows,
   onClick,
@@ -47,6 +49,7 @@ const MUIDataGrid:React.FC<MUIDataGridProps> = ({
   paginationMode
 }) => {
 const [searchText, setSearchText] = useState("");
+const theme = useTheme();
 
 const filteredRows = useMemo(() => {  
   if (!gridRows || gridRows.length === 0) return [];
@@ -68,6 +71,7 @@ const handleExportExcel = () => {
     <Box className='page-wrapper' sx={{width: '100%'}}>
       <Box sx={{ display: 'flex', mb: '5px', justifyContent: 'space-between', alignContent: 'center', gap: '10px' }}>
         { buttonText && <Button variant="outlined" className="btn btn-blue" disableElevation onClick={onClick}>{buttonText}</Button> }
+        {headingText && <Typography component='h3' variant="h3" sx={{color: theme?.common?.redColor}}>{headingText}</Typography>}
         {selectFilter}
         {exportButtton &&
           <Button
