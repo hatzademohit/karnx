@@ -24,6 +24,7 @@ declare module "@mui/material/styles" {
         common: {
             blueColor: string;
             redColor: string;
+            borderColor: string;
         }
     }
     interface ThemeOptions {
@@ -39,6 +40,7 @@ declare module "@mui/material/styles" {
         common: {
             blueColor: string;
             redColor: string;
+            borderColor: string;
         }
     }
 }
@@ -57,6 +59,7 @@ export const karnxTheme = createTheme({
     common: {
         blueColor: '#03045E',
         redColor: '#BC0019',
+        borderColor: '#E6E6E6'
     },
 
     typography: {
@@ -84,6 +87,10 @@ export const karnxTheme = createTheme({
         h6: {
             fontSize: 14,
             fontFamily: 'poppins-semibold'
+        },
+        body2: {
+            color: "#4D4D4D",
+            fontFamily: "'poppins-lt', sans-serif",
         },
     },
     components: {

@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { TextField, FormControl, InputLabel, Box, Typography } from '@mui/material';
+import { TextField, InputLabel, Box, Typography } from '@mui/material';
 import { useAuth } from '@/app/context/AuthContext';
 
 export interface CustomTextFieldProps {
@@ -55,10 +55,10 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
   ...props
 }, ref) => {
   const {theme} = useAuth()
-  const displayLabel = asterisk ? `${label} *` : label;
+
   return (
       <Box sx={{width: '100%'}}>
-        { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel} { required === true ? <Typography component='span' sx={{color: theme?.common?.redColor}}>*</Typography> : ''}</InputLabel> }
+        { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel} { asterisk && <Typography component='span' sx={{color: theme?.common?.redColor}}>*</Typography> }</InputLabel> }
         <TextField
           fullWidth
           inputRef={ref}
@@ -73,7 +73,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           disabled={disabled}
           variant={variant}
           {...props}
-          label={displayLabel}
+          // label={displayLabel}
           required={required}
           placeholder={ placeholder ? placeholder : `Enter ${inputLabel}`}
           className={className}

@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-	Box,
-	Stepper,
-	Step,
-	StepLabel,
-	Button,
-	Typography,
-	useTheme,
-} from "@mui/material";
+import { Box, Stepper, Step, StepLabel, Button, Typography, useTheme } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 import { AircraftFlightDetails, PricingDetails, AmenitiesDetails } from '@/components'
 
@@ -28,11 +20,12 @@ const CreateNewQuoteStepper = () => {
 			crewFees: "",
 			handlingFees: "",
 			catering: "",
+			totalAmount: 0,
 			quoteValidUntil: "",
 			cancellationPolicy: "",
 			amenities: [],
 			specialOffers: "",
-			notes: "",
+			addtionalNotes: "",
 		},
 	});
 
@@ -71,7 +64,7 @@ const CreateNewQuoteStepper = () => {
 					))}
 				</Stepper>
 
-				<Box sx={{ mb: 3 }}>
+				<Box sx={{ mb: 3, border: `1px solid ${theme?.common.borderColor}`, p: 3 }}>
 					{activeStep === 0 && <AircraftFlightDetails />}
 					{activeStep === 1 && <PricingDetails />}
 					{activeStep === 2 && <AmenitiesDetails />}
