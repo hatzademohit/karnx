@@ -94,7 +94,7 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         datatimelabel="Departure Date & Time"
                         required={true}
                         withClock
-                        value={field.value}
+                        value={field.value ? dayjs(field.value) : null}
                         onChange={(val: any) => field.onChange(val)}
                         error={!!errors?.multiCity?.[index]?.multiCitydepartureDate}
                         helperText={errors?.multiCity?.[index]?.multiCitydepartureDate?.message}

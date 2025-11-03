@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 
 interface InfoCardProps{
-    InfoNumber?: number;
+    InfoNumber?: number | string;
     InfoText?: string;
     InfoIcon?: any;
     InfoStatus?: string;

@@ -21,5 +21,11 @@ import FileSelection from "./FileSelection/FileSelection"
 import DateRangePickerInput from "./DatePicker/DateRangePickerInput";
 import CardDataGrid from "./TableComp/CardDataGrid";
 import TabLayout from "./CustomTabs/TabLayout";
+import AircraftFlightDetails from "./DashboardComponents/CreateNewQuote/AircraftFlightDetails";
+import AmenitiesDetails from "./DashboardComponents/CreateNewQuote/AmenitiesDetails";
+import PricingDetails from "./DashboardComponents/CreateNewQuote/PricingDetails";
+import CreateNewQuoteStepper from "./DashboardComponents/CreateNewQuote/CreateNewQuoteStepper";
+import CustomTimePicker from "./DatePicker/CustomTimePicker"
+import CustomDatePicker from "./DatePicker/CustomDatePicker"
 
-export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout };
+export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker };

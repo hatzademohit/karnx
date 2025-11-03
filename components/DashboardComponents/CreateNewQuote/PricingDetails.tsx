@@ -1,0 +1,135 @@
+import React, { useEffect, useMemo } from "react";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { CustomTextField, CustomDatePicker, SingleSelectRadio } from "@/components";
+import dayjs from "dayjs";
+
+const fields = [
+    { name: "baseFare", label: "Base Fare", numeric: true },
+    { name: "fuel", label: "Fuel", numeric: true },
+    { name: "taxes", label: "Taxes & Fees", numeric: true },
+    { name: "crewFees", label: "Crew Fees", numeric: true },
+    { name: "handlingFees", label: "Handling Fees", numeric: true },
+    { name: "catering", label: "Catering", numeric: true },
+];
+
+const PricingDetails = () => {
+    const { control, setValue } = useFormContext();
+    const theme = useTheme()
+    const watchedValues = useWatch({ control });
+
+    const totalAmount = useMemo(() => {
+    return Object.entries(watchedValues || {}).reduce((sum, [key, value]) => {
+        const field = fields.find(f => f.name === key);
+        if (field?.numeric) {
+        const num = parseFloat(value || "0");
+        return sum + (isNaN(num) ? 0 : num);
+        }
+        return sum;
+    }, 0);
+    }, [watchedValues, fields]);
+
+    useEffect(() => {
+        setValue("totalAmount", totalAmount);
+    }, [totalAmount, setValue]);
+
+    return (
+        <Box>
+            <Typography variant="h4" color={theme?.common.redColor} mb={2}>
+                Pricing Details
+            </Typography>
+            <Grid container spacing={2}>
+                {fields.map((input) => (
+                    <Grid size={{ lg: 6, md: 6, sm: 12 }} key={input.name}>
+                        <Controller
+                            name={input.name}
+                            control={control}
+                            rules={{
+                                required: `${input.label} is required`,
+                                ...(input.numeric && {
+                                    pattern: {
+                                        value: /^[0-9]*$/,
+                                        message: "Only numbers are allowed",
+                                    },
+                                }),
+                            }}
+                            render={({ field, fieldState }) => (
+                                <CustomTextField
+                                    {...field}
+                                    inputLabel={input.label}
+                                    asterisk={true}
+                                    placeholder={`Enter ${input.label}`}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                    size="medium"
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const filteredValue = input.numeric
+                                            ? value.replace(/[^0-9]/g, "")
+                                            : value;
+                                        field.onChange(filteredValue);
+                                    }}
+                                />
+                            )}
+                        />
+                    </Grid>
+                ))}
+                <Grid size={{ lg: 12 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, p: 3, border: `1px solid ${theme?.common.borderColor}`, mt: 3, backgroundColor: '#f2f2f2', borderRadius: 3 }}>
+                        <Typography variant="h4">Total Quote Amount:</Typography>
+                        <Typography variant="h2">{totalAmount}</Typography>
+                    </Box>
+                </Grid>
+                <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                    <Controller
+                        name="quoteValidUntil"
+                        control={control}
+                        rules={{
+                            required: "Quote valid until date is required",
+                            validate: (value) => value && value.isValid?.() ? true : "Invalid date",
+                        }}
+                        render={({ field, fieldState }) => (
+                            <CustomDatePicker
+                                {...field}
+                                datelabel="Quote Valid Until"
+                                asterisk={true}
+                                value={field.value ? dayjs(field.value) : null}
+                                onChange={(newVal) => field.onChange(newVal)}
+                                required
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                            />
+                        )}
+                    />
+                </Grid>
+                <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                    <Controller
+                        name="cancellationPolicy"
+                        control={control}
+                        rules={{
+                            required: "Please select a cancellation policy",
+                        }}
+                        render={({ field, fieldState }) => (
+                        <SingleSelectRadio
+                            inputLabel="Cancellation Policy"
+                            options={[
+                                "Free Cancellation within 24 hours",
+                                "Free Cancellation within 48 hours",
+                                "Free Cancellation within 72 hours",
+                                "Non-refundable",
+                                "50% Refundable",
+                            ]}
+                            value={field.value}
+                            onChange={field.onChange}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                        )}
+                    />
+                </Grid>
+            </Grid>
+        </Box>
+    );
+};
+
+export default PricingDetails;

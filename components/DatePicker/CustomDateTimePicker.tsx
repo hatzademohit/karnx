@@ -63,7 +63,7 @@ const theme = useTheme()
       )}
       <DateTimePicker
         label={label}
-        // value={value}
+        value={value}
         onChange={onChange}
         disabled={disabled}
         minDateTime={minDateTime}

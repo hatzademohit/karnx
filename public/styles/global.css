@@ -51,7 +51,7 @@ button.btn{
   box-shadow: unset !important;
   border: 1px solid;
 }
-.btn.btn-blue{
+.btn.btn-blue:not(.Mui-disabled){
   background-color: var(--blue-color);
   color: #ffffff;
 }
@@ -68,14 +68,14 @@ button.btn{
   background-color: var(--blue-color);
   color: #ffffff;
 }
-.btn.btn-danger{
+.btn.btn-danger:not(.Mui-disabled){
   background-color: var(--red-color);
   color: #ffffff;
 }
 .btn.btn-danger:hover{
   border: 1px solid var(--red-color);
   background-color: transparent;
-  color: #333333;
+  color: var(--red-color);
 }
 .btn.btn-status-rounded{
   max-width: 124px;
@@ -134,6 +134,13 @@ button.table-icon-btn svg{
 button.table-icon-btn:hover{
   background-color: var(--red-color);
 }
+span.custom-pill{
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #374151;
+  font-size: 12px;
+  margin-right: 4px;
+}
 .white-bg-input{
   background-color: #ffffff;
 }
@@ -186,6 +193,9 @@ button.table-icon-btn:hover{
 .modal-footer .btn-status{
   max-width: 160px;
   width: 100%;
+}
+.MuiFormLabel-asterisk{
+  color: var(--red-color);
 }
 
 .login-page{
@@ -447,4 +457,20 @@ hr.cust-divider{
 }
 .specify-range .date-range-picker .MuiOutlinedInput-root input{
   padding: 5px;
+}
+.quote-comparison-table thead th[data-disabled="true"],
+.quote-comparison-table tbody td[data-disabled="true"]{
+  opacity: 0.5;
+  position: relative;
+}
+.quote-comparison-table tbody td[data-disabled="true"]:has(.submit-rejection-reason){
+  opacity: 0.8;
+}
+.submit-rejection-reason{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
 }

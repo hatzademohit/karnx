@@ -4,9 +4,14 @@ import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutl
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { TabLayout } from "@/components";
-import { InquiryDetailsTab } from "@/components/DashboardComponents";
+import { InquiryDetailsTab, OperatorsTab, QuoteTabs } from "@/components/DashboardComponents";
 
-const InquiryDetails = ({ inquiryData }: any) => {
+export interface InquiryDetailsProps {
+  inquiryData: any;
+  hideOperatorTabs?: boolean;
+  itsTravelAgent?: boolean;
+}
+const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperatorTabs, itsTravelAgent }) => {
   const theme = useTheme();
 
   const tabs = [
@@ -15,20 +20,24 @@ const InquiryDetails = ({ inquiryData }: any) => {
       icon: <InsertDriveFileOutlinedIcon fontSize="small" />,
       content: <InquiryDetailsTab inquiryTabData={inquiryData} />,
     },
+    ...(!hideOperatorTabs
+    ? [
+        {
+          label: "Operators (0)",
+          icon: <SettingsOutlinedIcon fontSize="small" />,
+          content: <OperatorsTab />,
+        },
+      ]
+    : []),
     {
-      label: "Operators (2)",
-      icon: <SettingsOutlinedIcon fontSize="small" />,
-      content: <>operators tab content</>,
-    },
-    {
-      label: "Quotes (3)",
+      label: "Quotes (0)",
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
-      content: <>quote tab content</>,
+      content: <QuoteTabs travelTab={itsTravelAgent} />,
     },
   ];
 
   return (
-    <Box sx={{ paddingBlock: 3 }}>
+    <Box sx={{ padding: 2, border: '1px solid #E6E6E6' }}>
       {/* Header */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
         <Box>

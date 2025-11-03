@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OutlinedInput, InputLabel, SelectChangeEvent, FormControl, Select, MenuItem, ListItemText, Radio, Box, Typography } from "@mui/material";
+import { OutlinedInput, InputLabel, SelectChangeEvent, FormControl, Select, MenuItem, ListItemText, Radio, Box, Typography, FormHelperText } from "@mui/material";
 
 interface SingleSelectRadioProps {
   label?: string;
@@ -10,6 +10,9 @@ interface SingleSelectRadioProps {
   variant?: "outlined" | "filled" | "standard";
   inputLabel?: string;
   size?: "small" | "medium";
+  error?: boolean;
+  helperText?: string;
+  asterisk?: boolean;
 }
 
 const ITEM_HEIGHT = 48;
@@ -31,7 +34,10 @@ const SingleSelectRadio: React.FC<SingleSelectRadioProps> = ({
   width,
   variant = 'outlined',
   inputLabel,
-  size
+  size,
+  error = false,
+  helperText,
+  asterisk = false,
 }) => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     onChange(event.target.value);
@@ -39,13 +45,13 @@ const SingleSelectRadio: React.FC<SingleSelectRadioProps> = ({
 
   return (
     <Box sx={{width: '100%'}}>
-      { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel}</InputLabel> }
+      { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333', mb: '4px'}}>{inputLabel}</InputLabel> }
       <FormControl variant={variant} fullWidth>
       <InputLabel>{label}</InputLabel>
       <Select
         value={value ?? ""}
         onChange={handleChange}
-        input={<OutlinedInput label={label} />}
+        input={<OutlinedInput label={label} error={error} />}
         MenuProps={MenuProps}
         displayEmpty
         renderValue={(selected) => {
@@ -63,6 +69,7 @@ const SingleSelectRadio: React.FC<SingleSelectRadioProps> = ({
           </MenuItem>
         ))}
       </Select>
+      { error && <FormHelperText error>{helperText}</FormHelperText> }
     </FormControl>
     </Box>
   );
