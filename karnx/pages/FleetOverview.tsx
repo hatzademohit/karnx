@@ -66,7 +66,7 @@ type FormState = {
 };
 
 const FleetOverview = () => {
-  const { theme } = useAuth();
+  const { theme, hasPermission } = useAuth();
 
   // Listing state
   const [fleetRows, setFleetRows] = useState<FleetRow[]>([]);
@@ -561,12 +561,13 @@ const FleetOverview = () => {
             setPage(0);
           }}
         /> */}
-        <CardDataGrid 
-          buttonText="Add Fleet" 
-          onClick={handleOpenAdd}
+
+        <CardDataGrid
+          buttonText={hasPermission && hasPermission(['fleet create']) ? 'Add Fleet' : undefined}
+          onClick={hasPermission && hasPermission(['fleet create', 'fleet.add', 'asset.create']) ? handleOpenAdd : undefined}
           editClick={handleEdit}
           viewClick={handleView}
-          data={fleetRows} 
+          data={fleetRows}
         />
       </Box>
 
@@ -575,22 +576,22 @@ const FleetOverview = () => {
         <Stack spacing={2} sx={{ mt: 1 }}>
           <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
             {/* Each item takes 6 out of 12 columns = 2 per row */}
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
-                <SingleSelect
-                  inputLabel="Client"
-                  value={form.client_id || 0}
-                  onChange={(e) => handleFormChange("client_id", Number(e.target.value))}
-                  size='small'
-                >
-                  {clients.map((c) => (
-                    <MenuItem key={c.id} value={c.id}>
-                      {c.name}
-                    </MenuItem>
-                  ))}
-                </SingleSelect>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+              <SingleSelect
+                inputLabel="Client"
+                value={form.client_id || 0}
+                onChange={(e) => handleFormChange("client_id", Number(e.target.value))}
+                size='small'
+              >
+                {clients.map((c) => (
+                  <MenuItem key={c.id} value={c.id}>
+                    {c.name}
+                  </MenuItem>
+                ))}
+              </SingleSelect>
             </Grid>
 
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Asset Name"
                 value={form.asset_name}
@@ -600,7 +601,7 @@ const FleetOverview = () => {
             </Grid>
           </Grid>
           <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Asset Type"
                 value={form.asset_type}
@@ -609,7 +610,7 @@ const FleetOverview = () => {
               />
             </Grid>
 
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Aircraft Model"
                 value={form.aircraft_model}
@@ -618,7 +619,7 @@ const FleetOverview = () => {
               />
             </Grid>
 
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Aircraft Type"
                 value={form.aircraft_type}
@@ -627,7 +628,7 @@ const FleetOverview = () => {
               />
             </Grid>
 
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Registration No"
                 value={form.registration_no}
@@ -636,7 +637,7 @@ const FleetOverview = () => {
               />
             </Grid>
 
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Capacity"
                 type="number"
@@ -646,7 +647,7 @@ const FleetOverview = () => {
               />
             </Grid>
 
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Cabin Size"
                 value={form.cabin_size}
@@ -655,31 +656,31 @@ const FleetOverview = () => {
               />
             </Grid>
 
-            <Grid size={{lg: 4, md: 6, sm: 12}}>
-                <SingleSelect
-                  inputLabel="Status"
-                  value={form.status}
-                  onChange={(e) => handleFormChange("status", e.target.value as Status)}
-                  size='small'
-                >
-                  <MenuItem value="Active">Active</MenuItem>
-                  <MenuItem value="Inactive">Inactive</MenuItem>
-                  <MenuItem value="Maintenance">Maintenance</MenuItem>
-                </SingleSelect>
+            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+              <SingleSelect
+                inputLabel="Status"
+                value={form.status}
+                onChange={(e) => handleFormChange("status", e.target.value as Status)}
+                size='small'
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Inactive">Inactive</MenuItem>
+                <MenuItem value="Maintenance">Maintenance</MenuItem>
+              </SingleSelect>
             </Grid>
 
             {/* Full-width Details */}
-            <Grid size={{lg: 12, md: 12, sm: 12}}>
-              <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>Details</InputLabel>
-                <FormControl fullWidth>
-                  <TextField
-                    value={form.details}
-                    onChange={(e) => handleFormChange("details", e.target.value)}
-                    size="small"
-                    multiline
-                    minRows={3}
-                  />
-                </FormControl>
+            <Grid size={{ lg: 12, md: 12, sm: 12 }}>
+              <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>Details</InputLabel>
+              <FormControl fullWidth>
+                <TextField
+                  value={form.details}
+                  onChange={(e) => handleFormChange("details", e.target.value)}
+                  size="small"
+                  multiline
+                  minRows={3}
+                />
+              </FormControl>
             </Grid>
           </Grid>
 
@@ -708,7 +709,7 @@ const FleetOverview = () => {
 
           <Grid container spacing={1}>
             {(form.imageUrls || []).map((u, idx) => (
-              <Grid size={{lg: 4, md: 6, sm: 12}} key={`${u}-${idx}`}>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }} key={`${u}-${idx}`}>
                 <Box
                   sx={{
                     position: "relative",
@@ -747,7 +748,7 @@ const FleetOverview = () => {
             ))}
           </Grid>
         </Stack>
-        <DialogActions className="modal-footer" sx={{mt: 2}}>
+        <DialogActions className="modal-footer" sx={{ mt: 2 }}>
           <Button onClick={() => setOpenForm(false)} disabled={saving}>
             Cancel
           </Button>
@@ -758,93 +759,93 @@ const FleetOverview = () => {
       </CustomModal>
 
       <CustomModal open={openView} setOpen={setOpenView} dataClose={() => setOpenView(false)} headerText={`Fleet Details`} className="modal-lg">
-          {viewRow && (
-            <Stack spacing={2}>
-              <Grid container spacing={1}>
-                {(viewRow.imageUrls || []).map((u, idx) => (
-                  <Grid size={{lg: 4, md: 6, sm: 12}} key={`${u}-${idx}`}>
-                    <Box
-                      sx={{
-                        borderRadius: 1,
-                        overflow: "hidden",
-                        border: "1px solid #E6E6E6",
-                        height: 140,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        bgcolor: "#f8f8f8",
-                      }}
-                    >
-                      <img
-                        src={u}
-                        alt={`fleet-view-${idx}`}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
-                    </Box>
-                  </Grid>
-                ))}
-              </Grid>
-
-              <Grid container spacing={2}>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField
-                    inputLabel="Client"
-                    value={viewRow.client?.name ?? viewRow.client_id}
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField inputLabel="Asset Name" value={viewRow.asset_name} InputProps={{ readOnly: true }} />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField inputLabel="Asset Type" value={viewRow.asset_type} InputProps={{ readOnly: true }} />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField
-                    inputLabel="Aircraft Model"
-                    value={viewRow.aircraft_model}
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField
-                    inputLabel="Aircraft Type"
-                    value={viewRow.aircraft_type}
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField
-                    inputLabel="Registration No"
-                    value={viewRow.registration_no}
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField inputLabel="Capacity" value={viewRow.capacity} InputProps={{ readOnly: true }} />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField inputLabel="Cabin Size" value={viewRow.cabin_size} InputProps={{ readOnly: true }} />
-                </Grid>
-                <Grid size={{lg: 4, md: 6, sm: 12}}>
-                  <CustomTextField inputLabel="Status" value={viewRow.status} InputProps={{ readOnly: true }} />
-                </Grid>
-                <Grid size={{lg: 12, md: 12, sm: 12}}>
-                  <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>Details</InputLabel>
-                  <FormControl fullWidth>
-                    <TextField
-                      value={viewRow.details || ""}
-                      size="small"
-                      multiline
-                      minRows={3}
-                      InputProps={{ readOnly: true }}
+        {viewRow && (
+          <Stack spacing={2}>
+            <Grid container spacing={1}>
+              {(viewRow.imageUrls || []).map((u, idx) => (
+                <Grid size={{ lg: 4, md: 6, sm: 12 }} key={`${u}-${idx}`}>
+                  <Box
+                    sx={{
+                      borderRadius: 1,
+                      overflow: "hidden",
+                      border: "1px solid #E6E6E6",
+                      height: 140,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      bgcolor: "#f8f8f8",
+                    }}
+                  >
+                    <img
+                      src={u}
+                      alt={`fleet-view-${idx}`}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
-                  </FormControl>
+                  </Box>
                 </Grid>
+              ))}
+            </Grid>
+
+            <Grid container spacing={2}>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField
+                  inputLabel="Client"
+                  value={viewRow.client?.name ?? viewRow.client_id}
+                  InputProps={{ readOnly: true }}
+                />
               </Grid>
-            </Stack>
-          )}
-        <DialogActions className="modal-footer" sx={{mt: 2}}>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField inputLabel="Asset Name" value={viewRow.asset_name} InputProps={{ readOnly: true }} />
+              </Grid>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField inputLabel="Asset Type" value={viewRow.asset_type} InputProps={{ readOnly: true }} />
+              </Grid>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField
+                  inputLabel="Aircraft Model"
+                  value={viewRow.aircraft_model}
+                  InputProps={{ readOnly: true }}
+                />
+              </Grid>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField
+                  inputLabel="Aircraft Type"
+                  value={viewRow.aircraft_type}
+                  InputProps={{ readOnly: true }}
+                />
+              </Grid>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField
+                  inputLabel="Registration No"
+                  value={viewRow.registration_no}
+                  InputProps={{ readOnly: true }}
+                />
+              </Grid>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField inputLabel="Capacity" value={viewRow.capacity} InputProps={{ readOnly: true }} />
+              </Grid>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField inputLabel="Cabin Size" value={viewRow.cabin_size} InputProps={{ readOnly: true }} />
+              </Grid>
+              <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+                <CustomTextField inputLabel="Status" value={viewRow.status} InputProps={{ readOnly: true }} />
+              </Grid>
+              <Grid size={{ lg: 12, md: 12, sm: 12 }}>
+                <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>Details</InputLabel>
+                <FormControl fullWidth>
+                  <TextField
+                    value={viewRow.details || ""}
+                    size="small"
+                    multiline
+                    minRows={3}
+                    InputProps={{ readOnly: true }}
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Stack>
+        )}
+        <DialogActions className="modal-footer" sx={{ mt: 2 }}>
           <Button onClick={() => setOpenView(false)}>Close</Button>
         </DialogActions>
       </CustomModal>

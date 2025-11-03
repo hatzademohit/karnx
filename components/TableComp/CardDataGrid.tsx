@@ -15,6 +15,7 @@ import {
   IconButton
 } from "@mui/material";
 // import { CardDataGrid } from "..";
+import { useAuth } from "@/app/context/AuthContext";
 
 interface FleetClient {
   id: number;
@@ -24,8 +25,8 @@ interface FleetCardGridProps {
   data: FleetRow[];
   buttonText?: string;
   onClick?: () => void;
-  editClick?: (e:any) => void;
-  viewClick?: (e:any) => void;
+  editClick?: (e: any) => void;
+  viewClick?: (e: any) => void;
 }
 
 interface FleetRow {
@@ -48,7 +49,7 @@ const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick,
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const itemsPerPage = 4; // 4 per row × 2 rows
-
+  const { hasPermission } = useAuth();
   // 🔍 Filter by asset_name, client name, or registration_no
   const filteredData = useMemo(() => {
     const term = search.toLowerCase();
@@ -72,26 +73,26 @@ const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick,
   return (
     <Box sx={{ pt: 3 }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 3, gap: 2 }}>
-        { buttonText && <Button variant="outlined" className="btn btn-blue" disableElevation onClick={onClick}>{buttonText}</Button> }
+        {buttonText && <Button variant="outlined" className="btn btn-blue" disableElevation onClick={onClick}>{buttonText}</Button>}
         {/* Search box */}
         <TextField
-            variant="outlined"
-            size="small"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-            }}
-            fullWidth
-            sx={{ maxWidth: '250px', ml: 'auto' }}
-            className='input-search'
-            slotProps={{
-                input: {
-                    startAdornment: <SearchIcon sx={{color: "rgba(0, 0, 0, 0.54)"}} />,
-                    endAdornment: <IconButton size="small" onClick={ () => setSearch('')}><CloseIcon sx={{color: "rgba(0, 0, 0, 0.54)"}} /></IconButton>,
-                },
-            }}
+          variant="outlined"
+          size="small"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          fullWidth
+          sx={{ maxWidth: '250px', ml: 'auto' }}
+          className='input-search'
+          slotProps={{
+            input: {
+              startAdornment: <SearchIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />,
+              endAdornment: <IconButton size="small" onClick={() => setSearch('')}><CloseIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} /></IconButton>,
+            },
+          }}
         />
       </Box>
 
@@ -134,69 +135,74 @@ const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick,
               )}
 
               <CardContent sx={{ flexGrow: 1, paddingBottom: '16px !important' }}>
-                <Box sx={{display: 'flex', gap: '12px', flexDirection: 'column', '& h6': { marginBottom: '0px' }}}>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Assets Name:</Typography>
-                        <Typography variant="h6" gutterBottom noWrap>
-                            {item.asset_name}
-                        </Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Status:</Typography>
-                        <Chip
-                            label={item.status}
-                            color={
-                                item.status.toLowerCase() === "active"
-                                ? "success"
-                                : "default"
-                            }
-                            size="small"
-                        />
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Client:</Typography>
-                        <Typography variant="h6" gutterBottom noWrap>
-                            {item.client?.name}
-                        </Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Registration No:</Typography>
-                        <Typography variant="h6" gutterBottom noWrap>
-                            {item.registration_no}
-                        </Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Aircraft Model:</Typography>
-                        <Typography variant="h6" gutterBottom noWrap>
-                            {item.aircraft_model}
-                        </Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Aircraft Type:</Typography>
-                        <Typography variant="h6" gutterBottom noWrap>
-                            {item.asset_type}
-                        </Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Capacity:</Typography>
-                        <Typography variant="h6" gutterBottom noWrap>
-                            {item.capacity}
-                        </Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                        <Typography sx={{color: 'rgb(77, 77, 77)', fontSize: 14}}>Cabin Size:</Typography>
-                        <Typography variant="h6" gutterBottom noWrap>
-                            {item.cabin_size}
-                        </Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '10px', 'button.btn': { width: '100%' }}}>
-                        <Button size="small" className="btn btn-blue" onClick={ () => viewClick(item)}>
-                            View Details
-                        </Button>
-                        <Button size="small" className="btn btn-outlined" onClick={ () => editClick(item)}>
-                            Edit Details
-                        </Button>
-                    </Box>
+                <Box sx={{ display: 'flex', gap: '12px', flexDirection: 'column', '& h6': { marginBottom: '0px' } }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Assets Name:</Typography>
+                    <Typography variant="h6" gutterBottom noWrap>
+                      {item.asset_name}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Status:</Typography>
+                    <Chip
+                      label={item.status}
+                      color={
+                        item.status.toLowerCase() === "active"
+                          ? "success"
+                          : "default"
+                      }
+                      size="small"
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Client:</Typography>
+                    <Typography variant="h6" gutterBottom noWrap>
+                      {item.client?.name}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Registration No:</Typography>
+                    <Typography variant="h6" gutterBottom noWrap>
+                      {item.registration_no}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Aircraft Model:</Typography>
+                    <Typography variant="h6" gutterBottom noWrap>
+                      {item.aircraft_model}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Aircraft Type:</Typography>
+                    <Typography variant="h6" gutterBottom noWrap>
+                      {item.asset_type}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Capacity:</Typography>
+                    <Typography variant="h6" gutterBottom noWrap>
+                      {item.capacity}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography sx={{ color: 'rgb(77, 77, 77)', fontSize: 14 }}>Cabin Size:</Typography>
+                    <Typography variant="h6" gutterBottom noWrap>
+                      {item.cabin_size}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '10px', 'button.btn': { width: '100%' } }}>
+                    <Button size="small" className="btn btn-blue" onClick={() => viewClick(item)}>
+                      View Details
+                    </Button>
+                    <Button
+                      size="small"
+                      className="btn btn-outlined"
+                      onClick={hasPermission && hasPermission(['fleet edit']) ? () => editClick && editClick(item) : undefined}
+                      style={hasPermission && hasPermission(['fleet edit']) ? undefined : { display: 'none' }}
+                    >
+                      Edit Details
+                    </Button>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
