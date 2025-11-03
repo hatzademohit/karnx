@@ -474,3 +474,37 @@ hr.cust-divider{
   align-items: center;
   background-color: #ffffff;
 }
+.select_filter.MuiBox-root{
+  width: fit-content;
+
+  .MuiInputBase-root {
+
+    .MuiSelect-select{
+      padding-inline: 14px;
+    }
+    svg{display: none;}
+  }
+}
+.custom-select-dropdown ul li.Mui-disabled:first-child{
+  display: none;
+}
+.custom-select-dropdown ul {
+  padding: 0;
+
+  li.MuiMenuItem-root{
+    padding-inline: 10px;
+    color: #4D4D4D;
+
+  .MuiButtonBase-root{
+    padding: 4px;
+  }
+
+  span svg{
+    font-size: 20px;
+  }
+  .MuiListItemText-root span{
+    font-size: 14px;
+    font-family: 'poppins-lt', sans-serif;
+  }
+}
+}

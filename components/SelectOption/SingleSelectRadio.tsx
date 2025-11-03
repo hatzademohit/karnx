@@ -13,6 +13,9 @@ interface SingleSelectRadioProps {
   error?: boolean;
   helperText?: string;
   asterisk?: boolean;
+  className?: string;
+  id?: string;
+  menuClassName?: string;
 }
 
 const ITEM_HEIGHT = 48;
@@ -38,21 +41,31 @@ const SingleSelectRadio: React.FC<SingleSelectRadioProps> = ({
   error = false,
   helperText,
   asterisk = false,
+  className,
+  id,
+  menuClassName
 }) => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     onChange(event.target.value);
   };
 
   return (
-    <Box sx={{width: '100%'}}>
+    <Box sx={{width: '100%'}} className={className}>
       { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333', mb: '4px'}}>{inputLabel}</InputLabel> }
       <FormControl variant={variant} fullWidth>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel shrink={false}>{label}</InputLabel>
       <Select
+        id={id}
         value={value ?? ""}
         onChange={handleChange}
-        input={<OutlinedInput label={label} error={error} />}
-        MenuProps={MenuProps}
+        input={<OutlinedInput label={label} error={error} size={size} />}
+        // MenuProps={MenuProps}
+        MenuProps={{
+          PaperProps: {
+            id: id,
+            className: menuClassName, 
+          },
+        }}
         displayEmpty
         renderValue={(selected) => {
           if (selected === "") {
