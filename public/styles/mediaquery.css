@@ -14,8 +14,16 @@
         width: 74px;
         height: 74px;
 
-    svg{
-        font-size: 38px;
+        svg{
+            font-size: 38px;
+        }
     }
+}
+@media (max-width: 899.5px) {
+    div.custom-tabs .MuiButtonBase-root.MuiTab-root{
+        max-width: fit-content;
+    }
+    div.card{
+        padding: 10px;
     }
 }

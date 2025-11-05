@@ -58,24 +58,28 @@ const [selectedActivity, setSelectedActivity] = useState('All Activities')
 				sx={{
 					display: "flex",
 					alignItems: "flex-start",
-					p: 2,
+					p: { md: 2, xs: '8px' },
 					bgcolor: idx % 2 === 1 ? "#F7F7F9" : "#F9FAFB",
 					borderRadius: 2,
 					mb: 1.5,
 				}}
 				>
-					<Box sx={{ mr: 2, mt: 0.5 }}>{item.icon}</Box>
 					<Grid container spacing={2} sx={{ width: '100%' }}>
-						<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-							<Typography variant="subtitle1" fontWeight={600}>
-								{item.title}
-							</Typography>
-							<Typography variant="caption" color="text.secondary">
-								{item.time}
-							</Typography>
+						<Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+							<Box sx={{ display: 'flex', gap: 1.5 }}>
+								<Box sx={{ mt: 0.5 }}>{item.icon}</Box>
+								<Box>
+									<Typography variant="h5" component='h5'>
+										{item.title}
+									</Typography>
+									<Typography variant="caption" color="text.secondary">
+										{item.time}
+									</Typography>
+								</Box>
+							</Box>
 						</Grid>
-						<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-							<Typography variant="body2" sx={{ mt: 0.5 }}>
+						<Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+							<Typography variant="body2">
 								{item.details}
 							</Typography>
 							<Typography variant="body2" color="error" fontWeight={500}>

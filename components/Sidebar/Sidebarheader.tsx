@@ -10,7 +10,9 @@ import SeperateDrawer from './SeperateDrawer';
 import { Theme } from '@mui/system';
 
 export const drawerWidth = 240;
-export const headerHeight = 70;
+export const headerHeightLg = 70;
+export const headerHeightMd = 60;
+export const headerHeightXs = 40;
 const closeDrawerWidth = 48;
 
 interface MainProps {
@@ -22,7 +24,10 @@ export const Main = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
 })<MainProps>(({ theme, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(2),
+  padding: '10px',
+  [theme.breakpoints.up('sm')]: {
+    padding: 16,
+  },
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -36,7 +41,14 @@ export const Main = styled('main', {
     width: 'calc(100% - 200px)',
   }),
   overflow: 'hidden',
-  margin: `${headerHeight}px 0 0 ${closeDrawerWidth}px`,
+  marginLeft: `${closeDrawerWidth}px`,
+  marginTop: headerHeightXs,
+  [theme.breakpoints.up('md')]: {
+    marginTop: headerHeightMd,
+  },
+  [theme.breakpoints.up('lg')]: {
+    marginTop: headerHeightLg,
+  },
 }));
 
 const openedMixin = (theme: any) => ({
@@ -67,7 +79,7 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  minHeight: `${headerHeight}px !important`
+  minHeight: `${headerHeightLg}px !important`
 }));
 
 interface AppBarProps {

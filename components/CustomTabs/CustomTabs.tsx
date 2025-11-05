@@ -47,7 +47,7 @@ const CustomTabs: React.FC<CustomTabsProps> & { Tab: React.FC<CustomTabProps> } 
 
   return (
     <Box>
-      <Tabs value={value} onChange={handleChange} className="custom-tabs">
+      <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile className="custom-tabs">
         {tabsArray.map((child, idx) => (
           <Tab key={idx} label={child.props.label} id={`tab-${idx}`} aria-controls={`tabpanel-${idx}`} />
         ))}

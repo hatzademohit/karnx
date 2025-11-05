@@ -60,24 +60,24 @@ const theme  = useTheme();
                             display: "flex",
                             alignItems: "flex-start",
                             justifyContent: "space-between",
-                            p: 2,
+                            p: { md: 2, xs: '8px' },
                             mb: 1.5,
                             bgcolor: task.bg,
                             borderRadius: 2,
                         }}
                     >
-                        <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+                        <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
                             <Box sx={{ mr: 2, mt: 0.5 }}>{task.icon}</Box>
                             <Box>
-                            <Typography variant="subtitle1" fontWeight={600}>
-                                {task.title}
-                            </Typography>
-                            <Typography variant="body2" sx={{ mt: 0.5 }}>
-                                {task.details}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                {task.ref}
-                            </Typography>
+                                <Typography variant="h5" fontWeight={600}>
+                                    {task.title}
+                                </Typography>
+                                <Typography variant="body2" sx={{ mt: 0.5 }}>
+                                    {task.details}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    {task.ref}
+                                </Typography>
                             </Box>
                         </Box>
 

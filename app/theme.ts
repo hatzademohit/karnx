@@ -63,34 +63,95 @@ export const karnxTheme = createTheme({
     },
 
     typography: {
-        fontFamily: 'poppins',
+        fontFamily: "poppins",
+        body1: {
+            fontSize: "0.875rem",
+            "@media (min-width:900px)": {
+                fontSize: "1rem",
+            },
+        },
         h1: {
-            fontSize: 32,
-            fontFamily: 'poppins-semibold'
+            fontFamily: "poppins-semibold",
+            fontSize: '18px',
+            "@media (min-width:600px)": {
+                fontSize: "20px", // sm
+            },
+            "@media (min-width:900px)": {
+                fontSize: "24px", // md
+            },
+            "@media (min-width:1200px)": {
+                fontSize: "28px", // lg
+            },
+            "@media (min-width:1536px)": {
+                fontSize: "32px", // xl
+            },
         },
         h2: {
-            fontSize: 28,
-            fontFamily: 'poppins-semibold'
+            fontFamily: "poppins-semibold",
+            fontSize: '16px',
+            "@mediaQuery (min-width:600px)": {
+                fontSize: "16px", // sm
+            },
+            "@media (min-width:900px)": {
+                fontSize: "20px", // md
+            },
+            "@media (min-width:1200px)": {
+                fontSize: "24px", // lg
+            },
+            "@media (min-width:1536px)": {
+                fontSize: "28px", // xl
+            },
         },
         h3: {
-            fontSize: 24,
-            fontFamily: 'poppins-semibold'
+            fontFamily: "poppins-semibold",
+            fontSize: '15px',
+            "@mediaQuery (min-width:600px)": {
+                fontSize: "16px", // sm
+            },
+            "@media (min-width:900px)": {
+                fontSize: "18px", // md
+            },
+            "@media (min-width:1200px)": {
+                fontSize: "20px", // lg
+            },
+            "@media (min-width:1536px)": {
+                fontSize: "24px", // xl
+            },
         },
         h4: {
-            fontSize: 20,
-            fontFamily: 'poppins-semibold'
+            fontFamily: "poppins-semibold",
+            fontSize: '15px',
+            "@mediaQuery (min-width:600px)": {
+                fontSize: "15px", // sm
+            },
+            "@media (min-width:900px)": {
+                fontSize: "16px", // md
+            },
+            "@media (min-width:1200px)": {
+                fontSize: "18px", // lg
+            },
+            "@media (min-width:1536px)": {
+                fontSize: "20px", // xl
+            },
         },
         h5: {
-            fontSize: 16,
-            fontFamily: 'poppins-semibold'
+            fontFamily: "poppins-semibold",
+            fontSize: '16px',
+            "@media (max-width:600px)": {
+                fontSize: "14px", // md
+            },
         },
         h6: {
-            fontSize: 14,
-            fontFamily: 'poppins-semibold'
+            fontFamily: "poppins-semibold",
+            fontSize: '14px',
         },
         body2: {
             color: "#4D4D4D",
             fontFamily: "'poppins-lt', sans-serif",
+            fontSize: "0.875rem",
+            "@media (min-width:900px)": {
+                fontSize: "1rem",
+            },
         },
     },
     components: {
