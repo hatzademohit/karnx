@@ -175,6 +175,7 @@ span.custom-pill{
   top: 0;
   background-color: #ffffff;
   z-index: 1;
+  align-items: center;
 }
 .MuiDialog-container > .MuiPaper-root:has(.modal-footer){
   max-height: unset;
@@ -189,6 +190,11 @@ span.custom-pill{
   bottom: 0;
   background-color: #ffffff;
   padding-inline: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+  z-index: 9;
+  margin-inline: -10px;
+  padding-inline: 10px;
 }
 .modal-footer .btn-status{
   max-width: 160px;
@@ -507,4 +513,7 @@ hr.cust-divider{
     font-family: 'poppins-lt', sans-serif;
   }
 }
+}
+.card-content{
+  padding: 16px !important;
 }

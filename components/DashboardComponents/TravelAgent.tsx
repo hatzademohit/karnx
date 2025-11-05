@@ -128,7 +128,7 @@ const TravelAgent = () => {
             {!showDetailsTabs &&
                 <Grid container spacing={3}>
                     {cardInfoData && cardInfoData.map((item, index) => (
-                        <Grid size={{ lg: 2, md: 3, sm: 6, xs: 12 }} key={index}>
+                        <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index}>
                             <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon}/>
                         </Grid>
                     ))}

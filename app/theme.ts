@@ -137,7 +137,7 @@ export const karnxTheme = createTheme({
         h5: {
             fontFamily: "poppins-semibold",
             fontSize: '16px',
-            "@media (max-width:600px)": {
+            "@media (max-width:900px)": {
                 fontSize: "14px", // md
             },
         },

@@ -37,7 +37,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
   ];
 
   return (
-    <Box sx={{ padding: 2, border: '1px solid #E6E6E6' }}>
+    <Box sx={{ padding: { md: 2, xs: '10px' }, border: '1px solid #E6E6E6' }}>
       {/* Header */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
         <Box>
