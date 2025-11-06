@@ -175,6 +175,7 @@ span.custom-pill{
   top: 0;
   background-color: #ffffff;
   z-index: 1;
+  align-items: center;
 }
 .MuiDialog-container > .MuiPaper-root:has(.modal-footer){
   max-height: unset;
@@ -189,6 +190,11 @@ span.custom-pill{
   bottom: 0;
   background-color: #ffffff;
   padding-inline: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+  z-index: 9;
+  margin-inline: -10px;
+  padding-inline: 10px;
 }
 .modal-footer .btn-status{
   max-width: 160px;
@@ -473,4 +479,41 @@ hr.cust-divider{
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
+}
+.select_filter.MuiBox-root{
+  width: fit-content;
+
+  .MuiInputBase-root {
+
+    .MuiSelect-select{
+      padding-inline: 14px;
+    }
+    svg{display: none;}
+  }
+}
+.custom-select-dropdown ul li.Mui-disabled:first-child{
+  display: none;
+}
+.custom-select-dropdown ul {
+  padding: 0;
+
+  li.MuiMenuItem-root{
+    padding-inline: 10px;
+    color: #4D4D4D;
+
+  .MuiButtonBase-root{
+    padding: 4px;
+  }
+
+  span svg{
+    font-size: 20px;
+  }
+  .MuiListItemText-root span{
+    font-size: 14px;
+    font-family: 'poppins-lt', sans-serif;
+  }
+}
+}
+.card-content{
+  padding: 16px !important;
 }

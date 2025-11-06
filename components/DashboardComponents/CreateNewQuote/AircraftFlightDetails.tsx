@@ -26,7 +26,7 @@ const AircraftFlightDetails = () => {
 					</FormHelperText>
 				)}
 			</Typography>	
-			<Grid container spacing={2}>
+			<Grid container spacing={{ md: 2, xs: 1 }}>
 				<Controller
 					name="aircraft"
 					control={control}
@@ -34,7 +34,7 @@ const AircraftFlightDetails = () => {
 					render={({ field }) => (
 						<>
 							{aircrafts.map((aircraft) => (
-								<Grid size={{ lg: 4, md: 6, sm: 12 }} key={aircraft.name}>
+								<Grid size={{ lg: 4, md: 6, sm: 12, xs: 12 }} key={aircraft.name}>
 									<Card onClick={() => field.onChange(aircraft.name)}
 										sx={{ cursor: "pointer", border: selectedAircraft === aircraft.name ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
 										<CardContent sx={{ p: `16px !important` }}>
@@ -68,7 +68,7 @@ const AircraftFlightDetails = () => {
 				/>
 			</Grid>
 
-			<Box mt={3}>
+			<Box mt={{ md: 3, xs: 2 }}>
 				<Controller
 					name="estimatedFlightTime"
 					control={control}

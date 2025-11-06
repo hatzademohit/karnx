@@ -224,7 +224,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 
 	const renderRow = (label: string, key: keyof typeof quotes[0], isRich?: boolean) => (
 		<TableRow>
-			<TableCell sx={{ position: 'sticky', left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
+			<TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
 				<Typography variant="h5" >{label}</Typography>
 			</TableCell>
 			{quotes.map((q) => {
@@ -288,7 +288,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 			{!createNewQuote && (
 				quotes?.length >= 1 ? (
 					<Box>
-						<Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
+						<Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", flexWrap: 'wrap', gap: '4px' }}>
 							<Box>
 								<Typography variant="h4">
 									Quote Comparison
@@ -307,7 +307,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 							<Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
 								<TableHead>
 									<TableRow sx={{ '& th': { borderColor: '#eee' } }}>
-										<TableCell sx={{ position: 'sticky', left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
+										<TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
 											<Typography variant="h4">
 												Specifications
 											</Typography>
@@ -341,7 +341,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 									{renderRow("Key Amenities", "keyAmenities", true)}
 									{renderRow("Included Service", "includedService", true)}
 									<TableRow>
-										<TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: 'sticky', left: 0, zIndex: 1 }}>
+										<TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: { md: 'sticky', xs: 'static' }, left: 0, zIndex: 1 }}>
 											<Typography variant="h5">Select</Typography>
 										</TableCell>
 										{quotes.map((q) => {
@@ -395,7 +395,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 			{createNewQuote && <CreateNewQuoteStepper />}
 			{/* Quote Details Modal */}
 			<CustomModal headerText='Quote Details' open={viewQuoteDetails} setOpen={setViewQuoteDetails} dataClose={() => setViewQuoteDetails(false)} className="modal-lg">
-				<Grid container spacing={2}>
+				<Grid container spacing={{ md: 2, xs: 1 }}>
 					{/* Flight Details */}
 					<Grid size={{ xs: 12, md: 6 }}>
 						<Card elevation={2}>
@@ -404,7 +404,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 									Flight Details
 								</Typography>
 
-								<Grid container spacing={2}>
+								<Grid container spacing={{ md: 2, xs: 1 }}>
 									<Grid size={{ xs: 6 }}>
 										<Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
 											<FlightTakeoffIcon />
@@ -537,7 +537,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 						</Card>
 					</Grid>
 				</Grid>
-				<Box className="modal-footer" sx={{ pb: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: '200px', width: '100%' } }}>
+				<Box className="modal-footer" sx={{ py: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: { sm: '200px', xs: 'calc(50% - 4px)'}, width: '100%' } }}>
 					<Button className="btn btn-blue" onClick={ () => console.log('quote id:' + viewedQuote?.id)}>Accept Quote</Button>
 					<Button className="btn btn-danger" onClick={ () => console.log('quote id:' + viewedQuote?.id)}>Reject Quote</Button>
 				</Box>

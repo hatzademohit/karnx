@@ -98,14 +98,15 @@ export default function MyAccount() {
         sx={{
           backgroundColor: 'transparent',
           height: '40px',
-          padding: '4px 14px 4px 4px',
+          padding: '4px 3px 4px 4px',
           borderRadius: '26px',
-          gap: '14px',
+          gap: { md: '14px', sm: '10px', xs: '6px' },
           textTransform: 'capitalize',
           width: 'fit-content',
           '&:hover': {
             backgroundColor: 'transparent',
-          }
+          }, 
+          '& img': { width: { md: 30, sm: 25, xs: 20 }, height: { md: 30, sm: 25, xs: 20 } }
         }}
       >
         {
@@ -116,9 +117,7 @@ export default function MyAccount() {
         }
         <Typography sx={{display: 'flex', flexDirection: 'column', textAlign: 'start'}}>
           <Typography component='span'
-            sx={{
-              color: '#333333'
-            }}
+            sx={{ color: '#333333' }}
           >{ (user?.name) ? user.name : 'Operator'  }</Typography>
         </Typography>
       </Button>
@@ -131,8 +130,8 @@ export default function MyAccount() {
         open={open}
         onClose={handleClose}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', padding: "6px 16px", gap: '15px' }}>
-          {
+        <Box sx={{ display: 'flex', alignItems: 'center', padding: "6px 16px", gap: '15px'}}>
+        {
           user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{borderRadius: '50%', objectFit: 'cover' }} /> : 
           <Typography component="span">
             <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: theme?.common?.blueColor }} />

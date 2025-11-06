@@ -22,27 +22,11 @@ interface FleetClient {
   name: string;
 }
 interface FleetCardGridProps {
-  data: FleetRow[];
+  data: any[];
   buttonText?: string;
   onClick?: () => void;
   editClick?: (e: any) => void;
   viewClick?: (e: any) => void;
-}
-
-interface FleetRow {
-  id: number;
-  client_id: number;
-  client?: FleetClient;
-  asset_name: string;
-  asset_type: string;
-  aircraft_model: string;
-  aircraft_type: string;
-  registration_no: string;
-  capacity: number;
-  cabin_size: string;
-  imageUrls?: string;
-  status: string;
-  details?: string;
 }
 
 const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick, editClick, viewClick }) => {
@@ -50,16 +34,17 @@ const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick,
   const [page, setPage] = useState(1);
   const itemsPerPage = 4; // 4 per row × 2 rows
   const { hasPermission } = useAuth();
-  // 🔍 Filter by asset_name, client name, or registration_no
+
   const filteredData = useMemo(() => {
-    const term = search.toLowerCase();
-    return data.filter(
-      (item) =>
-        item.asset_name.toLowerCase().includes(term) ||
-        item.client?.name.toLowerCase().includes(term) ||
-        item.registration_no.toLowerCase().includes(term)
-    );
-  }, [search, data]);
+  const term = search.toLowerCase();
+  if (!term) return data;
+
+  return data.filter((item) => {
+    // Convert entire item (including nested fields) to a string
+    const itemString = JSON.stringify(item).toLowerCase();
+    return itemString.includes(term);
+  });
+}, [search, data]);
 
   // 📄 Pagination logic
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -71,8 +56,8 @@ const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick,
   const handlePageChange = (_: any, value: number) => setPage(value);
 
   return (
-    <Box sx={{ pt: 3 }}>
-      <Box sx={{ display: "flex", alignItems: "center", mb: 3, gap: 2 }}>
+    <Box>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2, gap: 2 }}>
         {buttonText && <Button variant="outlined" className="btn btn-blue" disableElevation onClick={onClick}>{buttonText}</Button>}
         {/* Search box */}
         <TextField

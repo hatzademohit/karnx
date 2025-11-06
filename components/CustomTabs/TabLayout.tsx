@@ -36,6 +36,7 @@ const TabLayout: React.FC<TabLayoutProps> = ({
       <Tabs
         value={tabValue}
         onChange={handleTabChange}
+        variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile
         sx={{
           borderBottom: 1,
           borderColor: "divider",

@@ -14,8 +14,27 @@
         width: 74px;
         height: 74px;
 
-    svg{
-        font-size: 38px;
+        svg{
+            font-size: 38px;
+        }
     }
+}
+@media (max-width: 899.5px) {
+    div.custom-tabs .MuiButtonBase-root.MuiTab-root{
+        max-width: fit-content;
+    }
+    div.card{
+        padding: 10px;
+    }
+    div.card-content{
+        padding: 10px !important;
+    }
+}
+@media (max-width: 599.5px) {
+    div.modal-body, .custom-modal .modal-header{
+        padding: 10px;
+    }
+    .dialog-modal .MuiDialog-container > .MuiPaper-root{
+        margin: 10px;
     }
 }

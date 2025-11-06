@@ -1,13 +1,10 @@
 'use client'
-import { Box, Button, Grid, IconButton, InputAdornment, Tooltip, Typography } from "@mui/material";
-import { CustomModal, CustomTextField, MUIDataGrid } from "@/components";
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
+import { CustomModal, MUIDataGrid } from "@/components";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useEffect, useState } from "react";
-import SearchIcon from '@mui/icons-material/Search';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { apiBaseUrl } from '@/karnx/api';
@@ -107,7 +104,7 @@ const Inquiries = () => {
     return (
         <>
             <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color, mb: theme?.heading?.marginBottom }}>Charter Inquiries</Typography>
-            <Box sx={{ padding: '24px', border: '1px solid #E6E6E6' }}>
+            <Box sx={{ p: { md: 2, xs: '8px' }, border: '1px solid #E6E6E6' }}>
                 <MUIDataGrid
                     gridColumns={columns}
                     gridRows={data}

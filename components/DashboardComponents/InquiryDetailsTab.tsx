@@ -36,18 +36,18 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
   return (
     <>
       {/* Flight Information */}
-      <Card variant="outlined" sx={{ borderRadius: 3, mb: 2 }}>
-        <CardContent sx={{ bgcolor: "#F7F8FC" }}>
-          <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="subtitle1">
+      <Card variant="outlined" sx={{ borderRadius: 3, mb: {md: 2, xs: 1} }}>
+        <CardContent sx={{ bgcolor: "#F7F8FC" }} className="card-content">
+          <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
             Flight Information
           </Typography>
 
-          <Grid container spacing={2}>
+          <Grid container spacing={{ md: 2, xs: 1 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">
                 Route
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 <FlightTakeoff fontSize="small" sx={{ mr: 0.5 }} />
                 {data?.route}
               </Typography>
@@ -57,7 +57,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               <Typography variant="body2" color="text.secondary">
                 Departure Date
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.date}
               </Typography>
             </Grid>
@@ -66,7 +66,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               <Typography variant="body2" color="text.secondary">
                 Passengers
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.passangers}
               </Typography>
             </Grid>
@@ -75,7 +75,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               <Typography variant="body2" color="text.secondary">
                 Aircraft Type
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.aircraft}
               </Typography>
             </Grid>
@@ -84,7 +84,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               <Typography variant="body2" color="text.secondary">
                 Purpose of Trip
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.traveling_purpose}
               </Typography>
             </Grid>
@@ -110,17 +110,17 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
       </Card>
 
       {/* Contact Information */}
-      <Card variant="outlined" sx={{ borderRadius: 3, mb: 2 }}>
-        <CardContent>
-          <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="subtitle1">
+      <Card variant="outlined" sx={{ borderRadius: 3, mb: {md: 2, xs: 1} }}>
+        <CardContent className="card-content">
+          <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
             Contact Information
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={{ md: 2, xs: 1 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">
                 Client Name
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.clientName}
               </Typography>
             </Grid>
@@ -129,7 +129,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               <Typography variant="body2" color="text.secondary">
                 Email
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.clientEmail}
               </Typography>
             </Grid>
@@ -138,7 +138,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               <Typography variant="body2" color="text.secondary">
                 Phone
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.clientPhone}
               </Typography>
             </Grid>
@@ -147,12 +147,12 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
       </Card>
 
       {/* Baggage & Services */}
-      <Grid container spacing={2}>
+      <Grid container spacing={{ md: 2, xs: 1 }}>
         {/* Baggage */}
         <Grid size={{ xs: 12, sm: 6 }}>
           <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
-            <CardContent>
-              <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="subtitle1">
+            <CardContent className="card-content">
+              <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
                 Baggage & Pets
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -172,7 +172,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               <Typography variant="body2" color="text.secondary">
                 Pets:
               </Typography>
-              <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
+              <Typography variant="h5">
                 {data?.is_traveling_pets}
               </Typography>
             </CardContent>
@@ -182,8 +182,8 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
         {/* Requested Services */}
         <Grid size={{ xs: 12, sm: 6 }}>
           <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
-            <CardContent>
-              <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="subtitle1">
+            <CardContent className="card-content">
+              <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
                 Requested Services
               </Typography>
               <Typography variant="body2" color="text.secondary">

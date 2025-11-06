@@ -130,14 +130,14 @@ const TravelAgent = () => {
     return (
         <>
             {!showDetailsTabs &&
-                <Grid container spacing={3}>
+                <Grid container spacing={{ md: 3, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
-                        <Grid size={{ lg: 2, md: 3, sm: 6, xs: 12 }} key={index}>
-                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon} />
+                        <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index}>
+                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon}/>
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
-                        <Box sx={{ padding: '24px', border: '1px solid #E6E6E6' }}>
+                        <Box sx={{ p: { md: 2, xs: '8px' }, border: '1px solid #E6E6E6' }}>
                             <MUIDataGrid
                                 headingText="Charter Inquiries"
                                 gridColumns={columns}

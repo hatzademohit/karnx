@@ -56,7 +56,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
   return (
     <>
         {/* heading */}
-        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
+        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: '8px'}}>
             <Box>
                 <Typography component='h4' variant="h4">Allocated Operators</Typography>
                 <Typography sx={{color: '#4D4D4D'}}>2 operators assigned to this inquiry</Typography>
@@ -67,10 +67,10 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
         </Box>
 
         {/* operators */}
-        <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid container spacing={{ md: 2, xs: 1 }}>
+            <Grid size={{ xs: 12, md: 6 }}>
                 <Card variant="outlined" sx={{ borderRadius: 3 }}>
-                    <CardContent>
+                    <CardContent className="card-content">
                         {/* header section */}
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -91,24 +91,24 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                             </IconButton>
                         </Box>
                         {/* body section */}
-                        <Grid container spacing={2} sx={{ mt: 2 }}>
-                            <Grid size={{ xs: 6, sm: 6 }}>
+                        <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating
                                 </Typography>
-                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="subtitle1">ARGUS Gold</Typography>
+                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">ARGUS Gold</Typography>
                             </Grid>
-                            <Grid size={{ xs: 6, sm: 6 }}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <WatchLaterOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Response Time
                                 </Typography>
-                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="subtitle1">{'< 2 hours'}</Typography>
+                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{'< 2 hours'}</Typography>
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <FlightOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Fleet Overview
                                 </Typography>
-                                <Typography sx={{ mt: 0.5 }} variant="subtitle1">6 aircraft</Typography>
+                                <Typography sx={{ mt: 0.5 }} variant="h5">6 aircraft</Typography>
                                 <Typography sx={{ mt: 0.5 }}>
                                     <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>1 Light</Typography>
                                     <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>2 Mid-Size</Typography>
@@ -138,45 +138,47 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                                 <Divider />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <Link
-                                            href="mailto:info@example.com"
-                                            underline="none"
-                                            color="text.secondary"
-                                        >
-                                            <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Email
-                                        </Link>
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <Link
-                                            href="tel:+919876543210"
-                                            underline="none"
-                                            color="text.secondary"
-                                        >
-                                            <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Call
-                                        </Link>
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <Link
-                                            href="https://example.com"
-                                            underline="none"
-                                            color="text.secondary"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Websites
-                                        </Link>
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 'auto' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, '& a': { display: 'inline-flex', flexWrap: 'nowrap' } }}>
+                                    <Box sx={{ display: 'flex', gap: '10px'}}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <Link
+                                                href="mailto:info@example.com"
+                                                underline="none"
+                                                color="text.secondary"
+                                            >
+                                                <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Email
+                                            </Link>
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <Link
+                                                href="tel:+919876543210"
+                                                underline="none"
+                                                color="text.secondary"
+                                            >
+                                                <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Call
+                                            </Link>
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <Link
+                                                href="https://example.com"
+                                                underline="none"
+                                                color="text.secondary"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Websites
+                                            </Link>
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <Typography variant="body2" color="text.secondary">
                                             Specialties: 
                                         </Typography>
-                                        <Typography>
+                                        <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
                                             <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>IS-BAO</Typography>
                                             <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>Wyvern Wingman</Typography>
                                             <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>ARGUS Gold</Typography>
-                                        </Typography>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Grid>
@@ -184,9 +186,9 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, md: 6 }}>
                 <Card variant="outlined" sx={{ borderRadius: 3 }}>
-                    <CardContent>
+                    <CardContent className="card-content">
                         {/* header section */}
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -207,24 +209,24 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                             </IconButton>
                         </Box>
                         {/* body section */}
-                        <Grid container spacing={2} sx={{ mt: 2 }}>
-                            <Grid size={{ xs: 6, sm: 6 }}>
+                        <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating
                                 </Typography>
-                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="subtitle1">ARGUS Gold</Typography>
+                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">ARGUS Gold</Typography>
                             </Grid>
-                            <Grid size={{ xs: 6, sm: 6 }}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <WatchLaterOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Response Time
                                 </Typography>
-                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="subtitle1">{'< 2 hours'}</Typography>
+                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{'< 2 hours'}</Typography>
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <FlightOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Fleet Overview
                                 </Typography>
-                                <Typography sx={{ mt: 0.5 }} variant="subtitle1">6 aircraft</Typography>
+                                <Typography sx={{ mt: 0.5 }} variant="h5">6 aircraft</Typography>
                                 <Typography sx={{ mt: 0.5 }}>
                                     <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>1 Light</Typography>
                                     <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>2 Mid-Size</Typography>
@@ -254,45 +256,47 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                                 <Divider />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <Link
-                                            href="mailto:info@example.com"
-                                            underline="none"
-                                            color="text.secondary"
-                                        >
-                                            <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Email
-                                        </Link>
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <Link
-                                            href="tel:+919876543210"
-                                            underline="none"
-                                            color="text.secondary"
-                                        >
-                                            <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Call
-                                        </Link>
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <Link
-                                            href="https://example.com"
-                                            underline="none"
-                                            color="text.secondary"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Websites
-                                        </Link>
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 'auto' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, '& a': { display: 'inline-flex', flexWrap: 'nowrap' } }}>
+                                    <Box sx={{ display: 'flex', gap: '10px'}}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <Link
+                                                href="mailto:info@example.com"
+                                                underline="none"
+                                                color="text.secondary"
+                                            >
+                                                <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Email
+                                            </Link>
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <Link
+                                                href="tel:+919876543210"
+                                                underline="none"
+                                                color="text.secondary"
+                                            >
+                                                <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Call
+                                            </Link>
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <Link
+                                                href="https://example.com"
+                                                underline="none"
+                                                color="text.secondary"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Websites
+                                            </Link>
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <Typography variant="body2" color="text.secondary">
                                             Specialties: 
                                         </Typography>
-                                        <Typography>
+                                        <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
                                             <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>IS-BAO</Typography>
                                             <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>Wyvern Wingman</Typography>
                                             <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>ARGUS Gold</Typography>
-                                        </Typography>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Grid>
@@ -302,7 +306,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
             </Grid>
         </Grid>
 
-       <CustomModal headerText="Add Operator" open={addOperator} setOpen={setAddOperator} dataClose={() => setAddOperator(false)}>
+        <CustomModal headerText="Add Operator" open={addOperator} setOpen={setAddOperator} dataClose={() => setAddOperator(false)}>
             <Box>
                 {operators.map((op) => (
                     <Card
@@ -316,22 +320,22 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                             "&:hover": { boxShadow: "0 2px 8px rgba(0,0,0,0.15)" },
                         }}
                     >
-                        <CardContent sx={{ padding: 2 }}>
-                            <Grid container alignItems="flex-start" spacing={2}>
-                                <Grid size={{ xs: 1.3, sm: 1.3 }} sx={{ borderRight: '2px solid #E6E6E6', height: '100%', minHeight: '84px', alignContent: 'center' }}>
+                        <CardContent className="card-content">
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <Box sx={{ borderRight: '2px solid #E6E6E6', width: '50px', height: '100%', minHeight: '84px', alignContent: 'center' }}>
                                     <Checkbox
                                         checked={selectedOperators.includes(op.id)}
                                         onChange={() => handleSelect(op.id)}
                                     />
-                                </Grid>
+                                </Box>
 
-                                <Grid size={{ xs: 10.7, sm: 10.7 }}>
+                                <Box>
                                     <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                                         <IconButton sx={{backgroundColor: `${theme?.common?.blueColor} !important`, color: '#ffffff', borderRadius: '8px', width: '40px', height: '40px'}}>
                                             <FlightOutlinedIcon />
                                         </IconButton>
                                         <Box>
-                                            <Typography variant="subtitle1" fontWeight={600}>
+                                            <Typography variant="h5" fontWeight={600}>
                                             {op.name}
                                             </Typography>
                                             <Box
@@ -371,8 +375,8 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                                             <Typography key={tag} component="span" className="custom-pill" sx={{ backgroundColor: '#f4f5f7' }}>{tag}</Typography>
                                         ))}
                                     </Box>
-                                </Grid>
-                            </Grid>
+                                </Box>
+                            </Box>
                         </CardContent>
                     </Card>
                 ))}
@@ -399,7 +403,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                     </Box>
                 </Box>
             </Box>
-       </CustomModal>
+        </CustomModal>
     </>
   );
 };
