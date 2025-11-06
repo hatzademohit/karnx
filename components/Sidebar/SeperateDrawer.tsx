@@ -12,6 +12,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import FlightIcon from '@mui/icons-material/Flight';
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
+import { useAuth } from '@/app/context/AuthContext';
 
 interface SeperateDrawerProps {
   open: boolean;
@@ -26,14 +27,16 @@ export default function SeperateDrawer({
 }: SeperateDrawerProps) {
 
   const pathname = usePathname();
+  const { hasPermission } = useAuth();
+
   const collapseMenu = [
     { menu: 'Navination', icon: <MenuIcon />, path: '/navigation' },
     { menu: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { menu: 'Inquiries', icon: <SearchOutlinedIcon />, path: '/inquiries' },
-    { menu: 'Flight Ops', icon: <FlightIcon />, path: '/flight-ops' },
-    { menu: 'Fleet', icon: <BuildOutlinedIcon />, path: '/fleet' },
-    { menu: 'Crew', icon: <Groups2OutlinedIcon />, path: '/crew-roster' },
-    { menu: 'Booking Inquiry', icon: <Groups2OutlinedIcon />, path: '/booking-inquiry' },
+    // { menu: 'Inquiries', icon: <SearchOutlinedIcon />, path: '/inquiries', permission: 'user read' },
+    { menu: 'Flight Ops', icon: <FlightIcon />, path: '/flight-ops', permission: 'flight ops master read' },
+    { menu: 'Fleet', icon: <BuildOutlinedIcon />, path: '/fleet', permission: 'fleet master read' },
+    { menu: 'Crew', icon: <Groups2OutlinedIcon />, path: '/crew-roster', permission: 'crew master read' },
+    // { menu: 'Booking Inquiry', icon: <Groups2OutlinedIcon />, path: '/booking-inquiry', permission: 'user read' },
   ]
 
   return (
@@ -45,8 +48,10 @@ export default function SeperateDrawer({
         sx={{ position: 'absolute' }}
       >
         <DrawerHeader />
-         <List component='ul' className="List-menu-sidebar">
-            { collapseMenu && collapseMenu.map((data, index) => (
+        <List component='ul' className="List-menu-sidebar">
+          {collapseMenu
+            .filter((item) => !item.permission || hasPermission(item.permission))
+            .map((data) => (
               <React.Fragment key={data.path}>
                 <Tooltip
                   title={data.menu}
@@ -56,16 +61,16 @@ export default function SeperateDrawer({
                     popper: {
                       sx: {
                         boxShadow: '1px 0px 2px 0px rgba(0, 0, 0, 0.3)', backgroundColor: '#ffffff', opacity: open ? "0 !important" : 1,
-                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`] : { marginLeft: "0px" },
-                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .MuiTooltip-tooltip`] :
-                        { margin: "0px", backgroundColor: "#ffffff", color: "#000000", fontFamily: "poppins", fontSize: "13px", padding: "11px 18px 11px 0", borderRadius: "0 12px 12px 0", height: 40 },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]: { marginLeft: "0px" },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .MuiTooltip-tooltip`]:
+                          { margin: "0px", backgroundColor: "#ffffff", color: "#000000", fontFamily: "poppins", fontSize: "13px", padding: "11px 18px 11px 0", borderRadius: "0 12px 12px 0", height: 40 },
                       },
                     },
                   }}
                 >
                   <ListItem
                     disablePadding
-                    sx={{ display: "block", color: '#202531', '& a': {color: 'inherit', textDecoration: 'none'} }}
+                    sx={{ display: "block", color: '#202531', '& a': { color: 'inherit', textDecoration: 'none' } }}
                   >
                     {
                       data.menu == 'Navination' ?
@@ -74,6 +79,22 @@ export default function SeperateDrawer({
                           disableRipple
                           onClick={handleDrawerOpen}
                         >
+                          <ListItemIcon className="menu-icon"
+                            sx={{ minWidth: 0, mr: open ? 3 : "0px", justifyContent: "center", transition: "all 0.3s ease", color: 'inherit' }}
+                          >
+                            {data.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={data.menu}
+                            sx={{ opacity: open ? 1 : 0, flex: open ? "1 1 auto" : 0 }}
+                          />
+                        </ListItemButton>
+                        :
+                        <Link href={data.path}>
+                          <ListItemButton className={`menu-icon-btn ${pathname == data.path ? "active" : "inactive"}`}
+                            sx={{ minHeight: 40, height: 40, justifyContent: open ? "initial" : "center", px: "10.5px", mb: '8px' }}
+                            disableRipple
+                          >
                             <ListItemIcon className="menu-icon"
                               sx={{ minWidth: 0, mr: open ? 3 : "0px", justifyContent: "center", transition: "all 0.3s ease", color: 'inherit' }}
                             >
@@ -83,22 +104,6 @@ export default function SeperateDrawer({
                               primary={data.menu}
                               sx={{ opacity: open ? 1 : 0, flex: open ? "1 1 auto" : 0 }}
                             />
-                        </ListItemButton>
-                      : 
-                        <Link href={data.path}>
-                          <ListItemButton className={`menu-icon-btn ${ pathname == data.path ? "active" : "inactive" }`}
-                            sx={{ minHeight: 40, height: 40, justifyContent: open ? "initial" : "center", px: "10.5px", mb: '8px' }}
-                            disableRipple
-                          >
-                              <ListItemIcon className="menu-icon"
-                                sx={{ minWidth: 0, mr: open ? 3 : "0px", justifyContent: "center", transition: "all 0.3s ease", color: 'inherit' }}
-                              >
-                                {data.icon}
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={data.menu}
-                                sx={{ opacity: open ? 1 : 0, flex: open ? "1 1 auto" : 0 }}
-                              />
                           </ListItemButton>
                         </Link>
                     }

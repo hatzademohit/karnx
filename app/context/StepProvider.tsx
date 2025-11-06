@@ -3,6 +3,7 @@ import { apiBaseUrl } from "@/karnx/api";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApi } from "@/karnx/Hooks/useApi";
+import { useResponceApi } from "@/karnx/Hooks/useResponceApi";
 import { toast } from "react-toastify";
 
 type StepContextType = {
@@ -10,6 +11,8 @@ type StepContextType = {
   medicalSupOptions: any[];
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
+  formatedFormData: any;
+  setFormatedFormData: React.Dispatch<React.SetStateAction<any>>;
   radioTabActive: number;
   setRadioTabActive: React.Dispatch<React.SetStateAction<number>>;
   aircraftTypeOptions?: any[];
@@ -18,8 +21,8 @@ type StepContextType = {
   cateringDietaryOptions?: any[];
   storeBookingInquiryData?: (data: any) => Promise<any>;
   handleBackClick?: any;
-  handleNextClick?: any; 
-  handleFinish?: any; 
+  handleNextClick?: any;
+  handleFinish?: any;
   activeStep?: number;
   setActiveStep?: any
 };
@@ -35,6 +38,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter();
 
   const [formData, setFormData] = useState<any>({});
+  const [formatedFormData, setFormatedFormData] = useState<any>({});
 
   const { data: airportCity, refetch: fetchAirportCities } = useApi<any[]>(
     `${apiBaseUrl}/form-fields-data/airport-cities`
@@ -55,26 +59,27 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { data: travelingPurposeOption, refetch: fetchTravelingPurpose } = useApi<any[]>(
     `${apiBaseUrl}/form-fields-data/travel-purposes`
   );
-    
+
   const { data: cateringDietaryOptions, refetch: fetchCateringDietaryOptions } = useApi<any[]>(
     `${apiBaseUrl}/form-fields-data/catering-dietary`
   );
 
-  const { data: storeData, refetch: storeBookingInquiry, error } = useApi<any[]>(
-    `${apiBaseUrl}/form-fields-data/catering-dietary`, {
+  const { data: storeData, refetch: storeBookingInquiry, error } = useResponceApi<any[]>(
+    `${apiBaseUrl}/booking-inquiries`, {
     method: "POST",
     skip: true,
-    body: formData,
+    body: formatedFormData,
   });
 
   const storeBookingInquiryData = async () => {
     await storeBookingInquiry(); // Will trigger POST call
-
     if (error) {
       toast.error(error || "Failed to submit booking inquiry.");
-    } else if (storeData) {
-      toast.success("Booking inquiry submitted successfully!");
-      router.push("/inquiries");
+    } else if (storeData?.status === true) {
+      toast.success(storeData?.message);
+      router.push("/dashboard");
+    } else {
+      toast.error(storeData?.message);
     }
   };
 
@@ -82,7 +87,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchAirportCities();
     fetchMedicalAssistanceOptions();
     fetchAirCraftTypes();
-    fetchCrewRequirements(); 
+    fetchCrewRequirements();
     fetchTravelingPurpose();
     fetchCateringDietaryOptions();
   }, []);
@@ -90,12 +95,13 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const handleNextClick = () => setActiveStep((prev) => prev + 1);
   const handleBackClick = () => setActiveStep((prev) => prev - 1);
 
-    const handleFinish = async () => {
-      await storeBookingInquiryData();
-    };
+  const handleFinish = async () => {
+    console.log(formatedFormData, 'mukesh');
+    await storeBookingInquiryData();
+  };
 
   return (
-    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, handleFinish, handleBackClick, handleNextClick, activeStep, setActiveStep }}>
+    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, handleFinish, handleBackClick, handleNextClick, activeStep, setActiveStep, formatedFormData, setFormatedFormData }}>
       {children}
     </StepContext.Provider>
   );

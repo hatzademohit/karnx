@@ -10,6 +10,17 @@ import { InquiryDetails } from '@/components/DashboardComponents';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
+import { apiBaseUrl } from '@/karnx/api';
+import { useApi } from '@/karnx/Hooks/useApi';
+
+interface TravelAgentCardCount {
+    this_month_mybooking?: number;
+    my_booking_active_clients?: number;
+    total_inquiries_this_month?: number;
+    inquiry_pending_this_month?: number;
+    confirmed_booking_this_week?: number;
+    earning?: number | string;
+}
 
 const TravelAgent = () => {
 
@@ -19,36 +30,29 @@ const TravelAgent = () => {
     const [inqueryData, setInqueryData] = useState(null);
     const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
 
-    const [data, setData] = useState([
-       {
-            "id": 92,
-            "inquiryId": "BQ-REF-00092",
-            "priority": [
-                "NEW",
-                "MEDIUM PRIORITY"
-            ],
-            "route": "NAG → PNQ",
-            "clientName": "KarnX",
-            "clientEmail": null,
-            "inquiryDate": "Sep/05/2025",
-            "date": "September 25, 2025",
-            "passangers": 4,
-            "aircraft": "Light Waight",
-            "assign": "Assigned",
-            "status": "Requested",
-            "status_color": "#cccccc",
-            "operators": "opt",
-            "value": "val"
-        },
-    ])
-   const [cardInfoData, setCardInfoData] = useState([
-        { count: 24, label: 'My Bookings', status: 'This Month', icon: <ErrorOutlineIcon /> },
-        { count: 3, label: 'Active Clients', status: 'Currently booking with you', icon: <ErrorOutlineIcon /> },
-        { count: 15, label: 'Total Inquiries', status: 'This Month', icon: <AccessTimeOutlinedIcon /> },
-        { count: 6, label: 'Inquiries Pending', status: 'This Month', icon: <AlarmOnIcon /> },
-        { count: 12, label: 'Confirmed Bookings', status: 'This Week', icon: <CheckOutlinedIcon /> },
-        { count: '$15750', label: 'Earnings', status: '+22% from BLRt month', icon: <CheckOutlinedIcon /> },
-    ])  
+    /** get card count from API*/
+    useEffect(() => {
+        fetchCardCount();
+        fetchCharterInquiries();
+    }, []);
+
+    const { data: result, refetch: fetchCardCount } = useApi<TravelAgentCardCount>(
+        `${apiBaseUrl}/dashboard/travelagent-cardcount`
+    );
+
+    const cardInfoData = [
+        { count: result?.this_month_mybooking, label: 'My Bookings', status: 'This Month', icon: <ErrorOutlineIcon /> },
+        { count: result?.my_booking_active_clients, label: 'Active Clients', status: 'Currently booking with you', icon: <ErrorOutlineIcon /> },
+        { count: result?.total_inquiries_this_month, label: 'Total Inquiries', status: 'This Month', icon: <AccessTimeOutlinedIcon /> },
+        { count: result?.inquiry_pending_this_month, label: 'Inquiries Pending', status: 'This Month', icon: <AlarmOnIcon /> },
+        { count: result?.confirmed_booking_this_week, label: 'Confirmed Bookings', status: 'This Week', icon: <CheckOutlinedIcon /> },
+        { count: '$' + result?.earning, label: 'Earnings', status: '+22% from BLRt month', icon: <CheckOutlinedIcon /> },
+    ];
+
+    const { data: data, refetch: fetchCharterInquiries } = useApi<any[]>(
+        `${apiBaseUrl}/dashboard/travelagent-charter-inquiries`
+    );
+
 
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)
@@ -123,13 +127,13 @@ const TravelAgent = () => {
         ])
     }, []);
 
-    return(
+    return (
         <>
             {!showDetailsTabs &&
                 <Grid container spacing={3}>
                     {cardInfoData && cardInfoData.map((item, index) => (
                         <Grid size={{ lg: 2, md: 3, sm: 6, xs: 12 }} key={index}>
-                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon}/>
+                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>

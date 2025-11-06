@@ -564,7 +564,7 @@ const FleetOverview = () => {
 
         <CardDataGrid
           buttonText={hasPermission && hasPermission(['fleet create']) ? 'Add Fleet' : undefined}
-          onClick={hasPermission && hasPermission(['fleet create', 'fleet.add', 'asset.create']) ? handleOpenAdd : undefined}
+          onClick={hasPermission && hasPermission(['fleet create']) ? handleOpenAdd : undefined}
           editClick={handleEdit}
           viewClick={handleView}
           data={fleetRows}

@@ -60,13 +60,13 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         render={({ field: toField }) => (
                           <SwapComp
                             options={airportOptions}
-                            fromValue={field.value}
-                            toValue={toField.value}
-                            onFromChange={(val: any) =>
-                              setValue(`multiCity[${index}].multiCityfrom`, val?.code)
-                            }
+                            fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
+                            toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                            onFromChange={(val: any) => {
+                              setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
+                            }}
                             onToChange={(val: any) =>
-                              setValue(`multiCity[${index}].multiCityto`, val?.code)
+                              setValue(`multiCity[${index}].multiCityto`, val?.id, { shouldValidate: true, shouldDirty: true })
                             }
                             onSwap={(from, to) => {
                               setValue(`multiCity[${index}].multiCityfrom`, from);
@@ -103,69 +103,73 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                   />
                 </TableCell>
 
-                <TableCell align="center" sx={{position: 'relative'}}>
+                <TableCell align="center" sx={{ position: 'relative' }}>
                   <Box sx={{ position: 'absolute', top: '35px' }}>
-                      <IconButton onClick={() => handleDeleteRow(rowId)}>
-                        <ClearRoundedIcon />
-                      </IconButton>
+                    <IconButton onClick={() => handleDeleteRow(rowId)}>
+                      <ClearRoundedIcon />
+                    </IconButton>
                   </Box>
                 </TableCell>
               </TableRow>
             ))}
             <TableRow>
-                <TableCell colSpan={2}>
-                  {/* From-To using Controller */}
-                  <Controller
-                    name="multiCityfromReturn"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Controller
-                        name="multiCitytoReturn"
-                        control={control}
-                        defaultValue=""
-                        render={({ field: toField }) => (
-                          <SwapComp
-                            options={airportOptions}
-                            fromValue={field.value}
-                            toValue={toField.value}
-                            onFromChange={(val: any) => setValue("multiCityfromReturn", val?.code)}
-                            onToChange={(val: any) => setValue("multiCitytoReturn", val?.code)}
-                            onSwap={(from, to) => {
-                              setValue("multiCityfromReturn", from);
-                              setValue("multiCitytoReturn", to);
-                            }}
-                            fromError={!!errors?.multiCityfromReturn}
-                            fromHelpertext={errors?.multiCityfromReturn?.message}
-                            toError={!!errors?.multiCitytoReturn}
-                            toHelpertext={errors?.multiCitytoReturn?.message}
-                          />
-                        )}
-                      />
-                    )}
-                  />
-                </TableCell>
+              <TableCell colSpan={2}>
+                {/* From-To using Controller */}
+                <Controller
+                  name="multiCityfromReturn"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Controller
+                      name="multiCitytoReturn"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: toField }) => (
+                        <SwapComp
+                          options={airportOptions}
+                          fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
+                          toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                          onFromChange={(val: any) => {
+                            setValue("multiCityfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
+                          }}
+                          onToChange={(val: any) =>
+                            setValue("multiCitytoReturn", val?.id, { shouldValidate: true, shouldDirty: true })
+                          }
+                          onSwap={(from, to) => {
+                            setValue("multiCityfromReturn", from);
+                            setValue("multiCitytoReturn", to);
+                          }}
+                          fromError={!!errors?.multiCityfromReturn}
+                          fromHelpertext={errors?.multiCityfromReturn?.message}
+                          toError={!!errors?.multiCitytoReturn}
+                          toHelpertext={errors?.multiCitytoReturn?.message}
+                        />
+                      )}
+                    />
+                  )}
+                />
+              </TableCell>
 
-                <TableCell colSpan={2}>
-                  {/* Date using Controller */}
-                  <Controller
-                    name="multiCityreturnDate"
-                    control={control}
-                    defaultValue={null}
-                    render={({ field }) => (
-                      <CustomDateTimePicker
-                        datatimelabel="Return Date & Time"
-                        required={true}
-                        withClock
-                        value={field.value}
-                        onChange={(val: any) => field.onChange(val)}
-                        error={!!errors?.multiCityreturnDate}
-                        helperText={errors?.multiCityreturnDate?.message}
-                      />
-                    )}
-                  />
-                </TableCell>
-              </TableRow>
+              <TableCell colSpan={2}>
+                {/* Date using Controller */}
+                <Controller
+                  name="multiCityreturnDate"
+                  control={control}
+                  defaultValue={null}
+                  render={({ field }) => (
+                    <CustomDateTimePicker
+                      datatimelabel="Return Date & Time"
+                      required={true}
+                      withClock
+                      value={field.value ? dayjs(field.value) : null}
+                      onChange={(val: any) => field.onChange(val)}
+                      error={!!errors?.multiCityreturnDate}
+                      helperText={errors?.multiCityreturnDate?.message}
+                    />
+                  )}
+                />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>

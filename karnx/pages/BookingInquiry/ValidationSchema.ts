@@ -118,23 +118,31 @@ export const passengerAircraftSchema = yup.object().shape({
   }),
   // 
   isMedicalAssistanceReq: yup.boolean().required("Please select medical assistance"),
-  specialAssistance: yup.object().default({}).when("isMedicalAssistanceReq", {
-    is: true,
-    then: (schema) => schema.test("at-least-one-selected", "Please select at least one assistance option",
-      (value) => value && Object.values(value).some((v) => v === true)
-    ),
-    otherwise: (schema) => schema.notRequired(),
-  }),
+  // specialAssistance: yup.object().default({}).when("isMedicalAssistanceReq", {
+  //   is: true,
+  //   then: (schema) => schema.test("at-least-one-selected", "Please select at least one assistance option",
+  //     (value) => value && Object.values(value).some((v) => v === true)
+  //   ),
+  //   otherwise: (schema) => schema.notRequired(),
+  // }),
+  specialAssistance: yup.array()
+    .min(1, "Please select at least one assistance option") // Ensure at least one item is selected
+    .when("isMedicalAssistanceReq", {
+      is: true, // Check if medical assistance is required
+      then: (schema) => schema, // If true, apply the `.min()` check
+      otherwise: (schema) => schema.notRequired(), // If false, make the field optional
+    })
+    .default([]), // Default value is an empty array if no values are selected
+
   // 
   checkedBags: yup.string().required("Please select checked bags"),
   carryOnBags: yup.string().required("Please select carry on bags"),
   overSizedItems: yup.string().required("Please select over sized items"),
   // 
-  preferredServices: yup.object().default({}).test(
-    "at-least-one-service-selected",
-    "Please select at least one preferred service",
-    (value) => !!value && Object.values(value).some((v) => v === true)
-  ),
+  preferredServices: yup.array()
+    .min(1, "Please select at least one preferred service") // Ensure at least one item is selected
+    .default([]), // Default value as an empty array
+
   // 
   crewRequirements: yup.object().shape({
     cabin_crew_pref_id: yup.string(),
@@ -157,25 +165,28 @@ export const passengerAircraftSchema = yup.object().shape({
     otherwise: (schema) => schema.notRequired(),
   }),
 
-  allergies: yup.string().when("isCateringRequired", { is: true, then: (schema) => 
-    schema.required("Please enter allergies & dietary restrictions"), 
+  allergies: yup.string().when("isCateringRequired", {
+    is: true, then: (schema) =>
+      schema.required("Please enter allergies & dietary restrictions"),
     otherwise: (schema) => schema.notRequired(),
   }),
-  drinkPreferences: yup.string().when("isCateringRequired", { is: true, then: (schema) => 
-    schema.required("Please enter drink preferences"), 
+  drinkPreferences: yup.string().when("isCateringRequired", {
+    is: true, then: (schema) =>
+      schema.required("Please enter drink preferences"),
     otherwise: (schema) => schema.notRequired(),
   }),
-  customServices: yup.string().when("isCateringRequired", { is: true, then: (schema) => 
-    schema.required("Please enter custom services"), 
+  customServices: yup.string().when("isCateringRequired", {
+    is: true, then: (schema) =>
+      schema.required("Please enter custom services"),
     otherwise: (schema) => schema.notRequired(),
   }),
   // 
-documentFile: yup
-  .mixed<File[]>() // Expecting an array of files
-  .nullable()
-  .test("file-required", "Please upload a document", (value) => {
-    return Array.isArray(value) && value.length > 0;
-  }),
+  documentFile: yup
+    .mixed<File[]>() // Expecting an array of files
+    .nullable()
+    .test("file-required", "Please upload a document", (value) => {
+      return Array.isArray(value) && value.length > 0;
+    }),
 
 });
 

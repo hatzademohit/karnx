@@ -3,6 +3,7 @@ import { CustomDateTimePicker, SwapComp } from "@/components";
 import { Box, Grid } from "@mui/material";
 import { useStep } from '@/app/context/StepProvider';
 import { Controller } from "react-hook-form";
+import dayjs from "dayjs";
 
 const RoundTripFlights = ({ control, setValue, errors }: any) => {
 
@@ -14,7 +15,7 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
         id: airport.id,
         code: airport.code,
     }));
-    
+
     return (
         <Box
             sx={{
@@ -37,10 +38,14 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                                 render={({ field: toField }) => (
                                     <SwapComp
                                         options={airportOptions}
-                                        fromValue={field.value}
-                                        toValue={toField.value}
-                                        onFromChange={(val:any) => setValue("roundTripfrom", val?.code)}
-                                        onToChange={(val:any) => setValue("roundTripto", val?.code)}
+                                        fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
+                                        toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                                        onFromChange={(val: any) => {
+                                            setValue("roundTripfrom", val?.id, { shouldValidate: true, shouldDirty: true });
+                                        }}
+                                        onToChange={(val: any) =>
+                                            setValue("roundTripto", val?.id, { shouldValidate: true, shouldDirty: true })
+                                        }
                                         onSwap={(from, to) => {
                                             setValue("roundTripfrom", from);
                                             setValue("roundTripto", to);
@@ -64,6 +69,7 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                         render={({ field }) => (
                             <CustomDateTimePicker
                                 {...field}
+                                value={field.value ? dayjs(field.value) : null}
                                 datatimelabel="Departure Date & Time"
                                 withClock
                                 error={!!errors.roundTripdepartureDate}
@@ -72,7 +78,7 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                         )}
                     />
                 </Grid>
-                
+
                 <Grid size={{ lg: 8, md: 8, sm: 12, xs: 12 }}>
                     <Controller
                         name="roundTripfromReturn"
@@ -84,10 +90,14 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                                 render={({ field: toField }) => (
                                     <SwapComp
                                         options={airportOptions}
-                                        fromValue={field.value}
-                                        toValue={toField.value}
-                                        onFromChange={(val:any) => setValue("roundTripfromReturn", val?.code)}
-                                        onToChange={(val:any) => setValue("roundTriptoReturn", val?.code)}
+                                        fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
+                                        toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                                        onFromChange={(val: any) => {
+                                            setValue("roundTripfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
+                                        }}
+                                        onToChange={(val: any) =>
+                                            setValue("roundTriptoReturn", val?.id, { shouldValidate: true, shouldDirty: true })
+                                        }
                                         onSwap={(from, to) => {
                                             setValue("roundTripfromReturn", from);
                                             setValue("roundTriptoReturn", to);
@@ -112,6 +122,7 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                             <CustomDateTimePicker
                                 {...field}
                                 datatimelabel="Return Date & Time"
+                                value={field.value ? dayjs(field.value) : null}
                                 withClock
                                 error={!!errors.roundTripreturnDate}
                                 helperText={errors.roundTripreturnDate?.message}

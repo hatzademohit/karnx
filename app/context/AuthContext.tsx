@@ -13,6 +13,7 @@ interface User {
   email: string;
   client_id?: number;
   avatar?: any;
+  access_type?: string; // e.g., 'admin', 'operator', etc.
 }
 
 interface AuthContextType {

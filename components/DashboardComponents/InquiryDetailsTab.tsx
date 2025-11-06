@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Card, CardContent, Typography, Grid, Chip } from "@mui/material";
 import { FlightTakeoff, Event } from "@mui/icons-material";
+import { apiBaseUrl } from "@/karnx/api";
+import { useApi } from "@/karnx/Hooks/useApi";
 
 interface InquiryDetailsTabProps {
   inquiryTabData: any;
 }
 
+interface InquiryDetailsValue {
+  route: string;
+  date: string;
+  passangers: string;
+  aircraft: string;
+  traveling_purpose: string;
+  flexible_date_range: string;
+  is_traveling_pets: boolean;
+  checkedBag: string;
+  carryOnBag: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+
+
+}
+
 const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData }) => {
+
+  const { data, refetch: fetchInquiryDetails } = useApi<InquiryDetailsValue>(
+    `${apiBaseUrl}/inquiry-details/get-details/${inquiryTabData}`
+  );
+  useEffect(() => {
+    fetchInquiryDetails();
+  }, []);
   return (
     <>
       {/* Flight Information */}
@@ -23,7 +49,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
                 <FlightTakeoff fontSize="small" sx={{ mr: 0.5 }} />
-                {inquiryTabData?.route}
+                {data?.route}
               </Typography>
             </Grid>
 
@@ -32,7 +58,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Departure Date
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                {inquiryTabData?.date}
+                {data?.date}
               </Typography>
             </Grid>
 
@@ -41,7 +67,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Passengers
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                {inquiryTabData?.passangers}
+                {data?.passangers}
               </Typography>
             </Grid>
 
@@ -50,7 +76,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Aircraft Type
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                Ultra Long-Range
+                {data?.aircraft}
               </Typography>
             </Grid>
 
@@ -59,7 +85,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Purpose of Trip
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                Business / Corporate
+                {data?.traveling_purpose}
               </Typography>
             </Grid>
           </Grid>
@@ -77,7 +103,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
           >
             <Event fontSize="small" color="action" />
             <Typography variant="body2">
-              <strong>Flexible Dates:</strong> Any day in March
+              <strong>Flexible Dates:</strong> {data?.flexible_date_range}
             </Typography>
           </Box>
         </CardContent>
@@ -95,7 +121,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Client Name
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                {inquiryTabData?.clientName}
+                {data?.clientName}
               </Typography>
             </Grid>
 
@@ -104,7 +130,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Email
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                {inquiryTabData?.clientEmail}
+                {data?.clientEmail}
               </Typography>
             </Grid>
 
@@ -113,7 +139,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Phone
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                +91 98765 43210
+                {data?.clientPhone}
               </Typography>
             </Grid>
           </Grid>
@@ -133,21 +159,21 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                 Checked Bags:
               </Typography>
               <Typography variant="body1" fontWeight={600} mb={1}>
-                8
+                {data?.checkedBag}
               </Typography>
 
               <Typography variant="body2" color="text.secondary">
                 Carry-on Bags:
               </Typography>
               <Typography variant="body1" fontWeight={600} mb={1}>
-                8
+                {data?.carryOnBag}
               </Typography>
 
               <Typography variant="body2" color="text.secondary">
                 Pets:
               </Typography>
               <Typography sx={{ fontFamily: "poppins-md" }} variant="subtitle1">
-                No
+                {data?.is_traveling_pets}
               </Typography>
             </CardContent>
           </Card>

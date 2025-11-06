@@ -14,18 +14,35 @@ import { apiBaseUrl } from '@/karnx/api';
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApi } from '@/karnx/Hooks/useApi';
 
+interface KXManagerCardCount {
+    new_inquiries?: number;
+    quote_pending?: number;
+    clients_decision?: number;
+    confirmed_booking?: number;
+    response_time?: number | string;
+}
+
 const KXManager = () => {
 
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const [cardInfoData, setCardInfoData] = useState([
-        { count: 2, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today', icon: <ErrorOutlineIcon /> },
-        { count: 15, label: 'Quotes Pending', status: 'Operator Response', desc: 'Avg 4.2h response', icon: <AccessTimeOutlinedIcon /> },
-        { count: 12, label: 'Client Decisions', status: 'Pending Review', desc: '2 expiring soon', icon: <AlarmOnIcon /> },
-        { count: 3, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue', icon: <CheckCircleOutlineIcon /> },
-        { count: 10, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
-    ])    
+    /** get card count from API*/
+    useEffect(() => {
+        fetchCardCount();
+    }, []);
+
+    const { data: result, refetch: fetchCardCount } = useApi<KXManagerCardCount>(
+        `${apiBaseUrl}/dashboard/kxmanager-cardcount`
+    );
+
+    const cardInfoData = [
+        { count: result?.new_inquiries, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today', icon: <ErrorOutlineIcon /> },
+        { count: result?.quote_pending, label: 'Quotes Pending', status: 'Operator Response', desc: 'Avg 4.2h response', icon: <AccessTimeOutlinedIcon /> },
+        { count: result?.clients_decision, label: 'Client Decisions', status: 'Pending Review', desc: '2 expiring soon', icon: <AlarmOnIcon /> },
+        { count: result?.confirmed_booking, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue', icon: <CheckCircleOutlineIcon /> },
+        { count: result?.response_time, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
+    ]
     const [columns, setColumns] = useState([])
     // const [data, setData] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
@@ -112,13 +129,13 @@ const KXManager = () => {
         fetchInquiries();
     }, []);
 
-    return(
+    return (
         <>
             {!showDetailsTabs &&
                 <Grid container spacing={3}>
                     {cardInfoData && cardInfoData.map((item, index) => (
                         <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index}>
-                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} InfoIcon={item.icon}/>
+                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} InfoIcon={item.icon} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
@@ -142,7 +159,7 @@ const KXManager = () => {
             {showDetailsTabs &&
                 <InquiryDetails inquiryData={inqueryData} />
             }
-            
+
         </>
     )
 }

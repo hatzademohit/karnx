@@ -18,17 +18,17 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
     {
       label: "Inquiry Details",
       icon: <InsertDriveFileOutlinedIcon fontSize="small" />,
-      content: <InquiryDetailsTab inquiryTabData={inquiryData} />,
+      content: <InquiryDetailsTab inquiryTabData={inquiryData.id} />,
     },
     ...(!hideOperatorTabs
-    ? [
+      ? [
         {
           label: "Operators (0)",
           icon: <SettingsOutlinedIcon fontSize="small" />,
           content: <OperatorsTab />,
         },
       ]
-    : []),
+      : []),
     {
       label: "Quotes (0)",
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
@@ -45,7 +45,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
             {inquiryData?.inquiryId}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Created on {inquiryData?.inquiryDate}
+            Created on {inquiryData?.created_on}
           </Typography>
         </Box>
         <Chip label={inquiryData?.status} color="info" variant="filled" />

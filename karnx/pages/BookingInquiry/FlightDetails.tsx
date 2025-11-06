@@ -11,9 +11,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { oneWaySchema, roundTripSchema, multiCitySchema } from "./ValidationSchema";
 import { useAuth } from "@/app/context/AuthContext";
 
-const FlightDetails = () =>{
-    const {theme} = useAuth();
-    const { radioTabActive, setRadioTabActive, activeStep, handleBackClick, handleNextClick, formData, setFormData  } = useStep();
+const FlightDetails = () => {
+    const { theme } = useAuth();
+    const { radioTabActive, setRadioTabActive, activeStep, handleBackClick, handleNextClick, formData, setFormData } = useStep();
 
     const schema = useMemo(() => {
         if (radioTabActive === 0) return oneWaySchema;
@@ -41,20 +41,21 @@ const FlightDetails = () =>{
             roundTripreturnDate: formData?.roundTripreturnDate || null,
             // Multi-city fields
             multiCity: [
-            {
-                multiCityfrom: formData?.multiCityfrom || '',
-                multiCityto: formData?.multiCityto || '',
-                multiCitydepartureDate: formData?.multiCitydepartureDate || null,
-            },
+                {
+                    multiCityfrom: formData?.multiCityfrom || '',
+                    multiCityto: formData?.multiCityto || '',
+                    multiCitydepartureDate: formData?.multiCitydepartureDate || null,
+                },
             ],
             multiCityfromReturn: formData?.multiCityfromReturn || '',
             multiCitytoReturn: formData?.multiCitytoReturn || '',
             multiCityreturnDate: formData?.multiCityreturnDate || null,
+            //tripType: radioTabActive,
         },
     });
 
     const onSubmit = (data: any) => {
-        setFormData((prev: any) => ({...prev, ...data}));
+        setFormData((prev: any) => ({ ...prev, ...data }));
         console.log("Form Submitted: ", data);
         handleNextClick();
     };
@@ -67,40 +68,39 @@ const FlightDetails = () =>{
     ]
 
     useEffect(() => {
-        if(radioTabActive === undefined){
+        if (radioTabActive === undefined) {
             setRadioTabActive(0);
         }
         setRadioTabActive(radioTabActive);
     }, [radioTabActive]);
-
-    return(
+    return (
         <>
-            <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px'}}>
-                <Typography variant="h3" sx={{color: theme?.common?.redColor, mb: '24px'}}>Popular Routes</Typography>
-                <Box sx={{ display: 'flex', gap: '24px'}}>
+            <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px' }}>
+                <Typography variant="h3" sx={{ color: theme?.common?.redColor, mb: '24px' }}>Popular Routes</Typography>
+                <Box sx={{ display: 'flex', gap: '24px' }}>
                     {popularRoutes && popularRoutes.map((route, index) => (
-                        <Box key={index + route.from} sx={{border: '1px solid #E6E6E6', padding: '12px 18px', display: 'flex', alignItems: 'center', gap: '16px', width: 'fit-content'}}>
+                        <Box key={index + route.from} sx={{ border: '1px solid #E6E6E6', padding: '12px 18px', display: 'flex', alignItems: 'center', gap: '16px', width: 'fit-content' }}>
                             <Typography variant="h6">{route.from}</Typography>
                             <TrendingFlatIcon />
                             <Typography variant="h6">{route.to}</Typography>
-                            <AirplanemodeActiveRoundedIcon sx={{fontSize: '20px', color: '#808080'}} />
+                            <AirplanemodeActiveRoundedIcon sx={{ fontSize: '20px', color: '#808080' }} />
                         </Box>
                     ))}
                 </Box>
-                <Typography variant="h3" sx={{color: theme?.common?.redColor, my: '24px'}}>Flight Details</Typography>
-                <RadioTabs defaultValue={radioTabActive} onchange={ (value: number) => { setRadioTabActive(value)}}>
-                    <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
+                <Typography variant="h3" sx={{ color: theme?.common?.redColor, my: '24px' }}>Flight Details</Typography>
+                <RadioTabs defaultValue={radioTabActive} onchange={(value: number) => { setRadioTabActive(value) }}>
+                    <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
                         <OneWayFlights control={control} errors={errors} setValue={setValue} />
                     </RadioTabs.Tab>
-                    <RadioTabs.Tab label="Round Trip" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
+                    <RadioTabs.Tab label="Round Trip" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
                         <RoundTripFlights control={control} setValue={setValue} errors={errors} />
                     </RadioTabs.Tab>
-                    <RadioTabs.Tab label="Multi City" icon={<Radio className="custom-radio" size="small" checked={false} sx={{margin: '0 !important'}} />}>
+                    <RadioTabs.Tab label="Multi City" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
                         <MultiCityFlights control={control} setValue={setValue} errors={errors} />
                     </RadioTabs.Tab>
                 </RadioTabs>
 
-                <Box sx={{mt: '25px'}}>
+                <Box sx={{ mt: '25px' }}>
                     <Controller
                         name="isFlexibleDates"
                         control={control}
@@ -119,25 +119,27 @@ const FlightDetails = () =>{
                         )}
                     />
                 </Box>
-                {watch("isFlexibleDates") && 
+                {watch("isFlexibleDates") &&
                     <Controller
                         name="flexibleRange"
                         control={control}
                         render={({ field }) => (
-                           <CustomTextField
+                            <CustomTextField
                                 size="medium"
-                                inputLabel="Specifics"
+                                inputLabel=""
                                 placeholder="Enter Specifics"
                                 {...field}
                                 error={!!errors.flexibleRange}
                                 helperText={errors?.flexibleRange?.message as string}
-                           />
+                            />
                         )}
                     />
                 }
-                <Box sx={{ fontFamily: 'poppins-lt', fontSize: '14px', display: 'flex', alignItems: 'center', mt: '10px' }}>
-                    Please specify a range, e.g. 18-09-2025 to 25-09-2025
-                </Box>
+                {watch("isFlexibleDates") &&
+                    <Box sx={{ fontFamily: 'poppins-lt', fontSize: '14px', display: 'flex', alignItems: 'center', mt: '10px' }}>
+                        Please specify a range, e.g. 18-09-2025 to 25-09-2025
+                    </Box>
+                }
                 {/* <Box sx={{mt: '10px', padding: '10px 16px', border: '1px solid #E6E6E6', backgroundColor: '#F2F2F2', borderRadius: '2px'}}>
                    <Box sx={{ fontFamily: 'poppins-lt', fontSize: '14px', display: 'flex', alignItems: 'center' }}>
                         Please specify a range, e.g., 
@@ -158,7 +160,7 @@ const FlightDetails = () =>{
             <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
                 <Button
                     disabled={activeStep === 0}
-                    onClick={ () => handleBackClick() }
+                    onClick={() => handleBackClick()}
                     className="btn btn-outlined"
                     sx={{ width: '100%' }}
                 >
