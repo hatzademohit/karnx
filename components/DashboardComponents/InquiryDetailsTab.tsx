@@ -10,13 +10,13 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
   return (
     <>
       {/* Flight Information */}
-      <Card variant="outlined" sx={{ borderRadius: 3, mb: 2 }}>
+      <Card variant="outlined" sx={{ borderRadius: 3, mb: {md: 2, xs: 1} }}>
         <CardContent sx={{ bgcolor: "#F7F8FC" }} className="card-content">
           <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
             Flight Information
           </Typography>
 
-          <Grid container spacing={2}>
+          <Grid container spacing={{ md: 2, xs: 1 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">
                 Route
@@ -84,12 +84,12 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
       </Card>
 
       {/* Contact Information */}
-      <Card variant="outlined" sx={{ borderRadius: 3, mb: 2 }}>
+      <Card variant="outlined" sx={{ borderRadius: 3, mb: {md: 2, xs: 1} }}>
         <CardContent className="card-content">
           <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
             Contact Information
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={{ md: 2, xs: 1 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">
                 Client Name
@@ -121,7 +121,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
       </Card>
 
       {/* Baggage & Services */}
-      <Grid container spacing={2}>
+      <Grid container spacing={{ md: 2, xs: 1 }}>
         {/* Baggage */}
         <Grid size={{ xs: 12, sm: 6 }}>
           <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>

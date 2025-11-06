@@ -79,7 +79,13 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  minHeight: `${headerHeightLg}px !important`
+  minHeight: `${headerHeightXs}px !important`,
+  [theme.breakpoints.up('md')]: {
+    minHeight: `${headerHeightMd}px !important`,
+  },
+  [theme.breakpoints.up('lg')]: {
+    minHeight: `${headerHeightLg}px !important`,
+  },
 }));
 
 interface AppBarProps {

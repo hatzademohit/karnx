@@ -395,7 +395,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 			{createNewQuote && <CreateNewQuoteStepper />}
 			{/* Quote Details Modal */}
 			<CustomModal headerText='Quote Details' open={viewQuoteDetails} setOpen={setViewQuoteDetails} dataClose={() => setViewQuoteDetails(false)} className="modal-lg">
-				<Grid container spacing={2}>
+				<Grid container spacing={{ md: 2, xs: 1 }}>
 					{/* Flight Details */}
 					<Grid size={{ xs: 12, md: 6 }}>
 						<Card elevation={2}>
@@ -404,7 +404,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 									Flight Details
 								</Typography>
 
-								<Grid container spacing={2}>
+								<Grid container spacing={{ md: 2, xs: 1 }}>
 									<Grid size={{ xs: 6 }}>
 										<Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
 											<FlightTakeoffIcon />

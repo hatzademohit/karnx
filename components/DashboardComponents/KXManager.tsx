@@ -116,14 +116,14 @@ const KXManager = () => {
         <>
             {!showDetailsTabs &&
                 <>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={{ md: 3, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
                         <Grid size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }} key={index}>
                             <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} InfoIcon={item.icon}/>
                         </Grid>
                     ))}
                     </Grid>
-                    <Grid container spacing={3} mt={2}>
+                    <Grid container spacing={{ md: 3, xs: 2 }} mt={2}>
                         <Grid size={{ lg: 6, md: 12, sm: 12, xs: 12 }}>
                             <ActivityTimeLine />
                         </Grid>

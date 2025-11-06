@@ -67,7 +67,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
         </Box>
 
         {/* operators */}
-        <Grid container spacing={2}>
+        <Grid container spacing={{ md: 2, xs: 1 }}>
             <Grid size={{ xs: 12, md: 6 }}>
                 <Card variant="outlined" sx={{ borderRadius: 3 }}>
                     <CardContent className="card-content">
@@ -91,7 +91,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                             </IconButton>
                         </Box>
                         {/* body section */}
-                        <Grid container spacing={2} sx={{ mt: 2 }}>
+                        <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
                             <Grid size={{ xs: 12, sm: 6 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating
@@ -209,7 +209,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                             </IconButton>
                         </Box>
                         {/* body section */}
-                        <Grid container spacing={2} sx={{ mt: 2 }}>
+                        <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
                             <Grid size={{ xs: 12, sm: 6 }}>
                                 <Typography variant="body2" color="text.secondary">
                                     <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating

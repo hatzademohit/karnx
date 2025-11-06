@@ -41,8 +41,8 @@ const FlightOperations = () => {
 
     return(
         <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color, mb: theme?.heading?.marginBottom}}>Flight Operations</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: theme?.heading?.marginBottom }}>
+                <Typography component='h1' variant="h1" sx={{color: theme?.heading?.color}}>Flight Operations</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <CustomTextField 
                         variant='outlined' 

@@ -64,7 +64,7 @@ const CreateNewQuoteStepper = () => {
 					))}
 				</Stepper>
 
-				<Box sx={{ mb: 3, border: `1px solid ${theme?.common.borderColor}`, p: 3 }}>
+				<Box sx={{ mb: 3, border: `1px solid ${theme?.common.borderColor}`, p: { md: 3, xs: '10px' } }}>
 					{activeStep === 0 && <AircraftFlightDetails />}
 					{activeStep === 1 && <PricingDetails />}
 					{activeStep === 2 && <AmenitiesDetails />}

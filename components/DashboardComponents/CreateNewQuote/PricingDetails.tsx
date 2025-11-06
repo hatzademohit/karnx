@@ -38,9 +38,9 @@ const PricingDetails = () => {
             <Typography variant="h4" color={theme?.common.redColor} mb={2}>
                 Pricing Details
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={{ md: 2, xs: 1 }}>
                 {fields.map((input) => (
-                    <Grid size={{ lg: 6, md: 6, sm: 12 }} key={input.name}>
+                    <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }} key={input.name}>
                         <Controller
                             name={input.name}
                             control={control}
@@ -74,8 +74,8 @@ const PricingDetails = () => {
                         />
                     </Grid>
                 ))}
-                <Grid size={{ lg: 12 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, p: 3, border: `1px solid ${theme?.common.borderColor}`, mt: 3, backgroundColor: '#f2f2f2', borderRadius: 3 }}>
+                <Grid size={{ xs: 12 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, p: 3, border: `1px solid ${theme?.common.borderColor}`, mt: 1, backgroundColor: '#f2f2f2', borderRadius: 3 }}>
                         <Typography variant="h4">Total Quote Amount:</Typography>
                         <Typography variant="h2">{totalAmount}</Typography>
                     </Box>

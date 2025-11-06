@@ -534,41 +534,15 @@ const FleetOverview = () => {
         <Typography component="h2" variant="h2" sx={{ color: theme?.heading?.color, mb: 2 }}>
           Fleet Master
         </Typography>
-
-        {/* <MUIDataGrid
-          gridColumns={columns}
-          gridRows={fleetRows}
-          // Toolbar
-          buttonText="Add Fleet"
-          onClick={handleOpenAdd}
-          exportButtton={false}
-          fileName="fleet"
-          fileHeading="Fleet"
-          rowHeight={64}
-          //selectFilter={pageSizeSelector}
-          // Server-side controls
-          paginationMode="server"
-          sortingMode="server"
-          rowCount={rowCount}
-          page={page}
-          pageSize={pageSize === Number.MAX_SAFE_INTEGER ? rowCount || 1000000 : pageSize}
-          onPageSizeChange={(model: { page: number; pageSize: number }) => {
-            setPage(model.page);
-            setPageSize(model.pageSize);
-          }}
-          onSortModelChange={(model: GridSortModel) => {
-            setSortModel(model);
-            setPage(0);
-          }}
-        /> */}
-
-        <CardDataGrid
-          buttonText={hasPermission && hasPermission(['fleet create']) ? 'Add Fleet' : undefined}
-          onClick={hasPermission && hasPermission(['fleet create', 'fleet.add', 'asset.create']) ? handleOpenAdd : undefined}
-          editClick={handleEdit}
-          viewClick={handleView}
-          data={fleetRows}
-        />
+        <Box sx={{ p: { md: 2, xs: '8px' }, border: '1px solid #E6E6E6' }}>
+          <CardDataGrid
+            buttonText={hasPermission && hasPermission(['fleet create']) ? 'Add Fleet' : undefined}
+            onClick={hasPermission && hasPermission(['fleet create', 'fleet.add', 'asset.create']) ? handleOpenAdd : undefined}
+            editClick={handleEdit}
+            viewClick={handleView}
+            data={fleetRows}
+          />
+        </Box>
       </Box>
 
       {/* Add/Edit Dialog */}

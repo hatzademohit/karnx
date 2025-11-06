@@ -42,9 +42,9 @@ const AmenitiesDetails = () => {
       <Typography variant="h5" mb={2}>
         Available Amenities
       </Typography>
-      <Grid container spacing={2.5}>
+      <Grid container spacing={{ md: 2.5, xs: 1 }}>
         {amenitiesList.map((amenitieItem) => (
-          <Grid size={{ lg: 3, md: 6, sm: 12}} key={amenitieItem.id}>
+          <Grid size={{ lg: 3, md: 6, sm: 6, xs: 12}} key={amenitieItem.id}>
             <Card
               onClick={() => toggleAmenity(amenitieItem.item)}
               sx={{ cursor: "pointer", border: selected.includes(amenitieItem.item) ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
