@@ -120,13 +120,30 @@ export const passengerAircraftSchema = yup.object().shape({
   // 
   isMedicalAssistanceReq: yup.boolean().required("Please select medical assistance"),
 
-  specialAssistance: yup.array().when("isMedicalAssistanceReq", {
-    is: true,
-    then: (schema) =>
-      schema.min(1, "Please select at least one assistance option").required("Please select at least one assistance option"),
-    otherwise: (schema) => schema.notRequired().nullable(),
-  }).default([]), // Default value is an empty array if no values are selected
+  specialAssistance: yup
+    .array()
+    .transform((value, originalValue) => {
+      // Ensure always an array (React Hook Form may pass string or undefined)
+      if (!originalValue) return [];
+      return Array.isArray(originalValue) ? originalValue : [originalValue];
+    })
+    .of(yup.string())
+    .when("isMedicalAssistanceReq", {
+      is: true,
+      then: (schema) =>
+        schema
+          .min(1, "Please select at least one assistance option")
+          .required("Please select at least one assistance option"),
+      otherwise: (schema) => schema.notRequired().nullable(),
+    })
+    .default([]),
 
+  otherAssistance: yup.string().when("specialAssistance", ([specialAssistance], schema) => {
+    if (Array.isArray(specialAssistance) && specialAssistance.includes("6")) {
+      return schema.required("Other Assistance is required when 'Other' is selected");
+    }
+    return schema.notRequired();
+  }), 
   // 
   checkedBags: yup.string().required("Please select checked bags"),
   carryOnBags: yup.string().required("Please select carry on bags"),
@@ -144,7 +161,7 @@ export const passengerAircraftSchema = yup.object().shape({
     language_skills_id: yup.string(),
     concierge_skills_id: yup.string(),
   }),
-  additionalNotes: yup.string().required("Please enter additional notes"),
+  additionalNotes: yup.string(),
   // 
   travelPurpose: yup.string().required("Please select a purpose of travel"),
   // 

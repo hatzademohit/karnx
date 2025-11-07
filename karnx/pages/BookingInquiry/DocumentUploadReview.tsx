@@ -28,7 +28,8 @@ const DocumentUploadReview = () => {
                     render={({ field }) => (
                         <>
                             <FileSelection
-                                onFileSelect={(files) => field.onChange(Array.from(files))} // Convert to array
+                                onFileSelect={(files) => field.onChange(Array.from(files))}
+                                defaultValue={field.value || []}
                             />
                             {errors.documentFile && (
                                 <Typography color="error" className="fs12" sx={{ mt: 1 }}>
@@ -47,40 +48,41 @@ const DocumentUploadReview = () => {
                         {errors?.requiredDocumentUploaded?.message as string}
                     </FormHelperText>
                 }
-            </Grid>
-            {requiredDocument && requiredDocument.map((docName) => (
-                <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }} key={docName.id}>
-                    <Controller
-                        name={`requiredDocumentUploaded`}
-                        control={control}
-                        render={({ field }) => (
-                            <FormControlLabel
-                                label={docName.name}
-                                control={
-                                    <Checkbox
-                                        size="small"
-                                        checked={Array.isArray(field.value) && field.value.includes(docName.id)}
-                                        onChange={(e) => {
-                                            const isChecked = e.target.checked;
-                                            const updatedValue = Array.isArray(field.value) ? [...field.value] : [];
+                <FormControl>
+                    {requiredDocument && requiredDocument.map((docName) => (
+                        <Controller
+                            key={docName.id}
+                            name={`requiredDocumentUploaded`}
+                            control={control}
+                            render={({ field }) => (
+                                <FormControlLabel
+                                    label={docName.name}
+                                    control={
+                                        <Checkbox
+                                            size="small"
+                                            checked={Array.isArray(field.value) && field.value.includes(docName.id)}
+                                            onChange={(e) => {
+                                                const isChecked = e.target.checked;
+                                                const updatedValue = Array.isArray(field.value) ? [...field.value] : [];
 
-                                            if (isChecked) {
-                                                updatedValue.push(docName.id);
-                                            } else {
-                                                const index = updatedValue.indexOf(docName.id);
-                                                if (index !== -1) {
-                                                    updatedValue.splice(index, 1);
+                                                if (isChecked) {
+                                                    updatedValue.push(docName.id);
+                                                } else {
+                                                    const index = updatedValue.indexOf(docName.id);
+                                                    if (index !== -1) {
+                                                        updatedValue.splice(index, 1);
+                                                    }
                                                 }
-                                            }
-                                            field.onChange(updatedValue);
-                                        }}
-                                    />
-                                }
-                            />
-                        )}
-                    />
-                </Grid>
-            ))}
+                                                field.onChange(updatedValue);
+                                            }}
+                                        />
+                                    }
+                                />
+                            )}
+                        />
+                    ))}
+                </FormControl>
+            </Grid>
         </>
     )
 }

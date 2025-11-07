@@ -165,7 +165,7 @@ const PassengerInformation = () => {
                         <Grid container spacing={1}>
                             <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
                                 <Typography component='h4' variant="h4" sx={{ mt: '10px' }}>Special Assistance</Typography>
-                                <Typography sx={{ fontFamily: 'poppins-lt', fontSize: '14px', color: '#959595', my: '10px' }}>
+                                <Typography sx={{ fontFamily: 'poppins-lt', fontSize: '14px', color: '#959595', mt: '10px' }}>
                                     Select Any Assistance needed for passenger
                                 </Typography>
                                 {errors.specialAssistance && (
@@ -214,13 +214,15 @@ const PassengerInformation = () => {
                                             name="otherAssistance" // Name of the field in form data
                                             control={control}
                                             defaultValue={otherAssistance || ''} // Default value is empty if `otherAssistance` is not set
-                                            render={({ field }) => (
+                                            render={({ field, fieldState }) => (
                                                 <CustomTextField
                                                     {...field} // Spread the field props from react-hook-form (value, onChange, etc.)
                                                     placeholder="Enter"
                                                     className="white-bg-input"
                                                     value={field.value} // Make sure `value` is controlled by react-hook-form
                                                     onChange={e => field.onChange(e.target.value)} // Update form data on change
+                                                    error={!!fieldState.error}
+                                                    helperText={fieldState.error?.message}
                                                 />
                                             )}
                                         />
