@@ -7,7 +7,7 @@ import { useFormContext, Controller } from "react-hook-form";
 import { useAuth } from "@/app/context/AuthContext";
 
 const CrewRequirements = () => {
-    const {theme} = useAuth()
+    const { theme } = useAuth()
     const { crewRequirementOptions } = useStep();
     const [crewReqRequirement, setCrewRequirement] = useState<any[]>([]);
     const { control, formState: { errors } } = useFormContext();
@@ -25,29 +25,36 @@ const CrewRequirements = () => {
             </Grid>
 
             {crewReqRequirement.map((crew) => (
-                <Grid size={{ lg: 4, md: 6, sm: 6, xs:12 }} key={crew.var_key}>
+                <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }} key={crew.var_key}>
                     <Controller
                         name={`crewRequirements.${crew.var_key}`}
                         control={control}
-                        defaultValue=""
-                        render={({ field }) => (
-                            <SingleSelect
-                                inputLabel={crew.inputLabel}
-                                value={field.value || ""}
-                                {...field}
-                                error={!!errors.crewRequirements?.[crew.var_key]}
-                                helperText={errors.crewRequirements?.[crew.var_key]?.message}
-                            >
-                                {crew.options.map(opt => (
-                                    <MenuItem value={opt.name} key={opt.id}>{opt.name}</MenuItem>
-                                ))}
-                            </SingleSelect>
-                        )}
+                        defaultValue="" // default value is empty string or set default ID
+                        render={({ field }) => {
+                            // Find the name of the selected option based on the stored ID
+                            const selectedOption = crew.options.find((opt) => opt.id === field.value);
+                            return (
+                                <SingleSelect
+                                    inputLabel={crew.inputLabel}
+                                    value={selectedOption ? selectedOption.name : ""} // Show name in dropdown
+                                    onChange={(e) => field.onChange(e.target.value)} // store the ID
+                                    error={!!errors.crewRequirements?.[crew.var_key]}
+                                    helperText={errors.crewRequirements?.[crew.var_key]?.message}
+                                >
+                                    {crew.options.map((opt) => (
+                                        <MenuItem value={opt.id} key={opt.id}>
+                                            {opt.name} {/* Show the name in dropdown */}
+                                        </MenuItem>
+                                    ))}
+                                </SingleSelect>
+                            );
+                        }}
                     />
                 </Grid>
             ))}
 
-            <Grid size={{ lg: 4, md: 6, sm: 6, xs:12 }}>
+
+            <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
                 <Controller
                     name="additionalNotes"
                     control={control}

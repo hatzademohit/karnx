@@ -87,6 +87,7 @@ export type passengerAircraftSchemaType = {
   travelPurpose: string;
   cateringType: string;
   documentFile: FileList;
+  requiredDocumentUploaded: any[];
   // 
   cateringDietary: string[];
   allergies: string;
@@ -118,21 +119,13 @@ export const passengerAircraftSchema = yup.object().shape({
   }),
   // 
   isMedicalAssistanceReq: yup.boolean().required("Please select medical assistance"),
-  // specialAssistance: yup.object().default({}).when("isMedicalAssistanceReq", {
-  //   is: true,
-  //   then: (schema) => schema.test("at-least-one-selected", "Please select at least one assistance option",
-  //     (value) => value && Object.values(value).some((v) => v === true)
-  //   ),
-  //   otherwise: (schema) => schema.notRequired(),
-  // }),
-  specialAssistance: yup.array()
-    .min(1, "Please select at least one assistance option") // Ensure at least one item is selected
-    .when("isMedicalAssistanceReq", {
-      is: true, // Check if medical assistance is required
-      then: (schema) => schema, // If true, apply the `.min()` check
-      otherwise: (schema) => schema.notRequired(), // If false, make the field optional
-    })
-    .default([]), // Default value is an empty array if no values are selected
+
+  specialAssistance: yup.array().when("isMedicalAssistanceReq", {
+    is: true,
+    then: (schema) =>
+      schema.min(1, "Please select at least one assistance option").required("Please select at least one assistance option"),
+    otherwise: (schema) => schema.notRequired().nullable(),
+  }).default([]), // Default value is an empty array if no values are selected
 
   // 
   checkedBags: yup.string().required("Please select checked bags"),
@@ -188,6 +181,9 @@ export const passengerAircraftSchema = yup.object().shape({
       return Array.isArray(value) && value.length > 0;
     }),
 
+  requiredDocumentUploaded: yup.array().required("Please select at least one required document") // Ensure at least one item is selected
+    .min(1, "Please select at least one required document")
+    .default([]), // Default value as an empty array
 });
 
 export type contactSummarySchemaType = {
