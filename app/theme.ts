@@ -65,9 +65,9 @@ export const karnxTheme = createTheme({
     typography: {
         fontFamily: "poppins",
         body1: {
-            fontSize: "0.875rem",
-            "@media (min-width:900px)": {
-                fontSize: "1rem",
+            fontSize: "16px",
+            "@media (max-width:900px)": {
+                fontSize: "14px",
             },
         },
         h1: {
@@ -205,6 +205,9 @@ export const karnxTheme = createTheme({
                     '&.Mui-disabled': {
                         color: '#333333',
                         backgroundColor: '#dfdfdf',
+                    },
+                    '&.MuiInputBase-root .MuiSelect-select .MuiTypography-body1': {
+                        fontSize: '12px'
                     },
                 },
                 input: {

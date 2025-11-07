@@ -1,5 +1,5 @@
 'use client'
-import { Box, Checkbox, FormControl, FormControlLabel, Grid, IconButton, Radio, RadioGroup, Typography } from "@mui/material";
+import { Box, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, Radio, RadioGroup, Typography } from "@mui/material";
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { useEffect, useState } from "react";
@@ -168,6 +168,11 @@ const PassengerInformation = () => {
                                 <Typography sx={{ fontFamily: 'poppins-lt', fontSize: '14px', color: '#959595', my: '10px' }}>
                                     Select Any Assistance needed for passenger
                                 </Typography>
+                                {errors.specialAssistance && (
+                                    <Typography color="error" className="fs12" sx={{ mt: 1 }}>
+                                        {errors?.specialAssistance?.root?.message as string || errors?.specialAssistance?.message as string}
+                                    </Typography>
+                                )}
                             </Grid>
                             {specialAssistance && specialAssistance.map((assistance) => (
                                 <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }} key={assistance.id}>

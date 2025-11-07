@@ -38,8 +38,8 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                                 render={({ field: toField }) => (
                                     <SwapComp
                                         options={airportOptions}
-                                        fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
-                                        toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                                        fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
+                                        toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfrom", val?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
@@ -90,8 +90,8 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                                 render={({ field: toField }) => (
                                     <SwapComp
                                         options={airportOptions}
-                                        fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
-                                        toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                                        fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
+                                        toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
                                         }}

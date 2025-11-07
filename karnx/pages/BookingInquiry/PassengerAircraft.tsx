@@ -13,9 +13,9 @@ const PassengerAircraft = () => {
         resolver: yupResolver(passengerAircraftSchema),
         mode: "onChange",
         defaultValues: {
-            adults: 1,
-            children: 0,
-            infants: 0,
+            adults: formData?.adults || 1,
+            children: formData?.children || 0,
+            infants: formData?.infants || 0,
             totalPassengers: formData?.totalPassengers || 0,
             isTravellingWithPets: formData?.isTravellingWithPets || false,
             petType: formData?.petType || '',
@@ -36,10 +36,10 @@ const PassengerAircraft = () => {
             // 
             isCateringRequired: formData?.isCateringRequired || false,
             cateringDietary: formData?.cateringDietary || [],
-            allergies: "",
-            drinkPreferences: "",
-            customServices: "",
-            documentFile: null
+            allergies: formData?.allergies || '',
+            drinkPreferences: formData?.drinkPreferences || '',
+            customServices: formData?.customServices || '',
+            documentFile: formData?.documentFile || null,
         },
     });
 

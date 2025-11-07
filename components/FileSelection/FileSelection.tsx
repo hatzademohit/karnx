@@ -5,16 +5,18 @@ import {  Box,  Typography, Paper, List, ListItem, ListItemText } from "@mui/mat
 
 type FileSelectionProps = {
   onFileSelect?: (files: File[]) => void;
+  defaultValue?: File[];
 };
 
-const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect }) => {
+const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValue }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      console.log("Selected files:", acceptedFiles);
       onFileSelect?.(acceptedFiles);
     },
     [onFileSelect]
   );
+
+  console.log(defaultValue, 'defaultValue')
 
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({ onDrop });

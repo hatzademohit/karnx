@@ -57,11 +57,13 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         name={`multiCity[${index}].multiCityto`}
                         control={control}
                         defaultValue=""
-                        render={({ field: toField }) => (
+                        render={({ field: toField }) =>{
+													console.log(toField, 'toField')
+													return(
                           <SwapComp
                             options={airportOptions}
-                            fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
-                            toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                            fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
+                            toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                             onFromChange={(val: any) => {
                               setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
                             }}
@@ -77,7 +79,7 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                             toError={!!errors?.multiCity?.[index]?.multiCityto}
                             toHelpertext={errors?.multiCity?.[index]?.multiCityto?.message}
                           />
-                        )}
+                        )}}
                       />
                     )}
                   />
