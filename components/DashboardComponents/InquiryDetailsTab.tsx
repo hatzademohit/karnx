@@ -21,6 +21,10 @@ interface InquiryDetailsValue {
   clientName: string;
   clientEmail: string;
   clientPhone: string;
+  requested_service: [];
+  crew_requirements: [];
+  medical_assistance_req: [];
+  pet_travels: [];
 
 
 }
@@ -33,10 +37,12 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
   useEffect(() => {
     fetchInquiryDetails();
   }, []);
+
+  console.log(data?.requested_service);
   return (
     <>
       {/* Flight Information */}
-      <Card variant="outlined" sx={{ borderRadius: 3, mb: {md: 2, xs: 1} }}>
+      <Card variant="outlined" sx={{ borderRadius: 3, mb: { md: 2, xs: 1 } }}>
         <CardContent sx={{ bgcolor: "#F7F8FC" }} className="card-content">
           <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
             Flight Information
@@ -110,7 +116,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
       </Card>
 
       {/* Contact Information */}
-      <Card variant="outlined" sx={{ borderRadius: 3, mb: {md: 2, xs: 1} }}>
+      <Card variant="outlined" sx={{ borderRadius: 3, mb: { md: 2, xs: 1 } }}>
         <CardContent className="card-content">
           <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
             Contact Information
@@ -180,24 +186,109 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
         </Grid>
 
         {/* Requested Services */}
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
-            <CardContent className="card-content">
-              <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
-                Requested Services
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Catering:
-              </Typography>
-              <Chip label="Hot meals" color="warning" size="small" sx={{ borderRadius: 1, mb: 1 }} />
+        {data?.requested_service?.length > 0 && (
+          <>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
+                <CardContent className="card-content">
+                  <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
+                    Requested Services
+                  </Typography>
 
-              <Typography variant="body2" color="text.secondary">
-                Onboard Services:
-              </Typography>
-              <Chip label="In-flight Wi-Fi" color="info" size="small" sx={{ borderRadius: 1 }} />
-            </CardContent>
-          </Card>
-        </Grid>
+                  <Typography variant="body2" color="text.secondary">
+                    Catering:
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                    {data?.requested_service.map((service: string, idx: number) => (
+                      <Chip key={`${service}-${idx}`} label={service} color="info" size="small" sx={{ borderRadius: 1 }} />
+                    ))}
+                  </Box>
+
+                </CardContent>
+              </Card>
+            </Grid>
+          </>
+        )}
+
+        {/* Crew Requirements */}
+        {data?.crew_requirements?.length > 0 && (
+          <>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
+                <CardContent className="card-content" >
+                  <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
+                    Crew Requirements
+                  </Typography>
+                  {data?.crew_requirements.map((crewReq: any, idx: number) => (
+                    <React.Fragment key={idx}>
+                      <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0 }}>
+                        {crewReq?.lable}:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+
+                        <Chip key={`${crewReq}-${idx}`} label={crewReq?.value} color="warning" size="small" sx={{ borderRadius: 1 }} />
+
+                      </Box>
+                    </React.Fragment>
+                  ))}
+                </CardContent>
+              </Card>
+            </Grid>
+          </>
+        )}
+        {/* Pet Information */}
+        {data?.pet_travels?.length > 0 && (
+          <>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
+                <CardContent className="card-content" >
+                  <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
+                    Traveling With Pets
+                  </Typography>
+                  {data?.pet_travels.map((petInfo: any, idx: number) => (
+                    <React.Fragment key={idx}>
+                      <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0 }}>
+                        {petInfo?.lable}:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+
+                        <Chip key={`${petInfo}-${idx}`} label={petInfo?.value} color="success" size="small" sx={{ borderRadius: 1 }} />
+
+                      </Box>
+                    </React.Fragment>
+                  ))}
+                </CardContent>
+              </Card>
+            </Grid>
+          </>
+        )}
+
+        {/* Medical Assistance Requirement */}
+        {data?.medical_assistance_req?.length > 0 && (
+          <>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
+                <CardContent className="card-content" >
+                  <Typography sx={{ fontFamily: "poppins-semibold", mb: 2 }} variant="h5">
+                    Medical Needs or Special Assistance
+                  </Typography>
+                  {data?.medical_assistance_req.map((medReq: string, idx: number) => (
+                    <React.Fragment key={idx}>
+                      {/* <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0 }}>
+                        Spec
+                      </Typography> */}
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+
+                        <Chip key={`${medReq}-${idx}`} label={medReq} color="warning" size="small" sx={{ borderRadius: 1 }} />
+
+                      </Box>
+                    </React.Fragment>
+                  ))}
+                </CardContent>
+              </Card>
+            </Grid>
+          </>
+        )}
       </Grid>
     </>
   );

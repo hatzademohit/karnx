@@ -19,6 +19,7 @@ type StepContextType = {
   crewRequirementOptions?: any[];
   travelingPurposeOption?: any[];
   cateringDietaryOptions?: any[];
+  requiredDocumentUploadOptions?: any[];
   storeBookingInquiryData?: (data: any) => Promise<any>;
   handleBackClick?: any;
   handleNextClick?: any;
@@ -64,6 +65,10 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
     `${apiBaseUrl}/form-fields-data/catering-dietary`
   );
 
+  const { data: requiredDocumentUploadOptions, refetch: fetchRequiredDocumentUploadOptions } = useApi<any[]>(
+    `${apiBaseUrl}/form-fields-data/required-document-option`
+  );
+
   const { data: storeData, refetch: storeBookingInquiry, error } = useResponceApi<any[]>(
     `${apiBaseUrl}/booking-inquiries`, {
     method: "POST",
@@ -90,6 +95,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchCrewRequirements();
     fetchTravelingPurpose();
     fetchCateringDietaryOptions();
+    fetchRequiredDocumentUploadOptions();
   }, []);
 
   const handleNextClick = () => setActiveStep((prev) => prev + 1);
@@ -101,7 +107,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, handleFinish, handleBackClick, handleNextClick, activeStep, setActiveStep, formatedFormData, setFormatedFormData }}>
+    <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, handleFinish, handleBackClick, handleNextClick, activeStep, setActiveStep, formatedFormData, setFormatedFormData, requiredDocumentUploadOptions }}>
       {children}
     </StepContext.Provider>
   );
