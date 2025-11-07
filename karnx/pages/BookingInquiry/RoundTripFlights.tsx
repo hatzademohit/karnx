@@ -38,17 +38,19 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                                 render={({ field: toField }) => (
                                     <SwapComp
                                         options={airportOptions}
-                                        fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                                        toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
+                                        fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
+                                        toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
+                                        // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
+                                        // toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfrom", val?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         onToChange={(val: any) =>
                                             setValue("roundTripto", val?.id, { shouldValidate: true, shouldDirty: true })
                                         }
-                                        onSwap={(from, to) => {
-                                            setValue("roundTripfrom", from);
-                                            setValue("roundTripto", to);
+                                        onSwap={(from: any, to: any) => {
+                                            setValue("roundTripfrom", from?.id, { shouldValidate: true, shouldDirty: true });
+                                            setValue("roundTripto", to?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         fromError={!!errors.roundTripfrom}
                                         fromHelpertext={errors.roundTripfrom?.message}
@@ -90,17 +92,19 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                                 render={({ field: toField }) => (
                                     <SwapComp
                                         options={airportOptions}
-                                        fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                                        toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
+                                        fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
+                                        toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
+                                        // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
+                                        // toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         onToChange={(val: any) =>
                                             setValue("roundTriptoReturn", val?.id, { shouldValidate: true, shouldDirty: true })
                                         }
-                                        onSwap={(from, to) => {
-                                            setValue("roundTripfromReturn", from);
-                                            setValue("roundTriptoReturn", to);
+                                        onSwap={(from: any, to: any) => {
+                                            setValue("roundTripfromReturn", from?.id, { shouldValidate: true, shouldDirty: true });
+                                            setValue("roundTriptoReturn", to?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         fromError={!!errors.roundTripfromReturn}
                                         fromHelpertext={errors.roundTripfromReturn?.message}
