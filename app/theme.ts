@@ -104,7 +104,7 @@ export const karnxTheme = createTheme({
         },
         h3: {
             fontFamily: "poppins-semibold",
-            fontSize: '15px',
+            fontSize: '16px',
             "@mediaQuery (min-width:600px)": {
                 fontSize: "16px", // sm
             },
@@ -120,7 +120,7 @@ export const karnxTheme = createTheme({
         },
         h4: {
             fontFamily: "poppins-semibold",
-            fontSize: '15px',
+            fontSize: '16px',
             "@mediaQuery (min-width:600px)": {
                 fontSize: "15px", // sm
             },

@@ -60,12 +60,10 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         render={({ field: toField }) =>{
 													return(
                           <SwapComp
-                            fromOptions={airportOptions}
+                            fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
                             toOptions={airportOptions.filter((airport) => airport.id != field.value) }
                             fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
                             toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
-                            // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                            // toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                             onFromChange={(val: any) => {
                               setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
                             }}
@@ -102,6 +100,7 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         onChange={(val: any) => field.onChange(val)}
                         error={!!errors?.multiCity?.[index]?.multiCitydepartureDate}
                         helperText={errors?.multiCity?.[index]?.multiCitydepartureDate?.message}
+                        minDateTime={dayjs().add(1, 'day').startOf('day')}
                       />
                     )}
                   />
@@ -130,12 +129,10 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                       defaultValue=""
                       render={({ field: toField }) => (
                         <SwapComp
-                          fromOptions={airportOptions}
+                          fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
                           toOptions={airportOptions.filter((airport) => airport.id != field.value) }
                           fromValue={airportOptions.find((airport) => airport.id === field.value) || ''}
                           toValue={airportOptions.find((airport) => airport.id === toField.value) || ''}
-                          // fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
-                          // toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
                           onFromChange={(val: any) => {
                             setValue("multiCityfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
                           }}
@@ -172,6 +169,7 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                       onChange={(val: any) => field.onChange(val)}
                       error={!!errors?.multiCityreturnDate}
                       helperText={errors?.multiCityreturnDate?.message}
+                      minDateTime={dayjs().add(1, 'day').startOf('day')}
                     />
                   )}
                 />

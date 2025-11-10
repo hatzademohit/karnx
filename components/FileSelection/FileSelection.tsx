@@ -28,8 +28,6 @@ const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValu
     }
   }, [defaultValue]);
 
-  console.log(defaultValue, 'defaultValue')
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (

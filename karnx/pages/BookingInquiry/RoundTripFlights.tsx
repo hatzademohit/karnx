@@ -37,18 +37,18 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                                 control={control}
                                 render={({ field: toField }) => (
                                     <SwapComp
-                                        fromOptions={airportOptions}
-                                        toOptions={airportOptions.filter((airport) => airport.id != field.value) }
+                                        fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
+                                        toOptions={airportOptions.filter((airport) => airport.id != field.value)}
                                         fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
                                         toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
-                                        // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                                        // toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfrom", val?.id, { shouldValidate: true, shouldDirty: true });
+                                            setValue("roundTriptoReturn", val?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
-                                        onToChange={(val: any) =>
-                                            setValue("roundTripto", val?.id, { shouldValidate: true, shouldDirty: true })
-                                        }
+                                        onToChange={(val: any) => {
+                                            setValue("roundTripto", val?.id, { shouldValidate: true, shouldDirty: true });
+                                            setValue("roundTripfromReturn", val?.id, { shouldValidate: true, shouldDirty: true })
+                                        }}
                                         onSwap={(from: any, to: any) => {
                                             setValue("roundTripfrom", from?.id, { shouldValidate: true, shouldDirty: true });
                                             setValue("roundTripto", to?.id, { shouldValidate: true, shouldDirty: true });
@@ -77,6 +77,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                                 withClock
                                 error={!!errors.roundTripdepartureDate}
                                 helperText={errors.roundTripdepartureDate?.message}
+                                minDateTime={dayjs().add(1, 'day').startOf('day')}
                             />
                         )}
                     />
@@ -93,10 +94,9 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                                 render={({ field: toField }) => {
                                 const roundTripfrom = watch('roundTripfrom');
                                 const roundTripto = watch('roundTripto');
-                                console.log(roundTripfrom)
                                 return(
                                     <SwapComp
-                                        fromOptions={airportOptions}
+                                        fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
                                         toOptions={airportOptions.filter((airport) => airport.id != field.value) }
                                         fromValue={airportOptions.find((airport) => airport.id == roundTripto) || ''}
                                         toValue={airportOptions.find((airport) => airport.id == roundTripfrom) || ''}
@@ -135,6 +135,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                                 withClock
                                 error={!!errors.roundTripreturnDate}
                                 helperText={errors.roundTripreturnDate?.message}
+                                minDateTime={dayjs().add(1, 'day').startOf('day')}
                             />
                         )}
                     />
