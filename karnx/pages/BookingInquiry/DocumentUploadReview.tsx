@@ -19,7 +19,7 @@ const DocumentUploadReview = () => {
     return (
         <>
             <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: theme?.common?.redColor, mb: '15px' }}>Document Upload & Review</Typography>
+                <Typography variant="h3" sx={{ color: theme?.common?.redColor }}>Document Upload & Review</Typography>
             </Grid>
             <Grid size={{ xs: 12 }}>
                 <Controller

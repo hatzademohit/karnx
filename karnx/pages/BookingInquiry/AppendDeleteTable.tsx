@@ -60,7 +60,8 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         render={({ field: toField }) =>{
 													return(
                           <SwapComp
-                            options={airportOptions}
+                            fromOptions={airportOptions}
+                            toOptions={airportOptions.filter((airport) => airport.id != field.value) }
                             fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
                             toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
                             // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
@@ -129,7 +130,8 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                       defaultValue=""
                       render={({ field: toField }) => (
                         <SwapComp
-                          options={airportOptions}
+                          fromOptions={airportOptions}
+                          toOptions={airportOptions.filter((airport) => airport.id != field.value) }
                           fromValue={airportOptions.find((airport) => airport.id === field.value) || ''}
                           toValue={airportOptions.find((airport) => airport.id === toField.value) || ''}
                           // fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}

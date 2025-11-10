@@ -29,7 +29,8 @@ const OneWayFlights = ({ control, errors, setValue }: any) => {
                 control={control}
                 render={({ field: toField }) => (
                   <SwapComp
-                    options={airportOptions}
+                    fromOptions={airportOptions}
+                    toOptions={airportOptions.filter((airport) => airport.id != field.value) }
                     fromValue={airportOptions.find((airport) => airport.id == field.value) || null }
                     toValue={airportOptions.find((airport) => airport.id == toField.value) || null }
                     // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
