@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import {  Box,  Typography, Paper, List, ListItem, ListItemText } from "@mui/material";
 
@@ -9,17 +9,28 @@ type FileSelectionProps = {
 };
 
 const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValue }) => {
+
+  const [selectedFiles, setSelectedFiles] = useState<File[]>(defaultValue || []);
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       onFileSelect?.(acceptedFiles);
+      const newFiles = [...selectedFiles, ...acceptedFiles];
+      setSelectedFiles(newFiles);
+      onFileSelect?.(newFiles);
     },
-    [onFileSelect]
+    [onFileSelect, selectedFiles]
   );
+
+  useEffect(() => {
+    if (defaultValue && defaultValue.length > 0) {
+      setSelectedFiles(defaultValue);
+    }
+  }, [defaultValue]);
 
   console.log(defaultValue, 'defaultValue')
 
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-    useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" sx={{width: '100%'}} gap={1}>
@@ -52,13 +63,13 @@ const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValu
         )}
       </Paper>
 
-      {acceptedFiles.length > 0 && (
+       {selectedFiles.length > 0 && (
         <Box width="100%" sx={{ display: 'flex', alignItems: 'center', gap: '10px'}}>
           <Typography variant="subtitle1" fontWeight="medium">
             Selected files:
           </Typography>
-          <List dense>
-            {acceptedFiles.map((file, i) => (
+          <List dense sx={{p: 0}}>
+            {selectedFiles.map((file, i) => (
               <ListItem key={i} sx={{ p: 0 }}>
                 <ListItemText primary={file.name} sx={{ '& .MuiListItemText-primary': { color: '#555555', fontFamily: 'poppins-lt' }}} />
               </ListItem>

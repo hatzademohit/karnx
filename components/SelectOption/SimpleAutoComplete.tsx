@@ -22,6 +22,7 @@ export interface SimpleAutoCompleteProps {
   required?: boolean;
   error?: boolean;
   helperText?: string;
+  disabled?: boolean;
 }
 
 const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
@@ -39,7 +40,8 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
   required = false,
   name,
   error,
-  helperText
+  helperText,
+  disabled
 }) => {
     const {theme} = useAuth()
   const [inputValue, setInputValue] = React.useState("");
@@ -61,6 +63,7 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
         <Autocomplete
           value={value}
           onChange={onChange}
+          disabled={disabled}
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);

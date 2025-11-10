@@ -4,9 +4,9 @@ import { Box, Grid } from "@mui/material";
 import { useStep } from '@/app/context/StepProvider';
 import { Controller } from "react-hook-form";
 import dayjs from "dayjs";
+import { useForm } from "react-hook-form";
 
-const RoundTripFlights = ({ control, setValue, errors }: any) => {
-
+const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
     const { airportCity } = useStep();
 
     // Defensive mapping for options
@@ -37,18 +37,21 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                                 control={control}
                                 render={({ field: toField }) => (
                                     <SwapComp
-                                        options={airportOptions}
-                                        fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                                        toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
+                                        fromOptions={airportOptions}
+                                        toOptions={airportOptions.filter((airport) => airport.id != field.value) }
+                                        fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
+                                        toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
+                                        // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
+                                        // toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfrom", val?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         onToChange={(val: any) =>
                                             setValue("roundTripto", val?.id, { shouldValidate: true, shouldDirty: true })
                                         }
-                                        onSwap={(from, to) => {
-                                            setValue("roundTripfrom", from);
-                                            setValue("roundTripto", to);
+                                        onSwap={(from: any, to: any) => {
+                                            setValue("roundTripfrom", from?.id, { shouldValidate: true, shouldDirty: true });
+                                            setValue("roundTripto", to?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         fromError={!!errors.roundTripfrom}
                                         fromHelpertext={errors.roundTripfrom?.message}
@@ -87,27 +90,33 @@ const RoundTripFlights = ({ control, setValue, errors }: any) => {
                             <Controller
                                 name="roundTriptoReturn"
                                 control={control}
-                                render={({ field: toField }) => (
+                                render={({ field: toField }) => {
+                                const roundTripfrom = watch('roundTripfrom');
+                                const roundTripto = watch('roundTripto');
+                                console.log(roundTripfrom)
+                                return(
                                     <SwapComp
-                                        options={airportOptions}
-                                        fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                                        toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
+                                        fromOptions={airportOptions}
+                                        toOptions={airportOptions.filter((airport) => airport.id != field.value) }
+                                        fromValue={airportOptions.find((airport) => airport.id == roundTripto) || ''}
+                                        toValue={airportOptions.find((airport) => airport.id == roundTripfrom) || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         onToChange={(val: any) =>
                                             setValue("roundTriptoReturn", val?.id, { shouldValidate: true, shouldDirty: true })
                                         }
-                                        onSwap={(from, to) => {
-                                            setValue("roundTripfromReturn", from);
-                                            setValue("roundTriptoReturn", to);
+                                        onSwap={(from: any, to: any) => {
+                                            setValue("roundTripfromReturn", from?.id, { shouldValidate: true, shouldDirty: true });
+                                            setValue("roundTriptoReturn", to?.id, { shouldValidate: true, shouldDirty: true });
                                         }}
                                         fromError={!!errors.roundTripfromReturn}
                                         fromHelpertext={errors.roundTripfromReturn?.message}
                                         toError={!!errors.roundTriptoReturn}
                                         toHelpertext={errors.roundTriptoReturn?.message}
+                                        disabled={true}
                                     />
-                                )}
+                                )} }
                             />
                         )}
                     />

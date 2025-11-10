@@ -58,21 +58,23 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         control={control}
                         defaultValue=""
                         render={({ field: toField }) =>{
-													console.log(toField, 'toField')
 													return(
                           <SwapComp
-                            options={airportOptions}
-                            fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                            toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
+                            fromOptions={airportOptions}
+                            toOptions={airportOptions.filter((airport) => airport.id != field.value) }
+                            fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
+                            toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
+                            // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
+                            // toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                             onFromChange={(val: any) => {
                               setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
                             }}
                             onToChange={(val: any) =>
                               setValue(`multiCity[${index}].multiCityto`, val?.id, { shouldValidate: true, shouldDirty: true })
                             }
-                            onSwap={(from, to) => {
-                              setValue(`multiCity[${index}].multiCityfrom`, from);
-                              setValue(`multiCity[${index}].multiCityto`, to);
+                            onSwap={(from: any, to: any) => {
+                              setValue(`multiCity[${index}].multiCityfrom`, from?.id, { shouldValidate: true, shouldDirty: true });
+                              setValue(`multiCity[${index}].multiCityto`, to?.id, { shouldValidate: true, shouldDirty: true });
                             }}
                             fromError={!!errors?.multiCity?.[index]?.multiCityfrom}
                             fromHelpertext={errors?.multiCity?.[index]?.multiCityfrom?.message}
@@ -128,18 +130,21 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                       defaultValue=""
                       render={({ field: toField }) => (
                         <SwapComp
-                          options={airportOptions}
-                          fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
-                          toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
+                          fromOptions={airportOptions}
+                          toOptions={airportOptions.filter((airport) => airport.id != field.value) }
+                          fromValue={airportOptions.find((airport) => airport.id === field.value) || ''}
+                          toValue={airportOptions.find((airport) => airport.id === toField.value) || ''}
+                          // fromValue={airportOptions.find((airport) => airport.id === field.value)?.code || ''}
+                          // toValue={airportOptions.find((airport) => airport.id === toField.value)?.code || ''}
                           onFromChange={(val: any) => {
                             setValue("multiCityfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
                           }}
                           onToChange={(val: any) =>
                             setValue("multiCitytoReturn", val?.id, { shouldValidate: true, shouldDirty: true })
                           }
-                          onSwap={(from, to) => {
-                            setValue("multiCityfromReturn", from);
-                            setValue("multiCitytoReturn", to);
+                          onSwap={(from: any, to: any) => {
+                            setValue("multiCityfromReturn", from?.id, { shouldValidate: true, shouldDirty: true });
+                            setValue("multiCitytoReturn", to?.id, { shouldValidate: true, shouldDirty: true });
                           }}
                           fromError={!!errors?.multiCityfromReturn}
                           fromHelpertext={errors?.multiCityfromReturn?.message}

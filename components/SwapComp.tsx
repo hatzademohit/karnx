@@ -10,6 +10,8 @@ type SwapCompProps = {
   toLabel?: string;
   toPlaceholder?: string;
   options?: string[];
+  fromOptions?: string[];
+  toOptions?: string[];
   fromValue: string;
   toValue: string;
   onFromChange: (val: string) => void;
@@ -19,6 +21,7 @@ type SwapCompProps = {
   fromHelpertext?: string;
   toError?: boolean;
   toHelpertext?: string;
+  disabled?: boolean;
 };
 
 const SwapComp: React.FC<SwapCompProps> = ({
@@ -27,6 +30,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
   toLabel = "To",
   toPlaceholder = "Destination airport",
   options = [],
+  fromOptions = [],
+  toOptions = [],
   fromValue,
   toValue,
   onFromChange,
@@ -35,7 +40,8 @@ const SwapComp: React.FC<SwapCompProps> = ({
   fromError,
   fromHelpertext,
   toError,
-  toHelpertext
+  toHelpertext,
+  disabled = false,
 }) => {
 
   const {theme} = useAuth();
@@ -60,12 +66,13 @@ const SwapComp: React.FC<SwapCompProps> = ({
         <SimpleAutoComplete
           inputLabel={fromLabel}
           placeholder={fromPlaceholder}
-          options={options}
+          options={fromOptions || options}
           size="medium"
           value={fromValue}
           onChange={(_: any, val: any) => onFromChange(val ?? "")}
           error={fromError}
           helperText={fromHelpertext}
+          disabled={disabled}
         />
       </Box>
 
@@ -82,6 +89,7 @@ const SwapComp: React.FC<SwapCompProps> = ({
         }}
       >
         <IconButton
+          disabled={disabled}
           onClick={handleSwap}
           sx={{
             border: "1px solid #e6e6e6",
@@ -100,12 +108,13 @@ const SwapComp: React.FC<SwapCompProps> = ({
         <SimpleAutoComplete
           inputLabel={toLabel}
           placeholder={toPlaceholder}
-          options={options}
+          options={toOptions || options}
           size="medium"
           value={toValue}
           onChange={(_: any, val: any) => onToChange(val ?? "")}
           error={toError}
           helperText={toHelpertext}
+          disabled={disabled}
         />
       </Box>
     </Box>

@@ -40,6 +40,7 @@ const PassengerAircraft = () => {
             drinkPreferences: formData?.drinkPreferences || '',
             customServices: formData?.customServices || '',
             documentFile: formData?.documentFile || null,
+            requiredDocumentUploaded: formData?.requiredDocumentUploaded || null,
         },
     });
 

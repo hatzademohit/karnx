@@ -93,7 +93,7 @@ const FlightDetails = () => {
                         <OneWayFlights control={control} errors={errors} setValue={setValue} />
                     </RadioTabs.Tab>
                     <RadioTabs.Tab label="Round Trip" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
-                        <RoundTripFlights control={control} setValue={setValue} errors={errors} />
+                        <RoundTripFlights control={control} setValue={setValue} errors={errors} watch={watch} />
                     </RadioTabs.Tab>
                     <RadioTabs.Tab label="Multi City" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
                         <MultiCityFlights control={control} setValue={setValue} errors={errors} />
