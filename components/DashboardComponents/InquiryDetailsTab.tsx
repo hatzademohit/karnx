@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Card, CardContent, Typography, Grid, Chip } from "@mui/material";
+import { Box, Card, CardContent, Typography, Grid, Chip, Link } from "@mui/material";
 import { FlightTakeoff, Event } from "@mui/icons-material";
 import { apiBaseUrl } from "@/karnx/api";
 import { useApi } from "@/karnx/Hooks/useApi";
@@ -25,7 +25,8 @@ interface InquiryDetailsValue {
   crew_requirements: [];
   medical_assistance_req: [];
   pet_travels: [];
-
+  uploaded_documents_path: [];
+  required_documents_name: [];
 
 }
 
@@ -284,6 +285,43 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                       </Box>
                     </React.Fragment>
                   ))}
+                </CardContent>
+              </Card>
+            </Grid>
+          </>
+        )}
+
+        {/* Uploaded Documents */}
+        {data?.uploaded_documents_path?.length > 0 && (
+          <>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Card variant="outlined" sx={{ borderRadius: 3, height: "100%" }}>
+                <CardContent className="card-content" >
+                  <Typography sx={{ mb: 2 }} variant="h5">
+                    Attached Document(s)
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid size={{ lg: 6, sm: 12 }}>
+                      <Typography variant="h6" mb={1}> Document(s) Name</Typography>
+                      {data?.required_documents_name.map((path: string, idx: number) => (
+                        <React.Fragment key={idx}>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                            <Chip key={`${path}-${idx}`} label={path} size="small" sx={{ borderRadius: 1 }} />
+                          </Box>
+                        </React.Fragment>
+                      ))}
+                    </Grid>
+                    <Grid size={{ lg: 6, sm: 12 }}>
+                      <Typography variant="h6" mb={1}>Document(s) Link</Typography>
+                      {data?.uploaded_documents_path.map((medReq: string, idx: number) => (
+                        <React.Fragment key={idx}>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                            <Link key={`${medReq}-${idx}`} href={medReq} >{medReq}</Link>
+                          </Box>
+                        </React.Fragment>
+                      ))}
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </Card>
             </Grid>

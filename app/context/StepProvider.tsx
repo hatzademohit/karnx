@@ -69,6 +69,11 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
     `${apiBaseUrl}/form-fields-data/required-document-option`
   );
 
+  const handleFinish = async (fd) => {
+    setFormatedFormData(fd);
+    await storeBookingInquiryData();
+  };
+
   const { data: storeData, refetch: storeBookingInquiry, error } = useResponceApi<any[]>(
     `${apiBaseUrl}/booking-inquiries`, {
     method: "POST",
@@ -77,7 +82,9 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const storeBookingInquiryData = async () => {
+   // console.log(formatedFormData);
     await storeBookingInquiry(); // Will trigger POST call
+    //console.log(error, storeData);
     if (error) {
       toast.error(error || "Failed to submit booking inquiry.");
     } else if (storeData?.status === true) {
@@ -100,11 +107,6 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const handleNextClick = () => setActiveStep((prev) => prev + 1);
   const handleBackClick = () => setActiveStep((prev) => prev - 1);
-
-  const handleFinish = async () => {
-    console.log(formatedFormData, 'mukesh');
-    await storeBookingInquiryData();
-  };
 
   return (
     <StepContext.Provider value={{ airportCity, formData, setFormData, radioTabActive, setRadioTabActive, medicalSupOptions, aircraftTypeOptions, crewRequirementOptions, travelingPurposeOption, cateringDietaryOptions, handleFinish, handleBackClick, handleNextClick, activeStep, setActiveStep, formatedFormData, setFormatedFormData, requiredDocumentUploadOptions }}>

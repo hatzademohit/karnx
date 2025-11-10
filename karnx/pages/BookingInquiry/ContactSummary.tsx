@@ -5,11 +5,11 @@ import { Controller, FormProvider, useForm, useFormContext } from "react-hook-fo
 import { yupResolver } from "@hookform/resolvers/yup";
 import { contactSummarySchema, contactSummarySchemaType } from "./ValidationSchema";
 import { useAuth } from "@/app/context/AuthContext";
-import { apiBaseUrl } from "@/karnx/api";
 import { use, useCallback, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
 
 function formDataCustomization(formData, radioTabActive) {
     //console.log("Form Submitted: ", formData);
@@ -87,7 +87,9 @@ function formDataCustomization(formData, radioTabActive) {
                 special_requirements: formData.specialRequirements,
             }
         },
-        documents: formData.documentFile,
+        //documents: formData.documentFile,
+        documentName: formData.requiredDocumentUploaded,
+
     };
     //console.log(bookingData);
     return bookingData;
@@ -97,7 +99,9 @@ const ContactSummary = () => {
     const { theme } = useAuth()
     const { formData, setFormData, aircraftTypeOptions, activeStep, handleBackClick, handleFinish, airportCity, formatedFormData, setFormatedFormData, radioTabActive } = useStep();
     const [formValues, setFormValues] = useState<Record<string, any>>({});
+    const [tripType, setTripType] = useState<number>();
     const [getRoute, setRoute] = useState<any>();
+    const { karnxToken, setLoader } = useAuth();
     const methods = useForm<any>({
         resolver: yupResolver(contactSummarySchema),
         mode: "onChange",
@@ -112,11 +116,47 @@ const ContactSummary = () => {
     const { control, handleSubmit } = methods;
 
     const onSubmit = async (data: contactSummarySchemaType) => {
+        // Merge latest form values into state (async), but use merged object locally for payload
         setFormData((prev: any) => ({ ...prev, ...data }));
-        let formSubmitdata = await formDataCustomization(formData, radioTabActive);
-        setFormatedFormData(formSubmitdata);
-        console.log(formatedFormData);
-        handleFinish();
+        const merged = { ...formData, ...data };
+        const bookingPayload = formDataCustomization(merged, tripType);
+        const fd = new FormData();
+        const docs = (merged as any)?.documentFile;
+        if (docs) {
+            if (Array.isArray(docs)) {
+                docs.forEach((file: File) => {
+                    if (file) fd.append('documents', file);
+                });
+            } else if (docs instanceof File) {
+                fd.append('documents', docs);
+            }
+        }
+        const { documents, documentFile, ...rest } = bookingPayload as any;
+        fd.append('payload', JSON.stringify(rest));
+        setLoader(true);
+        try {
+            const headers: Record<string, string> = {
+                Authorization: `Bearer ${karnxToken || ""}`,
+            };
+            const response = await fetch(`${apiBaseUrl}/booking-inquiries`, {
+                method: 'POST',
+                headers,
+                body: fd,
+            });
+            if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+
+            const result = await response.json();
+            if (result?.status === true) {
+                toast.success(result?.message);
+                router.push('/dashboard');
+            } else {
+                toast.error(result?.message);
+            }
+        } catch (err: any) {
+            toast.error(err.message || 'Something went wrong');
+        } finally {
+            setLoader(false);
+        }
     };
 
     const handleAnyChange = useCallback((name: string, value: any) => {
@@ -128,14 +168,15 @@ const ContactSummary = () => {
     };
 
     useEffect(() => {
+        setTripType(radioTabActive);
         let depLocation; let arrLocation;
-        if (radioTabActive === 0) {
+        if (tripType === 0) {
             depLocation = formData.oneWayfrom;
             arrLocation = formData.oneWayto;
-        } else if (radioTabActive === 1) {
+        } else if (tripType === 1) {
             depLocation = formData.roundTripfrom;
             arrLocation = formData.roundTripto;
-        } else if (radioTabActive === 2) {
+        } else if (tripType === 2) {
             // formData.multiCity.forEach((leg: any, index: number) => {
             //     if (index === 0) {
             //         depLocation = [{ id: leg.multiCityfrom }];
@@ -255,13 +296,13 @@ const ContactSummary = () => {
                             {formData.isFlexibleDates &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{formData.flexibleRange}</Typography>
                             }
-                            {radioTabActive === 0 && formData.isFlexibleDates === false &&
+                            {tripType === 0 && formData.isFlexibleDates === false &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{dayjs(formData.oneWaydepartureDate).format("MMMM DD, YYYY")}</Typography>
                             }
-                            {radioTabActive === 1 && formData.isFlexibleDates === false &&
+                            {tripType === 1 && formData.isFlexibleDates === false &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{dayjs(formData.roundTripdepartureDate).format("MMMM DD, YYYY")}</Typography>
                             }
-                            {radioTabActive === 2 && formData.isFlexibleDates === false &&
+                            {tripType === 2 && formData.isFlexibleDates === false &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{dayjs(formData.multiCity[0].multiCitydepartureDate).format("MMMM DD, YYYY")}</Typography>
                             }
 
