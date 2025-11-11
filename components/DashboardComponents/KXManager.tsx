@@ -49,7 +49,7 @@ const KXManager = () => {
     const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
 
     const { data, refetch: fetchInquiries } = useApi<any[]>(
-        `${apiBaseUrl}/booking-inquiries`
+        `${apiBaseUrl}/dashboard/kxmanager-charter-inquiries`
     );
 
     const viewInquiryDetails = (inquiryRow) => {
