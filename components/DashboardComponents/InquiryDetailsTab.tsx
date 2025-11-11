@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Card, CardContent, Typography, Grid, Chip, Link } from "@mui/material";
 import { FlightTakeoff, Event } from "@mui/icons-material";
-import { apiBaseUrl } from "@/karnx/api";
+import { apiBaseUrl, fileStorageUrl } from "@/karnx/api";
 import { useApi } from "@/karnx/Hooks/useApi";
 
 interface InquiryDetailsTabProps {
@@ -39,7 +39,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
     fetchInquiryDetails();
   }, []);
 
-  console.log(data?.requested_service);
+
   return (
     <>
       {/* Flight Information */}
@@ -110,7 +110,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
           >
             <Event fontSize="small" color="action" />
             <Typography variant="body2">
-              <strong>Flexible Dates:</strong> {data?.flexible_date_range}
+              <strong>Flexible Dates:</strong> {data?.flexible_date_range ?? 'NA'}
             </Typography>
           </Box>
         </CardContent>
@@ -316,7 +316,73 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                       {data?.uploaded_documents_path.map((medReq: string, idx: number) => (
                         <React.Fragment key={idx}>
                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
-                            <Link key={`${medReq}-${idx}`} href={medReq} >{medReq}</Link>
+                            <Link
+                              key={`${medReq}-${idx}`}
+                              href={medReq}
+                              onClick={async (e) => {
+                                try {
+                                  // Prevent default navigation to handle download manually
+                                  e.preventDefault();
+                                  const url = medReq;
+                                  //console.log(url);
+                                  // Derive filename from URL path if possible
+                                  const deriveFilename = (inputUrl: string) => {
+                                    try {
+                                      const u = new URL(inputUrl, window.location.origin);
+                                      const pathname = u.pathname;
+                                      const lastSegment = pathname.substring(pathname.lastIndexOf("/") + 1) || "download";
+                                      return decodeURIComponent(lastSegment);
+                                    } catch {
+                                      // Fallback if URL constructor fails
+                                      const parts = inputUrl.split("/");
+                                      return decodeURIComponent(parts[parts.length - 1] || "download");
+                                    }
+                                  };
+
+                                  const filename = deriveFilename(url);
+
+                                  // Attempt to fetch to support same-origin protected URLs and set correct filename
+                                  const response = await fetch(url, { credentials: 'include' });
+                                  if (!response.ok) {
+                                    // If fetch fails (e.g., CORS or 4xx/5xx), fallback to opening the URL in a new tab
+                                    const a = document.createElement('a');
+                                    a.href = fileStorageUrl + url;
+                                    a.target = '_blank';
+                                    a.rel = 'noopener noreferrer';
+                                    a.click();
+                                    return;
+                                  }
+
+                                  // Try to extract filename from Content-Disposition header
+                                  const cd = response.headers.get('content-disposition');
+                                  let suggestedName = filename;
+                                  if (cd && cd.includes('filename')) {
+                                    const match = cd.match(/filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
+                                    if (match) {
+                                      suggestedName = decodeURIComponent(match[1] || match[2]);
+                                    }
+                                  }
+
+                                  const blob = await response.blob();
+                                  const blobUrl = window.URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = fileStorageUrl + blobUrl;
+                                  a.download = suggestedName || 'download';
+                                  document.body.appendChild(a);
+                                  a.click();
+                                  a.remove();
+                                  console.log(fileStorageUrl, blobUrl);
+                                  /*window.URL.revokeObjectURL(blobUrl);*/
+                                } catch (err) {
+                                  // As a last resort, try navigating to the URL
+                                  alert('Unable to open file, please try again.');
+                                  console.error('Download failed, falling back to navigation:', err);
+                                  //window.open(medReq, '_blank', 'noopener,noreferrer');
+                                }
+                              }}
+                            >
+                              {medReq}
+                            </Link>
                           </Box>
                         </React.Fragment>
                       ))}
