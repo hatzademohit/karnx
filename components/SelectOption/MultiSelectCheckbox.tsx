@@ -7,6 +7,7 @@ interface MultiSelectCheckboxProps {
   value: any;
   onChange: (value: any) => void;
   width?: number | string;
+  size?: any;
 }
 
 const ITEM_HEIGHT = 48;
@@ -26,6 +27,7 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   value,
   onChange,
   width = 300,
+  size = 'medium'
 }) => {
   const handleChange = (event: SelectChangeEvent<typeof value>) => {
     const {
@@ -35,7 +37,7 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   };
 
   return (
-    <FormControl sx={{ m: 1, width }}>
+    <FormControl size={size} sx={{ m: 1, width }}>
       <InputLabel>{label}</InputLabel>
       <Select
         multiple
