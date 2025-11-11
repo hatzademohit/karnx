@@ -4,7 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { InputLabel, styled, Typography, useTheme } from "@mui/material";
 
 interface CustomDateTimePickerProps {
@@ -20,6 +20,7 @@ interface CustomDateTimePickerProps {
   required?: boolean;
   error?: boolean;
   helperText?: string;
+  minDate?: Date;
 }
 
 // ✅ Styled wrapper that enforces highlight on selected values
@@ -43,15 +44,16 @@ export default function CustomDateTimePicker({
   value,
   onChange,
   withClock = true,
-  minDateTime,
+  minDateTime = dayjs(),
   maxDateTime,
   disabled = false,
   name, 
   required = false,
   error = false,
-  helperText
+  helperText,
+  minDate
 }: CustomDateTimePickerProps) {
-
+const [open, setOpen] = React.useState(false);
 const theme = useTheme()
 
   return (
@@ -66,6 +68,9 @@ const theme = useTheme()
         value={value}
         onChange={onChange}
         disabled={disabled}
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
         minDateTime={minDateTime}
         maxDateTime={maxDateTime}
         viewRenderers={
@@ -91,6 +96,7 @@ const theme = useTheme()
           textField: { 
             size: "medium", fullWidth: true, variant: "outlined",
             error: error,  helperText: helperText,
+            onClick: () => setOpen(true),
           },
           layout: {
             sx: {

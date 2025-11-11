@@ -98,7 +98,6 @@ const ContactSummary = () => {
     const router = useRouter();
     const { theme } = useAuth()
     const { formData, setFormData, aircraftTypeOptions, activeStep, handleBackClick, handleFinish, airportCity, formatedFormData, setFormatedFormData, radioTabActive } = useStep();
-    const [formValues, setFormValues] = useState<Record<string, any>>({});
     const [tripType, setTripType] = useState<number>();
     const [getRoute, setRoute] = useState<any>();
     const { karnxToken, setLoader } = useAuth();
@@ -160,7 +159,6 @@ const ContactSummary = () => {
     };
 
     const handleAnyChange = useCallback((name: string, value: any) => {
-        setFormValues(prev => ({ ...prev, [name]: value }));
         setFormData((prev: any) => ({ ...prev, [name]: value }));
     }, []);
     const makeOnChange = (name: string, rhfOnChange: (v: any) => void) => (arg: any) => {
@@ -281,7 +279,7 @@ const ContactSummary = () => {
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Box sx={{ display: 'flex', gap: '10px' }}>
                             <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Contact:</Typography>
-                            <Typography sx={{ fontSize: '14px', color: '#808080' }}>{formValues.contactName}</Typography>
+                            <Typography sx={{ fontSize: '14px', color: '#808080' }}>{formData?.contactName}</Typography>
                         </Box>
                     </Grid>
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
@@ -327,10 +325,10 @@ const ContactSummary = () => {
                             {formData.adults &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{formData.adults} adults</Typography>
                             }
-                            {formData.children &&
+                            {formData.children != 0 &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>| {formData.children} children</Typography>
                             }
-                            {formData.infants &&
+                            {formData.infants != 0 &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>| {formData.infants} infant</Typography>
                             }
                         </Box>

@@ -29,12 +29,10 @@ const OneWayFlights = ({ control, errors, setValue }: any) => {
                 control={control}
                 render={({ field: toField }) => (
                   <SwapComp
-                    fromOptions={airportOptions}
-                    toOptions={airportOptions.filter((airport) => airport.id != field.value) }
+                    fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
+                    toOptions={airportOptions.filter((airport) => airport.id != field.value)}
                     fromValue={airportOptions.find((airport) => airport.id == field.value) || null }
                     toValue={airportOptions.find((airport) => airport.id == toField.value) || null }
-                    // fromValue={airportOptions.find((airport) => airport.id == field.value)?.code || ''}
-                    // toValue={airportOptions.find((airport) => airport.id == toField.value)?.code || ''}
                     onFromChange={(val: any) => {
                       setValue("oneWayfrom", val?.id, { shouldValidate: true, shouldDirty: true });
                     }}
@@ -68,6 +66,7 @@ const OneWayFlights = ({ control, errors, setValue }: any) => {
                 withClock
                 error={!!errors.oneWaydepartureDate}
                 helperText={errors.oneWaydepartureDate?.message}
+                minDateTime={dayjs().add(1, 'day').startOf('day')}
               />
             )}
           />

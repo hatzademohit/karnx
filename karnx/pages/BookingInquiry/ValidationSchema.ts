@@ -118,7 +118,7 @@ export const passengerAircraftSchema = yup.object().shape({
     otherwise: schema => schema.notRequired(),
   }),
   // 
-  isMedicalAssistanceReq: yup.boolean().required("Please select medical assistance"),
+  isMedicalAssistanceReq: yup.boolean(),
 
   specialAssistance: yup
     .array()
@@ -129,7 +129,7 @@ export const passengerAircraftSchema = yup.object().shape({
     })
     .of(yup.string())
     .when("isMedicalAssistanceReq", {
-      is: true,
+      is: (val) => val === true ,
       then: (schema) =>
         schema
           .min(1, "Please select at least one assistance option")
@@ -145,8 +145,8 @@ export const passengerAircraftSchema = yup.object().shape({
     return schema.notRequired();
   }), 
   // 
-  checkedBags: yup.string().required("Please select checked bags"),
-  carryOnBags: yup.string().required("Please select carry on bags"),
+  checkedBags: yup.number().typeError('Only number are allowed').required("Please select checked bags").integer("Only whole numbers are allowed").min(0, "Value cannot be negative"),
+  carryOnBags: yup.number().typeError('Only number are allowed').required("Please select carry on bags").integer("Only whole numbers are allowed").min(0, "Value cannot be negative"),
   overSizedItems: yup.string().required("Please select over sized items"),
   // 
   preferredServices: yup.array()
