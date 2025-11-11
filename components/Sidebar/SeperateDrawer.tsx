@@ -12,6 +12,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import FlightIcon from '@mui/icons-material/Flight';
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
+import BusinessIcon from '@mui/icons-material/Business';
 import { useAuth } from '@/app/context/AuthContext';
 
 interface SeperateDrawerProps {
@@ -33,9 +34,11 @@ export default function SeperateDrawer({
     { menu: 'Navination', icon: <MenuIcon />, path: '/navigation' },
     { menu: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     // { menu: 'Inquiries', icon: <SearchOutlinedIcon />, path: '/inquiries', permission: 'user read' },
-    { menu: 'Flight Ops', icon: <FlightIcon />, path: '/flight-ops', permission: 'flight ops master read' },
-    { menu: 'Fleet', icon: <BuildOutlinedIcon />, path: '/fleet', permission: 'fleet master read' },
-    { menu: 'Crew', icon: <Groups2OutlinedIcon />, path: '/crew-roster', permission: 'crew master read' },
+    { menu: 'Flight Ops', icon: <FlightIcon />, path: '/flight-ops', permission: 'flight read' },
+    { menu: 'Fleet', icon: <BuildOutlinedIcon />, path: '/fleet', permission: 'fleet read' },
+    { menu: 'Crew', icon: <Groups2OutlinedIcon />, path: '/crew-roster', permission: 'crew read' },
+    { menu: 'Company Profile', icon: <BusinessIcon />, path: '/company-profile', permission: 'crew read' },
+    // { menu: 'Crew Roster', icon: <Groups2OutlinedIcon />, path: '/cre-roster', permission: 'crew read' },
     // { menu: 'Booking Inquiry', icon: <Groups2OutlinedIcon />, path: '/booking-inquiry', permission: 'user read' },
   ]
 

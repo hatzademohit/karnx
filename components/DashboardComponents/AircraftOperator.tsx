@@ -11,7 +11,17 @@ import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { RecentInquiries, Next24Hours, InquiryDetails } from '@/components/DashboardComponents';
+import { apiBaseUrl } from '@/karnx/api';
+import { useApi } from '@/karnx/Hooks/useApi';
 
+
+interface AircraftOperatorCardCount {
+    assigned_inquiries?: number;
+    quote_pending?: number;
+    upcoming_flights?: number;
+    live_flights?: number;
+    completed_bookings?: number | string;
+}
 const AircraftOperator = () => {
 
     const router = useRouter()
@@ -20,40 +30,54 @@ const AircraftOperator = () => {
     const [inqueryData, setInqueryData] = useState(null);
     const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
 
-    const [data, setData] = useState([
-       {
-            "id": 92,
-            "inquiryId": "BQ-REF-00092",
-            "priority": [
-                "NEW",
-                "MEDIUM PRIORITY"
-            ],
-            "route": "NAG → PNQ",
-            "clientName": "KarnX",
-            "clientEmail": null,
-            "inquiryDate": "Sep/05/2025",
-            "date": "September 25, 2025",
-            "passangers": 4,
-            "aircraft": "Light Waight",
-            "assign": "Assigned",
-            "status": "Requested",
-            "status_color": "#cccccc",
-            "operators": "opt",
-            "value": "val"
-        },
-    ])
-    const [cardInfoData, setCardInfoData] = useState([
-        { count: 8, label: 'Assigned Inquiries', icon: <DescriptionOutlinedIcon /> },
-        { count: 5, label: 'Pending Quotes', icon: <AccessTimeOutlinedIcon /> },
-        { count: 12, label: 'Upcoming Flights', icon: <AirplanemodeActiveIcon /> },
-        { count: 3, label: 'Live Flights', icon: <LocationOnOutlinedIcon /> },
-        { count: 10, label: 'Completed Bookings', icon: <CheckOutlinedIcon /> },
-    ])
+    // const [data, setData] = useState([
+    //     {
+    //         "id": 92,
+    //         "inquiryId": "BQ-REF-00092",
+    //         "priority": [
+    //             "NEW",
+    //             "MEDIUM PRIORITY"
+    //         ],
+    //         "route": "NAG → PNQ",
+    //         "clientName": "KarnX",
+    //         "clientEmail": null,
+    //         "inquiryDate": "Sep/05/2025",
+    //         "date": "September 25, 2025",
+    //         "passangers": 4,
+    //         "aircraft": "Light Waight",
+    //         "assign": "Assigned",
+    //         "status": "Requested",
+    //         "status_color": "#cccccc",
+    //         "operators": "opt",
+    //         "value": "val"
+    //     },
+    // ])
+    /** get card count from API*/
+    useEffect(() => {
+        fetchCardCount();
+        fetchInquiries();
+    }, []);
+
+    const { data: result, refetch: fetchCardCount } = useApi<AircraftOperatorCardCount>(
+        `${apiBaseUrl}/dashboard/aircraft-operator-cardcount`
+    );
+
+    const cardInfoData = [
+        { count: result?.assigned_inquiries, label: 'Assigned Inquiries', icon: <DescriptionOutlinedIcon /> },
+        { count: result?.quote_pending, label: 'Pending Quotes', icon: <AccessTimeOutlinedIcon /> },
+        { count: result?.upcoming_flights, label: 'Upcoming Flights', icon: <AirplanemodeActiveIcon /> },
+        { count: result?.live_flights, label: 'Live Flights', icon: <LocationOnOutlinedIcon /> },
+        { count: result?.completed_bookings, label: 'Completed Bookings', icon: <CheckOutlinedIcon /> },
+    ];
 
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)
         setInqueryData(inquiryRow);
     }
+
+    const { data, refetch: fetchInquiries } = useApi<any[]>(
+        `${apiBaseUrl}/dashboard/aircraft-operator-charter-inquiries`
+    );
 
     useEffect(() => {
         setColumns([
@@ -123,13 +147,13 @@ const AircraftOperator = () => {
         ])
     }, []);
 
-    return(
+    return (
         <>
             {!showDetailsTabs &&
                 <Grid container spacing={{ md: 3, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
                         <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index}>
-                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoIcon={item.icon}/>
+                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoIcon={item.icon} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
