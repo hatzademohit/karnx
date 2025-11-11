@@ -172,7 +172,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.removeItem("loginTime");
         localStorage.removeItem("permissions");
         localStorage.removeItem("role");
-        window.location.href = '/';
+        router.push("/");
       })
       .catch((error) => {
         console.log(error);

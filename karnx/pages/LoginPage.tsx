@@ -11,6 +11,7 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";
 import { apiBaseUrl } from '@/karnx/api';
+import { useRouter } from "next/navigation";
 
 interface LoginFormInputs {
   userId: string;
@@ -31,6 +32,7 @@ const LoginPage = () => {
     },
   });
 
+  const router = useRouter();
   const [inputType, setInputType] = useState('password');
 
   const inputChange = () => {
@@ -50,11 +52,12 @@ const LoginPage = () => {
       localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
       localStorage.setItem("role", response.data.role);
       localStorage.setItem('loggedInUser', JSON.stringify(user));
-      // localStorage.setItem('loginTime', currentTime);
+      localStorage.setItem('loginTime', currentTime); // session manager
       setAlertMessage(response.data.message);
       setOpenAlert(true);
       setSeverity('success');
-      window.location.href = "/dashboard";
+      // window.location.href = "/dashboard";
+      router.push("/dashboard");
     } catch (error: any) {
       if (error.response) {
         setAlertMessage(error.response.data.message || "Invalid credentials");
