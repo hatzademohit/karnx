@@ -8,6 +8,8 @@ interface MultiSelectCheckboxProps {
   onChange: (value: any) => void;
   width?: number | string;
   size?: any;
+  disabled?: boolean;
+  inputLabel?: string;
 }
 
 const ITEM_HEIGHT = 48;
@@ -27,7 +29,9 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   value,
   onChange,
   width = 300,
-  size = 'medium'
+  size = 'medium',
+  disabled = false,
+  inputLabel = '',
 }) => {
   const handleChange = (event: SelectChangeEvent<typeof value>) => {
     const {
@@ -37,7 +41,9 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   };
 
   return (
-    <FormControl size={size} sx={{ m: 1, width }}>
+    <>
+    { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel}</InputLabel> }
+    <FormControl size={size} sx={{ width }}>
       <InputLabel>{label}</InputLabel>
       <Select
         multiple
@@ -46,6 +52,7 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
         input={<OutlinedInput label={label} />}
         renderValue={(selected) => selected.join(", ")}
         MenuProps={MenuProps}
+        disabled={disabled}
       >
         {options.map((option) => (
           <MenuItem key={option} value={option}>
@@ -55,6 +62,7 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
         ))}
       </Select>
     </FormControl>
+    </>
   );
 };
 
