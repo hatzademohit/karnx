@@ -1,6 +1,6 @@
 "use client"
 import React, { useMemo, useState } from 'react';
-import { Box, Card, CardContent, Chip, Grid, IconButton, MenuItem, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Card, CardContent, Chip, Grid, IconButton, MenuItem, Stack, Tooltip, Typography, useTheme } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
@@ -37,6 +37,7 @@ const ReadOnlyRow = ({ label, value }: { label: string; value: React.ReactNode }
 
 export default function CompanyProfile() {
     // Main profile state
+    const theme = useTheme()
     const [editing, setEditing] = useState(false);
     const [profile, setProfile] = useState({
         companyName: 'Elite Aviation Services',
@@ -65,7 +66,6 @@ export default function CompanyProfile() {
         country: 'India',
         pinCode: 110001,
         selectedSection: 'Overview',
-
     });
 
     // Form buffer while editing
@@ -92,6 +92,7 @@ export default function CompanyProfile() {
 
     return (
         <>
+            <Typography variant='h3' sx={{ color: theme?.heading?.color, mb: theme?.heading?.marginBottom}}>Company Profile</Typography>
             <Box sx={{ border: '1px solid #cccccc', padding: 2 }}>
                 <Grid container spacing={3}>
                     <Grid size={{ lg: 12, md: 12, xs: 12 }}>

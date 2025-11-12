@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import dayjs from "dayjs";
 
-const OneWayFlights = ({ control, errors, setValue }: any) => {
+const OneWayFlights = ({ control, errors, setValue, watch }: any) => {
   const { airportCity } = useStep();
 
   // Defensive mapping for options
@@ -27,12 +27,15 @@ const OneWayFlights = ({ control, errors, setValue }: any) => {
               <Controller
                 name="oneWayto"
                 control={control}
-                render={({ field: toField }) => (
+                render={({ field: tofiled }) => {
+                  const oneWayfrom = watch('oneWayfrom');
+                  const oneWayto = watch('oneWayto');
+                  return(
                   <SwapComp
-                    fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
-                    toOptions={airportOptions.filter((airport) => airport.id != field.value)}
-                    fromValue={airportOptions.find((airport) => airport.id == field.value) || null }
-                    toValue={airportOptions.find((airport) => airport.id == toField.value) || null }
+                    fromOptions={airportOptions.filter((airport) => airport.id != oneWayto)}
+                    toOptions={airportOptions.filter((airport) => airport.id != oneWayfrom)}
+                    fromValue={airportOptions.find((airport) => airport.id == oneWayfrom) || null }
+                    toValue={airportOptions.find((airport) => airport.id == oneWayto) || null }
                     onFromChange={(val: any) => {
                       setValue("oneWayfrom", val?.id, { shouldValidate: true, shouldDirty: true });
                     }}
@@ -48,7 +51,7 @@ const OneWayFlights = ({ control, errors, setValue }: any) => {
                     toError={!!errors.oneWayto}
                     toHelpertext={errors.oneWayto?.message}
                   />
-                )}
+                )}}
               />
             )}
           />

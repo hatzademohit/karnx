@@ -6,9 +6,10 @@ interface MultiCityFlightsProps {
   control: any;
   setValue: any;
   errors: any;
+  watch?: any;
 }
 
-const MultiCityFlights = ({ control, setValue, errors }: MultiCityFlightsProps) => {
+const MultiCityFlights = ({ control, setValue, errors, watch }: MultiCityFlightsProps) => {
   return (
     <Box
       sx={{
@@ -18,7 +19,7 @@ const MultiCityFlights = ({ control, setValue, errors }: MultiCityFlightsProps) 
         borderRadius: "10px",
       }}
     >
-      <AppendDeleteTable control={control} setValue={setValue} errors={errors} />
+      <AppendDeleteTable control={control} setValue={setValue} errors={errors} watch={watch} />
     </Box>
   );
 };

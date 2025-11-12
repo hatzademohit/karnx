@@ -35,12 +35,15 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                             <Controller
                                 name="roundTripto"
                                 control={control}
-                                render={({ field: toField }) => (
+                                render={({ field: tofield }) => {
+                                const roundTripfrom = watch('roundTripfrom');
+                                const roundTripto = watch('roundTripto');
+                                return(
                                     <SwapComp
-                                        fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
-                                        toOptions={airportOptions.filter((airport) => airport.id != field.value)}
-                                        fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
-                                        toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
+                                        fromOptions={airportOptions.filter((airport) => airport.id != roundTripto)}
+                                        toOptions={airportOptions.filter((airport) => airport.id != roundTripfrom)}
+                                        fromValue={airportOptions.find((airport) => airport.id == roundTripfrom) || ''}
+                                        toValue={airportOptions.find((airport) => airport.id == roundTripto) || ''}
                                         onFromChange={(val: any) => {
                                             setValue("roundTripfrom", val?.id, { shouldValidate: true, shouldDirty: true });
                                             setValue("roundTriptoReturn", val?.id, { shouldValidate: true, shouldDirty: true });
@@ -58,7 +61,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                                         toError={!!errors.roundTripto}
                                         toHelpertext={errors.roundTripto?.message}
                                     />
-                                )}
+                                )}}
                             />
                         )}
                     />
@@ -87,17 +90,17 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                     <Controller
                         name="roundTripfromReturn"
                         control={control}
-                        render={({ field }) => (
+                        render={({ field: roundTripfromReturn }) => (
                             <Controller
                                 name="roundTriptoReturn"
                                 control={control}
-                                render={({ field: toField }) => {
+                                render={({ field: roundTriptoReturn }) => {
                                 const roundTripfrom = watch('roundTripfrom');
                                 const roundTripto = watch('roundTripto');
                                 return(
                                     <SwapComp
-                                        fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
-                                        toOptions={airportOptions.filter((airport) => airport.id != field.value) }
+                                        fromOptions={airportOptions.filter((airport) => airport.id != roundTriptoReturn.value)}
+                                        toOptions={airportOptions.filter((airport) => airport.id != roundTripfromReturn.value) }
                                         fromValue={airportOptions.find((airport) => airport.id == roundTripto) || ''}
                                         toValue={airportOptions.find((airport) => airport.id == roundTripfrom) || ''}
                                         onFromChange={(val: any) => {

@@ -21,9 +21,10 @@ interface AppendDeleteTableProps {
   control: any;
   setValue: any;
   errors: any;
+  watch?: any;
 }
 
-const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps) => {
+const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTableProps) => {
   const [rows, setRows] = useState<number[]>([1, 2]); // Just store row IDs
   const { airportCity } = useStep();
 
@@ -58,12 +59,14 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                         control={control}
                         defaultValue=""
                         render={({ field: toField }) =>{
-													return(
+                          const multiCityto = watch(`multiCity[${index}].multiCityto`);
+                          const multiCityfrom = watch(`multiCity[${index}].multiCityfrom`);
+                        return(
                           <SwapComp
-                            fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
-                            toOptions={airportOptions.filter((airport) => airport.id != field.value) }
-                            fromValue={airportOptions.find((airport) => airport.id == field.value) || ''}
-                            toValue={airportOptions.find((airport) => airport.id == toField.value) || ''}
+                            fromOptions={airportOptions.filter((airport) => airport.id != multiCityto)}
+                            toOptions={airportOptions.filter((airport) => airport.id != multiCityfrom) }
+                            fromValue={airportOptions.find((airport) => airport.id == multiCityfrom) || ''}
+                            toValue={airportOptions.find((airport) => airport.id == multiCityto) || ''}
                             onFromChange={(val: any) => {
                               setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
                             }}
@@ -127,12 +130,15 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                       name="multiCitytoReturn"
                       control={control}
                       defaultValue=""
-                      render={({ field: toField }) => (
+                      render={({ field: toField }) =>{
+                        const multiCityfromReturn = watch('multiCityfromReturn');
+                        const multiCitytoReturn = watch('multiCitytoReturn');
+                        return(
                         <SwapComp
-                          fromOptions={airportOptions.filter((airport) => airport.id != toField.value)}
-                          toOptions={airportOptions.filter((airport) => airport.id != field.value) }
-                          fromValue={airportOptions.find((airport) => airport.id === field.value) || ''}
-                          toValue={airportOptions.find((airport) => airport.id === toField.value) || ''}
+                          fromOptions={airportOptions.filter((airport) => airport.id != multiCitytoReturn)}
+                          toOptions={airportOptions.filter((airport) => airport.id != multiCityfromReturn) }
+                          fromValue={airportOptions.find((airport) => airport.id == multiCityfromReturn) || ''}
+                          toValue={airportOptions.find((airport) => airport.id == multiCitytoReturn) || ''}
                           onFromChange={(val: any) => {
                             setValue("multiCityfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
                           }}
@@ -148,7 +154,7 @@ const AppendDeleteTable = ({ control, setValue, errors }: AppendDeleteTableProps
                           toError={!!errors?.multiCitytoReturn}
                           toHelpertext={errors?.multiCitytoReturn?.message}
                         />
-                      )}
+                      )}}
                     />
                   )}
                 />

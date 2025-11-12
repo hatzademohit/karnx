@@ -120,26 +120,42 @@ export const passengerAircraftSchema = yup.object().shape({
   // 
   isMedicalAssistanceReq: yup.boolean(),
 
-  specialAssistance: yup
-    .array()
-    .transform((value, originalValue) => {
-      // Ensure always an array (React Hook Form may pass string or undefined)
-      if (!originalValue) return [];
-      return Array.isArray(originalValue) ? originalValue : [originalValue];
-    })
-    .of(yup.string())
-    .when("isMedicalAssistanceReq", {
-      is: (val) => val === true ,
-      then: (schema) =>
-        schema
-          .min(1, "Please select at least one assistance option")
-          .required("Please select at least one assistance option"),
-      otherwise: (schema) => schema.notRequired().nullable(),
-    })
-    .default([]),
+  // specialAssistance: yup
+  //   .array()
+  //   .transform((value, originalValue) => {
+  //     // Ensure always an array (React Hook Form may pass string or undefined)
+  //     if (!originalValue) return [];
+  //     return Array.isArray(originalValue) ? originalValue : [originalValue];
+  //   })
+  //   .of(yup.string())
+  //   .when("isMedicalAssistanceReq", {
+  //     is: (val) => val === true ,
+  //     then: (schema) =>
+  //       schema
+  //         .min(1, "Please select at least one assistance option")
+  //         .required("Please select at least one assistance option"),
+  //     otherwise: (schema) => schema.notRequired().nullable(),
+  //   })
+  //   .default([]),
+
+  //  specialAssistance: yup.array().of(yup.string()).when("isMedicalAssistanceReq", {
+  //   is: true,
+  //   then: (schema) =>
+  //     schema.min(1, "Please select at least one assistance option").required("Please select at least one assistance option"),
+  //   otherwise: (schema) => schema.notRequired().nullable(),
+  // }).default([]),
+
+  specialAssistance: yup.array().when('isMedicalAssistanceReq', {
+    is: true,
+    then: (schema) =>
+      schema
+        .min(1, 'Please select at least one assistance option')
+        .required('Please select at least one assistance option'),
+    otherwise: (schema) => schema.notRequired(),
+  }),
 
   otherAssistance: yup.string().when("specialAssistance", ([specialAssistance], schema) => {
-    if (Array.isArray(specialAssistance) && specialAssistance.includes("6")) {
+    if (Array.isArray(specialAssistance) && specialAssistance.includes(6)) {
       return schema.required("Other Assistance is required when 'Other' is selected");
     }
     return schema.notRequired();

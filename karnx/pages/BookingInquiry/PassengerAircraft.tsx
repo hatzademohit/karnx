@@ -22,13 +22,13 @@ const PassengerAircraft = () => {
             petSize: formData?.petSize || '',
             petAdditionalNotes: formData?.petAdditionalNotes || '',
             isMedicalAssistanceReq: formData?.isMedicalAssistanceReq || false,
-            specialAssistance: formData?.specialAssistance || {},
+            specialAssistance: formData?.specialAssistance || [],
             checkedBags: formData?.checkedBags || '',
             carryOnBags: formData?.carryOnBags || '',
             overSizedItems: formData?.overSizedItems || '',
             // 
-            preferredServices: formData?.preferredServices || {},
-            crewRequirements: formData?.crewRequirements || {},
+            preferredServices: formData?.preferredServices || '',
+            crewRequirements: formData?.crewRequirements || '',
             additionalNotes: formData?.additionalNotes || '',
             otherAssistance: formData?.otherAssistance || '',
             //
