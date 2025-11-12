@@ -16,11 +16,11 @@ const BookingStatusMaster = () => {
   const [modalName, setModalName] = useState<boolean>(false)
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedBookingStatus, setSelectedBookingStatus] = useState<any>(null);
-  const [status, setStatus] = useState<any[]>([{id: 1, status: 'Active'}, {id: 0, status: 'Inactive'}]);
+  const [status, setStatus] = useState<any[]>([{ id: 1, status: 'Active' }, { id: 0, status: 'Inactive' }]);
 
   // Pagination, Search, Sort states
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [rowCount, setRowCount] = useState(0);
   const [search, setSearch] = useState("");
   const [sortModel, setSortModel] = useState<any>([{ field: "name", sort: "asc" }]);
@@ -73,20 +73,20 @@ const BookingStatusMaster = () => {
         sortable: false,
         renderCell: (params: any) => (
           <>
-          { hasPermission('booking status update') && (
-            <Tooltip title='Edit Booking Status' arrow placement="top">
-              <IconButton size="small" onClick={() => editRow(params.row)}>
-                <EditOutlinedIcon sx={{ color: theme?.common?.blueColor, fontSize: '20px' }} />
-              </IconButton>
-            </Tooltip>
-          )}
-          { hasPermission('booking status delete') && (
-            <Tooltip title='Delete Booking Status' arrow placement="top">
-              <IconButton size="small" onClick={() => deleteRow(params.row)}>
-                <DeleteOutlineOutlinedIcon sx={{ color: theme?.common?.redColor, fontSize: '20px' }} />
-              </IconButton>
-            </Tooltip>
-          )}
+            {hasPermission('booking status update') && (
+              <Tooltip title='Edit Booking Status' arrow placement="top">
+                <IconButton size="small" onClick={() => editRow(params.row)}>
+                  <EditOutlinedIcon sx={{ color: theme?.common?.blueColor, fontSize: '20px' }} />
+                </IconButton>
+              </Tooltip>
+            )}
+            {hasPermission('booking status delete') && (
+              <Tooltip title='Delete Booking Status' arrow placement="top">
+                <IconButton size="small" onClick={() => deleteRow(params.row)}>
+                  <DeleteOutlineOutlinedIcon sx={{ color: theme?.common?.redColor, fontSize: '20px' }} />
+                </IconButton>
+              </Tooltip>
+            )}
           </>
         ),
       },
@@ -180,15 +180,15 @@ const BookingStatusMaster = () => {
         // onClick={() => { setSelectedBookingStatus(null); setAddRow(true); setModalName(false) }}
         buttonText={hasPermission("booking status create") ? "Add Booking Status" : undefined}
         onClick={() => {
-            if (hasPermission("booking status create")) {
+          if (hasPermission("booking status create")) {
             setSelectedBookingStatus(null);
             setAddRow(true);
             setModalName(false);
-            }
+          }
         }}
-        
+
       />
-    
+
       {/* Add / Edit Modal */}
       <CustomModal
         open={addRow}
@@ -234,7 +234,7 @@ const BookingStatusMaster = () => {
               InputProps={{ readOnly: false }}
             />
           </Grid>
-          
+
           {modalName &&
             <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
               <SingleSelect

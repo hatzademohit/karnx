@@ -133,7 +133,7 @@ const TravelAgent = () => {
                 <Grid container spacing={{ md: 3, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
                         <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index}>
-                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon}/>
+                            <InfoCard InfoNumber={(item.count != undefined) ? item.count : 0} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>

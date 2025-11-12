@@ -128,7 +128,7 @@ const AircraftOperator = () => {
                     </Button>
                 ),
             },
-            { headerName: 'Operators', flex: 1, field: 'operators' },
+           // { headerName: 'Operators', flex: 1, field: 'operators' },
             { headerName: 'Value', flex: 1, field: 'value' },
             {
                 headerName: 'Action',
