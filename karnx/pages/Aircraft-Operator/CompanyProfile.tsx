@@ -178,7 +178,7 @@ export default function CompanyProfile() {
                                     disabled={!editing}
                                 >
                                     {certOptions.map((option) => (
-                                        <MenuItem value={option}>{option}</MenuItem>
+                                        <MenuItem key={option} value={option}>{option}</MenuItem>
                                     ))}
                                 </SingleSelect>
                             </Grid>
@@ -397,7 +397,7 @@ export default function CompanyProfile() {
                                 </Typography>
                                 <Typography sx={{ mt: 0.5 }}>
                                     {profile?.regions.map((city) => (
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{city}</Typography>
+                                        <Typography key={city} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{city}</Typography>
                                     ))}
                                 </Typography>
                             </Grid>
@@ -407,7 +407,7 @@ export default function CompanyProfile() {
                                 </Typography>
                                 <Typography sx={{ mt: 0.5 }}>
                                     {profile?.certifications.map((certification) => (
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>{certification}</Typography>
+                                        <Typography key={certification} component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>{certification}</Typography>
                                     ))}
                                 </Typography>
                             </Grid>
@@ -418,7 +418,7 @@ export default function CompanyProfile() {
                                 </Typography>
                                 <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start', mt: 0.5 }}>
                                     {profile?.specialties.map((specialtie) => (
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>{specialtie}</Typography>
+                                        <Typography key={specialtie} component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>{specialtie}</Typography>
                                     ))}
                                 </Box>
                             </Grid>
