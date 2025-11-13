@@ -24,7 +24,7 @@ const FlightDetails = () => {
     const { control, handleSubmit, formState: { errors }, setValue, watch } = useForm<any>({
         resolver: yupResolver(schema as any),
         mode: "onChange",
-        shouldUnregister: false,
+        shouldUnregister: true,
         defaultValues: {
             flexibleRange: formData?.flexibleRange || '',
             isFlexibleDates: formData?.isFlexibleDates || false,
@@ -40,13 +40,13 @@ const FlightDetails = () => {
             roundTriptoReturn: formData?.roundTriptoReturn || '',
             roundTripreturnDate: formData?.roundTripreturnDate || null,
             // Multi-city fields
-            multiCity: [
-                {
-                    multiCityfrom: formData?.multiCityfrom || '',
-                    multiCityto: formData?.multiCityto || '',
-                    multiCitydepartureDate: formData?.multiCitydepartureDate || null,
-                },
-            ],
+            multiCity:  formData?.multiCity?.map((item) => {
+                return {
+                    multiCityfrom: item.multiCityfrom || '',
+                    multiCityto: item.multiCityto || '',
+                    multiCitydepartureDate: item.multiCitydepartureDate || null,
+                };
+            }),
             multiCityfromReturn: formData?.multiCityfromReturn || '',
             multiCitytoReturn: formData?.multiCitytoReturn || '',
             multiCityreturnDate: formData?.multiCityreturnDate || null,
@@ -90,13 +90,13 @@ const FlightDetails = () => {
                 <Typography variant="h3" sx={{ color: theme?.common?.redColor, my: '24px' }}>Flight Details</Typography>
                 <RadioTabs defaultValue={radioTabActive} onchange={(value: number) => { setRadioTabActive(value) }}>
                     <RadioTabs.Tab label="One Way" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
-                        <OneWayFlights control={control} errors={errors} setValue={setValue} />
+                        <OneWayFlights control={control} errors={errors} setValue={setValue} watch={watch} />
                     </RadioTabs.Tab>
                     <RadioTabs.Tab label="Round Trip" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
                         <RoundTripFlights control={control} setValue={setValue} errors={errors} watch={watch} />
                     </RadioTabs.Tab>
                     <RadioTabs.Tab label="Multi City" icon={<Radio className="custom-radio" size="small" checked={false} sx={{ margin: '0 !important' }} />}>
-                        <MultiCityFlights control={control} setValue={setValue} errors={errors} />
+                        <MultiCityFlights control={control} setValue={setValue} errors={errors} watch={watch} />
                     </RadioTabs.Tab>
                 </RadioTabs>
 

@@ -20,7 +20,7 @@ const PassengerInformation = () => {
 
     useEffect(() => {
         setSpecialAssistance(medicalSupOptions || []);
-    }, [medicalSupOptions]);
+    }, [ ]);
 
     useEffect(() => {
         setValue("totalPassengers", adults + children + infants);
@@ -33,6 +33,10 @@ const PassengerInformation = () => {
         const newValue = action === "inc" ? currentValue + 1 : Math.max(min, currentValue - 1);
         setValue(name, newValue);
     };
+
+    useEffect(() => {
+        console.log(errors)
+    }, [errors])
 
     return (
         <>
@@ -189,7 +193,6 @@ const PassengerInformation = () => {
                                                         onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             const updatedValue = Array.isArray(field.value) ? [...field.value] : [];
-
                                                             if (isChecked) {
                                                                 // If checked, add the service id to the array
                                                                 updatedValue.push(assistance.id);

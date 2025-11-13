@@ -17,6 +17,7 @@ export interface SelectProps {
     required?: boolean;
     error?: boolean;
     inputLabel?: string;
+    disabled?: boolean;
 }
  
 const SingleSelect: React.FC<SelectProps> = ({
@@ -31,7 +32,8 @@ const SingleSelect: React.FC<SelectProps> = ({
     style,
     required,
     error,
-    inputLabel
+    inputLabel,
+    disabled = false
 }) => {
  
   return (
@@ -49,6 +51,7 @@ const SingleSelect: React.FC<SelectProps> = ({
                 onChange={onChange}
                 sx={ style }
                 error={error}
+                disabled={disabled}
                 MenuProps={{
                     PaperProps: {
                         style: {
