@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Box, Card, CardContent, Typography, Grid, Button, IconButton, useTheme, Link, Divider, Checkbox } from "@mui/material";
 import FlightOutlinedIcon from '@mui/icons-material/FlightOutlined';
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
@@ -12,40 +12,29 @@ import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 import CustomModal from "../CustomModal";
 import StarIcon from "@mui/icons-material/Star";
+import { apiBaseUrl } from "@/karnx/api";
+import { useApi } from "@/karnx/Hooks/useApi";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
+import { toast } from "react-toastify";
 
 interface OperatorsTabProps {
-    inquiryData?: any;
+    inquiryId?: any;
 }
 
-const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
+const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
 
+    const callApi = useApiFunction();
     const theme = useTheme();
     const [addOperator, setAddOperator] = useState(false);
+    const [assignedOperator, setAssignedOperator] = useState<any[]>([1, 2]);
     const handleOpenAddOperator = () => {
         setAddOperator(true);
     }
-    const [selectedOperators, setSelectedOperators] = useState<number[]>([]);
+    const [selectedOperators, setSelectedOperators] = useState<any[]>([]);
 
-    const [operators, setOperators] = useState([
-        {
-            id: 1,
-            name: "Platinum Jets International dfgs",
-            rating: 4.8,
-            flights: 2847,
-            aircraft: 3,
-            duration: "< 2 hours",
-            tags: ["Luxury Travel", "Group Charters", "VIP Transport"],
-        },
-        {
-            id: 2,
-            name: "Global Charter Solutions",
-            rating: 4.7,
-            flights: 1456,
-            aircraft: 4,
-            duration: "< 3 hours",
-            tags: ["Leisure Travel", "Family Charters"],
-        },
-    ]);
+    const { data: operators, refetch: fetchOperators } = useApi<any[]>(
+        `${apiBaseUrl}/inquiry-operator/get-operators`
+    );
 
     const handleSelect = (id: number) => {
         setSelectedOperators((prev) =>
@@ -53,13 +42,47 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
         );
     };
 
+    const addOperators = async () => {
+        if (selectedOperators.length > 0) {
+            const created = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-operator/operators-assign`, body: { inquiry_id: inquiryId, operator_ids: selectedOperators } });
+            console.log(created);
+            fetchAssignedOperators(inquiryId);
+        } else {
+            alert("Please select at least one operator.");
+        }
+    };
+
+    const fetchAssignedOperators = async (inquiryId) => {
+        const fetched = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-operator/get-assigned-operators?inquiry_id=${encodeURIComponent(inquiryId)}` });
+        if (fetched?.status === true) {
+            toast.success(fetched?.message);
+            setAssignedOperator(fetched.data || []);
+        } else {
+            toast.error(fetched?.message);
+        }
+    };
+
+    const removeOperator = async (operatorId: number) => {
+        if (operatorId) {
+            const deleted = await callApi({ method: 'DELETE', url: `${apiBaseUrl}/inquiry-operator/operators-remove/${operatorId}` });
+            console.log(deleted);
+            fetchAssignedOperators(inquiryId);
+        } else {
+            alert("Please select at least one operator.");
+        }
+    };
+
+    useEffect(() => {
+        fetchAssignedOperators(inquiryId);
+    }, []);
+
     return (
         <>
             {/* heading */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: '8px' }}>
                 <Box>
                     <Typography component='h4' variant="h4">Allocated Operators</Typography>
-                    <Typography sx={{ color: '#4D4D4D' }}>2 operators assigned to this inquiry</Typography>
+                    <Typography sx={{ color: '#4D4D4D' }}>{assignedOperator.length} operators assigned to this inquiry</Typography>
                 </Box>
                 <Box>
                     <Button className="btn btn-danger" onClick={handleOpenAddOperator}>+ Add Operators</Button>
@@ -68,247 +91,136 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
 
             {/* operators */}
             <Grid container spacing={{ md: 2, xs: 1 }}>
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Card variant="outlined" sx={{ borderRadius: 3 }}>
-                        <CardContent className="card-content">
-                            {/* header section */}
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                    <IconButton sx={{ backgroundColor: `${theme?.common?.blueColor} !important`, color: '#ffffff', borderRadius: '8px', width: '40px', height: '40px' }}>
-                                        <FlightOutlinedIcon />
-                                    </IconButton>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                        <Typography variant="h4">Elite Aviation Services</Typography>
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <StarOutlinedIcon sx={{ color: '#FFD700' }} />
-                                            <Typography component="span" sx={{ fontFamily: 'poppins-semibold', fontSize: '14px', color: '#4D4D4D' }}> 4.9</Typography>
-                                            <Typography component="span" sx={{ fontSize: '14px', color: '#4B5563', ml: 1 }}>2,847 flights</Typography>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                                <IconButton>
-                                    <ClearOutlinedIcon />
-                                </IconButton>
-                            </Box>
-                            {/* body section */}
-                            <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
-                                <Grid size={{ xs: 12, sm: 6 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating
-                                    </Typography>
-                                    <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">ARGUS Gold</Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 6 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <WatchLaterOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Response Time
-                                    </Typography>
-                                    <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{'< 2 hours'}</Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <FlightOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Fleet Overview
-                                    </Typography>
-                                    <Typography sx={{ mt: 0.5 }} variant="h5">6 aircraft</Typography>
-                                    <Typography sx={{ mt: 0.5 }}>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>1 Light</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>2 Mid-Size</Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <LanguageIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Operating Regions
-                                    </Typography>
-                                    <Typography sx={{ mt: 0.5 }}>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>Delhi</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>Mumbai</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>Pune</Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <WorkspacePremiumOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Certifications
-                                    </Typography>
-                                    <Typography sx={{ mt: 0.5 }}>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>IS-BAO</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>Wyvern Wingman</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>ARGUS Gold</Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Divider />
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, '& a': { display: 'inline-flex', flexWrap: 'nowrap' } }}>
-                                        <Box sx={{ display: 'flex', gap: '10px' }}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <Link
-                                                    href="mailto:info@example.com"
-                                                    underline="none"
-                                                    color="text.secondary"
-                                                >
-                                                    <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Email
-                                                </Link>
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <Link
-                                                    href="tel:+919876543210"
-                                                    underline="none"
-                                                    color="text.secondary"
-                                                >
-                                                    <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Call
-                                                </Link>
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <Link
-                                                    href="https://example.com"
-                                                    underline="none"
-                                                    color="text.secondary"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Websites
-                                                </Link>
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Specialties:
-                                            </Typography>
-                                            <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                                                <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>IS-BAO</Typography>
-                                                <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>Wyvern Wingman</Typography>
-                                                <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>ARGUS Gold</Typography>
+                {assignedOperator.length > 0 && assignedOperator?.map((op) =>
+                    <Grid key={op.id} size={{ xs: 12, md: 6 }}>
+                        <Card variant="outlined" sx={{ borderRadius: 3 }}>
+                            <CardContent className="card-content">
+                                {/* header section */}
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                        <IconButton sx={{ backgroundColor: `${theme?.common?.blueColor} !important`, color: '#ffffff', borderRadius: '8px', width: '40px', height: '40px' }}>
+                                            <FlightOutlinedIcon />
+                                        </IconButton>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                            <Typography variant="h4">{op.name}</Typography>
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <StarOutlinedIcon sx={{ color: '#FFD700' }} />
+                                                <Typography component="span" sx={{ fontFamily: 'poppins-semibold', fontSize: '14px', color: '#4D4D4D' }}> {op.rating}</Typography>
+                                                <Typography component="span" sx={{ fontSize: '14px', color: '#4B5563', ml: 1 }}>{op.flights} flights</Typography>
                                             </Box>
                                         </Box>
                                     </Box>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Card variant="outlined" sx={{ borderRadius: 3 }}>
-                        <CardContent className="card-content">
-                            {/* header section */}
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                    <IconButton sx={{ backgroundColor: `${theme?.common?.blueColor} !important`, color: '#ffffff', borderRadius: '8px', width: '40px', height: '40px' }}>
-                                        <FlightOutlinedIcon />
+                                    <IconButton onClick={() => removeOperator(op.id)}>
+                                        <ClearOutlinedIcon />
                                     </IconButton>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                        <Typography variant="h4">Elite Aviation Services</Typography>
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <StarOutlinedIcon sx={{ color: '#FFD700' }} />
-                                            <Typography component="span" sx={{ fontFamily: 'poppins-semibold', fontSize: '14px', color: '#4D4D4D' }}> 4.9</Typography>
-                                            <Typography component="span" sx={{ fontSize: '14px', color: '#4B5563', ml: 1 }}>2,847 flights</Typography>
-                                        </Box>
-                                    </Box>
                                 </Box>
-                                <IconButton>
-                                    <ClearOutlinedIcon />
-                                </IconButton>
-                            </Box>
-                            {/* body section */}
-                            <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
-                                <Grid size={{ xs: 12, sm: 6 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating
-                                    </Typography>
-                                    <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">ARGUS Gold</Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 6 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <WatchLaterOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Response Time
-                                    </Typography>
-                                    <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{'< 2 hours'}</Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <FlightOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Fleet Overview
-                                    </Typography>
-                                    <Typography sx={{ mt: 0.5 }} variant="h5">6 aircraft</Typography>
-                                    <Typography sx={{ mt: 0.5 }}>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>1 Light</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF' }}>2 Mid-Size</Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <LanguageIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Operating Regions
-                                    </Typography>
-                                    <Typography sx={{ mt: 0.5 }}>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>Delhi</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>Mumbai</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>Pune</Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <WorkspacePremiumOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Certifications
-                                    </Typography>
-                                    <Typography sx={{ mt: 0.5 }}>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>IS-BAO</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>Wyvern Wingman</Typography>
-                                        <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>ARGUS Gold</Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Divider />
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 12 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, '& a': { display: 'inline-flex', flexWrap: 'nowrap' } }}>
-                                        <Box sx={{ display: 'flex', gap: '10px' }}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <Link
-                                                    href="mailto:info@example.com"
-                                                    underline="none"
-                                                    color="text.secondary"
-                                                >
-                                                    <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Email
-                                                </Link>
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <Link
-                                                    href="tel:+919876543210"
-                                                    underline="none"
-                                                    color="text.secondary"
-                                                >
-                                                    <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Call
-                                                </Link>
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <Link
-                                                    href="https://example.com"
-                                                    underline="none"
-                                                    color="text.secondary"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Websites
-                                                </Link>
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Specialties:
-                                            </Typography>
-                                            <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                                                <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>IS-BAO</Typography>
-                                                <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>Wyvern Wingman</Typography>
-                                                <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>ARGUS Gold</Typography>
+                                {/* body section */}
+                                <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
+                                    <Grid size={{ xs: 12, sm: 6 }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating
+                                        </Typography>
+                                        <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{op.safety_rating}</Typography>
+                                    </Grid>
+                                    <Grid size={{ xs: 12, sm: 6 }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <WatchLaterOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Response Time
+                                        </Typography>
+                                        <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{op.response_time}</Typography>
+                                    </Grid>
+                                    <Grid size={{ xs: 12, sm: 12 }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <FlightOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Fleet Overview
+                                        </Typography>
+                                        <Typography sx={{ mt: 0.5 }} variant="h5">{op?.fleet_overview?.total_aircraft ?? 0} aircraft</Typography>
+                                        <Typography sx={{ mt: 0.5 }}>
+                                            {(op?.fleet_overview?.aircraft_types ?? []).map((type) => (
+                                                <Typography key={type} component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF', mr: 0.5 }}>{type.type} {type.count}</Typography>
+                                            ))}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid size={{ xs: 12, sm: 12 }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <LanguageIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Operating Regions
+                                        </Typography>
+                                        <Typography sx={{ mt: 0.5 }}>
+                                            {(op?.operating_regions ?? []).map((reg) => (
+                                                <Typography key={reg} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{reg}</Typography>
+                                            ))}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid size={{ xs: 12, sm: 12 }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <WorkspacePremiumOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Certifications
+                                        </Typography>
+                                        <Typography sx={{ mt: 0.5 }}>
+                                            {(op?.certifications ?? []).map((c) => (
+                                                <Typography key={c} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{c}</Typography>
+                                            ))}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid size={{ xs: 12, sm: 12 }}>
+                                        <Divider />
+                                    </Grid>
+                                    <Grid size={{ xs: 12, sm: 12 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, '& a': { display: 'inline-flex', flexWrap: 'nowrap' } }}>
+                                            <Box sx={{ display: 'flex', gap: '10px' }}>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    <Link
+                                                        href={`mailto:${op?.contact_methods?.email}`}
+                                                        underline="none"
+                                                        color="text.secondary"
+                                                        title=""
+                                                    >
+                                                        <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Email
+                                                    </Link>
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    <Link
+                                                        href={`tel:${op?.contact_methods?.call}`}
+                                                        underline="none"
+                                                        color="text.secondary"
+                                                    >
+                                                        <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Call
+                                                    </Link>
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    <Link
+                                                        href={op?.contact_methods?.website}
+                                                        underline="none"
+                                                        color="text.secondary"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Websites
+                                                    </Link>
+                                                </Typography>
+                                            </Box>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Specialties:
+                                                </Typography>
+                                                <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                                                    {(op?.specialties ?? []).map((spec) => (
+                                                        // how to console here
+                                                        console.log(op?.fleet_overview?.specialties, '54654651651'),
+                                                        <Typography key={spec} component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>{spec}</Typography>
+                                                    ))}
+                                                </Box>
                                             </Box>
                                         </Box>
-                                    </Box>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                )}
             </Grid>
 
             <CustomModal headerText="Add Operator" open={addOperator} setOpen={setAddOperator} dataClose={() => setAddOperator(false)}>
                 <Box>
-                    {operators.map((op) => (
+                    {operators?.map((op) => (
+
                         <Card
                             key={op.id}
                             sx={{
@@ -397,7 +309,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryData }) => {
                             <Button className="btn btn-outlined" onClick={() => setAddOperator(false)}>
                                 Cancel
                             </Button>
-                            <Button className="btn btn-blue" disabled={selectedOperators.length === 0}>
+                            <Button className="btn btn-blue" disabled={selectedOperators.length === 0} onClick={() => addOperators(selectedOperators)}>
                                 Add Operators
                             </Button>
                         </Box>

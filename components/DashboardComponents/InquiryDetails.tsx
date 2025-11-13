@@ -25,7 +25,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
         {
           label: "Operators (0)",
           icon: <SettingsOutlinedIcon fontSize="small" />,
-          content: <OperatorsTab />,
+          content: <OperatorsTab inquiryId={inquiryData.id}/>,
         },
       ]
       : []),
