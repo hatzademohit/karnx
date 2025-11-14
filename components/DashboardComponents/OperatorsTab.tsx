@@ -16,6 +16,8 @@ import { apiBaseUrl } from "@/karnx/api";
 import { useApi } from "@/karnx/Hooks/useApi";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 import { toast } from "react-toastify";
+import AddIcon from '@mui/icons-material/Add';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 interface OperatorsTabProps {
     inquiryId?: any;
@@ -43,17 +45,19 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
         );
     };
 
-    const addOperators = async (data) => {
+    const addOperators = async (selectedOperators: any[]) => {
         if (selectedOperators.length > 0) {
             const created = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-operator/operators-assign`, body: { inquiry_id: inquiryId, operator_ids: selectedOperators } });
             fetchAssignedOperators(inquiryId);
+            setAddOperator(false);
         } else {
             alert("Please select at least one operator.");
         }
     };
 
     const fetchAssignedOperators = async (inquiryId) => {
-        const fetched = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-operator/get-assigned-operators?inquiry_id=${encodeURIComponent(inquiryId)}` });
+        console.log(selectedOperators);
+        const fetched = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-operator/get-assigned-operators?inquiry_id=${encodeURIComponent(inquiryId)}&selected=${selectedOperators}` });
         if (fetched?.status === true) {
             //toast.success(fetched?.message);
             setAssignedOperator(fetched.data || []);
@@ -83,20 +87,21 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     return (
         <>
             {/* heading */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: '8px' }}>
-                <Box>
-                    <Typography component='h4' variant="h4">Allocated Operators</Typography>
-                    <Typography sx={{ color: '#4D4D4D' }}>{assignedOperator.length} operators assigned to this inquiry</Typography>
+            {assignedOperator.length > 0 &&
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: '8px' }}>
+                    <Box>
+                        <Typography component='h4' variant="h4">Allocated Operators</Typography>
+                        <Typography sx={{ color: '#4D4D4D' }}>{assignedOperator.length} operators assigned to this inquiry</Typography>
+                    </Box>
+                    <Box>
+                        <Button className="btn btn-danger" onClick={handleOpenAddOperator}>+ Add Operators</Button>
+                    </Box>
                 </Box>
-                <Box>
-                    <Button className="btn btn-danger" onClick={handleOpenAddOperator}>+ Add Operators</Button>
-                </Box>
-            </Box>
-
+            }
             {/* operators */}
             <Grid container spacing={{ md: 2, xs: 1 }}>
                 {assignedOperator.length > 0 && assignedOperator?.map((op) =>
-                    <Grid key={op.id} size={{ xs: 12, md: 6 }}>
+                    <Grid key={op.id || op} size={{ xs: 12, md: 6 }}>
                         <Card variant="outlined" sx={{ borderRadius: 3 }}>
                             <CardContent className="card-content">
                                 {/* header section */}
@@ -218,7 +223,14 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                     </Grid>
                 )}
             </Grid>
-
+            {assignedOperator.length === 0 &&
+                <Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
+                    <SettingsOutlinedIcon sx={{ fontSize: '35px', color: '#808080' }} />
+                    <Typography variant="h4">No operators assigned yet</Typography>
+                    <Typography color="text.secondary">Operators will appear here once you assigned operators to inquiry.</Typography>
+                    <Button className='btn btn-danger' onClick={handleOpenAddOperator}><AddIcon sx={{ mr: '4px' }} /> Add Operators</Button>
+                </Box>
+            }
             <CustomModal headerText="Add Operator" open={addOperator} setOpen={setAddOperator} dataClose={() => setAddOperator(false)}>
                 <Box>
                     {getOperatorList?.map((op) => (

@@ -94,7 +94,6 @@ export default function CompanyProfile() {
     const save = async () => {
         try {
             const payload = draft;
-            console.log(payload);
             // const updated = await callApi({ method: 'PUT', url: `${apiBaseUrl}/clients`, body: payload });
             // if (updated?.status === true) {
             //     toast.success(updated?.message || 'Profile updated successfully');
