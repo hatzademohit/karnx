@@ -55,9 +55,10 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
           value={Array.isArray(value) ? value : []}
           onChange={handleChange}
           input={<OutlinedInput label={label} />}
-          renderValue={(selected) => { 
-            const ids = Array.isArray(selected) ? selected : []; 
-            const labels = ids.map(id => { const opt = (Array.isArray(options) ? options : []).find(o => String(o?.id) === String(id)); return opt ? String(opt.city_name) : String(id); }); return labels.join(', '); }}
+          renderValue={(selected) => {
+            const ids = Array.isArray(selected) ? selected : [];
+            const labels = ids.map(id => { const opt = (Array.isArray(options) ? options : []).find(o => String(o?.id) === String(id)); return opt ? String(opt.city_name) : String(id); }); return labels.join(', ');
+          }}
           MenuProps={MenuProps}
           disabled={disabled}
         >

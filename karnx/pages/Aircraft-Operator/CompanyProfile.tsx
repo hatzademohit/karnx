@@ -78,10 +78,13 @@ export default function CompanyProfile() {
     const [draft, setDraft] = useState<any>({ client: {}, regionCities: [], rating: 0, totalFlights: 0, totalAircraft: 0 });
     const getProfileData = async () => {
         const getData = await callApi({ method: 'GET', url: `${apiBaseUrl}/clients/${user?.client_id}` });
-        console.log(getData.data);
         if (getData?.status === true) {
+            console.log(getData.data.client.operating_reginons, 'profile data');
             setProfile(getData.data);
-            setDraft(getData.data);
+            // Avoid overwriting local edits while editing; only refresh draft when not editing
+            if (!editing) {
+                setDraft(getData.data);
+            }
         } else {
             toast.error(getData?.message || '');
         }
@@ -94,16 +97,16 @@ export default function CompanyProfile() {
     const save = async () => {
         try {
             const payload = draft;
-            // const updated = await callApi({ method: 'PUT', url: `${apiBaseUrl}/clients`, body: payload });
-            // if (updated?.status === true) {
-            //     toast.success(updated?.message || 'Profile updated successfully');
-            //     setProfile(payload);
-            //     setEditing(false);
-            // } else {
-            //     toast.error(updated?.message || 'Error updating profile');
-            // }
+            const updated = await callApi({ method: 'PUT', url: `${apiBaseUrl}/clients/${user?.client_id}`, body: payload?.client });
+            if (updated?.status === true) {
+                toast.success(updated?.message);
+                await getProfileData();
+                setEditing(false);
+            } else {
+                toast.error(updated?.message);
+            }
         } catch (e) {
-            toast.error('Error updating profile');
+            toast.error('Error updating profile 100');
         }
         // console.log(draft, 'draft')
     };
@@ -180,7 +183,7 @@ export default function CompanyProfile() {
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
                                 <CustomTextField
                                     inputLabel="Safety Rating"
-                                    placeholder="e.g., ARGUS Gold"
+                                    placeholder="e.g., ARGUS Gold, Wyvern Wingman"
                                     value={(editing ? draft?.client?.safety_ratings : profile?.client?.safety_ratings) ?? ''}
                                     onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, safety_ratings: e.target.value } })}
                                     disabled={!editing}
@@ -198,35 +201,53 @@ export default function CompanyProfile() {
                             </Grid>
 
                             {/* Operating Regions */}
-                            {/* <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <MultiSelectCheckbox
-                                    inputLabel="Operating Regions"
-                                    label=''
-                                    options={profile?.regionCities ?? []}
-                                    value={profile?.client?.operating_reginons || []}
-                                    onChange={(val: string[]) => setDraft({ ...draft, operating_reginons: val })}
-                                    size='small'
-                                    width='100%'
-                                    disabled={!editing}
-                                />
-                            </Grid> */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <MultiSelectCheckbox
-                                    inputLabel="Operating Regions"
-                                    label=""
-                                    options={profile?.regionCities}
-                                    value={(editing ? draft?.client?.operating_reginons : profile?.client?.operating_reginons) ?? []}
-                                    onChange={(val: string[]) => setDraft({ ...draft, client: { ...draft.client, operating_reginons: val } })}
-                                    size="small" width="100%"
-                                    disabled={!editing}
-                                />
+                                {(() => {
+                                    // Build list of available option IDs as strings
+                                    const optionIdStrs = (profile?.regionCities ?? [])
+                                        .map((o: any) => String(o?.id))
+                                        .filter((s: any) => s && s !== 'undefined' && s !== 'null');
+
+                                    // Read current selection from draft when editing else profile
+                                    const raw = editing ? draft?.client?.operating_reginons : profile?.client?.operating_reginons;
+
+                                    // Coerce to array robustly
+                                    const arr: any[] = Array.isArray(raw)
+                                        ? raw
+                                        : (raw !== null && raw !== undefined)
+                                            ? (typeof raw === 'string' ? raw.split(',') : [raw])
+                                            : [];
+
+                                    // Normalize to string IDs and drop invalids
+                                    const normalized = arr
+                                        .map((x: any) => String(x))
+                                        .filter((s: string) => s && s !== 'undefined' && s !== 'null' && s.trim().length > 0);
+
+                                    // Only keep IDs that exist in options
+                                    const finalValue = normalized.filter((id: string) => optionIdStrs.includes(id));
+
+                                    // If options aren't loaded yet, skip rendering to avoid false negatives
+                                    if (!optionIdStrs.length) return null;
+
+                                    return (
+                                        <MultiSelectCheckbox
+                                            inputLabel="Operating Regions"
+                                            label=""
+                                            options={profile?.regionCities}
+                                            value={finalValue}
+                                            onChange={(val: any[]) => setDraft({ ...draft, client: { ...draft.client, operating_reginons: (Array.isArray(val) ? val : []).map(v => String(v)) } })}
+                                            size="small" width="100%"
+                                            disabled={!editing}
+                                        />
+                                    );
+                                })()}
                             </Grid>
 
                             {/* Certifications */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
                                 <CustomTextField
                                     inputLabel="Certifications"
-                                    placeholder="e.g., Argus Gold"
+                                    placeholder="e.g., Argus Gold, IS-BAO, Wyvern Wingman"
                                     value={(editing ? draft?.client?.certifications : profile?.client?.certifications) ?? ''}
                                     onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, certifications: e.target.value } })}
                                     disabled={!editing}
