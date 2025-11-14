@@ -106,6 +106,7 @@ export default function CompanyProfile() {
         } catch (e) {
             toast.error('Error updating profile');
         }
+        // console.log(draft, 'draft')
     };
 
     const viewProfile = () => {
@@ -214,9 +215,7 @@ export default function CompanyProfile() {
                                 <MultiSelectCheckbox
                                     inputLabel="Operating Regions"
                                     label=""
-                                    options={profile?.regionCities.map((region: string) =>
-                                        ({ name: region?.city_name, value: region?.id })) || []}
-                                    // options={['abc', 'xyz']}
+                                    options={profile?.regionCities}
                                     value={(editing ? draft?.client?.operating_reginons : profile?.client?.operating_reginons) ?? []}
                                     onChange={(val: string[]) => setDraft({ ...draft, client: { ...draft.client, operating_reginons: val } })}
                                     size="small" width="100%"

@@ -43,7 +43,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
         );
     };
 
-    const addOperators = async () => {
+    const addOperators = async (data) => {
         if (selectedOperators.length > 0) {
             const created = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-operator/operators-assign`, body: { inquiry_id: inquiryId, operator_ids: selectedOperators } });
             fetchAssignedOperators(inquiryId);

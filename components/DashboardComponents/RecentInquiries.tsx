@@ -25,12 +25,12 @@ const RecentInquiries = () => {
                     value={assignAt}
                     onChange={setassignAt}
                 />
-                <MultiSelectCheckbox
+                {/* <MultiSelectCheckbox
                     label="Status"
                     options={['Accepted', 'New', 'Quote Pending', 'Rejected']}
                     value={status}
                     onChange={setstatus}
-                />
+                /> */}
                 <Divider className="cust-divider" />
                 <Box className="filter-selected">
                     <Box className='option-selected'>Today X</Box>

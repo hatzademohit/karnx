@@ -109,12 +109,12 @@ export default function MyAccount() {
           '& img': { width: { md: 30, sm: 25, xs: 20 }, height: { md: 30, sm: 25, xs: 20 } }
         }}
       >
-        {
+        {/* {
           user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{ borderRadius: '50%', objectFit: 'cover' }} /> : 
           <Typography component="span" sx={{ backgroundColor: '#F6F7FF', padding: '6px', borderRadius: '50%', width: '40px', height: '40px' }}>
             <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: theme?.common?.blueColor }} />
           </Typography>
-        }
+        } */}
         <Typography sx={{display: 'flex', flexDirection: 'column', textAlign: 'start'}}>
           <Typography component='span'
             sx={{ color: '#333333' }}
@@ -131,12 +131,12 @@ export default function MyAccount() {
         onClose={handleClose}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', padding: "6px 16px", gap: '15px'}}>
-        {
+        {/* {
           user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{borderRadius: '50%', objectFit: 'cover' }} /> : 
           <Typography component="span">
             <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: theme?.common?.blueColor }} />
           </Typography>
-        }
+        } */}
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography component='h5' variant='h5'>
               { (user?.name) ? user.name : 'Operator'  }

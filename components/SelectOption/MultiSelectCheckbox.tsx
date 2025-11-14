@@ -42,8 +42,8 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   };
 
   useEffect(() => {
-    console.log("MultiSelectCheckbox options:", options);
-  }, [])
+    console.log("MultiSelectCheckbox value:", value);
+  }, [value])
 
   return (
     <>
@@ -52,17 +52,19 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
         <InputLabel>{label}</InputLabel>
         <Select
           multiple
-          value={value}
+          value={Array.isArray(value) ? value : []}
           onChange={handleChange}
           input={<OutlinedInput label={label} />}
-          renderValue={(selected) => selected.join(", ")}
+          renderValue={(selected) => { 
+            const ids = Array.isArray(selected) ? selected : []; 
+            const labels = ids.map(id => { const opt = (Array.isArray(options) ? options : []).find(o => String(o?.id) === String(id)); return opt ? String(opt.city_name) : String(id); }); return labels.join(', '); }}
           MenuProps={MenuProps}
           disabled={disabled}
         >
           {options.map((option) => (
-            <MenuItem key={option?.id || option} value={option?.id || option} id={option?.city_name || option}>
-              <Checkbox size="small" checked={value.indexOf(option) > -1} />
-              <ListItemText primary={option?.city_name || option} />
+            <MenuItem key={option?.id} value={option?.id} id={option?.id}>
+              <Checkbox checked={(Array.isArray(value) ? value : []).map(String).includes(String(option?.id))} />
+              <ListItemText primary={option?.city_name} />
             </MenuItem>
           ))}
         </Select>
