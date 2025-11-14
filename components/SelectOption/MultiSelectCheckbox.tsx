@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import * as React from "react";
 import { OutlinedInput, InputLabel, SelectChangeEvent, FormControl, Select, MenuItem, ListItemText, Checkbox } from "@mui/material";
 
@@ -40,28 +41,32 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
     onChange(typeof selected === "string" ? selected.split(",") : selected);
   };
 
+  useEffect(() => {
+    console.log("MultiSelectCheckbox options:", options);
+  }, [])
+
   return (
     <>
-    { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel}</InputLabel> }
-    <FormControl size={size} sx={{ width }}>
-      <InputLabel>{label}</InputLabel>
-      <Select
-        multiple
-        value={value}
-        onChange={handleChange}
-        input={<OutlinedInput label={label} />}
-        renderValue={(selected) => selected.join(", ")}
-        MenuProps={MenuProps}
-        disabled={disabled}
-      >
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            <Checkbox size="small" checked={value.indexOf(option) > -1} />
-            <ListItemText primary={option} />
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+      {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel}</InputLabel>}
+      <FormControl size={size} sx={{ width }}>
+        <InputLabel>{label}</InputLabel>
+        <Select
+          multiple
+          value={value}
+          onChange={handleChange}
+          input={<OutlinedInput label={label} />}
+          renderValue={(selected) => selected.join(", ")}
+          MenuProps={MenuProps}
+          disabled={disabled}
+        >
+          {options.map((option) => (
+            <MenuItem key={option?.id || option} value={option?.id || option} id={option?.city_name || option}>
+              <Checkbox size="small" checked={value.indexOf(option) > -1} />
+              <ListItemText primary={option?.city_name || option} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </>
   );
 };

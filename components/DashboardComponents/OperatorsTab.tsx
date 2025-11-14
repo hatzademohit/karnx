@@ -27,14 +27,15 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     const theme = useTheme();
     const [addOperator, setAddOperator] = useState(false);
     const [assignedOperator, setAssignedOperator] = useState<any[]>([1, 2]);
-    const handleOpenAddOperator = () => {
-        setAddOperator(true);
-    }
+    const [getOperatorList, setOperatorList] = useState<any[]>([]);
     const [selectedOperators, setSelectedOperators] = useState<any[]>([]);
 
-    const { data: operators, refetch: fetchOperators } = useApi<any[]>(
-        `${apiBaseUrl}/inquiry-operator/get-operators`
-    );
+    const handleOpenAddOperator = async () => {
+        setAddOperator(true);
+        const operators = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-operator/get-operators`, body: { inquiry_id: inquiryId } });
+        setOperatorList(operators.data || []);
+    }
+
 
     const handleSelect = (id: number) => {
         setSelectedOperators((prev) =>
@@ -45,7 +46,6 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     const addOperators = async () => {
         if (selectedOperators.length > 0) {
             const created = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-operator/operators-assign`, body: { inquiry_id: inquiryId, operator_ids: selectedOperators } });
-            console.log(created);
             fetchAssignedOperators(inquiryId);
         } else {
             alert("Please select at least one operator.");
@@ -55,7 +55,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     const fetchAssignedOperators = async (inquiryId) => {
         const fetched = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-operator/get-assigned-operators?inquiry_id=${encodeURIComponent(inquiryId)}` });
         if (fetched?.status === true) {
-            toast.success(fetched?.message);
+            //toast.success(fetched?.message);
             setAssignedOperator(fetched.data || []);
         } else {
             toast.error(fetched?.message);
@@ -65,8 +65,12 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     const removeOperator = async (operatorId: number) => {
         if (operatorId) {
             const deleted = await callApi({ method: 'DELETE', url: `${apiBaseUrl}/inquiry-operator/operators-remove/${operatorId}` });
-            console.log(deleted);
-            fetchAssignedOperators(inquiryId);
+            if (deleted?.status === true) {
+                toast.success(deleted?.message);
+                fetchAssignedOperators(inquiryId);
+            } else {
+                toast.error(deleted?.message);
+            }
         } else {
             alert("Please select at least one operator.");
         }
@@ -134,8 +138,8 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                         </Typography>
                                         <Typography sx={{ mt: 0.5 }} variant="h5">{op?.fleet_overview?.total_aircraft ?? 0} aircraft</Typography>
                                         <Typography sx={{ mt: 0.5 }}>
-                                            {(op?.fleet_overview?.aircraft_types ?? []).map((type) => (
-                                                <Typography key={type} component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF', mr: 0.5 }}>{type.type} {type.count}</Typography>
+                                            {(op?.fleet_overview?.aircraft_types ?? []).map((type, index) => (
+                                                <Typography key={index || type} component="span" className="custom-pill" sx={{ backgroundColor: '#E1F2FF', mr: 0.5 }}>{type.type} {type.count}</Typography>
                                             ))}
                                         </Typography>
                                     </Grid>
@@ -144,8 +148,8 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                             <LanguageIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Operating Regions
                                         </Typography>
                                         <Typography sx={{ mt: 0.5 }}>
-                                            {(op?.operating_regions ?? []).map((reg) => (
-                                                <Typography key={reg} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{reg}</Typography>
+                                            {(op?.operating_regions ?? []).map((reg, index) => (
+                                                <Typography key={index || reg} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{reg}</Typography>
                                             ))}
                                         </Typography>
                                     </Grid>
@@ -154,8 +158,8 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                             <WorkspacePremiumOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Certifications
                                         </Typography>
                                         <Typography sx={{ mt: 0.5 }}>
-                                            {(op?.certifications ?? []).map((c) => (
-                                                <Typography key={c} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{c}</Typography>
+                                            {(op?.certifications ?? []).map((c, index) => (
+                                                <Typography key={index || c} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{c}</Typography>
                                             ))}
                                         </Typography>
                                     </Grid>
@@ -201,10 +205,8 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                                     Specialties:
                                                 </Typography>
                                                 <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                                                    {(op?.specialties ?? []).map((spec) => (
-                                                        // how to console here
-                                                        console.log(op?.fleet_overview?.specialties, '54654651651'),
-                                                        <Typography key={spec} component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>{spec}</Typography>
+                                                    {(op?.specialties ?? []).map((spec, index) => (
+                                                        <Typography key={index || spec} component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>{spec}</Typography>
                                                     ))}
                                                 </Box>
                                             </Box>
@@ -219,7 +221,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
 
             <CustomModal headerText="Add Operator" open={addOperator} setOpen={setAddOperator} dataClose={() => setAddOperator(false)}>
                 <Box>
-                    {operators?.map((op) => (
+                    {getOperatorList?.map((op) => (
 
                         <Card
                             key={op.id}
@@ -283,8 +285,8 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                         </Box>
 
                                         <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1 }}>
-                                            {op.tags.map((tag) => (
-                                                <Typography key={tag} component="span" className="custom-pill" sx={{ backgroundColor: '#f4f5f7' }}>{tag}</Typography>
+                                            {op.tags.map((tag, index) => (
+                                                <Typography key={index || tag} component="span" className="custom-pill" sx={{ backgroundColor: '#f4f5f7' }}>{tag}</Typography>
                                             ))}
                                         </Box>
                                     </Box>
