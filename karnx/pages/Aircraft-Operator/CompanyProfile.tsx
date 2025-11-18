@@ -254,7 +254,6 @@ export default function CompanyProfile() {
                                 />
                             </Grid>
 
-
                             {/* Certifications */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
                                 <RHFCustomTextField
