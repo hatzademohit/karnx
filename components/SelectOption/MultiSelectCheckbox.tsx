@@ -41,10 +41,6 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
     onChange(typeof selected === "string" ? selected.split(",") : selected);
   };
 
-  useEffect(() => {
-    console.log("MultiSelectCheckbox value:", value);
-  }, [value])
-
   return (
     <>
       {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel}</InputLabel>}

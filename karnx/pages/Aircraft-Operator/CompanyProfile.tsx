@@ -1,7 +1,7 @@
 "use client"
-import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Card, CardContent, Divider, Grid, IconButton, Link, MenuItem, Stack, Tooltip, Typography, useTheme } from '@mui/material';
-import { CustomTextField, SingleSelect, MultiSelectCheckbox, CustomModal } from '@/components';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Link, Stack, Tooltip, Typography, useTheme } from '@mui/material';
+import { CustomTextField, CustomModal, AutoComplteCheckbox } from '@/components';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
@@ -23,11 +23,6 @@ import { apiBaseUrl } from '@/karnx/api';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/app/context/AuthContext';
 
-// Local mock options. Replace with API data via hooks when backend is ready.
-const regionOptions = ['Delhi', 'Mumbai', 'Pune', 'Bengaluru', 'Hyderabad', 'Chennai'];
-const certOptions = ['IS-BAO', 'Wyvern Wingman', 'ARGUS Gold', 'IOSA'];
-const specOptions = ['Corporate Travel', 'VIP Transport', 'Medical Evac', 'Sports Charter', 'Film Crew'];
-
 const labelSx = { color: '#6b7280', fontSize: 14 };
 
 const ReadOnlyRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -43,44 +38,17 @@ export default function CompanyProfile() {
     // Main profile state
     const theme = useTheme()
     const [editing, setEditing] = useState(false);
+    const [selectedOption, setSelectedOption] = useState<any>();
     const [previewProfile, setPreviewProfile] = useState(false);
     const [profile, setProfile] = useState<any>({ client: {}, regionCities: [], rating: 0, totalFlights: 0, totalAircraft: 0 });
-    // const [profile, setProfile] = useState({
-    //     companyName: 'Elite Aviation Services',
-    //     rating: 4.9,
-    //     flights: 2847,
-    //     safetyRating: 'ARGUS Gold',
-    //     responseTime: '2 hours',
-    //     fleetTotal: 6,
-    //     fleetBreakup: [
-    //         { label: 'Light', count: 1, color: 'info' as const },
-    //         { label: 'Mid-Size', count: 2, color: 'success' as const },
-    //     ],
-    //     regions: ['Delhi', 'Mumbai', 'Pune'] as string[],
-    //     certifications: ['IS-BAO', 'Wyvern Wingman', 'ARGUS Gold'] as string[],
-    //     email: 'ops@eliteaviation.com',
-    //     phone: '+91 98XXXXXX10',
-    //     website: 'www.eliteaviation.com',
-    //     specialties: ['Corporate Travel', 'VIP Transport'] as string[],
-
-    //     contactPerson: 'John Deo',
-    //     addressLine1: '123 Main St',
-    //     addressLine2: '158',
-    //     area: 'Delhi',
-    //     city: 'Delhi',
-    //     state: 'Maharashtra',
-    //     country: 'India',
-    //     pinCode: 110001,
-    //     selectedSection: 'Overview',
-    // });
 
     // Form buffer while editing
     const [draft, setDraft] = useState<any>({ client: {}, regionCities: [], rating: 0, totalFlights: 0, totalAircraft: 0 });
     const getProfileData = async () => {
         const getData = await callApi({ method: 'GET', url: `${apiBaseUrl}/clients/${user?.client_id}` });
         if (getData?.status === true) {
-            console.log(getData.data.client.operating_reginons, 'profile data');
             setProfile(getData.data);
+            setSelectedOption(getData?.data?.regionCities.filter((o: any) => getData?.data?.client.operating_reginons.includes(o?.id)));
             // Avoid overwriting local edits while editing; only refresh draft when not editing
             if (!editing) {
                 setDraft(getData.data);
@@ -91,9 +59,13 @@ export default function CompanyProfile() {
     };
 
     const startEdit = async () => {
+        setSelectedOption(profile?.regionCities.filter((o: any) => draft.client.operating_reginons.includes(o?.id)));
         setEditing(true);
     };
-    const cancelEdit = () => setEditing(false);
+    const cancelEdit = () => {
+        setSelectedOption(profile.regionCities.filter((o: any) => profile.client.operating_reginons.includes(o?.id)));
+        setEditing(false);
+    };
     const save = async () => {
         try {
             const payload = draft;
@@ -108,7 +80,6 @@ export default function CompanyProfile() {
         } catch (e) {
             toast.error('Error updating profile 100');
         }
-        // console.log(draft, 'draft')
     };
 
     const viewProfile = () => {
@@ -118,10 +89,6 @@ export default function CompanyProfile() {
     useEffect(() => {
         getProfileData();
     }, []);
-
-    // useEffect(() => {
-    //     setDraft(profile);
-    // }, [profile]);
 
     return (
         <>
@@ -164,7 +131,6 @@ export default function CompanyProfile() {
                             <ReadOnlyRow label="Rating" value={`${profile?.rating ?? 0} ★`} />
                             <ReadOnlyRow label="Total Flights" value={`${profile?.totalFlights ?? 0} flights`} />
                             <ReadOnlyRow label="Total Aircraft" value={`🛧 ${profile?.totalAircraft ?? 0}`} />
-
                         </Stack>
                     </Grid>
                     <Grid size={{ sm: 12, xs: 12 }}>
@@ -202,45 +168,16 @@ export default function CompanyProfile() {
 
                             {/* Operating Regions */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                {(() => {
-                                    // Build list of available option IDs as strings
-                                    const optionIdStrs = (profile?.regionCities ?? [])
-                                        .map((o: any) => String(o?.id))
-                                        .filter((s: any) => s && s !== 'undefined' && s !== 'null');
-
-                                    // Read current selection from draft when editing else profile
-                                    const raw = editing ? draft?.client?.operating_reginons : profile?.client?.operating_reginons;
-
-                                    // Coerce to array robustly
-                                    const arr: any[] = Array.isArray(raw)
-                                        ? raw
-                                        : (raw !== null && raw !== undefined)
-                                            ? (typeof raw === 'string' ? raw.split(',') : [raw])
-                                            : [];
-
-                                    // Normalize to string IDs and drop invalids
-                                    const normalized = arr
-                                        .map((x: any) => String(x))
-                                        .filter((s: string) => s && s !== 'undefined' && s !== 'null' && s.trim().length > 0);
-
-                                    // Only keep IDs that exist in options
-                                    const finalValue = normalized.filter((id: string) => optionIdStrs.includes(id));
-
-                                    // If options aren't loaded yet, skip rendering to avoid false negatives
-                                    if (!optionIdStrs.length) return null;
-
-                                    return (
-                                        <MultiSelectCheckbox
-                                            inputLabel="Operating Regions"
-                                            label=""
-                                            options={profile?.regionCities}
-                                            value={finalValue}
-                                            onChange={(val: any[]) => setDraft({ ...draft, client: { ...draft.client, operating_reginons: (Array.isArray(val) ? val : []).map(v => String(v)) } })}
-                                            size="small" width="100%"
-                                            disabled={!editing}
-                                        />
-                                    );
-                                })()}
+                                <AutoComplteCheckbox
+                                    inputLabel="Operating Regions"
+                                    options={profile?.regionCities}
+                                    value={selectedOption}
+                                    onChange={(selected: any) => {
+                                        setSelectedOption(selected)
+                                        setDraft({ ...draft, client: { ...draft.client, operating_reginons: selected.map((val) => val.id) } });
+                                    }}
+                                    disabled={!editing}
+                                />
                             </Grid>
 
                             {/* Certifications */}
@@ -368,7 +305,141 @@ export default function CompanyProfile() {
                         </Grid>
                     </Grid>
                 </Grid>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingBlock: '10px',  }}>
+                    {editing ? 
+                        <>
+                            <Button className='btn btn-blue' onClick={save}>Save</Button>
+                            <Button className='btn btn-danger' onClick={cancelEdit}>Cancel</Button>
+                        </>
+                    :
+                    <>
+                        <Button className='btn btn-blue' onClick={viewProfile}>Preview</Button>
+                        <Button className='btn btn-outlined' onClick={startEdit}>Edit</Button>
+                    </>
+                }
+                </Box>
             </Box>
+
+            <CustomModal open={previewProfile} setOpen={setPreviewProfile} headerText='Preview Profile' dataClose={() => setPreviewProfile(false)}>
+                <Card variant="outlined" sx={{ borderRadius: 3 }}>
+                    <CardContent className="card-content">
+                        {/* header section */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <IconButton sx={{ backgroundColor: `${theme?.common?.blueColor} !important`, color: '#ffffff', borderRadius: '8px', width: '40px', height: '40px' }}>
+                                <FlightOutlinedIcon />
+                            </IconButton>
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <Typography variant="h4">{profile?.client?.name}</Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <StarOutlinedIcon sx={{ color: '#FFD700' }} />
+                                    <Typography component="span" sx={{ fontFamily: 'poppins-semibold', fontSize: '14px', color: '#4D4D4D' }}>{profile?.rating}</Typography>
+                                    <Typography component="span" sx={{ fontSize: '14px', color: '#4B5563', ml: 1 }}>{profile?.totalFlights} flights</Typography>
+                                </Box>
+                            </Box>
+                        </Box>
+                        {/* body section */}
+                        <Grid container spacing={{ md: 2, xs: 1 }} sx={{ mt: 2 }}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <LocalPoliceOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Safety Rating
+                                </Typography>
+                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{profile?.client?.safety_ratings}</Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <WatchLaterOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Response Time
+                                </Typography>
+                                <Typography sx={{ fontFamily: "poppins-md", mt: 0.5 }} variant="h5">{`< ${profile?.client?.response_time}`}</Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <FlightOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Fleet Overview
+                                </Typography>
+                                <Typography sx={{ mt: 0.5 }} variant="h5">{profile?.totalAircraft} aircraft</Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <LanguageIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Operating Regions
+                                </Typography>
+                                <Typography sx={{ mt: 0.5 }}>
+                                    {selectedOption && selectedOption?.map((region) => (
+                                        <Typography key={region.id} component="span" className="custom-pill" sx={{ backgroundColor: '#F3F4F6' }}>{region.title}</Typography>
+                                    ))}
+                                </Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <WorkspacePremiumOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} /> Certifications
+                                </Typography>
+                                <Typography sx={{ mt: 0.5 }}>
+                                    <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>{profile?.client?.certifications}</Typography>
+                                </Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <FolderSpecialIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
+                                    Specialties
+                                </Typography>
+                                <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'flex-start', mt: 0.5 }}>
+                                    <Typography component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>{profile?.client?.specialties}</Typography>
+                                </Box>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Divider />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant='h5'>Contact Information</Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
+                                    Email
+                                </Typography>
+                                <Link href={profile?.email} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
+                                    {profile?.client?.email}
+                                </Link>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <CallOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
+                                    Phone
+                                </Typography>
+                                <Link href={`tel: ${profile?.client?.phone}`} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
+                                    {profile?.client?.phone}
+                                </Link>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
+                                    Website
+                                </Typography>
+                                <Link href={profile?.client?.website} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
+                                    {profile?.client?.website}
+                                </Link>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <Face6Icon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
+                                    Contact Person
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                    {profile?.client?.contact_person}
+                                </Typography>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 12 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                    <ContactsIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
+                                    Address
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                    {profile?.client?.address_line1}, {profile?.client?.address_line2 && `${profile?.client?.address_line2}, `}
+                                    {profile?.client?.area}, {profile?.client?.city}, {profile?.client?.state}, {profile?.client?.country} - {profile?.client?.pincode}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </CustomModal>
         </>
     );
 }

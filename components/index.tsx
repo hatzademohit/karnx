@@ -27,5 +27,6 @@ import PricingDetails from "./DashboardComponents/CreateNewQuote/PricingDetails"
 import CreateNewQuoteStepper from "./DashboardComponents/CreateNewQuote/CreateNewQuoteStepper";
 import CustomTimePicker from "./DatePicker/CustomTimePicker"
 import CustomDatePicker from "./DatePicker/CustomDatePicker"
+import AutoComplteCheckbox from "./SelectOption/AutoCompleteCheckbox";
 
-export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker };
+export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker, AutoComplteCheckbox };
