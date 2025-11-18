@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles';
 import mediaQuery from "css-mediaquery"; // Add this dependency
 import karnxLogo from "@/public/imgs/karnx_logo.svg";
 import loginBackground from "@/public/imgs/loginbg.png";
+import loginVideo from "@/public/videos/KarnXwings.mp4"
 
 function createSsrMatchMedia(width: number) {
     return (query: string) => ({
@@ -50,7 +51,8 @@ export const karnxTheme = createTheme({
     images: {
         logo: karnxLogo,
         loginBg: loginBackground,
-        loginBgVideo: '/videos/karnXwings.mp4'
+        loginBgVideo: loginVideo,
+        // loginBgVideo: '/videos/karnXwings.mp4'
     },
     heading: {
         color: '#03045E',

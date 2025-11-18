@@ -76,16 +76,16 @@ const LoginPage = () => {
   return (
     <Box className="login-page">
       <Box className="img-section">
-        {/* <video
+        <video
           autoPlay
           loop
           muted
           playsInline
           className="w-100 h-100 object-cover"
         >
-          <source src={theme?.images?.loginBg} type="video/mp4" />
-        </video> */}
-        <Image src={theme?.images?.loginBg} alt="img-not-found" />
+          <source src={theme?.images?.loginBgVideo} type="video/mp4" />
+        </video>
+        {/* <Image src={theme?.images?.loginBg} alt="img-not-found" /> */}
       </Box>
 
       <Box className="input-section">
