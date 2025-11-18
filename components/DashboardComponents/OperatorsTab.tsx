@@ -48,8 +48,14 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     const addOperators = async (selectedOperators: any[]) => {
         if (selectedOperators.length > 0) {
             const created = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-operator/operators-assign`, body: { inquiry_id: inquiryId, operator_ids: selectedOperators } });
-            fetchAssignedOperators(inquiryId);
-            setAddOperator(false);
+            if (created?.status === true) {
+                toast.success(created?.message);
+                fetchAssignedOperators(inquiryId);
+                setAddOperator(false);
+            } else {
+                toast.error(created?.message);
+            }
+
         } else {
             alert("Please select at least one operator.");
         }
@@ -195,7 +201,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
                                                     <Link
-                                                        href={op?.contact_methods?.website}
+                                                        href={String(op?.contact_methods?.website)}
                                                         underline="none"
                                                         color="text.secondary"
                                                         target="_blank"
