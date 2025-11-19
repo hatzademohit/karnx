@@ -2,12 +2,20 @@ import React, { useState } from "react";
 import { Box, Stepper, Step, StepLabel, Button, Typography, useTheme } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 import { AircraftFlightDetails, PricingDetails, AmenitiesDetails } from '@/components'
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
 
 const steps = ["Aircraft & Flight Details", "Pricing Details", "Amenities & Final Details"];
 
-const CreateNewQuoteStepper = () => {
+export interface CreateNewQuoteProps {
+	inquiryId?: number;
+}
+//const CreateNewQuoteStepper = (inquiryId) => {
+const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => {
 	const [activeStep, setActiveStep] = useState(0);
 	const theme = useTheme();
+	const callApi = useApiFunction();
 
 	const methods = useForm({
 		mode: "onChange",
@@ -35,8 +43,18 @@ const CreateNewQuoteStepper = () => {
 		formState: { isValid },
 	} = methods;
 
-	const onSubmit = (data: any) => {
-		console.log("Final Data:", data);
+	const onSubmit = async (data: any) => {
+		//console.log("Final Data:", data);
+		try {
+			const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/submit-quote`, body: { ...data, inquiryId } });
+			if (res?.status === true) {
+				toast.success(res?.message || '');
+			} else {
+				toast.error(res?.message || '');
+			}
+		} catch (e) {
+			toast.error('Network error while fetching cancellation policies');
+		}
 	};
 
 	const handleNext = async () => {

@@ -32,7 +32,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
     {
       label: "Quotes (0)",
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
-      content: <QuoteTabs travelTab={itsTravelAgent} />,
+      content: <QuoteTabs travelTab={itsTravelAgent} inquiryId={inquiryData.id} />,
     },
   ];
 

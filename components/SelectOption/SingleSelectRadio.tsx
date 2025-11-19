@@ -1,11 +1,16 @@
 import * as React from "react";
 import { OutlinedInput, InputLabel, SelectChangeEvent, FormControl, Select, MenuItem, ListItemText, Radio, Box, Typography, FormHelperText } from "@mui/material";
 
+interface OptionItem {
+  value: string | number;
+  label: string;
+}
+
 interface SingleSelectRadioProps {
   label?: string;
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
+  options: OptionItem[] | string[];
+  value: string | number;
+  onChange: (value: string | number) => void;
   width?: number | string;
   variant?: "outlined" | "filled" | "standard";
   inputLabel?: string;
@@ -45,7 +50,13 @@ const SingleSelectRadio: React.FC<SingleSelectRadioProps> = ({
   id,
   menuClassName
 }) => {
-  const handleChange = (event: SelectChangeEvent<string>) => {
+  const normalizedOptions: OptionItem[] = Array.isArray(options)
+    ? (typeof options[0] === 'string'
+        ? (options as string[]).map((s) => ({ value: s, label: s }))
+        : (options as OptionItem[]))
+    : [];
+
+  const handleChange = (event: SelectChangeEvent<string | number>) => {
     onChange(event.target.value);
   };
 
@@ -56,10 +67,9 @@ const SingleSelectRadio: React.FC<SingleSelectRadioProps> = ({
       <InputLabel shrink={false}>{label}</InputLabel>
       <Select
         id={id}
-        value={value ?? ""}
+        value={(value ?? "") as any}
         onChange={handleChange}
         input={<OutlinedInput label={label} error={error} size={size} />}
-        // MenuProps={MenuProps}
         MenuProps={{
           PaperProps: {
             id: id,
@@ -68,17 +78,18 @@ const SingleSelectRadio: React.FC<SingleSelectRadioProps> = ({
         }}
         displayEmpty
         renderValue={(selected) => {
-          if (selected === "") {
+          if (selected === "" || selected === undefined || selected === null) {
             return <Typography sx={{color: '#cccccc', fontSize: 'inherit'}}>{`Select ${inputLabel}`}</Typography>;
           }
-          return selected;
+          const found = normalizedOptions.find(o => o.value === selected);
+          return found ? found.label : String(selected);
         }}
       >
         <MenuItem disabled>{`Select ${inputLabel}`}</MenuItem>
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            <Radio checked={value === option} />
-            <ListItemText primary={option} />
+        {normalizedOptions.map((option) => (
+          <MenuItem key={String(option.value)} value={option.value as any}>
+            <Radio checked={value === option.value} />
+            <ListItemText primary={option.label} />
           </MenuItem>
         ))}
       </Select>
