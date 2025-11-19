@@ -1,31 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, Grid, useTheme, FormHelperText } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import { CustomTimePicker } from "@/components"
 import dayjs from "dayjs";
+import { get } from "http";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
+import { useAuth } from "@/app/context/AuthContext";
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
 
-const aircrafts = [
-	{ name: "Gulfstream G650", year: 2019, desc: 'Ultra Long Range', seats: 14, range: "7,000 nm", speed: 'Mach 0.925' },
-	{ name: "Bombardier Global 7500", year: 2021, desc: 'Ultra Long Range', seats: 14, range: "7,000 nm", speed: 'Mach 0.925' },
-	{ name: "Cessna Citation X+", year: 2018, desc: 'Ultra Long Range', seats: 14, range: "7,000 nm", speed: 'Mach 0.925' },
-	{ name: "Embraer Phenom 300E", year: 2020, desc: 'Ultra Long Range', seats: 14, range: "7,000 nm", speed: 'Mach 0.925' },
+const getAircraftList = [
+	{ asset_name: "Gulfstream G650", model_year: 2019, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
+	{ asset_name: "Bombardier Global 7500", model_year: 2021, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
+	{ asset_name: "Cessna Citation X+", model_year: 2018, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
+	{ asset_name: "Embraer Phenom 300E", model_year: 2020, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
 ];
 
 const AircraftFlightDetails = () => {
 	const { control, watch, formState: { errors } } = useFormContext();
 	const selectedAircraft = watch("aircraft");
 	const theme = useTheme();
+	const callApi = useApiFunction();
+	const { user } = useAuth();
+	const [aircraftList, setAircraftList] = useState<any>([]);
+	const getAircrafts = async () => {
+		try {
+			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/get-aircraft` });
+			if (res?.status === true) {
+				setAircraftList(res.data);
+			} else {
+				toast.error(res?.message || '');
+			}
+		} catch (e) {
+			toast.error('Network error while fetching aircraft');
+		}
+	};
+
+	useEffect(() => {
+		getAircrafts();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<Box>
 			<Typography variant="h4" color={theme?.common.redColor} mb={2}>
-				Choose Aircraft from Your Fleet *					
+				Choose Aircraft from Your Fleet *
 				{errors.aircraft && (
 					<FormHelperText error>
 						{errors.aircraft.message as string}
 					</FormHelperText>
 				)}
-			</Typography>	
+			</Typography>
 			<Grid container spacing={{ md: 2, xs: 1 }}>
 				<Controller
 					name="aircraft"
@@ -33,30 +58,30 @@ const AircraftFlightDetails = () => {
 					rules={{ required: "Please select an aircraft" }}
 					render={({ field }) => (
 						<>
-							{aircrafts.map((aircraft) => (
-								<Grid size={{ lg: 4, md: 6, sm: 12, xs: 12 }} key={aircraft.name}>
-									<Card onClick={() => field.onChange(aircraft.name)}
-										sx={{ cursor: "pointer", border: selectedAircraft === aircraft.name ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
+							{aircraftList.length > 0 && aircraftList.map((aircraft) => (
+								<Grid size={{ lg: 4, md: 6, sm: 12, xs: 12 }} key={aircraft.asset_name}>
+									<Card onClick={() => field.onChange(aircraft.id)}
+										sx={{ cursor: "pointer", border: selectedAircraft === aircraft.id ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
 										<CardContent sx={{ p: `16px !important` }}>
 											<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 												<Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-													<Typography variant="h5" color={theme?.common.blueColor}>{aircraft.name}</Typography>
-													<Typography variant="body2">{aircraft.desc}</Typography>
+													<Typography variant="h5" color={theme?.common.blueColor}>{aircraft.asset_name}</Typography>
+													<Typography variant="body2">{aircraft?.aircraft_type?.name}</Typography>
 												</Box>
-												<Typography variant="body2">{aircraft.year}</Typography>
+												<Typography variant="body2">{aircraft.model_year}</Typography>
 											</Box>
 											<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mt: 2 }}>
 												<Box>
 													<Typography variant="body2">Seats</Typography>
-													<Typography variant="h6">{aircraft?.seats}</Typography>
+													<Typography variant="h6">{aircraft?.capacity}</Typography>
 												</Box>
 												<Box>
 													<Typography variant="body2">Range</Typography>
-													<Typography variant="h6">{aircraft?.range}</Typography>
+													<Typography variant="h6">{aircraft?.flying_range.toLocaleString("en-IN")} nm</Typography>
 												</Box>
 												<Box>
 													<Typography variant="body2">Speed</Typography>
-													<Typography variant="h6">{aircraft?.speed}</Typography>
+													<Typography variant="h6">Mach {aircraft?.speed}</Typography>
 												</Box>
 											</Box>
 										</CardContent>

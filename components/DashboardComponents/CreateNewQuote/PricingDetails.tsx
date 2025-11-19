@@ -1,8 +1,11 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { CustomTextField, CustomDatePicker, SingleSelectRadio } from "@/components";
 import dayjs from "dayjs";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
 
 const fields = [
     { name: "baseFare", label: "Base Fare", numeric: true },
@@ -17,22 +20,43 @@ const PricingDetails = () => {
     const { control, setValue } = useFormContext();
     const theme = useTheme()
     const watchedValues = useWatch({ control });
+    const callApi = useApiFunction();
+    const [cancellationPolicyList, setcancellationPolicyList] = useState<any>([]);
 
     const totalAmount = useMemo(() => {
-    return Object.entries(watchedValues || {}).reduce((sum, [key, value]) => {
-        const field = fields.find(f => f.name === key);
-        if (field?.numeric) {
-        const num = parseFloat(value || "0");
-        return sum + (isNaN(num) ? 0 : num);
-        }
-        return sum;
-    }, 0);
+        return Object.entries(watchedValues || {}).reduce((sum, [key, value]) => {
+            const field = fields.find(f => f.name === key);
+            if (field?.numeric) {
+                const num = parseFloat(value || "0");
+                return sum + (isNaN(num) ? 0 : num);
+            }
+            return sum;
+        }, 0);
     }, [watchedValues, fields]);
 
     useEffect(() => {
         setValue("totalAmount", totalAmount);
     }, [totalAmount, setValue]);
 
+
+
+    const getCancellationPolicies = async () => {
+        try {
+            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/form-fields-data/cancelation-policies` });
+            if (res?.status === true) {
+                setcancellationPolicyList(res.data);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            toast.error('Network error while fetching cancellation policies');
+        }
+    };
+
+    useEffect(() => {
+        getCancellationPolicies();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <Box>
             <Typography variant="h4" color={theme?.common.redColor} mb={2}>
@@ -77,7 +101,7 @@ const PricingDetails = () => {
                 <Grid size={{ xs: 12 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, p: 3, border: `1px solid ${theme?.common.borderColor}`, mt: 1, backgroundColor: '#f2f2f2', borderRadius: 3 }}>
                         <Typography variant="h4">Total Quote Amount:</Typography>
-                        <Typography variant="h2">{totalAmount}</Typography>
+                        <Typography variant="h2">₹ {totalAmount.toLocaleString("en-IN")}</Typography>
                     </Box>
                 </Grid>
                 <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
@@ -110,20 +134,14 @@ const PricingDetails = () => {
                             required: "Please select a cancellation policy",
                         }}
                         render={({ field, fieldState }) => (
-                        <SingleSelectRadio
-                            inputLabel="Cancellation Policy"
-                            options={[
-                                "Free Cancellation within 24 hours",
-                                "Free Cancellation within 48 hours",
-                                "Free Cancellation within 72 hours",
-                                "Non-refundable",
-                                "50% Refundable",
-                            ]}
-                            value={field.value}
-                            onChange={field.onChange}
-                            error={!!fieldState.error}
-                            helperText={fieldState.error?.message}
-                        />
+                            <SingleSelectRadio
+                                inputLabel="Cancellation Policy"
+                                options={cancellationPolicyList?.map((p: any) => ({ value: p?.id, label: p?.name }))}
+                                value={field.value}
+                                onChange={field.onChange}
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                            />
                         )}
                     />
                 </Grid>

@@ -11,134 +11,16 @@ interface RejectionFormData {
 	message: string;
 }
 interface PriceFormData {
-  commissionPercentage: string;
+	commissionPercentage: string;
 }
 
-export interface QuoteTabsProps{
+export interface QuoteTabsProps {
 	travelTab?: boolean;
+	inquiryId?: number;
 }
-const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
+const QuoteTabs: React.FC<QuoteTabsProps> = ({ travelTab = false, inquiryId }) => {
 
 	const theme = useTheme();
-
-	// const [quotes, setQuotes] = useState([
-	// 	{
-	// 		id: 1,
-	// 		name: "Platinum Jets International",
-	// 		rating: 4.8,
-	// 		aircraft: "Bombardier Global 7500",
-	// 		aircraftInfo: "2021 • 19 seats",
-	// 		price: "1,00,00,000",
-	// 		validity: "Valid until 31-Aug-2025",
-	// 		flightTime: "8h 30m",
-	// 		returnTime: "8h 45m",
-	// 		baseFare: "75,00,000",
-	// 		fuel: "16,00,000",
-	// 		taxes: "8,00,000",
-	// 		catering: "1,00,000",
-	// 		keyAmenities: "Four living spaces, Full kitchen, Master suite, Shower, Ka-band Wi-Fi",
-	// 		includedService: "Gourmet catering, Ground handling, Flight planning, Crew accommodation, Ground transportation",
-	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-	// 	},
-	// 	{
-	// 		id: 2,
-	// 		name: "Elite Aviation Services",
-	// 		rating: 3.7,
-	// 		aircraft: "Gulfstream G650",
-	// 		aircraftInfo: "2019 • 14 seats",
-	// 		price: "1,10,00,000",
-	// 		validity: "Valid until 05-Sept-2025",
-	// 		flightTime: "8h 30m",
-	// 		returnTime: "8h 45m",
-	// 		baseFare: "83,00,000",
-	// 		fuel: "17,00,000",
-	// 		taxes: "9,00,000",
-	// 		catering: "1,00,000",
-	// 		keyAmenities:
-	// 			"Full galley, Private bedroom, Conference area, Satellite phone, High-speed Wi-Fi",
-	// 		includedService:
-	// 			"Catering, Ground handling, Flight planning, Crew accommodation",
-	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-	// 	},
-	// 	{
-	// 		id: 3,
-	// 		name: "JetSet Experience",
-	// 		rating: 4.9,
-	// 		aircraft: "Dassault Falcon 8X",
-	// 		aircraftInfo: "2022 • 12 seats",
-	// 		price: "1,04,00,000",
-	// 		validity: "Valid until 20-Mar-2026",
-	// 		flightTime: "6h 30m",
-	// 		returnTime: "6h 35m",
-	// 		baseFare: "95,00,000",
-	// 		fuel: "25,00,000",
-	// 		taxes: "10,00,000",
-	// 		catering: "2,00,000",
-	// 		keyAmenities:
-	// 			"Luxury interior, High-speed internet, Foldable table, Private bathroom",
-	// 		includedService:
-	// 			"Gourmet service, Exclusive travel itineraries, Concierge service",
-	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-	// 	},
-	// 	{
-	// 		id: 4,
-	// 		name: "JetSet Experience",
-	// 		rating: 4.9,
-	// 		aircraft: "Dassault Falcon 8X",
-	// 		aircraftInfo: "2022 • 12 seats",
-	// 		price: "1,04,00,000",
-	// 		validity: "Valid until 20-Mar-2026",
-	// 		flightTime: "6h 30m",
-	// 		returnTime: "6h 35m",
-	// 		baseFare: "95,00,000",
-	// 		fuel: "25,00,000",
-	// 		taxes: "10,00,000",
-	// 		catering: "2,00,000",
-	// 		keyAmenities: "Luxury interior, High-speed internet, Foldable table, Private bathroom",
-	// 		includedService: "Gourmet service, Exclusive travel itineraries, Concierge service",
-	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-	// 	},
-	// 	{
-	// 		id: 5,
-	// 		name: "JetSet Experience",
-	// 		rating: 4.9,
-	// 		aircraft: "Dassault Falcon 8X",
-	// 		aircraftInfo: "2022 • 12 seats",
-	// 		price: "1,04,00,000",
-	// 		validity: "Valid until 20-Mar-2026",
-	// 		flightTime: "6h 30m",
-	// 		returnTime: "6h 35m",
-	// 		baseFare: "95,00,000",
-	// 		fuel: "25,00,000",
-	// 		taxes: "10,00,000",
-	// 		catering: "2,00,000",
-	// 		keyAmenities:
-	// 			"Luxury interior, High-speed internet, Foldable table, Private bathroom",
-	// 		includedService:
-	// 			"Gourmet service, Exclusive travel itineraries, Concierge service",
-	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-	// 	},
-	// 	{
-	// 		id: 6,
-	// 		name: "JetSet Experience",
-	// 		rating: 4.9,
-	// 		aircraft: "Dassault Falcon 8X",
-	// 		aircraftInfo: "2022 • 12 seats",
-	// 		price: "1,04,00,000",
-	// 		validity: "Valid until 20-Mar-2026",
-	// 		flightTime: "6h 30m",
-	// 		returnTime: "6h 35m",
-	// 		baseFare: "95,00,000",
-	// 		fuel: "25,00,000",
-	// 		taxes: "10,00,000",
-	// 		catering: "2,00,000",
-	// 		keyAmenities:
-	// 			"Luxury interior, High-speed internet, Foldable table, Private bathroom",
-	// 		includedService:
-	// 			"Gourmet service, Exclusive travel itineraries, Concierge service",
-	// 		image: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1186",
-	// 	},
-	// ]);
 
 	const [quotes, setQuotes] = useState([])
 	const [viewQuoteDetails, setViewQuoteDetails] = useState<boolean>(false);
@@ -208,7 +90,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 		reset: travelAgentReset,
 	} = useForm<PriceFormData>({
 		defaultValues: {
-		commissionPercentage: "",
+			commissionPercentage: "",
 		},
 	});
 
@@ -249,33 +131,34 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 										{q.validity}
 									</Typography>
 								</> :
-							label == 'Flight Time' ?
-								<>
-									<Typography color="text.secondary">
+								label == 'Flight Time' ?
+									<>
+										<Typography color="text.secondary">
+											{q[key]}
+										</Typography>
+										<Typography color="text.secondary" fontSize={12}>
+											Return: {q.returnTime}
+										</Typography>
+										{isDisabled &&
+											<Box className="submit-rejection-reason">
+												<Button sx={{ width: '220px' }} onClick={() => setRejectionModal(true)} className="btn btn-danger">Submit Rejection Reason</Button>
+											</Box>
+										}
+									</> :
+									<Typography
+										variant="body2"
+										sx={{
+											whiteSpace: "pre-line",
+											color: isRich ? "text.secondary" : "text.primary",
+											fontWeight: isRich ? 400 : 500,
+										}}
+									>
 										{q[key]}
 									</Typography>
-									<Typography color="text.secondary" fontSize={12}>
-										Return: {q.returnTime}
-									</Typography>
-									{isDisabled && 
-										<Box className="submit-rejection-reason">
-											<Button sx={{ width: '220px' }} onClick={() => setRejectionModal(true)} className="btn btn-danger">Submit Rejection Reason</Button>
-										</Box>
-									}
-								</> :
-							<Typography
-								variant="body2"
-								sx={{
-									whiteSpace: "pre-line",
-									color: isRich ? "text.secondary" : "text.primary",
-									fontWeight: isRich ? 400 : 500,
-								}}
-							>
-								{q[key]}
-							</Typography>
 						}
 					</TableCell>
-			)})}
+				)
+			})}
 		</TableRow>
 	);
 
@@ -315,18 +198,19 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 										{quotes.map((quote) => {
 											const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
 											return (
-											<TableCell key={quote.id} data-disabled={isDisabled}>
-												<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
-													<img src={quote.image} alt={quote.name} style={{ maxWidth: '300px', height: 'auto' }} />
-													<Typography variant="h4">
-														{quote.name}
-													</Typography>
-													<Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
-														View Details
-													</Button>
-												</Box>
-											</TableCell>
-										)})}
+												<TableCell key={quote.id} data-disabled={isDisabled}>
+													<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
+														<img src={quote.image} alt={quote.name} style={{ maxWidth: '300px', height: 'auto' }} />
+														<Typography variant="h4">
+															{quote.name}
+														</Typography>
+														<Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
+															View Details
+														</Button>
+													</Box>
+												</TableCell>
+											)
+										})}
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -354,7 +238,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 															{isAccepted ? "Quote Accepted" : "Accept Quote"}
 														</Button>
 														{!isAccepted && (
-															<Button className="btn btn-danger w-100" onClick={ () => rejectQuote(q.id)} disabled={isDisabled}>
+															<Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
 																Reject Quote
 															</Button>
 														)}
@@ -375,7 +259,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 							</Button>
 						</Box>
 					</Box>
-				):(
+				) : (
 					<Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
 						<AttachMoneyIcon sx={{ fontSize: '35px', color: '#808080' }} />
 						<Typography variant="h4">No quotes received yet</Typography>
@@ -392,7 +276,7 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 					</Box>
 				)
 			)}
-			{createNewQuote && <CreateNewQuoteStepper />}
+			{createNewQuote && <CreateNewQuoteStepper inquiryId={inquiryId} />}
 			{/* Quote Details Modal */}
 			<CustomModal headerText='Quote Details' open={viewQuoteDetails} setOpen={setViewQuoteDetails} dataClose={() => setViewQuoteDetails(false)} className="modal-lg">
 				<Grid container spacing={{ md: 2, xs: 1 }}>
@@ -537,27 +421,27 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 						</Card>
 					</Grid>
 				</Grid>
-				<Box className="modal-footer" sx={{ py: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: { sm: '200px', xs: 'calc(50% - 4px)'}, width: '100%' } }}>
-					<Button className="btn btn-blue" onClick={ () => console.log('quote id:' + viewedQuote?.id)}>Accept Quote</Button>
-					<Button className="btn btn-danger" onClick={ () => console.log('quote id:' + viewedQuote?.id)}>Reject Quote</Button>
+				<Box className="modal-footer" sx={{ py: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: { sm: '200px', xs: 'calc(50% - 4px)' }, width: '100%' } }}>
+					<Button className="btn btn-blue" onClick={() => console.log('quote id:' + viewedQuote?.id)}>Accept Quote</Button>
+					<Button className="btn btn-danger" onClick={() => console.log('quote id:' + viewedQuote?.id)}>Reject Quote</Button>
 				</Box>
 			</CustomModal>
-			
+
 			{/* Rejection Reason Modal */}
 			<CustomModal headerText='Rejection Reason' open={rejectionModal} setOpen={setRejectionModal} dataClose={() => setRejectionModal(false)}>
 				<Typography component="form" onSubmit={handleSubmit(onSubmit)}>
-					<InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}} required={true}>Massage</InputLabel>
+					<InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }} required={true}>Massage</InputLabel>
 					<FormControl fullWidth>
 						<TextField
 							size="small"
 							multiline
 							minRows={4}
 							{...register("message", {
-							required: "Message is required",
-							minLength: {
-								value: 5,
-								message: "Message must be at least 5 characters",
-							},
+								required: "Message is required",
+								minLength: {
+									value: 5,
+									message: "Message must be at least 5 characters",
+								},
 							})}
 							error={!!errors.message}
 							helperText={errors.message?.message}
@@ -574,22 +458,22 @@ const QuoteTabs: React.FC<QuoteTabsProps>= ({travelTab = false}) => {
 			<CustomModal headerText='Sent To Travel Agent' open={travelAgentModal} setOpen={setTravelAgentModal} dataClose={() => setTravelAgentModal(false)}>
 				<Typography component="form" onSubmit={travelAgentHandleSubmit(travelAgentSubmit)}>
 					<CustomTextField
-						inputLabel={<>Commission Percentage <Typography component='span' sx={{color: theme?.common?.redColor}}>*</Typography></>}
+						inputLabel={<>Commission Percentage <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography></>}
 						placeholder="Add your Commission Percentage"
 						size="large"
 						type="number"
 						error={!!travelAgentErrors.commissionPercentage}
 						helperText={travelAgentErrors.commissionPercentage?.message}
 						{...travelAgentRegister("commissionPercentage", {
-						required: "Commission percentage is required",
-						pattern: {
-							value: /^[0-9]+(\.[0-9]{1,2})?$/,
-							message: "Enter a valid number (e.g. 5 or 10.5)",
-						},
-						validate: (value) =>
-							Number(value) >= 0 && Number(value) <= 100
-							? true
-							: "Percentage must be between 0 and 100",
+							required: "Commission percentage is required",
+							pattern: {
+								value: /^[0-9]+(\.[0-9]{1,2})?$/,
+								message: "Enter a valid number (e.g. 5 or 10.5)",
+							},
+							validate: (value) =>
+								Number(value) >= 0 && Number(value) <= 100
+									? true
+									: "Percentage must be between 0 and 100",
 						})}
 					/>
 					<Card elevation={2} sx={{ mt: 2 }}>
