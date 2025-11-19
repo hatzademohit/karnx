@@ -27,7 +27,7 @@ import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 
 
-const AmenitiesDetails = () => {
+const AmenitiesDetails = (editedData) => {
   const { control, watch, setValue } = useFormContext();
   const selected = watch("amenities") || [];
   const theme = useTheme();
@@ -50,7 +50,7 @@ const AmenitiesDetails = () => {
         toast.error(res?.message || '');
       }
     } catch (e) {
-      //toast.error('Network error while fetching cancellation policies');
+
     }
   };
 

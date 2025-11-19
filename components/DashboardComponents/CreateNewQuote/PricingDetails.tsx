@@ -16,7 +16,7 @@ const fields = [
     { name: "catering", label: "Catering", numeric: true },
 ];
 
-const PricingDetails = () => {
+const PricingDetails = (editedData) => {
     const { control, setValue } = useFormContext();
     const theme = useTheme()
     const watchedValues = useWatch({ control });
@@ -49,7 +49,7 @@ const PricingDetails = () => {
                 toast.error(res?.message || '');
             }
         } catch (e) {
-            toast.error('Network error while fetching cancellation policies');
+            //toast.error('Network error while fetching cancellation policies');
         }
     };
 

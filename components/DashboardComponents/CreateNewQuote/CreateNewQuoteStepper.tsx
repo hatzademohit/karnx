@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Stepper, Step, StepLabel, Button, Typography, useTheme } from "@mui/material";
 import { useForm, FormProvider } from "react-hook-form";
 import { AircraftFlightDetails, PricingDetails, AmenitiesDetails } from '@/components'
 import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
+import { useRouter } from "next/navigation";
 
 const steps = ["Aircraft & Flight Details", "Pricing Details", "Amenities & Final Details"];
 
@@ -14,26 +15,45 @@ export interface CreateNewQuoteProps {
 //const CreateNewQuoteStepper = (inquiryId) => {
 const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => {
 	const [activeStep, setActiveStep] = useState(0);
+	const router = useRouter();
 	const theme = useTheme();
 	const callApi = useApiFunction();
+	const [quoteDetails, setQuoteDetails] = useState<any>([]);
+
+	const getQuoteDetails = async () => {
+		try {
+			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
+			if (res?.status === true) {
+				setQuoteDetails(res.data);
+			} else {
+				toast.error(res?.message || '');
+			}
+		} catch (e) {
+			toast.error('Network error while fetching cancellation policies');
+		}
+	};
+
+	useEffect(() => {
+		getQuoteDetails();
+	}, [inquiryId]);
 
 	const methods = useForm({
 		mode: "onChange",
 		defaultValues: {
-			aircraft: "",
-			estimatedFlightTime: "",
-			baseFare: "",
-			fuel: "",
-			taxes: "",
-			crewFees: "",
-			handlingFees: "",
-			catering: "",
-			totalAmount: 0,
-			quoteValidUntil: "",
-			cancellationPolicy: "",
+			aircraft: quoteDetails?.aircraft_id || "",
+			estimatedFlightTime: quoteDetails?.estimated_flight_time || "",
+			baseFare: quoteDetails?.base_fare || "",
+			fuel: quoteDetails?.fluel_cost || "",
+			taxes: quoteDetails?.taxes_fees || "",
+			crewFees: quoteDetails?.crew_fees || "",
+			handlingFees: quoteDetails?.handling_fees || "",
+			catering: quoteDetails?.catering_fees || "",
+			totalAmount: quoteDetails?.total || 0,
+			quoteValidUntil: quoteDetails?.validate_till || "",
+			cancellationPolicy: quoteDetails?.cancellation_policy_id || "",
 			amenities: [],
-			specialOffers: "",
-			addtionalNotes: "",
+			specialOffers: quoteDetails?.special_offers_promotions || "",
+			addtionalNotes: quoteDetails?.additional_notes || "",
 		},
 	});
 
@@ -44,16 +64,18 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => 
 	} = methods;
 
 	const onSubmit = async (data: any) => {
-		//console.log("Final Data:", data);
+		if (!isValid) return;
 		try {
 			const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/submit-quote`, body: { ...data, inquiryId } });
 			if (res?.status === true) {
 				toast.success(res?.message || '');
+				/**redirect to the dashboard componants */
+				router.push('/dashboard');
 			} else {
 				toast.error(res?.message || '');
 			}
 		} catch (e) {
-			toast.error('Network error while fetching cancellation policies');
+			//toast.error('Network error while fetching cancellation policies');
 		}
 	};
 
@@ -83,9 +105,9 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => 
 				</Stepper>
 
 				<Box sx={{ mb: 3, border: `1px solid ${theme?.common.borderColor}`, p: { md: 3, xs: '10px' } }}>
-					{activeStep === 0 && <AircraftFlightDetails />}
-					{activeStep === 1 && <PricingDetails />}
-					{activeStep === 2 && <AmenitiesDetails />}
+					{activeStep === 0 && <AircraftFlightDetails editedData={quoteDetails} />}
+					{activeStep === 1 && <PricingDetails editedData={quoteDetails} />}
+					{activeStep === 2 && <AmenitiesDetails editedData={quoteDetails} />}
 				</Box>
 
 				<Box display="flex" justifyContent="space-between" gap={2}>

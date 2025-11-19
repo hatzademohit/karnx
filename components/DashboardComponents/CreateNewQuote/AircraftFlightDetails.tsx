@@ -16,12 +16,13 @@ const getAircraftList = [
 	{ asset_name: "Embraer Phenom 300E", model_year: 2020, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
 ];
 
-const AircraftFlightDetails = () => {
+const AircraftFlightDetails = (editedData) => {
 	const { control, watch, formState: { errors } } = useFormContext();
 	const selectedAircraft = watch("aircraft");
 	const theme = useTheme();
 	const callApi = useApiFunction();
 	const { user } = useAuth();
+	//console.log(editedData, selectedAircraft);
 	const [aircraftList, setAircraftList] = useState<any>([]);
 	const getAircrafts = async () => {
 		try {
@@ -32,13 +33,13 @@ const AircraftFlightDetails = () => {
 				toast.error(res?.message || '');
 			}
 		} catch (e) {
-			toast.error('Network error while fetching aircraft');
+			//toast.error('Network error while fetching aircraft');
 		}
 	};
 
 	useEffect(() => {
 		getAircrafts();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps		
 	}, []);
 
 	return (
