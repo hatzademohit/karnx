@@ -25,7 +25,6 @@ function AlertMassage({ severity, alertText, onClose }: AlertMassageProps) {
           padding: '7px 12px 7px 12px !important',
         },
         '& .MuiAlert-message': {
-          fontFamily: 'kyn-md',
           fontSize: '16px',
           padding: '7px 0',
         },

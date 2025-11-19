@@ -82,7 +82,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           InputLabelProps={{ shrink: InputLabelProps }}
           InputProps={InputProps}
           autoComplete='off'
-          id={id}
+          id={inputLabel || label || id}
           // multiline={multiline}
         />
       </Box>

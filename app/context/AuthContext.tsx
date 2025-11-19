@@ -176,12 +176,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       .catch((error) => {
         console.log(error);
-      });
-
-    // setTimeout(() => {
-    //   window.location.href = '/';
-    //   setLoader(false);
-    // }, 2000)
+      }).finally(() => {
+        setLoader(false);
+      })
   };
 
   return (
