@@ -5,6 +5,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { TabLayout } from "@/components";
 import { InquiryDetailsTab, OperatorsTab, QuoteTabs } from "@/components/DashboardComponents";
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 export interface InquiryDetailsProps {
   inquiryData: any;
@@ -13,7 +14,7 @@ export interface InquiryDetailsProps {
 }
 const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperatorTabs, itsTravelAgent }) => {
   const theme = useTheme();
-
+  const { assignedOperatorLength } = useInquiryDetails()
   const tabs = [
     {
       label: "Inquiry Details",
@@ -23,7 +24,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
     ...(!hideOperatorTabs
       ? [
         {
-          label: "Operators (0)",
+          label: `Operators (${assignedOperatorLength})`,
           icon: <SettingsOutlinedIcon fontSize="small" />,
           content: <OperatorsTab inquiryId={inquiryData.id}/>,
         },

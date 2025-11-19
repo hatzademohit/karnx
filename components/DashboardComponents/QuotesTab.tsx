@@ -6,6 +6,7 @@ import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { useForm } from "react-hook-form";
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
+import { useAuth } from "@/app/context/AuthContext";
 
 interface RejectionFormData {
 	message: string;
@@ -21,7 +22,7 @@ export interface QuoteTabsProps {
 const QuoteTabs: React.FC<QuoteTabsProps> = ({ travelTab = false, inquiryId }) => {
 
 	const theme = useTheme();
-
+	const { user } = useAuth()
 	const [quotes, setQuotes] = useState([])
 	const [viewQuoteDetails, setViewQuoteDetails] = useState<boolean>(false);
 	const [acceptedQuoteId, setAcceptedQuoteId] = useState<Number>(null);
@@ -263,7 +264,7 @@ const QuoteTabs: React.FC<QuoteTabsProps> = ({ travelTab = false, inquiryId }) =
 					<Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
 						<AttachMoneyIcon sx={{ fontSize: '35px', color: '#808080' }} />
 						<Typography variant="h4">No quotes received yet</Typography>
-						{travelTab == false ?
+						{user.access_type === 'Aircraft Operator' ?
 							<>
 								<Typography color="text.secondary">Quotes will appear here once you submit their proposals.</Typography>
 								<Button className='btn btn-danger' onClick={addQuote}><AddIcon sx={{ mr: '4px' }} /> Add Quote</Button>

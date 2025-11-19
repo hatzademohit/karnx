@@ -13,11 +13,11 @@ import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 import CustomModal from "../CustomModal";
 import StarIcon from "@mui/icons-material/Star";
 import { apiBaseUrl } from "@/karnx/api";
-import { useApi } from "@/karnx/Hooks/useApi";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 import { toast } from "react-toastify";
 import AddIcon from '@mui/icons-material/Add';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 interface OperatorsTabProps {
     inquiryId?: any;
@@ -28,16 +28,16 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     const callApi = useApiFunction();
     const theme = useTheme();
     const [addOperator, setAddOperator] = useState(false);
-    const [assignedOperator, setAssignedOperator] = useState<any[]>([1, 2]);
+    const [assignedOperator, setAssignedOperator] = useState<any[]>([]);
     const [getOperatorList, setOperatorList] = useState<any[]>([]);
     const [selectedOperators, setSelectedOperators] = useState<any[]>([]);
+    const { assignedOperatorLength, setAssignedOperatorLength } = useInquiryDetails();
 
     const handleOpenAddOperator = async () => {
         setAddOperator(true);
         const operators = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-operator/get-operators`, body: { inquiry_id: inquiryId } });
         setOperatorList(operators.data || []);
     }
-
 
     const handleSelect = (id: number) => {
         setSelectedOperators((prev) =>
@@ -67,6 +67,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
         if (fetched?.status === true) {
             //toast.success(fetched?.message);
             setAssignedOperator(fetched.data || []);
+            setAssignedOperatorLength(fetched?.data?.length || [])
         } else {
             toast.error(fetched?.message);
         }
