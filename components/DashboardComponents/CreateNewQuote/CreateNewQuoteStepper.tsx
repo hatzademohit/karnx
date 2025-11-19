@@ -6,6 +6,7 @@ import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 import { useRouter } from "next/navigation";
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const steps = ["Aircraft & Flight Details", "Pricing Details", "Amenities & Final Details"];
 
@@ -19,7 +20,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => 
 	const theme = useTheme();
 	const callApi = useApiFunction();
 	const [quoteDetails, setQuoteDetails] = useState<any>([]);
-
+	const { setShowDetailsTabs, showDetailsTabs } = useInquiryDetails()
 	const getQuoteDetails = async () => {
 		try {
 			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
@@ -69,8 +70,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => 
 			const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/submit-quote`, body: { ...data, inquiryId } });
 			if (res?.status === true) {
 				toast.success(res?.message || '');
-				/**redirect to the dashboard componants */
-				router.push('/dashboard');
+				setShowDetailsTabs(false)
 			} else {
 				toast.error(res?.message || '');
 			}

@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { RecentInquiries, Next24Hours, InquiryDetails } from '@/components/DashboardComponents';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
+import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
 
 
 interface AircraftOperatorCardCount {
@@ -28,7 +29,9 @@ const AircraftOperator = () => {
     const searchParams = useSearchParams();
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
-    const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
+        const { setShowDetailsTabs, showDetailsTabs } = useInquiryDetails()
+    // const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
+
 
     // const [data, setData] = useState([
     //     {
