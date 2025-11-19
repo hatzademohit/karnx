@@ -1,5 +1,6 @@
 "use client"
 import { CustomTextField } from "./CustomTextField/CustomTextField";
+import RHFCustomTextField from "./CustomTextField/RHFCustomTextField";
 import PageLoader from "./Loader/PageLoader";
 import SimpleAutoComplete from "./SelectOption/SimpleAutoComplete";
 import SingleSelect from "./SelectOption/SingleSelect";
@@ -29,4 +30,4 @@ import CustomTimePicker from "./DatePicker/CustomTimePicker"
 import CustomDatePicker from "./DatePicker/CustomDatePicker"
 import AutoComplteCheckbox from "./SelectOption/AutoCompleteCheckbox";
 
-export { CustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker, AutoComplteCheckbox };
+export { CustomTextField, RHFCustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker, AutoComplteCheckbox };

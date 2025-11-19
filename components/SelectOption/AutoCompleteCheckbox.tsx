@@ -27,6 +27,8 @@ interface AutoCompleteCheckboxProps {
   placeholder?: string;
   label?: string; // TextField label
   limitTags?: number;
+  helperText?: string;
+  error?: boolean;
 }
 
 const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
@@ -40,6 +42,8 @@ const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
   placeholder = 'Select...',
   label = 'Select',
   limitTags = 2,
+  helperText = '',
+  error = false,
 }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -92,7 +96,7 @@ const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
             );
           }}
           renderInput={(params) => (
-            <TextField {...params} placeholder={placeholder} />
+            <TextField {...params} placeholder={placeholder} helperText={helperText} error={error}/>
           )}
         />
       </FormControl>

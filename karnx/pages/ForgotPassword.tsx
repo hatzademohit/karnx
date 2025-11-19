@@ -60,7 +60,7 @@ const ForgotPassword = () => {
           playsInline
           className="w-100 h-100 object-cover"
         >
-          <source src={theme?.images?.loginBg} type="video/mp4" />
+          <source src={theme?.images?.loginBgVideo} type="video/mp4" />
         </video>
       </Box>
 

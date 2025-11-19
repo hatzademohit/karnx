@@ -1,6 +1,5 @@
 import * as yup from "yup";
 
-
 export const oneWaySchema = yup.object({
   oneWayfrom: yup.string().nullable().required("Departure is required"),
   oneWayto: yup.string().nullable().required("Destination is required"),
@@ -120,31 +119,6 @@ export const passengerAircraftSchema = yup.object().shape({
   // 
   isMedicalAssistanceReq: yup.boolean(),
 
-  // specialAssistance: yup
-  //   .array()
-  //   .transform((value, originalValue) => {
-  //     // Ensure always an array (React Hook Form may pass string or undefined)
-  //     if (!originalValue) return [];
-  //     return Array.isArray(originalValue) ? originalValue : [originalValue];
-  //   })
-  //   .of(yup.string())
-  //   .when("isMedicalAssistanceReq", {
-  //     is: (val) => val === true ,
-  //     then: (schema) =>
-  //       schema
-  //         .min(1, "Please select at least one assistance option")
-  //         .required("Please select at least one assistance option"),
-  //     otherwise: (schema) => schema.notRequired().nullable(),
-  //   })
-  //   .default([]),
-
-  //  specialAssistance: yup.array().of(yup.string()).when("isMedicalAssistanceReq", {
-  //   is: true,
-  //   then: (schema) =>
-  //     schema.min(1, "Please select at least one assistance option").required("Please select at least one assistance option"),
-  //   otherwise: (schema) => schema.notRequired().nullable(),
-  // }).default([]),
-
   specialAssistance: yup.array().when('isMedicalAssistanceReq', {
     is: true,
     then: (schema) =>
@@ -232,3 +206,31 @@ export const contactSummarySchema = yup.object().shape({
   contactPhone: yup.string().required("Contact Phone is required").matches(/^\d{10}$/, "Contact Phone must be exactly 10 digits"),
   specialRequirements: yup.string().notRequired(),
 });
+
+export const CompanyProfileSchema = yup.object().shape({
+  clientName: yup.string().required('Company Name is required'),
+  safetyRating: yup.string().required('Safety Rating is required'),
+  responseTime: yup.string().required('Response Time is required'),
+  operatingRegions: yup.array().required('Operating Regions is required').nonNullable(),
+  certification: yup.string().required('Certification is required'),
+  specialtie: yup.string().required('Specialtie is required'),
+  contactPerson: yup.string().required('Contact Person is required'),
+  email: yup.string().email("Invalid email format").required("Email is required"),
+  phone: yup.string().required("Phone is required").matches(/^\d{10}$/, "Phone must be exactly 10 digits"),
+  // website: yup.string().url("Invalid URL").required('Website is required'),
+  website: yup.string().transform((value) => {
+    if (!value) return value;
+    // If missing protocol → add https://
+    if (!/^https?:\/\//i.test(value)) {
+      return `https://${value}`;
+    }
+    return value;
+  }).url("Please enter a valid URL").required("Website is required"),
+  addressLine1: yup.string().required('Address Line 1 is required'),
+  addressLine2: yup.string().nullable(),
+  area: yup.string().required('Area is required'),
+  city: yup.string().required('City is required'),
+  state: yup.string().required('State is required'),
+  country: yup.string().required('Country is required'),
+  pinCode: yup.string().required('Pin Code is required'),
+})

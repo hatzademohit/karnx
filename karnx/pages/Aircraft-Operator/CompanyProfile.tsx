@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Link, Stack, Tooltip, Typography, useTheme } from '@mui/material';
-import { CustomTextField, CustomModal, AutoComplteCheckbox } from '@/components';
+import { CustomModal, AutoComplteCheckbox, RHFCustomTextField } from '@/components';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
@@ -22,6 +22,9 @@ import useApiFunction from '@/karnx/Hooks/useApiFunction';
 import { apiBaseUrl } from '@/karnx/api';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/app/context/AuthContext';
+import { useForm, FormProvider, Controller, useFormContext } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { CompanyProfileSchema } from '../BookingInquiry/ValidationSchema';
 
 const labelSx = { color: '#6b7280', fontSize: 14 };
 
@@ -90,14 +93,48 @@ export default function CompanyProfile() {
         getProfileData();
     }, []);
 
+    const methods = useForm({
+        resolver: yupResolver(CompanyProfileSchema),
+        mode: "onChange"
+    });
+    const { handleSubmit, reset, control, formState: { errors } } = methods;
+
+    useEffect(() => {
+        if (profile?.client) {
+            reset({
+                clientName: (editing ? draft?.client?.name : profile?.client?.name) ?? '',
+                safetyRating: (editing ? draft?.client?.safety_ratings : profile?.client?.safety_ratings) ?? '',
+                responseTime: (editing ? draft?.client?.response_time : profile?.client?.response_time) ?? '',
+                operatingRegions: (editing ? draft?.client?.operating_reginons : profile?.client?.operating_reginons) ?? [],
+                certification: (editing ? draft?.client?.certifications : profile?.client?.certifications) ?? '',
+                specialtie: (editing ? draft?.client?.specialties : profile?.client?.specialties) ?? '',
+                contactPerson: (editing ? draft?.client?.contact_person : profile?.client?.contact_person) ?? '',
+                email: (editing ? draft?.client?.email : profile?.client?.email) ?? '',
+                phone: (editing ? draft?.client?.phone : profile?.client?.phone) ?? '',
+                website: (editing ? draft?.client?.website : profile?.client?.website) ?? '',
+                addressLine1: (editing ? draft?.client?.address_line1 : profile?.client?.address_line1) ?? '',
+                addressLine2: (editing ? draft?.client?.address_line2 : profile?.client?.address_line2) ?? '',
+                area: (editing ? draft?.client?.area : profile?.client?.area) ?? '',
+                city: (editing ? draft?.client?.city : profile?.client?.city) ?? '',
+                state: (editing ? draft?.client?.state : profile?.client?.city) ?? '',
+                country: (editing ? draft?.client?.country : profile?.client?.country) ?? '',
+                pinCode: (editing ? draft?.client?.pincode : profile?.client?.pincode) ?? '',
+            });
+        }
+    }, [profile, reset, editing]);
+
+    const onSubmit = (data) => {
+        save()
+    };
+
     return (
-        <>
+        <FormProvider {...methods}>
             <Stack direction="row" spacing={1} mb={2} justifyContent='space-between' alignItems='center'>
                 <Typography variant='h3' sx={{ color: theme?.heading?.color, mb: theme?.heading?.marginBottom }}>Company Profile</Typography>
                 {editing ? (
                     <Box>
                         <Tooltip title="Save">
-                            <IconButton color="primary" onClick={save}>
+                            <IconButton color="primary" onClick={handleSubmit(onSubmit)}>
                                 <SaveIcon />
                             </IconButton>
                         </Tooltip>
@@ -122,7 +159,7 @@ export default function CompanyProfile() {
                     </Box>
                 )}
             </Stack>
-            <Box sx={{ border: '1px solid #cccccc', padding: 2 }}>
+            <Typography component='form' onSubmit={handleSubmit(onSubmit)} sx={{ border: '1px solid #cccccc', padding: '16px' }}>
                 <Grid container spacing={2}>
                     {/* Flight Informtaion */}
                     <Grid size={{ sm: 12, xs: 12 }}>
@@ -136,68 +173,105 @@ export default function CompanyProfile() {
                     <Grid size={{ sm: 12, xs: 12 }}>
                         <Grid container spacing={2}>
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Company Name"
+                                <RHFCustomTextField
+                                    name='clientName'
+                                    label="Company Name"
                                     placeholder="Enter company name"
-                                    value={(editing ? draft?.client?.name : profile?.client?.name) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, name: e.target.value } })}
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, name: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
 
-                            {/* Safety and Response Time */}
+                            {/* Safety Rating */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Safety Rating"
+                                <RHFCustomTextField
+                                    name='safetyRating'
+                                    label="Safety Rating"
                                     placeholder="e.g., ARGUS Gold, Wyvern Wingman"
-                                    value={(editing ? draft?.client?.safety_ratings : profile?.client?.safety_ratings) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, safety_ratings: e.target.value } })}
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, safety_ratings: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
+
                             {/* Response Time */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Response Time"
+                                <RHFCustomTextField
+                                    name='responseTime'
+                                    label="Response Time"
                                     placeholder="e.g., < 2 hours"
-                                    value={(editing ? draft?.client?.response_time : profile?.client?.response_time) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, response_time: e.target.value } })}
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, response_time: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
 
                             {/* Operating Regions */}
+                            {/* <Grid size={{ md: 4, sm: 6, xs: 12 }}>
+                                <Controller name='operatingRegions' control={control} render={({ field }) =>{
+                                    // console.log(field.value)
+                                return(
+                                    <AutoComplteCheckbox
+                                        inputLabel="Operating Regions"
+                                        options={profile?.regionCities}
+                                        value={selectedOption}
+                                        onChange={(selected: any) => {
+                                            setSelectedOption(selected)
+                                            setDraft({ ...draft, client: { ...draft.client, operating_reginons: selected.map((val) => val.id) } });
+                                        }}
+                                        disabled={!editing}
+                                        error={!!errors.operatingRegions}
+                                        helperText={errors?.operatingRegions?.message as string}
+
+                                    />
+                                )}}/>
+                            </Grid> */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <AutoComplteCheckbox
-                                    inputLabel="Operating Regions"
-                                    options={profile?.regionCities}
-                                    value={selectedOption}
-                                    onChange={(selected: any) => {
-                                        setSelectedOption(selected)
-                                        setDraft({ ...draft, client: { ...draft.client, operating_reginons: selected.map((val) => val.id) } });
-                                    }}
-                                    disabled={!editing}
+                                <Controller
+                                    name="operatingRegions"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <AutoComplteCheckbox
+                                            inputLabel="Operating Regions"
+                                            options={profile?.regionCities}
+                                            value={profile?.regionCities?.filter((city) => 
+                                                field.value.includes(city.id)
+                                            )
+                                            }
+                                            onChange={(selected) => {
+                                                field.onChange(selected.map((val) => val.id));
+                                                setDraft({
+                                                    ...draft,
+                                                    client: {
+                                                        ...draft.client,
+                                                        operating_reginons: selected.map((v) => v.id),
+                                                    },
+                                                });
+                                            }}
+                                            disabled={!editing}
+                                            error={!!errors.operatingRegions}
+                                            helperText={errors?.operatingRegions?.message as string}
+                                        />
+                                    )}
                                 />
                             </Grid>
 
                             {/* Certifications */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Certifications"
+                                <RHFCustomTextField
+                                    name='certification'
+                                    label="Certifications"
                                     placeholder="e.g., Argus Gold, IS-BAO, Wyvern Wingman"
-                                    value={(editing ? draft?.client?.certifications : profile?.client?.certifications) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, certifications: e.target.value } })}
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, certifications: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
 
                             {/* Specialties */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Specialties"
+                                <RHFCustomTextField
+                                    name='specialtie'
+                                    label="Specialties"
                                     placeholder="e.g., Corporate Travel, VIP Transport"
-                                    value={(editing ? draft?.client?.specialties : profile?.client?.specialties) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, specialties: e.target.value } })}
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, specialties: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
@@ -214,111 +288,110 @@ export default function CompanyProfile() {
                     <Grid size={{ sm: 12, xs: 12 }}>
                         <Grid container spacing={2}>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Contact Person"
-                                    value={(editing ? draft?.client?.contact_person : profile?.client?.contact_person) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, contact_person: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='contactPerson'
+                                    label="Contact Person"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, contact_person: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Email"
-                                    value={(editing ? draft?.client?.email : profile?.client?.email) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, email: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='email'
+                                    label="Email"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, email: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Phone"
-                                    value={(editing ? draft?.client?.phone : profile?.client?.phone) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, phone: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='phone'
+                                    label="Phone"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, phone: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Website"
-                                    value={(editing ? draft?.client?.website : profile?.client?.website) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, website: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='website'
+                                    label="Website"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, website: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Address Line 1"
-                                    value={(editing ? draft?.client?.address_line1 : profile?.client?.address_line1) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, address_line1: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='addressLine1'
+                                    label="Address Line 1"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, address_line1: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Address Line 2"
-                                    value={(editing ? draft?.client?.address_line2 : profile?.client?.address_line2) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, address_line2: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='addressLine2'
+                                    label="Address Line 2"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, address_line2: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Area"
-                                    value={(editing ? draft?.client?.area : profile?.client?.area) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, area: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='area'
+                                    label="Area"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, area: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="City"
-                                    value={(editing ? draft?.client?.city : profile?.client?.city) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, city: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='city'
+                                    label="City"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, city: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="State"
-                                    value={(editing ? draft?.client?.state : profile?.client?.state) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, state: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='state'
+                                    label="State"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, state: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Country"
-                                    value={(editing ? draft?.client?.country : profile?.client?.country) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, country: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='country'
+                                    label="Country"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, country: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
-                                <CustomTextField
-                                    inputLabel="Pin Code"
-                                    type="number"
-                                    value={(editing ? draft?.client?.pincode : profile?.client?.pincode) ?? ''}
-                                    onChange={(e: any) => setDraft({ ...draft, client: { ...draft.client, pincode: e.target.value } })}
+                                <RHFCustomTextField
+                                    name='pinCode'
+                                    label="Pin Code"
+                                    onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, pincode: val } })}
                                     disabled={!editing}
                                 />
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingBlock: '10px',  }}>
-                    {editing ? 
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingBlock: '10px', }}>
+                    {editing ?
                         <>
-                            <Button className='btn btn-blue' onClick={save}>Save</Button>
+                            <Button className='btn btn-blue' type="submit">Save</Button>
                             <Button className='btn btn-danger' onClick={cancelEdit}>Cancel</Button>
                         </>
-                    :
-                    <>
-                        <Button className='btn btn-blue' onClick={viewProfile}>Preview</Button>
-                        <Button className='btn btn-outlined' onClick={startEdit}>Edit</Button>
-                    </>
-                }
+                        :
+                        <>
+                            <Button className='btn btn-blue' onClick={viewProfile}>Preview</Button>
+                            <Button className='btn btn-outlined' onClick={startEdit}>Edit</Button>
+                        </>
+                    }
                 </Box>
-            </Box>
+            </Typography>
 
             <CustomModal open={previewProfile} setOpen={setPreviewProfile} headerText='Preview Profile' dataClose={() => setPreviewProfile(false)}>
                 <Card variant="outlined" sx={{ borderRadius: 3 }}>
@@ -440,6 +513,6 @@ export default function CompanyProfile() {
                     </CardContent>
                 </Card>
             </CustomModal>
-        </>
+        </FormProvider>
     );
 }
