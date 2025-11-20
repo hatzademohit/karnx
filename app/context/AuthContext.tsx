@@ -107,7 +107,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (diffMinutes > 60) {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("loginTime");
-      setUser(null);
+      logout();
+      // setUser(null);
       router.push("/");
     } else {
       localStorage.setItem("loginTime", formattedTime);
