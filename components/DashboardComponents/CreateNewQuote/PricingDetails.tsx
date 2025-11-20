@@ -110,9 +110,13 @@ const PricingDetails = (editedData) => {
                         control={control}
                         rules={{
                             required: "Quote valid until date is required",
-                            validate: (value) => value && value.isValid?.() ? true : "Invalid date",
+                            validate: (value) => {
+                                const isValid = dayjs(value).isAfter(dayjs());
+                                return isValid ? true : "Invalid date";
+                            },
                         }}
-                        render={({ field, fieldState }) => (
+                        render={({ field, fieldState }) => {
+                            return(
                             <CustomDatePicker
                                 {...field}
                                 datelabel="Quote Valid Until"
@@ -122,8 +126,9 @@ const PricingDetails = (editedData) => {
                                 required
                                 error={!!fieldState.error}
                                 helperText={fieldState.error?.message}
+                                minDate={dayjs().add(1, "day")}
                             />
-                        )}
+                        )}}
                     />
                 </Grid>
                 <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>

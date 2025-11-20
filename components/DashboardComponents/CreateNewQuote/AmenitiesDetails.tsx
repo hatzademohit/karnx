@@ -9,6 +9,7 @@ import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 // Map API icon identifiers to actual components
 const IconMap: Record<string, React.ReactElement> = {
@@ -68,7 +69,7 @@ const AmenitiesDetails = (editedData) => {
         Available Amenities
       </Typography>
       <Grid container spacing={{ md: 2.5, xs: 1 }}>
-        {amentiesList.length && amentiesList.map((amenitieItem) => (
+        {amentiesList.length > 0 && amentiesList.map((amenitieItem) => (
           <Grid size={{ lg: 3, md: 6, sm: 6, xs: 12 }} key={amenitieItem.id}>
             <Card
               onClick={() => toggleAmenity(amenitieItem.id)}
@@ -82,6 +83,14 @@ const AmenitiesDetails = (editedData) => {
             </Card>
           </Grid>
         ))}
+        {amentiesList.length === 0 && 
+          <Grid size={{ xs: 12 }}>
+            <Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
+              <SettingsOutlinedIcon sx={{ fontSize: '35px', color: '#808080' }} />
+              <Typography variant="h4">Amenities not found</Typography>
+            </Box>
+          </Grid>
+        }
         <Grid size={{ lg: 6, xs: 12 }}>
           <Controller
             name="specialOffers"

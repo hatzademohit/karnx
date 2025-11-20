@@ -319,7 +319,9 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData })
                             <Link
                               key={`${medReq}-${idx}`}
                               href={medReq}
+                              sx={{ fontSize: '14px' }}
                               onClick={async (e) => {
+                                e.preventDefault();
                                 try {
                                   // Prevent default navigation to handle download manually
                                   e.preventDefault();

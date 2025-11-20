@@ -3,18 +3,10 @@ import { Box, Typography, Card, CardContent, Grid, useTheme, FormHelperText } fr
 import { useFormContext, Controller } from "react-hook-form";
 import { CustomTimePicker } from "@/components"
 import dayjs from "dayjs";
-import { get } from "http";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 import { useAuth } from "@/app/context/AuthContext";
 import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
-
-const getAircraftList = [
-	{ asset_name: "Gulfstream G650", model_year: 2019, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
-	{ asset_name: "Bombardier Global 7500", model_year: 2021, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
-	{ asset_name: "Cessna Citation X+", model_year: 2018, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
-	{ asset_name: "Embraer Phenom 300E", model_year: 2020, desc: 'Ultra Long Range', capacity: 14, flying_range: "7,000 nm", speed: 'Mach 0.925' },
-];
 
 const AircraftFlightDetails = (editedData) => {
 	const { control, watch, formState: { errors } } = useFormContext();
@@ -99,7 +91,9 @@ const AircraftFlightDetails = (editedData) => {
 					name="estimatedFlightTime"
 					control={control}
 					rules={{ required: "Estimated flight time is required" }}
-					render={({ field, fieldState }) => (
+					render={({ field, fieldState }) => {
+						console.log(field.value)
+						return(
 						<CustomTimePicker
 							{...field}
 							value={field.value ? dayjs(field.value) : null}
@@ -109,7 +103,7 @@ const AircraftFlightDetails = (editedData) => {
 							error={!!fieldState.error}
 							helperText={fieldState.error?.message}
 						/>
-					)}
+					)}}
 				/>
 			</Box>
 		</Box>

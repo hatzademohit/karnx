@@ -3,14 +3,14 @@ import * as React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { InputLabel, Typography, useTheme } from "@mui/material";
 
 interface CustomDatePickerProps {
     label?: string;
     datelabel?: string;
     value?: Dayjs | null;
-    onChange?: (newValue: Dayjs | null) => void;
+    onChange?: (newValue: any | null) => void;
     minDate?: Dayjs;
     maxDate?: Dayjs;
     disabled?: boolean;
@@ -66,15 +66,17 @@ export default function CustomDatePicker({
                 value={
                     value && typeof value === "object" && "isValid" in value ? value : null
                 }
-                onChange={(newValue) =>
-                    onChange?.(newValue && newValue.isValid ? newValue : null)
-                }
+                onChange={(newValue) =>{
+                    const timeOnly = newValue ? dayjs(newValue) : "";
+                    onChange(timeOnly);
+                }}
                 disabled={disabled}
                 minDate={minDate}
                 maxDate={maxDate}
                 open={open}
                 onOpen={() => setOpen(true)}
                 onClose={() => setOpen(false)}
+                format="DD/MM/YYYY"
                 slotProps={{
                     textField: {
                         name,

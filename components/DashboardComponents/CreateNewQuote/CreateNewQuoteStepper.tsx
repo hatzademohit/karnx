@@ -40,27 +40,12 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => 
 
 	const methods = useForm({
 		mode: "onChange",
-		defaultValues: {
-			aircraft: quoteDetails?.aircraft_id || "",
-			estimatedFlightTime: quoteDetails?.estimated_flight_time || "",
-			baseFare: quoteDetails?.base_fare || "",
-			fuel: quoteDetails?.fluel_cost || "",
-			taxes: quoteDetails?.taxes_fees || "",
-			crewFees: quoteDetails?.crew_fees || "",
-			handlingFees: quoteDetails?.handling_fees || "",
-			catering: quoteDetails?.catering_fees || "",
-			totalAmount: quoteDetails?.total || 0,
-			quoteValidUntil: quoteDetails?.validate_till || "",
-			cancellationPolicy: quoteDetails?.cancellation_policy_id || "",
-			amenities: [],
-			specialOffers: quoteDetails?.special_offers_promotions || "",
-			addtionalNotes: quoteDetails?.additional_notes || "",
-		},
 	});
 
 	const {
 		handleSubmit,
 		trigger,
+		reset,
 		formState: { isValid },
 	} = methods;
 
@@ -78,6 +63,25 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => 
 			//toast.error('Network error while fetching cancellation policies');
 		}
 	};
+
+	useEffect(() => (
+		reset({
+			aircraft: quoteDetails?.aircraft_id ?? "",
+			estimatedFlightTime: quoteDetails?.estimated_flight_time ?? "",
+			baseFare: quoteDetails?.base_fare ?? "",
+			fuel: quoteDetails?.fluel_cost ?? "",
+			taxes: quoteDetails?.taxes_fees ?? "",
+			crewFees: quoteDetails?.crew_fees ?? "",
+			handlingFees: quoteDetails?.handling_fees ?? "",
+			catering: quoteDetails?.catering_fees ?? "",
+			totalAmount: quoteDetails?.total ?? 0,
+			quoteValidUntil: quoteDetails?.validate_till ?? "",
+			cancellationPolicy: quoteDetails?.cancellation_policy_id ?? "",
+			amenities: quoteDetails?.amenities_ids ? quoteDetails.amenities_ids.split(",").map(Number) : [],
+			specialOffers: quoteDetails?.special_offers_promotions ?? "",
+			addtionalNotes: quoteDetails?.additional_notes ?? "",
+		})
+	), [reset, quoteDetails])
 
 	const handleNext = async () => {
 		const valid = await trigger();
@@ -115,7 +119,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => 
 						Previous Step
 					</Button>
 
-					{activeStep < steps.length - 1 ? (
+					{activeStep < steps.length ? (
 						<Button variant="contained" className="btn btn-blue w-100" onClick={handleNext}>
 							Continue
 						</Button>

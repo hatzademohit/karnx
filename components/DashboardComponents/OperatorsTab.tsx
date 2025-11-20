@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Card, CardContent, Typography, Grid, Button, IconButton, useTheme, Link, Divider, Checkbox } from "@mui/material";
 import FlightOutlinedIcon from '@mui/icons-material/FlightOutlined';
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
@@ -31,7 +31,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     const [assignedOperator, setAssignedOperator] = useState<any[]>([]);
     const [getOperatorList, setOperatorList] = useState<any[]>([]);
     const [selectedOperators, setSelectedOperators] = useState<any[]>([]);
-    const { assignedOperatorLength, setAssignedOperatorLength } = useInquiryDetails();
+    const { setAssignedOperatorLength } = useInquiryDetails();
 
     const handleOpenAddOperator = async () => {
         setAddOperator(true);
@@ -67,7 +67,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
         if (fetched?.status === true) {
             //toast.success(fetched?.message);
             setAssignedOperator(fetched.data || []);
-            setAssignedOperatorLength(fetched?.data?.length || [])
+            setAssignedOperatorLength(fetched?.data?.length || 0)
         } else {
             toast.error(fetched?.message);
         }
