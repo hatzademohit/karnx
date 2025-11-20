@@ -167,7 +167,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     axios.request(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
         localStorage.removeItem("token");
         localStorage.removeItem("loggedInUser");
         localStorage.removeItem("loginTime");

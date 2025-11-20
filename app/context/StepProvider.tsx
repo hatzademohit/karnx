@@ -82,9 +82,7 @@ export const StepProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const storeBookingInquiryData = async () => {
-   // console.log(formatedFormData);
     await storeBookingInquiry(); // Will trigger POST call
-    //console.log(error, storeData);
     if (error) {
       toast.error(error || "Failed to submit booking inquiry.");
     } else if (storeData?.status === true) {

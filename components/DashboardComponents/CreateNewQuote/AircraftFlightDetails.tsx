@@ -91,9 +91,7 @@ const AircraftFlightDetails = (editedData) => {
 					name="estimatedFlightTime"
 					control={control}
 					rules={{ required: "Estimated flight time is required" }}
-					render={({ field, fieldState }) => {
-						console.log(field.value)
-						return(
+					render={({ field, fieldState }) => (
 						<CustomTimePicker
 							{...field}
 							value={field.value ? dayjs(field.value) : null}
@@ -103,7 +101,7 @@ const AircraftFlightDetails = (editedData) => {
 							error={!!fieldState.error}
 							helperText={fieldState.error?.message}
 						/>
-					)}}
+					)}
 				/>
 			</Box>
 		</Box>

@@ -12,7 +12,6 @@ import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 
 function formDataCustomization(formData, radioTabActive) {
-    //console.log("Form Submitted: ", formData);
     const tripType = { 0: "one_way", 1: "round_trip", 2: "multi_city" };
     let depLocation; let arrLocation; let depDateTime;
     if (radioTabActive === 0) {
@@ -91,7 +90,6 @@ function formDataCustomization(formData, radioTabActive) {
         documentName: formData.requiredDocumentUploaded,
 
     };
-    //console.log(bookingData);
     return bookingData;
 }
 const ContactSummary = () => {

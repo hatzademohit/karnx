@@ -48,7 +48,6 @@ const PassengerAircraft = () => {
 
     const onSubmit = (data: passengerAircraftSchemaType) => {
         setFormData((prev: any) => ({ ...prev, ...data }));
-        console.log("Form Submitted: ", data);
         handleNextClick();
     };
 
