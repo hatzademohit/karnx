@@ -1,11 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { CustomTextField, CustomDatePicker, SingleSelectRadio } from "@/components";
 import dayjs from "dayjs";
-import useApiFunction from "@/karnx/Hooks/useApiFunction";
-import { apiBaseUrl } from "@/karnx/api";
-import { toast } from "react-toastify";
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const fields = [
     { name: "baseFare", label: "Base Fare", numeric: true },
@@ -20,8 +18,7 @@ const PricingDetails = (editedData) => {
     const { control, setValue } = useFormContext();
     const theme = useTheme()
     const watchedValues = useWatch({ control });
-    const callApi = useApiFunction();
-    const [cancellationPolicyList, setcancellationPolicyList] = useState<any>([]);
+    const { cancellationPolicyList } = useInquiryDetails();
 
     const totalAmount = useMemo(() => {
         return Object.entries(watchedValues || {}).reduce((sum, [key, value]) => {
@@ -38,25 +35,6 @@ const PricingDetails = (editedData) => {
         setValue("totalAmount", totalAmount);
     }, [totalAmount, setValue]);
 
-
-
-    const getCancellationPolicies = async () => {
-        try {
-            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/form-fields-data/cancelation-policies` });
-            if (res?.status === true) {
-                setcancellationPolicyList(res.data);
-            } else {
-                toast.error(res?.message || '');
-            }
-        } catch (e) {
-            //toast.error('Network error while fetching cancellation policies');
-        }
-    };
-
-    useEffect(() => {
-        getCancellationPolicies();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
     return (
         <Box>
             <Typography variant="h4" color={theme?.common.redColor} mb={2}>
@@ -116,19 +94,20 @@ const PricingDetails = (editedData) => {
                             },
                         }}
                         render={({ field, fieldState }) => {
-                            return(
-                            <CustomDatePicker
-                                {...field}
-                                datelabel="Quote Valid Until"
-                                asterisk={true}
-                                value={field.value ? dayjs(field.value) : null}
-                                onChange={(newVal) => field.onChange(newVal)}
-                                required
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                                minDate={dayjs().add(1, "day")}
-                            />
-                        )}}
+                            return (
+                                <CustomDatePicker
+                                    {...field}
+                                    datelabel="Quote Valid Until"
+                                    asterisk={true}
+                                    value={field.value ? dayjs(field.value) : null}
+                                    onChange={(newVal) => field.onChange(newVal)}
+                                    required
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                    minDate={dayjs().add(1, "day")}
+                                />
+                            )
+                        }}
                     />
                 </Grid>
                 <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>

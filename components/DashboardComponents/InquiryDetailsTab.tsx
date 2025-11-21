@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Card, CardContent, Typography, Grid, Chip, Link } from "@mui/material";
 import { FlightTakeoff, Event } from "@mui/icons-material";
 import { apiBaseUrl, fileStorageUrl } from "@/karnx/api";
 import { useApi } from "@/karnx/Hooks/useApi";
 
 interface InquiryDetailsTabProps {
-  inquiryTabData: any;
+  inquiryId: any;
 }
 
 interface InquiryDetailsValue {
@@ -27,18 +27,17 @@ interface InquiryDetailsValue {
   pet_travels: [];
   uploaded_documents_path: [];
   required_documents_name: [];
-
 }
 
-const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryTabData }) => {
+const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
 
   const { data, refetch: fetchInquiryDetails } = useApi<InquiryDetailsValue>(
-    `${apiBaseUrl}/inquiry-details/get-details/${inquiryTabData}`
+    `${apiBaseUrl}/inquiry-details/get-details/${inquiryId}`
   );
+
   useEffect(() => {
     fetchInquiryDetails();
-  }, []);
-
+  }, [inquiryId]);
 
   return (
     <>

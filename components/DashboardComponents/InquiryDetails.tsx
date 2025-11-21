@@ -21,7 +21,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
     {
       label: "Inquiry Details",
       icon: <InsertDriveFileOutlinedIcon fontSize="small" />,
-      content: <InquiryDetailsTab inquiryTabData={inquiryData.id} />,
+      content: <InquiryDetailsTab inquiryId={inquiryData.id} />,
     },
     ...(!hideOperatorTabs
       ? [

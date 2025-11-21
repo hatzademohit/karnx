@@ -34,10 +34,6 @@ const PassengerInformation = () => {
         setValue(name, newValue);
     };
 
-    useEffect(() => {
-        console.log(errors)
-    }, [errors])
-
     return (
         <>
             <Grid size={{ xs: 12 }}>

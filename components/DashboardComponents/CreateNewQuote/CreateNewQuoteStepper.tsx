@@ -5,7 +5,6 @@ import { AircraftFlightDetails, PricingDetails, AmenitiesDetails } from '@/compo
 import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
-import { useRouter } from "next/navigation";
 import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const steps = ["Aircraft & Flight Details", "Pricing Details", "Amenities & Final Details"];
@@ -16,11 +15,10 @@ export interface CreateNewQuoteProps {
 //const CreateNewQuoteStepper = (inquiryId) => {
 const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => {
 	const [activeStep, setActiveStep] = useState(0);
-	const router = useRouter();
 	const theme = useTheme();
 	const callApi = useApiFunction();
 	const [quoteDetails, setQuoteDetails] = useState<any>([]);
-	const { setShowDetailsTabs, showDetailsTabs } = useInquiryDetails()
+	const { setShowDetailsTabs } = useInquiryDetails()
 	const getQuoteDetails = async () => {
 		try {
 			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });

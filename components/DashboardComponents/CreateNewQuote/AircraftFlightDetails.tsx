@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Typography, Card, CardContent, Grid, useTheme, FormHelperText } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import { CustomTimePicker } from "@/components"
 import dayjs from "dayjs";
-import useApiFunction from "@/karnx/Hooks/useApiFunction";
-import { useAuth } from "@/app/context/AuthContext";
-import { apiBaseUrl } from "@/karnx/api";
-import { toast } from "react-toastify";
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const AircraftFlightDetails = (editedData) => {
 	const { control, watch, formState: { errors } } = useFormContext();
 	const selectedAircraft = watch("aircraft");
 	const theme = useTheme();
-	const callApi = useApiFunction();
-	const { user } = useAuth();
-	//console.log(editedData, selectedAircraft);
-	const [aircraftList, setAircraftList] = useState<any>([]);
-	const getAircrafts = async () => {
-		try {
-			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/get-aircraft` });
-			if (res?.status === true) {
-				setAircraftList(res.data);
-			} else {
-				toast.error(res?.message || '');
-			}
-		} catch (e) {
-			//toast.error('Network error while fetching aircraft');
-		}
-	};
-
-	useEffect(() => {
-		getAircrafts();
-		// eslint-disable-next-line react-hooks/exhaustive-deps		
-	}, []);
+	const { aircraftList } = useInquiryDetails();
 
 	return (
 		<Box>

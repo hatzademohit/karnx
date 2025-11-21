@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Grid, Card, CardContent, Typography, useTheme } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined';
@@ -23,17 +23,13 @@ const IconMap: Record<string, React.ReactElement> = {
   FreeBreakfastOutlinedIcon: <FreeBreakfastOutlinedIcon />,
 };
 import { CustomTextField } from "@/components";
-import useApiFunction from "@/karnx/Hooks/useApiFunction";
-import { apiBaseUrl } from "@/karnx/api";
-import { toast } from "react-toastify";
-
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const AmenitiesDetails = (editedData) => {
   const { control, watch, setValue } = useFormContext();
   const selected = watch("amenities") || [];
   const theme = useTheme();
-  const callApi = useApiFunction();
-  const [amentiesList, setAmentiesListList] = useState<any>([]);
+  const { amentiesList } = useInquiryDetails();
 
   const toggleAmenity = (a: string) => {
     const updated = selected.includes(a)
@@ -41,24 +37,6 @@ const AmenitiesDetails = (editedData) => {
       : [...selected, a];
     setValue("amenities", updated);
   };
-
-  const getAvailableAmenties = async () => {
-    try {
-      const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/form-fields-data/available-amenities` });
-      if (res?.status === true) {
-        setAmentiesListList(res.data);
-      } else {
-        toast.error(res?.message || '');
-      }
-    } catch (e) {
-
-    }
-  };
-
-  useEffect(() => {
-    getAvailableAmenties();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Box>
@@ -83,7 +61,7 @@ const AmenitiesDetails = (editedData) => {
             </Card>
           </Grid>
         ))}
-        {amentiesList.length === 0 && 
+        {amentiesList.length === 0 &&
           <Grid size={{ xs: 12 }}>
             <Box sx={{ padding: 4, border: '2px dashed #cccccc', display: 'flex', gap: 1.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F7FF', borderRadius: '8px' }}>
               <SettingsOutlinedIcon sx={{ fontSize: '35px', color: '#808080' }} />
