@@ -11,6 +11,8 @@ interface InquiryDetailsContextType {
     aircraftList: any;
     cancellationPolicyList: any;
     amentiesList: any;
+    inquiryId?: number | null;
+    setInquiryId: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 export const InquiryDetailsContext = createContext<InquiryDetailsContextType | undefined>({
@@ -21,6 +23,8 @@ export const InquiryDetailsContext = createContext<InquiryDetailsContextType | u
     aircraftList: [],
     cancellationPolicyList: [],
     amentiesList: [],
+    setInquiryId: () => { },
+    inquiryId: null,
 })
 
 export const InquiryDetailsProvider = ({ children }: { children: React.ReactNode }) => {
@@ -31,6 +35,7 @@ export const InquiryDetailsProvider = ({ children }: { children: React.ReactNode
     const [aircraftList, setAircraftList] = useState<any>([]);
     const [cancellationPolicyList, setcancellationPolicyList] = useState<any>([]);
     const [amentiesList, setAmentiesListList] = useState<any>([]);
+    const [inquiryId, setInquiryId] = useState<number | null>(null);
 
     const getAircrafts = async () => {
         try {
@@ -78,7 +83,7 @@ export const InquiryDetailsProvider = ({ children }: { children: React.ReactNode
     }, []);
 
     return (
-        <InquiryDetailsContext.Provider value={{ assignedOperatorLength, setAssignedOperatorLength, showDetailsTabs, setShowDetailsTabs, aircraftList, cancellationPolicyList, amentiesList }}>
+        <InquiryDetailsContext.Provider value={{ assignedOperatorLength, setAssignedOperatorLength, showDetailsTabs, setShowDetailsTabs, aircraftList, cancellationPolicyList, amentiesList, inquiryId, setInquiryId }}>
             {children}
         </InquiryDetailsContext.Provider>
     )

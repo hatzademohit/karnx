@@ -9,12 +9,10 @@ import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { RecentInquiries, Next24Hours, InquiryDetails } from '@/components/DashboardComponents';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
 import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
-
 
 interface AircraftOperatorCardCount {
     assigned_inquiries?: number;
@@ -25,11 +23,9 @@ interface AircraftOperatorCardCount {
 }
 const AircraftOperator = () => {
 
-    const router = useRouter()
-    const searchParams = useSearchParams();
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
-        const { setShowDetailsTabs, showDetailsTabs } = useInquiryDetails()
+    const { setShowDetailsTabs, showDetailsTabs } = useInquiryDetails()
     // const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
 
 
@@ -131,7 +127,7 @@ const AircraftOperator = () => {
                     </Button>
                 ),
             },
-           // { headerName: 'Operators', flex: 1, field: 'operators' },
+            // { headerName: 'Operators', flex: 1, field: 'operators' },
             { headerName: 'Value', flex: 1, field: 'value' },
             {
                 headerName: 'Action',

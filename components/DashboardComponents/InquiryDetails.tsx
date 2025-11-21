@@ -28,12 +28,12 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
         {
           label: `Operators (${assignedOperatorLength})`,
           icon: <SettingsOutlinedIcon fontSize="small" />,
-          content: <OperatorsTab inquiryId={inquiryData.id}/>,
+          content: <OperatorsTab inquiryId={inquiryData.id} />,
         },
       ]
       : []),
     {
-      label: `Quotes ${user.access_type !== 'Aircraft Operator' ? '(0)' : '' }`,
+      label: `Quotes ${user.access_type !== 'Aircraft Operator' ? '(0)' : ''}`,
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
       content: <QuoteTabs travelTab={itsTravelAgent} inquiryId={inquiryData.id} />,
     },

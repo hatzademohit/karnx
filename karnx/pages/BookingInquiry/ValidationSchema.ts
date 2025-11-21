@@ -133,7 +133,7 @@ export const passengerAircraftSchema = yup.object().shape({
       return schema.required("Other Assistance is required when 'Other' is selected");
     }
     return schema.notRequired();
-  }), 
+  }),
   // 
   checkedBags: yup.number().typeError('Only number are allowed').required("Please select checked bags").integer("Only whole numbers are allowed").min(0, "Value cannot be negative"),
   carryOnBags: yup.number().typeError('Only number are allowed').required("Please select carry on bags").integer("Only whole numbers are allowed").min(0, "Value cannot be negative"),
@@ -188,9 +188,7 @@ export const passengerAircraftSchema = yup.object().shape({
       return Array.isArray(value) && value.length > 0;
     }),
 
-  requiredDocumentUploaded: yup.array().required("Please select at least one required document") // Ensure at least one item is selected
-    .min(1, "Please select at least one required document")
-    .default([]), // Default value as an empty array
+  requiredDocumentUploaded: yup.array().default([]), // Default value as an empty array
 });
 
 export type contactSummarySchemaType = {
@@ -206,6 +204,8 @@ export const contactSummarySchema = yup.object().shape({
   contactPhone: yup.string().required("Contact Phone is required").matches(/^\d{10}$/, "Contact Phone must be exactly 10 digits"),
   specialRequirements: yup.string().notRequired(),
 });
+
+// company priofile schema
 
 export const CompanyProfileSchema = yup.object().shape({
   clientName: yup.string().required('Company Name is required'),

@@ -11,8 +11,8 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { apiBaseUrl } from '@/karnx/api';
-import { useRouter, useSearchParams } from "next/navigation";
 import { useApi } from '@/karnx/Hooks/useApi';
+import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
 
 interface KXManagerCardCount {
     new_inquiries?: number;
@@ -24,9 +24,7 @@ interface KXManagerCardCount {
 
 const KXManager = () => {
 
-    const router = useRouter();
-    const searchParams = useSearchParams();
-
+    const { setInquiryId } = useInquiryDetails();
     /** get card count from API*/
     useEffect(() => {
         fetchCardCount();
@@ -55,6 +53,7 @@ const KXManager = () => {
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)
         setInqueryData(inquiryRow);
+        setInquiryId(inquiryRow?.id);
     }
 
     useEffect(() => {

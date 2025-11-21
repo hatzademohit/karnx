@@ -12,13 +12,13 @@ const steps = ["Aircraft & Flight Details", "Pricing Details", "Amenities & Fina
 export interface CreateNewQuoteProps {
 	inquiryId?: number;
 }
-//const CreateNewQuoteStepper = (inquiryId) => {
-const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = ({ inquiryId }) => {
+
+const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	const [activeStep, setActiveStep] = useState(0);
 	const theme = useTheme();
 	const callApi = useApiFunction();
 	const [quoteDetails, setQuoteDetails] = useState<any>([]);
-	const { setShowDetailsTabs } = useInquiryDetails()
+	const { setShowDetailsTabs, inquiryId } = useInquiryDetails()
 	const getQuoteDetails = async () => {
 		try {
 			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
