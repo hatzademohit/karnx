@@ -25,32 +25,8 @@ const AircraftOperator = () => {
 
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
-    const { setShowDetailsTabs, showDetailsTabs } = useInquiryDetails()
-    // const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
+    const { setShowDetailsTabs, showDetailsTabs, setInquiryId } = useInquiryDetails()
 
-
-    // const [data, setData] = useState([
-    //     {
-    //         "id": 92,
-    //         "inquiryId": "BQ-REF-00092",
-    //         "priority": [
-    //             "NEW",
-    //             "MEDIUM PRIORITY"
-    //         ],
-    //         "route": "NAG → PNQ",
-    //         "clientName": "KarnX",
-    //         "clientEmail": null,
-    //         "inquiryDate": "Sep/05/2025",
-    //         "date": "September 25, 2025",
-    //         "passangers": 4,
-    //         "aircraft": "Light Waight",
-    //         "assign": "Assigned",
-    //         "status": "Requested",
-    //         "status_color": "#cccccc",
-    //         "operators": "opt",
-    //         "value": "val"
-    //     },
-    // ])
     /** get card count from API*/
     useEffect(() => {
         fetchCardCount();
@@ -72,6 +48,7 @@ const AircraftOperator = () => {
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)
         setInqueryData(inquiryRow);
+        setInquiryId(inquiryRow?.id);
     }
 
     const { data, refetch: fetchInquiries } = useApi<any[]>(
