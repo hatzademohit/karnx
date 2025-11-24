@@ -38,11 +38,11 @@ const AircraftOperator = () => {
     );
 
     const cardInfoData = [
-        { count: result?.assigned_inquiries, label: 'Assigned Inquiries', icon: <DescriptionOutlinedIcon /> },
-        { count: result?.quote_pending, label: 'Pending Quotes', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.upcoming_flights, label: 'Upcoming Flights', icon: <AirplanemodeActiveIcon /> },
-        { count: result?.live_flights, label: 'Live Flights', icon: <LocationOnOutlinedIcon /> },
-        { count: result?.completed_bookings, label: 'Completed Bookings', icon: <CheckOutlinedIcon /> },
+        { count: result?.assigned_inquiries || 0, label: 'Assigned Inquiries', icon: <DescriptionOutlinedIcon /> },
+        { count: result?.quote_pending || 0, label: 'Pending Quotes', icon: <AccessTimeOutlinedIcon /> },
+        { count: result?.upcoming_flights || 0, label: 'Upcoming Flights', icon: <AirplanemodeActiveIcon /> },
+        { count: result?.live_flights || 0, label: 'Live Flights', icon: <LocationOnOutlinedIcon /> },
+        { count: result?.completed_bookings || 0, label: 'Completed Bookings', icon: <CheckOutlinedIcon /> },
     ];
 
     const viewInquiryDetails = (inquiryRow) => {
