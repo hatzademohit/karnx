@@ -40,7 +40,7 @@ interface FleetRow {
   asset_name: string;
   asset_type: string;
   aircraft_model: string;
-  aircraft_type: string;
+  aircraft_type_id: number;
   registration_no: string;
   capacity: number;
   cabin_size: string;
@@ -55,7 +55,7 @@ type FormState = {
   asset_name: string;
   asset_type: string;
   aircraft_model: string;
-  aircraft_type: string;
+  aircraft_type_id: number;
   registration_no: string;
   capacity: number;
   cabin_size: string;
@@ -66,8 +66,7 @@ type FormState = {
 };
 
 const FleetOverview = () => {
-  const { theme, hasPermission } = useAuth();
-
+  const { theme, hasPermission, user } = useAuth();
   // Listing state
   const [fleetRows, setFleetRows] = useState<FleetRow[]>([]);
   const [page, setPage] = useState<number>(0);
@@ -81,12 +80,13 @@ const FleetOverview = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [saving, setSaving] = useState(false);
   const [clients, setClients] = useState<FleetClient[]>([]);
+  const [assetType, setAssetType] = useState<FleetClient[]>([]);
   const [form, setForm] = useState<FormState>({
-    client_id: 0,
+    client_id: user.client_id || 0,
     asset_name: "",
     asset_type: "",
     aircraft_model: "",
-    aircraft_type: "",
+    aircraft_type_id: 0,
     registration_no: "",
     capacity: 0,
     cabin_size: "",
@@ -165,6 +165,27 @@ const FleetOverview = () => {
     }
   }, []);
 
+  const fetchAssetType = useCallback(async () => {
+    try {
+      const res = await fetch(`${apiBaseUrl}/form-fields-data/aircraft-types`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token") || ""}` },
+      });
+      if (!res.ok) throw new Error(`Asset types fetch failed (${res.status})`);
+      const data = await res.json();
+      const list = (data?.data?.data ?? data?.data ?? []) as any[];
+      const mapped = list
+        .map((c) => ({
+          id: Number(c.id),
+          name: String(c.name ?? c.asset_type ?? c.title ?? ""),
+        }))
+        .filter((c) => c.name);
+      setAssetType(mapped);
+    } catch (e: any) {
+      console.warn("Failed to fetch asset types", e);
+      setAssetType([]);
+    }
+  }, []);
+
   // Fetch assets (server-side)
   const fetchAssets = useCallback(async () => {
     try {
@@ -201,12 +222,12 @@ const FleetOverview = () => {
         const imageUrls = parseImages(imagesField);
         const row: FleetRow = {
           id: Number(item.id),
-          client_id: Number(item.client_id),
+          client_id: user.client_id,
           client: item.client ? { id: Number(item.client.id), name: String(item.client.name) } : undefined,
           asset_name: String(item.asset_name ?? ""),
           asset_type: String(item.asset_type ?? ""),
           aircraft_model: String(item.aircraft_model ?? ""),
-          aircraft_type: String(item.aircraft_type ?? ""),
+          aircraft_type_id: Number(item.aircraft_type_id ?? ""),
           registration_no: String(item.registration_no ?? ""),
           capacity: Number(item.capacity ?? 0),
           cabin_size: String(item.cabin_size ?? ""),
@@ -250,11 +271,11 @@ const FleetOverview = () => {
     });
     fileByPreviewRef.current.clear();
     setForm({
-      client_id: 0,
+      client_id: user.client_id || 0,
       asset_name: "",
       asset_type: "",
       aircraft_model: "",
-      aircraft_type: "",
+      aircraft_type_id: 0,
       registration_no: "",
       capacity: 0,
       cabin_size: "",
@@ -271,17 +292,18 @@ const FleetOverview = () => {
     setIsEdit(false);
     setOpenForm(true);
     await fetchClients();
+    await fetchAssetType();
   };
 
   const handleEdit = async (row: FleetRow) => {
     resetForm();
     setForm({
       id: row.id,
-      client_id: row.client_id,
+      client_id: user.client_id || 0,
       asset_name: row.asset_name,
       asset_type: row.asset_type,
       aircraft_model: row.aircraft_model,
-      aircraft_type: row.aircraft_type,
+      aircraft_type_id: row.aircraft_type_id,
       registration_no: row.registration_no,
       capacity: row.capacity,
       cabin_size: row.cabin_size,
@@ -293,6 +315,7 @@ const FleetOverview = () => {
     setIsEdit(true);
     setOpenForm(true);
     await fetchClients();
+    await fetchAssetType();
   };
 
   const handleView = (row: FleetRow) => {
@@ -377,10 +400,10 @@ const FleetOverview = () => {
   const handleSave = async () => {
     try {
       // Basic validation
-      if (!form.client_id || form.client_id === 0) {
-        toast.error("Please select a client");
-        return;
-      }
+      // if (!form.client_id || form.client_id === 0) {
+      //   toast.error("Please select a client");
+      //   return;
+      // }
       if (!form.asset_name.trim()) {
         toast.error("Please enter Asset Name");
         return;
@@ -389,11 +412,11 @@ const FleetOverview = () => {
       setSaving(true);
 
       const fd = new FormData();
-      fd.append("client_id", String(form.client_id));
+      fd.append("client_id", user.client_id ? String(user.client_id) : "0");
       fd.append("asset_name", form.asset_name);
       fd.append("asset_type", form.asset_type);
       fd.append("aircraft_model", form.aircraft_model);
-      fd.append("aircraft_type", form.aircraft_type);
+      fd.append("aircraft_type_id", String(form.aircraft_type_id));
       fd.append("registration_no", form.registration_no);
       fd.append("capacity", String(form.capacity || 0));
       fd.append("cabin_size", form.cabin_size);
@@ -576,7 +599,7 @@ const FleetOverview = () => {
         <Stack spacing={2} sx={{ mt: 1 }}>
           <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
             {/* Each item takes 6 out of 12 columns = 2 per row */}
-            <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+            {/* <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <SingleSelect
                 inputLabel="Client"
                 value={form.client_id || 0}
@@ -589,7 +612,7 @@ const FleetOverview = () => {
                   </MenuItem>
                 ))}
               </SingleSelect>
-            </Grid>
+            </Grid> */}
 
             <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
@@ -599,8 +622,8 @@ const FleetOverview = () => {
                 size="small"
               />
             </Grid>
-          </Grid>
-          <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}>
+            {/* </Grid>
+          <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }}> */}
             <Grid size={{ lg: 4, md: 6, sm: 12 }}>
               <CustomTextField
                 inputLabel="Asset Type"
@@ -620,12 +643,24 @@ const FleetOverview = () => {
             </Grid>
 
             <Grid size={{ lg: 4, md: 6, sm: 12 }}>
-              <CustomTextField
+              {/* <CustomTextField
                 inputLabel="Aircraft Type"
-                value={form.aircraft_type}
-                onChange={(e) => handleFormChange("aircraft_type", e.target.value)}
+                value={form.aircraft_type_id}
+                onChange={(e) => handleFormChange("aircraft_type_id", e.target.value)}
                 size="small"
-              />
+              /> */}
+              <SingleSelect
+                inputLabel="Aircraft Type"
+                value={form.aircraft_type_id || 0}
+                onChange={(e) => handleFormChange("aircraft_type_id", Number(e.target.value))}
+                size='small'
+              >
+                {assetType.map((a) => (
+                  <MenuItem key={a.id} value={a.id}>
+                    {a.name}
+                  </MenuItem>
+                ))}
+              </SingleSelect>
             </Grid>
 
             <Grid size={{ lg: 4, md: 6, sm: 12 }}>
@@ -667,6 +702,11 @@ const FleetOverview = () => {
                 <MenuItem value="Inactive">Inactive</MenuItem>
                 <MenuItem value="Maintenance">Maintenance</MenuItem>
               </SingleSelect>
+              <CustomTextField
+                value={user?.client_id || ""}
+                name="client_id"
+                InputProps={{ style: { display: "none" } }}
+              />
             </Grid>
 
             {/* Full-width Details */}
@@ -810,7 +850,7 @@ const FleetOverview = () => {
               <Grid size={{ lg: 4, md: 6, sm: 12 }}>
                 <CustomTextField
                   inputLabel="Aircraft Type"
-                  value={viewRow.aircraft_type}
+                  value={viewRow.aircraft_type_id}
                   InputProps={{ readOnly: true }}
                 />
               </Grid>

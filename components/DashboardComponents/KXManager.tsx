@@ -24,7 +24,7 @@ interface KXManagerCardCount {
 
 const KXManager = () => {
 
-    const { setInquiryId } = useInquiryDetails();
+    const { setInquiryId, setinquiryRowData} = useInquiryDetails();
     /** get card count from API*/
     useEffect(() => {
         fetchCardCount();
@@ -54,6 +54,7 @@ const KXManager = () => {
         setShowDetailsTabs(true)
         setInqueryData(inquiryRow);
         setInquiryId(inquiryRow?.id);
+        setinquiryRowData(inquiryRow);
     }
 
     useEffect(() => {
