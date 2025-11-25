@@ -340,6 +340,8 @@ const ViewQuotes = () => {
                             {renderRow("Catering", "catering_fees")}
                             {renderRow("Key Amenities", "available_amenities", true)}
                             {renderRow("Included Service", "special_offers_promotions", true)}
+
+
                             {user.access_type === 'Portal Admin' &&
                                 <TableRow>
                                     <TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: { md: 'sticky', xs: 'static' }, left: 0, zIndex: 1 }}>
