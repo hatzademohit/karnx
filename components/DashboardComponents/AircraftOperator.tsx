@@ -29,9 +29,11 @@ const AircraftOperator = () => {
 
     /** get card count from API*/
     useEffect(() => {
-        fetchCardCount();
-        fetchInquiries();
-    }, []);
+        if (!showDetailsTabs) {
+            fetchInquiries();
+            fetchCardCount();
+        }
+    }, [showDetailsTabs]);
 
     const { data: result, refetch: fetchCardCount } = useApi<AircraftOperatorCardCount>(
         `${apiBaseUrl}/dashboard/aircraft-operator-cardcount`

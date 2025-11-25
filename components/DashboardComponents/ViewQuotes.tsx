@@ -338,7 +338,6 @@ const ViewQuotes = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-
                             {renderRow("Rating", "rating")}
                             {renderRow("Aircraft", "aircraft")}
                             {renderRow("Price", "total")}

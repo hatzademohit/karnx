@@ -52,7 +52,7 @@ const LoginPage = () => {
       localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
       localStorage.setItem("role", response.data.role);
       localStorage.setItem('loggedInUser', JSON.stringify(user));
-      localStorage.setItem('loginTime', currentTime); // session manager
+      // localStorage.setItem('loginTime', currentTime); // session manager
 
       // Set session cookies for middleware-based access control
       await fetch("/api/session", {

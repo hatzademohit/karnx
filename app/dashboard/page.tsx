@@ -1,8 +1,12 @@
+"use client";
 import Dashboard from '@/karnx/pages/Dashboard'
+import { InquiryDetailsProvider } from '../context/InquiryDetailsContext';
 
 const page = () => {
-    return(
-        <Dashboard />
+    return (
+        <InquiryDetailsProvider>
+            <Dashboard />
+        </InquiryDetailsProvider>
     )
 }
 

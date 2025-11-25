@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       secure: true,
       sameSite: "lax" as const,
       path: "/",
-      maxAge: 60 * 60, // 1 hour
+      // maxAge: 60 * 60, // 1 hour
     };
 
     if (token) {
