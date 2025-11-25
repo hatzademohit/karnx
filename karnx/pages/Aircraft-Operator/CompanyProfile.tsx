@@ -51,9 +51,10 @@ export default function CompanyProfile() {
         const getData = await callApi({ method: 'GET', url: `${apiBaseUrl}/clients/${user?.client_id}` });
         if (getData?.status === true) {
             setProfile(getData.data);
-            setSelectedOption(getData?.data?.regionCities.filter((o: any) => getData?.data?.client.operating_reginons.includes(o?.id)));
+            setSelectedOption(getData?.data?.regionCities.filter((o: any) => (getData?.data?.client.operating_reginons ?? []).includes(o?.id)));
             // Avoid overwriting local edits while editing; only refresh draft when not editing
             if (!editing) {
+                console.log(getData.data);
                 setDraft(getData.data);
             }
         } else {
@@ -62,11 +63,11 @@ export default function CompanyProfile() {
     };
 
     const startEdit = async () => {
-        setSelectedOption(profile?.regionCities.filter((o: any) => draft.client.operating_reginons.includes(o?.id)));
+        setSelectedOption(profile?.regionCities.filter((o: any) => (draft?.client?.operating_reginons ?? []).includes(o?.id)));
         setEditing(true);
     };
     const cancelEdit = () => {
-        setSelectedOption(profile.regionCities.filter((o: any) => profile.client.operating_reginons.includes(o?.id)));
+        setSelectedOption(profile.regionCities.filter((o: any) => (profile.client.operating_reginons ?? []).includes(o?.id)));
         setEditing(false);
     };
     const save = async () => {
@@ -232,7 +233,7 @@ export default function CompanyProfile() {
                                         <AutoComplteCheckbox
                                             inputLabel="Operating Regions"
                                             options={profile?.regionCities}
-                                            value={profile?.regionCities?.filter((city) => 
+                                            value={profile?.regionCities?.filter((city) =>
                                                 field.value.includes(city.id)
                                             )
                                             }

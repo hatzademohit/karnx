@@ -47,7 +47,7 @@ const AircraftFlightDetails = (editedData) => {
 												</Box>
 												<Box>
 													<Typography variant="body2">Range</Typography>
-													<Typography variant="h6">{aircraft?.flying_range.toLocaleString("en-IN")} nm</Typography>
+													<Typography variant="h6">{aircraft?.flying_range != null ? aircraft?.flying_range.toLocaleString("en-IN") : 0} nm</Typography>
 												</Box>
 												<Box>
 													<Typography variant="body2">Speed</Typography>

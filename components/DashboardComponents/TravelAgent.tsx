@@ -12,6 +12,7 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
+import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
 
 interface TravelAgentCardCount {
     this_month_mybooking?: number;
@@ -29,7 +30,7 @@ const TravelAgent = () => {
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
     const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
-
+    const { setInquiryId, setinquiryRowData } = useInquiryDetails();
     /** get card count from API*/
     useEffect(() => {
         fetchCardCount();
@@ -57,6 +58,8 @@ const TravelAgent = () => {
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)
         setInqueryData(inquiryRow);
+        setInquiryId(inquiryRow?.id);
+        setinquiryRowData(inquiryRow);
     }
 
     useEffect(() => {

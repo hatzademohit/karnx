@@ -9,10 +9,17 @@ import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 const NoQuotes = () => {
     const { user } = useAuth();
     const [createNewQuote, setCreateNewQuote] = useState<boolean>(false);
+    const { inquiryRowData } = useInquiryDetails();
+    const inqStsId = inquiryRowData?.status_id;
     const addQuote = () => {
         setCreateNewQuote(true);
     }
 
+    useEffect(() => {
+        if ([4].includes(inqStsId)) {
+            setCreateNewQuote(false);
+        }
+    }, [inqStsId]);
     return (
         <>
             {!createNewQuote &&
@@ -31,7 +38,7 @@ const NoQuotes = () => {
                     }
                 </Box>
             }
-            {createNewQuote && <CreateNewQuoteStepper />}
+            {createNewQuote && user.access_type === 'Aircraft Operator' && <CreateNewQuoteStepper />}
         </>
     )
 }

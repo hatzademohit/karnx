@@ -25,7 +25,7 @@ const AircraftOperator = () => {
 
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
-    const { setShowDetailsTabs, showDetailsTabs, setInquiryId } = useInquiryDetails()
+    const { setShowDetailsTabs, showDetailsTabs, setInquiryId, setinquiryRowData } = useInquiryDetails()
 
     /** get card count from API*/
     useEffect(() => {
@@ -49,6 +49,7 @@ const AircraftOperator = () => {
         setShowDetailsTabs(true)
         setInqueryData(inquiryRow);
         setInquiryId(inquiryRow?.id);
+        setinquiryRowData(inquiryRow);
     }
 
     const { data, refetch: fetchInquiries } = useApi<any[]>(
