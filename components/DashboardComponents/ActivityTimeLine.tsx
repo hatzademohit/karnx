@@ -57,7 +57,7 @@ const ActivityTimeLine: React.FC = () => {
           variant="filled"
           options={options}
           value={selectedActivity}
-          onChange={(value) => setSelectedActivity(value)}
+          onChange={(value: any) => setSelectedActivity(value)}
           className="select_filter"
           menuClassName="custom-select-dropdown"
         />

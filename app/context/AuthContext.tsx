@@ -60,8 +60,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [logUser, setLogUser] = useState<User | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [karnxToken, setKarnxToken] = useState<string>()
-  const [permissions, setPermissions] = useState<any>([]);
-  const [role, setRole] = useState<any>([]);
+  const [permissions, setPermissions] = useState<string[]>([]);
+  const [role, setRole] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [severity, setSeverity] = useState<string>('success')
@@ -132,16 +132,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const storedPermissions = localStorage.getItem("permissions");
-    if (storedPermissions) {
-      setPermissions(storedPermissions);
+    try {
+      if (storedPermissions) {
+        const parsed = JSON.parse(storedPermissions);
+        if (Array.isArray(parsed)) setPermissions(parsed as string[]);
+      }
+    } catch {
+      // ignore bad data
     }
     const storedRole = localStorage.getItem("role");
-    if (storedRole) {
+    if (storedRole && typeof storedRole === "string") {
       setRole(storedRole);
     }
   }, []);
 
   const hasPermission = (permission: string | string[]) => {
+    if (!permissions || permissions.length === 0) return false;
     if (Array.isArray(permission)) {
       return permission.some((p) => permissions.includes(p));
     }
@@ -166,12 +172,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     axios.request(config)
-      .then((response) => {
+      .then(async (response) => {
         localStorage.removeItem("token");
         localStorage.removeItem("loggedInUser");
         localStorage.removeItem("loginTime");
         localStorage.removeItem("permissions");
         localStorage.removeItem("role");
+        // Clear middleware session cookies
+        try {
+          await fetch("/api/session/clear", { method: "POST" });
+        } catch {}
         router.push("/");
       })
       .catch((error) => {

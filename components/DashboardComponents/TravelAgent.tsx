@@ -42,12 +42,12 @@ const TravelAgent = () => {
     );
 
     const cardInfoData = [
-        { count: result?.this_month_mybooking, label: 'My Bookings', status: 'This Month', icon: <ErrorOutlineIcon /> },
-        { count: result?.my_booking_active_clients, label: 'Active Clients', status: 'Currently booking with you', icon: <ErrorOutlineIcon /> },
-        { count: result?.total_inquiries_this_month, label: 'Total Inquiries', status: 'This Month', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.inquiry_pending_this_month, label: 'Inquiries Pending', status: 'This Month', icon: <AlarmOnIcon /> },
-        { count: result?.confirmed_booking_this_week, label: 'Confirmed Bookings', status: 'This Week', icon: <CheckOutlinedIcon /> },
-        { count: '$' + result?.earning, label: 'Earnings', status: '+22% from BLRt month', icon: <CheckOutlinedIcon /> },
+        { count: result?.this_month_mybooking || 0, label: 'My Bookings', status: 'This Month', icon: <ErrorOutlineIcon /> },
+        { count: result?.my_booking_active_clients || 0, label: 'Active Clients', status: 'Currently booking with you', icon: <ErrorOutlineIcon /> },
+        { count: result?.total_inquiries_this_month || 0, label: 'Total Inquiries', status: 'This Month', icon: <AccessTimeOutlinedIcon /> },
+        { count: result?.inquiry_pending_this_month || 0, label: 'Inquiries Pending', status: 'This Month', icon: <AlarmOnIcon /> },
+        { count: result?.confirmed_booking_this_week || 0, label: 'Confirmed Bookings', status: 'This Week', icon: <CheckOutlinedIcon /> },
+        { count: '$' + result?.earning || 0, label: 'Earnings', status: '+22% from BLRt month', icon: <CheckOutlinedIcon /> },
     ];
 
     const { data: data, refetch: fetchCharterInquiries } = useApi<any[]>(
