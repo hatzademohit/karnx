@@ -330,22 +330,18 @@ const ViewQuotes = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {quotes.map((q) => {
-                                return (
-                                    <>
-                                        {renderRow("Rating", "rating")}
-                                        {renderRow("Aircraft", "aircraft")}
-                                        {renderRow("Price", "total")}
-                                        {renderRow("Flight Time", "estimated_flight_time")}
-                                        {renderRow("Base Fare", "base_fare")}
-                                        {renderRow("Fuel", "fluel_cost")}
-                                        {renderRow("Taxes & Fees", "taxes_fees")}
-                                        {renderRow("Catering", "catering_fees")}
-                                        {renderRow("Key Amenities", "available_amenities", true)}
-                                        {renderRow("Included Service", "special_offers_promotions", true)}
-                                    </>
-                                )
-                            })}
+
+                            {renderRow("Rating", "rating")}
+                            {renderRow("Aircraft", "aircraft")}
+                            {renderRow("Price", "total")}
+                            {renderRow("Flight Time", "estimated_flight_time")}
+                            {renderRow("Base Fare", "base_fare")}
+                            {renderRow("Fuel", "fluel_cost")}
+                            {renderRow("Taxes & Fees", "taxes_fees")}
+                            {renderRow("Catering", "catering_fees")}
+                            {renderRow("Key Amenities", "available_amenities", true)}
+                            {renderRow("Included Service", "special_offers_promotions", true)}
+
 
                             {user.access_type === 'Portal Admin' &&
                                 <TableRow>
