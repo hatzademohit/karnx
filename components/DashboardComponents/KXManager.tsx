@@ -28,10 +28,6 @@ const KXManager = () => {
     const theme = useTheme();
     const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     const [introducingPopupOpen, setIntroducingPopupOpen] = useState<boolean>(false);
-    /** get card count from API*/
-    useEffect(() => {
-        fetchCardCount();
-    }, []);
 
     const { data: result, refetch: fetchCardCount } = useApi<KXManagerCardCount>(
         `${apiBaseUrl}/dashboard/kxmanager-cardcount`
@@ -45,7 +41,6 @@ const KXManager = () => {
         { count: result?.response_time || 0, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
     ]
     const [columns, setColumns] = useState([])
-    // const [data, setData] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
 
     const { data, refetch: fetchInquiries } = useApi<any[]>(
@@ -128,12 +123,12 @@ const KXManager = () => {
     }, []);
 
     useEffect(() => {
-        {
-            showDetailsTabs &&
-                fetchInquiries();
+        if (!showDetailsTabs) {
+            fetchInquiries();
+            fetchCardCount();
         }
-        console.log("showDetailsTabs changed", showDetailsTabs)
     }, [showDetailsTabs]);
+
 
     return (
         <>

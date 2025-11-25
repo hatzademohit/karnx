@@ -1,43 +1,48 @@
 'use client'
 import { CustomTabs } from "@/components";
-import { Box, Typography } from "@mui/material"
+import { Box, Button, IconButton, Typography } from "@mui/material"
 import { KXManager, AircraftOperator, TravelAgent, GHS } from '@/components/DashboardComponents'
 import { useAuth } from "@/app/context/AuthContext";
-import { InquiryDetailsProvider } from "@/app/context/InquiryDetailsContext";
+import { InquiryDetailsProvider, useInquiryDetails } from "@/app/context/InquiryDetailsContext";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 const Dashboard = () => {
     const { user } = useAuth();
+    const { showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     return (
-        <InquiryDetailsProvider>
-            <Box>
-                <Typography component='h1' variant="h1" sx={{ mb: '10px' }}>Dashboard</Typography>
-                <CustomTabs defaultValue={0}>
-                    {user.access_type === 'Portal Admin' &&
-                        <CustomTabs.Tab label="KX Manager">
-                            <KXManager />
-                        </CustomTabs.Tab>
-                    }
-
-                    {user.access_type === 'Aircraft Operator' &&
-                        <CustomTabs.Tab label="Aircraft Operator">
-                            <AircraftOperator />
-                        </CustomTabs.Tab>
-                    }
-
-                    {user.access_type === 'Aircraft Travel Agent' &&
-                        <CustomTabs.Tab label="Travel Agent">
-                            <TravelAgent />
-                        </CustomTabs.Tab>
-                    }
-
-                    {user.access_type === 'Portal GHS' &&
-                        <CustomTabs.Tab label="GHS">
-                            <GHS />
-                        </CustomTabs.Tab>
-                    }
-                </CustomTabs>
+        <Box>
+            <Box sx={{ mb: '10px', display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'space-between' }}>
+                <Typography component='h1' variant="h1">Dashboard</Typography>
+                {showDetailsTabs &&
+                    <Button onClick={() => setShowDetailsTabs(false)}><KeyboardBackspaceIcon sx={{ mr: 0.5 }} />Back to Inquiries</Button>
+                }
             </Box>
-        </InquiryDetailsProvider>
+            <CustomTabs defaultValue={0}>
+                {user.access_type === 'Portal Admin' &&
+                    <CustomTabs.Tab label="KX Manager">
+                        <KXManager />
+                    </CustomTabs.Tab>
+                }
+
+                {user.access_type === 'Aircraft Operator' &&
+                    <CustomTabs.Tab label="Aircraft Operator">
+                        <AircraftOperator />
+                    </CustomTabs.Tab>
+                }
+
+                {user.access_type === 'Aircraft Travel Agent' &&
+                    <CustomTabs.Tab label="Travel Agent">
+                        <TravelAgent />
+                    </CustomTabs.Tab>
+                }
+
+                {user.access_type === 'Portal GHS' &&
+                    <CustomTabs.Tab label="GHS">
+                        <GHS />
+                    </CustomTabs.Tab>
+                }
+            </CustomTabs>
+        </Box>
     )
 }
 

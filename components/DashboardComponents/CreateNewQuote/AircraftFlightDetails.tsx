@@ -28,7 +28,7 @@ const AircraftFlightDetails = (editedData) => {
 					rules={{ required: "Please select an aircraft" }}
 					render={({ field }) => (
 						<>
-							{aircraftList.length > 0 && aircraftList.map((aircraft) => (
+							{aircraftList.length != 0 && aircraftList.map((aircraft) => (
 								<Grid size={{ lg: 4, md: 6, sm: 12, xs: 12 }} key={aircraft.asset_name}>
 									<Card onClick={() => field.onChange(aircraft.id)}
 										sx={{ cursor: "pointer", border: selectedAircraft === aircraft.id ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
