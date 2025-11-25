@@ -9,7 +9,6 @@ const ActivityTimeLine: React.FC = () => {
   const theme = useTheme();
   const [selectedActivity, setSelectedActivity] = useState('All Activities')
   const [activities, setActivitiesData] = useState([]);
-  const [tasks, setTaskData] = useState([]);
   const fetchActivitis = async () => {
     try {
       const url = `${apiBaseUrl}/dashboard/kxmanager-activitytimeline`;
@@ -27,26 +26,8 @@ const ActivityTimeLine: React.FC = () => {
     }
   }
 
-  const fetchTasks = async () => {
-    try {
-      const url = `${apiBaseUrl}/dashboard/kxmanager-prioritytask`;
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-        }
-      });
-      if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
-      const result = await response.json();
-      setTaskData(result.data);
-    } catch (err: any) {
-      console.error(err);
-    }
-  }
-
   useEffect(() => {
     fetchActivitis();
-    fetchTasks();
   }, []);
   return (
     <Box className='card'>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { InfoCard, MUIDataGrid } from '@/components'
-import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
+import { CustomModal, InfoCard, MUIDataGrid } from '@/components'
+import { Box, Button, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
@@ -13,6 +13,7 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
 import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 interface KXManagerCardCount {
     new_inquiries?: number;
@@ -24,7 +25,9 @@ interface KXManagerCardCount {
 
 const KXManager = () => {
 
+    const theme = useTheme();
     const { setInquiryId } = useInquiryDetails();
+    const [introducingPopupOpen, setIntroducingPopupOpen] = useState<boolean>(false);
     /** get card count from API*/
     useEffect(() => {
         fetchCardCount();
@@ -162,6 +165,32 @@ const KXManager = () => {
             {showDetailsTabs &&
                 <InquiryDetails inquiryData={inqueryData} />
             }
+
+            {/* <Button onClick={() => setIntroducingPopupOpen(true)}>modal open</Button> */}
+
+            {/* Introducing popup */}
+            <CustomModal open={introducingPopupOpen} dataClose={() => setIntroducingPopupOpen(false)} headerText="Introducing Astha">
+                <Grid container spacing={3} sx={{ alignItems: 'center' }}>
+                    <Grid size={6}>
+                        <Typography variant='h1' sx={{ color: theme?.common?.blueColor }}>Discover the Spirit of India</Typography>
+                        <Typography variant='body1' sx={{ mt: 2 }}>
+                            Experience India's rich cultural diversity through sacred pilgrimages. Journey to ancient temples, holy rivers, and spiritual destinations aboard exclusive private charters.
+                        </Typography>
+                        <Box sx={{ mt: 3, display: 'flex', gap: 1.5, alignItems: 'center', color: theme?.common?.redColor }}>
+                            <NotificationsIcon sx={{ color: 'inherit' }} />
+                            <Typography variant='h5' sx={{ color: 'inherit' }}>Fly to Faith – Your Spiritual Journey Awaits</Typography>
+                        </Box>
+                        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+                            <Button variant="contained" size='large' onClick={() => setIntroducingPopupOpen(false)}>
+                                Book Now
+                            </Button>
+                            <Button variant="contained" size='large' onClick={() => setIntroducingPopupOpen(false)}>
+                                Maybe Later
+                            </Button>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </CustomModal>
         </>
     )
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Card, CardContent, Grid, useTheme, FormHelperText } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
-import { CustomTimePicker } from "@/components"
+import { CustomDateTimePicker, CustomTimePicker } from "@/components"
 import dayjs from "dayjs";
 import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
@@ -61,26 +61,63 @@ const AircraftFlightDetails = (editedData) => {
 						</>
 					)}
 				/>
+				{/* one way trip */}
+				<Grid size={{ xs: 12 }}>
+					<Controller
+						name="estimatedFlightTime"
+						control={control}
+						rules={{ required: "Estimated flight time is required" }}
+						render={({ field, fieldState }) => (
+							<CustomTimePicker
+								{...field}
+								value={field.value ? dayjs(field.value) : null}
+								onChange={(newValue) => field.onChange(newValue)}
+								timelabel="Estimate Flight Time"
+								asterisk
+								error={!!fieldState.error}
+								helperText={fieldState.error?.message}
+							/>
+						)}
+					/>
+				</Grid>
+				{/* for multi and round trip */}
+				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+					<Controller
+						name="estimatedDepartureDate"
+						control={control}
+						rules={{ required: "Estimated departure date & time is required" }}
+						render={({ field, fieldState }) => (
+							<CustomDateTimePicker
+								{...field}
+								value={field.value ? dayjs(field.value) : null}
+								datatimelabel="Departure Date & Time"
+								withClock
+								error={!!fieldState.error}
+								helperText={fieldState.error?.message}
+								minDateTime={dayjs().add(1, 'day').startOf('day')}
+							/>
+						)}
+					/>
+				</Grid>
+				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+					<Controller
+						name="estimatedReturnDate"
+						control={control}
+						rules={{ required: "Estimated return date & time is required" }}
+						render={({ field, fieldState }) => (
+							<CustomDateTimePicker
+								{...field}
+								value={field.value ? dayjs(field.value) : null}
+								datatimelabel="Return Date & Time"
+								withClock
+								error={!!fieldState.error}
+								helperText={fieldState.error?.message}
+								minDateTime={dayjs().add(1, 'day').startOf('day')}
+							/>
+						)}
+					/>
+				</Grid>
 			</Grid>
-
-			<Box mt={{ md: 3, xs: 2 }}>
-				<Controller
-					name="estimatedFlightTime"
-					control={control}
-					rules={{ required: "Estimated flight time is required" }}
-					render={({ field, fieldState }) => (
-						<CustomTimePicker
-							{...field}
-							value={field.value ? dayjs(field.value) : null}
-							onChange={(newValue) => field.onChange(newValue)}
-							timelabel="Estimate Flight Time"
-							asterisk
-							error={!!fieldState.error}
-							helperText={fieldState.error?.message}
-						/>
-					)}
-				/>
-			</Box>
 		</Box>
 	);
 };
