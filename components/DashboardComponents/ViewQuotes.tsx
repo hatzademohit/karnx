@@ -20,7 +20,7 @@ interface PriceFormData {
 
 const ViewQuotes = () => {
     const callApi = useApiFunction();
-    const { inquiryId } = useInquiryDetails();
+    const { inquiryId, setShowDetailsTabs } = useInquiryDetails();
     const [quotes, setQuotes] = useState([]);
     const [bestQuotes, setBestQuotes] = useState<any>(null);
     const [acceptedQuoteId, setAcceptedQuoteId] = useState<Number>(null);
@@ -372,7 +372,7 @@ const ViewQuotes = () => {
                     </Table>
                 </Box>
                 <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
-                    <Button variant="outlined" className="btn btn-outlined">
+                    <Button variant="outlined" className="btn btn-outlined" onClick={() => setShowDetailsTabs(false)}>
                         Close
                     </Button>
                     {user.access_type === 'Portal Admin' &&
