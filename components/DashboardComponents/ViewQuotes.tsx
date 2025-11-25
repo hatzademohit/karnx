@@ -330,23 +330,16 @@ const ViewQuotes = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {quotes.map((q) => {
-                                return (
-                                    <React.Fragment key={q.id}>
-                                        {renderRow("Rating", "rating")}
-                                        {renderRow("Aircraft", "aircraft")}
-                                        {renderRow("Price", "total")}
-                                        {renderRow("Flight Time", "estimated_flight_time")}
-                                        {renderRow("Base Fare", "base_fare")}
-                                        {renderRow("Fuel", "fluel_cost")}
-                                        {renderRow("Taxes & Fees", "taxes_fees")}
-                                        {renderRow("Catering", "catering_fees")}
-                                        {renderRow("Key Amenities", "available_amenities", true)}
-                                        {renderRow("Included Service", "special_offers_promotions", true)}
-                                    </React.Fragment>
-                                )
-                            })}
-
+                            {renderRow("Rating", "rating")}
+                            {renderRow("Aircraft", "aircraft")}
+                            {renderRow("Price", "total")}
+                            {renderRow("Flight Time", "estimated_flight_time")}
+                            {renderRow("Base Fare", "base_fare")}
+                            {renderRow("Fuel", "fluel_cost")}
+                            {renderRow("Taxes & Fees", "taxes_fees")}
+                            {renderRow("Catering", "catering_fees")}
+                            {renderRow("Key Amenities", "available_amenities", true)}
+                            {renderRow("Included Service", "special_offers_promotions", true)}
                             {user.access_type === 'Portal Admin' &&
                                 <TableRow>
                                     <TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: { md: 'sticky', xs: 'static' }, left: 0, zIndex: 1 }}>
