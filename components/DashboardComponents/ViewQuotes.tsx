@@ -50,6 +50,12 @@ const ViewQuotes = () => {
     //     aircraftAmenities: ['Wi-Fi tututu', 'In-seat power', 'Entertainment system', 'Conference area'],
     //     includedServices: ['Gourmet service', 'Exclusive travel itineraries', 'Concierge service'],
     // }
+
+    const applyCurrencyFormat = (value: any) => {
+        if (value == null) return '0';
+
+        return value.toLocaleString("en-IN");
+    };
     const openQuoteDetails = (quote: any) => {
         const { hours, minutes } = parseToHoursMinutes(quote.estimated_flight_time);
         const quoteViewData = {
@@ -62,20 +68,20 @@ const ViewQuotes = () => {
             returnTime: "6h 35m",
             model: quote.aircraft.aircraft_model,
             validityInYear: '2025',
-            capacity: quote.aircraft.capacity.toLocaleString("en-IN") + ' passangers',
-            range: quote.aircraft.flying_range.toLocaleString("en-IN") + ' nm',
-            speed: 'Mach ' + quote.aircraft.speed.toLocaleString("en-IN"),
+            capacity: applyCurrencyFormat(quote.aircraft.capacity) + ' passangers',
+            range: applyCurrencyFormat(quote.aircraft.flying_range) + ' nm',
+            speed: 'Mach ' + applyCurrencyFormat(quote.aircraft.speed),
 
-            baseFire: quote.base_fare.toLocaleString("en-IN"),
-            fluelCost: quote.fluel_cost.toLocaleString("en-IN"),
-            taxesFees: quote.taxes_fees.toLocaleString("en-IN"),
-            crewFees: quote.crew_fees.toLocaleString("en-IN"),
-            handlingFees: quote.handling_fees.toLocaleString("en-IN"),
-            cateringFees: quote.catering_fees.toLocaleString("en-IN"),
+            baseFire: applyCurrencyFormat(quote.base_fare),
+            fluelCost: applyCurrencyFormat(quote.fluel_cost),
+            taxesFees: applyCurrencyFormat(quote.taxes_fees),
+            crewFees: applyCurrencyFormat(quote.crew_fees),
+            handlingFees: applyCurrencyFormat(quote.handling_fees),
+            cateringFees: applyCurrencyFormat(quote.catering_fees),
 
             aircraftAmenities: quote?.available_amenities,//['Wi-Fi tututu', 'In-seat power', 'Entertainment system', 'Conference area'],
             includedServices: quote.special_offers_promotions,
-            total: quote.total.toLocaleString("en-IN"),
+            total: applyCurrencyFormat(quote.total),
             cancelationCondition: quote.cancelation_policy ? quote.cancelation_policy.name : '',
             additionalNotes: quote.additional_notes || '',
         };
@@ -216,7 +222,7 @@ const ViewQuotes = () => {
                             label == 'Price' ?
                                 <>
                                     <Typography color="text.secondary">
-                                        {q[key].toLocaleString("en-IN")}
+                                        {applyCurrencyFormat(q[key])}
                                     </Typography>
                                     <Typography color="#BC0019" fontSize={12}>
                                         {q.validate_till ? 'Valid until ' + dayjs(q.validate_till).format("DD-MMM-YYYY") : ''}
@@ -265,7 +271,7 @@ const ViewQuotes = () => {
                                                     fontWeight: isRich ? 400 : 500,
                                                 }}
                                             >
-                                                {q[key].toLocaleString("en-IN")}
+                                                {applyCurrencyFormat(q[key])}
                                             </Typography>
                         }
                     </TableCell>
@@ -288,7 +294,7 @@ const ViewQuotes = () => {
                             </Typography>
                         </Box>
                         <Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
-                            Best Quote Price: {bestQuotes?.total.toLocaleString("en-IN") ?? 0}
+                            Best Quote Price: {applyCurrencyFormat(bestQuotes?.total)}
                         </Typography>
                     </Box>
                 }
@@ -310,7 +316,7 @@ const ViewQuotes = () => {
                                     return (
                                         <TableCell key={quote.id} data-disabled={isDisabled}>
                                             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
-                                                <img src={fileStorageUrl + image[0]} alt={quote.aircraft.asset_name} style={{ maxWidth: '300px', height: 'auto' }} />
+                                                <img src={fileStorageUrl + image[0]} alt={quote.aircraft.asset_name} style={{ width: 'auto', maxWidth: '300px', height: '250px' }} />
                                                 <Typography variant="h4">
                                                     {quote.client.name}
                                                 </Typography>
