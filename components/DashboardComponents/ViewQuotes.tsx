@@ -20,7 +20,7 @@ interface PriceFormData {
 
 const ViewQuotes = () => {
     const callApi = useApiFunction();
-    const { inquiryId } = useInquiryDetails();
+    const { inquiryId, setShowDetailsTabs } = useInquiryDetails();
     const [quotes, setQuotes] = useState([]);
     const [bestQuotes, setBestQuotes] = useState<any>(null);
     const [acceptedQuoteId, setAcceptedQuoteId] = useState<Number>(null);
@@ -332,7 +332,7 @@ const ViewQuotes = () => {
                         <TableBody>
                             {quotes.map((q) => {
                                 return (
-                                    <>
+                                    <React.Fragment key={q.id}>
                                         {renderRow("Rating", "rating")}
                                         {renderRow("Aircraft", "aircraft")}
                                         {renderRow("Price", "total")}
@@ -343,7 +343,7 @@ const ViewQuotes = () => {
                                         {renderRow("Catering", "catering_fees")}
                                         {renderRow("Key Amenities", "available_amenities", true)}
                                         {renderRow("Included Service", "special_offers_promotions", true)}
-                                    </>
+                                    </React.Fragment>
                                 )
                             })}
 
@@ -376,7 +376,7 @@ const ViewQuotes = () => {
                     </Table>
                 </Box>
                 <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
-                    <Button variant="outlined" className="btn btn-outlined">
+                    <Button variant="outlined" className="btn btn-outlined" onClick={() => setShowDetailsTabs(false)}>
                         Close
                     </Button>
                     {user.access_type === 'Portal Admin' &&

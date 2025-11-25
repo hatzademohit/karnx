@@ -26,7 +26,7 @@ interface KXManagerCardCount {
 const KXManager = () => {
 
     const theme = useTheme();
-    const { setInquiryId, setinquiryRowData } = useInquiryDetails();
+    const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     const [introducingPopupOpen, setIntroducingPopupOpen] = useState<boolean>(false);
     /** get card count from API*/
     useEffect(() => {
@@ -47,7 +47,6 @@ const KXManager = () => {
     const [columns, setColumns] = useState([])
     // const [data, setData] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
-    const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
 
     const { data, refetch: fetchInquiries } = useApi<any[]>(
         `${apiBaseUrl}/dashboard/kxmanager-charter-inquiries`
@@ -129,8 +128,12 @@ const KXManager = () => {
     }, []);
 
     useEffect(() => {
-        fetchInquiries();
-    }, []);
+        {
+            showDetailsTabs &&
+                fetchInquiries();
+        }
+        console.log("showDetailsTabs changed", showDetailsTabs)
+    }, [showDetailsTabs]);
 
     return (
         <>
