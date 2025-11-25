@@ -22,7 +22,7 @@ export interface CustomTextFieldProps {
   size?: any;
   variant?: any;
   InputLabelProps?: any;
-  sx?:{};
+  sx?: {};
   InputProps?: any;
   id?: string;
   inputLabel?: any;
@@ -30,35 +30,35 @@ export interface CustomTextFieldProps {
 }
 
 const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
- ({ name,
-  type,
-  value,
-  asterisk,
-  onFocus,
-  onChange,
-  onBlur,
-  error,
-  helperText,
-  disabled,
-  label,
-  required,
-  placeholder,
-  className,
-  maxlength,
-  size = 'small',
-  variant = 'outlined',
-  InputLabelProps,
-  InputProps,
-  id,
-  inputLabel,
-  multiline,
-  ...props
-}, ref) => {
-  const {theme} = useAuth()
+  ({ name,
+    type,
+    value,
+    asterisk,
+    onFocus,
+    onChange,
+    onBlur,
+    error,
+    helperText,
+    disabled,
+    label,
+    required,
+    placeholder,
+    className,
+    maxlength,
+    size = 'small',
+    variant = 'outlined',
+    InputLabelProps,
+    InputProps,
+    id,
+    inputLabel,
+    multiline,
+    ...props
+  }, ref) => {
+    const { theme } = useAuth()
 
-  return (
-      <Box sx={{width: '100%'}}>
-        { inputLabel && <InputLabel sx={{fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333'}}>{inputLabel} { asterisk && <Typography component='span' sx={{color: theme?.common?.redColor}}>*</Typography> }</InputLabel> }
+    return (
+      <>
+        {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography>}</InputLabel>}
         <TextField
           fullWidth
           inputRef={ref}
@@ -75,18 +75,18 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           {...props}
           // label={displayLabel}
           required={required}
-          placeholder={ placeholder ? placeholder : `Enter ${inputLabel}`}
+          placeholder={placeholder ? placeholder : `Enter ${inputLabel}`}
           className={className}
           inputProps={{ maxLength: maxlength }}
-          size={size}        
+          size={size}
           InputLabelProps={{ shrink: InputLabelProps }}
           InputProps={InputProps}
           autoComplete='off'
           id={inputLabel || label || id}
-          // multiline={multiline}
+        // multiline={multiline}
         />
-      </Box>
-  );
-}
+      </>
+    );
+  }
 )
 export { CustomTextField };

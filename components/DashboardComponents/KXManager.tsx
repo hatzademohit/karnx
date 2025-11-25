@@ -129,7 +129,6 @@ const KXManager = () => {
         }
     }, [showDetailsTabs]);
 
-
     return (
         <>
             {!showDetailsTabs &&

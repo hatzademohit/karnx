@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField } from "@mui/material";
+import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField, FormControlLabel, Checkbox } from "@mui/material";
 import { CustomModal, CustomTextField } from "@/components";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
@@ -16,6 +16,7 @@ interface RejectionFormData {
 }
 interface PriceFormData {
     commissionPercentage: string;
+    rejectionReason: string;
 }
 
 const ViewQuotes = () => {
@@ -146,6 +147,7 @@ const ViewQuotes = () => {
     } = useForm<PriceFormData>({
         defaultValues: {
             commissionPercentage: "",
+            rejectionReason: ''
         },
     });
 
@@ -402,7 +404,7 @@ const ViewQuotes = () => {
                         Close
                     </Button>
                     {user.access_type === 'Portal Admin' &&
-                        <Button className="btn btn-blue" onClick={() => quoteSendToTravelAgent()}>
+                        <Button className="btn btn-blue" disabled={acceptedQuoteId == null || acceptedQuoteId == 0} onClick={() => quoteSendToTravelAgent()}>
                             Send To Travel Agent
                         </Button>
                     }
@@ -671,6 +673,33 @@ const ViewQuotes = () => {
                                     : "Percentage must be between 0 and 100",
                         })}
                     />
+                    <Card elevation={2} sx={{ mt: 2 }}>
+                        <CardContent>
+                            <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
+                                <Typography variant="h4" color={theme.common?.blueColor}>
+                                    Rejected Quotes
+                                </Typography>
+                                <FormControlLabel control={<Checkbox size="small" />} label="Same Value for all" />
+                            </Box>
+                            {quotes.filter((q) => q.id !== acceptedQuoteId).map((quote) => {
+                                return (
+                                    <Box key={quote.id} sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
+                                        <Typography>
+                                            {quote?.client?.name}
+                                        </Typography>
+                                        <CustomTextField
+                                            placeholder="Enter rejection reason"
+                                            size="small"
+                                            error={!!travelAgentErrors.rejectionReason}
+                                            helperText={travelAgentErrors.rejectionReason?.message}
+                                            {...travelAgentRegister("rejectionReason")}
+                                            sx={{ maxWidth: '250px' }}
+                                        />
+                                    </Box>
+                                )
+                            })}
+                        </CardContent>
+                    </Card>
                     <Card elevation={2} sx={{ mt: 2 }}>
                         <CardContent>
                             <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>

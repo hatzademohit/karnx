@@ -29,13 +29,14 @@ const TravelAgent = () => {
     const searchParams = useSearchParams();
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
-    const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
-    const { setInquiryId, setinquiryRowData } = useInquiryDetails();
+    const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     /** get card count from API*/
     useEffect(() => {
-        fetchCardCount();
-        fetchCharterInquiries();
-    }, []);
+        if (!showDetailsTabs) {
+            fetchCharterInquiries();
+            fetchCardCount();
+        }
+    }, [showDetailsTabs]);
 
     const { data: result, refetch: fetchCardCount } = useApi<TravelAgentCardCount>(
         `${apiBaseUrl}/dashboard/travelagent-cardcount`
