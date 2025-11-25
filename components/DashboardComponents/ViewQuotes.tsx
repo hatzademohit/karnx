@@ -30,6 +30,7 @@ const ViewQuotes = () => {
     const [viewedQuote, setViewedQuote] = useState<any>([]);
     const theme = useTheme();
     const { user } = useAuth();
+    const [quoteIdForRejection, setQuoteIdForRejection] = useState<number | null>(null);
     // {
     //     id: 3,
     //     departure: '08:30 - 17:00',
@@ -84,6 +85,7 @@ const ViewQuotes = () => {
             total: applyCurrencyFormat(quote.total),
             cancelationCondition: quote.cancelation_policy ? quote.cancelation_policy.name : '',
             additionalNotes: quote.additional_notes || '',
+            quoteStatus: quote.is_selected || '',
         };
         setViewedQuote(quoteViewData);
         setViewQuoteDetails(true);
@@ -93,11 +95,18 @@ const ViewQuotes = () => {
         setAcceptedQuoteId(id);
     }
 
+    const cancelAcception = () => {
+        setAcceptedQuoteId(null);
+    }
+
     const rejectQuote = (id) => {
-        console.log('Reject quote id:' + id);
+        setRejectionModal(true);
+        setQuoteIdForRejection(id);
     }
 
     const quoteSendToTravelAgent = () => {
+        // acceptedQuoteId
+        console.log(quotes);
         setTravelAgentModal(true);
     }
 
@@ -107,10 +116,21 @@ const ViewQuotes = () => {
         },
     });
 
-    const onSubmit = (data: RejectionFormData) => {
-        console.log("Form Submitted:", data);
-        setRejectionModal(false);
-        reset();
+    const onRejectionSubmit = async (data: RejectionFormData) => {
+        const quoteId = quoteIdForRejection;
+        try {
+            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/reject-quote`, body: { quoteId, inquiryId } });
+            if (res?.status === true) {
+                toast.success(res?.message || '');
+                setRejectionModal(false);
+                reset();
+                fetchQuotes();
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while accepting/rejecting quote');
+        }
     };
 
     const handleClose = () => {
@@ -136,6 +156,7 @@ const ViewQuotes = () => {
 
     const handleCancel = () => {
         console.log("Cancelled quote id:", viewedQuote?.id);
+        setTravelAgentModal(false);
         travelAgentReset();
     };
 
@@ -159,21 +180,7 @@ const ViewQuotes = () => {
     }, []);
 
     const acceptRejectQuote = async (quoteId: number, action: 'accept' | 'reject') => {
-        // try {
-        //     const token = localStorage.token;
-        //     const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/accept-reject-quote`, body: { quoteId, action, inquiryId } });
-        //     if (res?.status === true) {
-        //         if (action === 'accept') {
-        //             setAcceptedQuoteId(quoteId);
-        //         } else {
-        //             setRejectionModal(true);
-        //         }
-        //     } else {
-        //         toast.error(res?.message || '');
-        //     }
-        // } catch (e) {
-        //     toast.error('Network error while accepting/rejecting quote');
-        // }
+
     };
 
     const parseToHoursMinutes = (value: any) => {
@@ -206,7 +213,8 @@ const ViewQuotes = () => {
                 <Typography variant="h5" >{label}</Typography>
             </TableCell>
             {quotes.length > 0 && quotes.map((q) => {
-                const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                let isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                isDisabled = (q.is_selected === 'rejected');
                 //console.log(q[key]);
                 return (
                     <TableCell key={q.id} sx={{ verticalAlign: "top" }} data-disabled={isDisabled}>
@@ -242,11 +250,11 @@ const ViewQuotes = () => {
                                         <Typography color="text.secondary" fontSize={12}>
                                             {/* Return: {q.returnTime} */}
                                         </Typography>
-                                        {isDisabled &&
+                                        {/* {isDisabled &&
                                             <Box className="submit-rejection-reason">
                                                 <Button sx={{ width: '220px' }} onClick={() => setRejectionModal(true)} className="btn btn-danger">Submit Rejection Reason</Button>
                                             </Box>
-                                        }
+                                        } */}
                                     </> :
                                     label == 'Key Amenities' ?
                                         <>
@@ -353,16 +361,35 @@ const ViewQuotes = () => {
                                         const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
                                         return (
                                             <TableCell key={q.id} data-disabled={isDisabled}>
-                                                <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                                                    <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id)}>
-                                                        {isAccepted ? "Quote Accepted" : "Accept Quote"}
-                                                    </Button>
-                                                    {!isAccepted && (
-                                                        <Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
-                                                            Reject Quote
-                                                        </Button>
-                                                    )}
-                                                </Box>
+                                                {q.is_selected === 'rejected' ?
+                                                    <>
+                                                        <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                                                            <Button className="btn btn-defualt w-100" disabled={true}>
+                                                                Quote Rejected
+                                                            </Button>
+                                                        </Box>
+
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                                                            <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id)}>
+                                                                {isAccepted ? "Quote Accepted" : "Accept Quote"}
+                                                            </Button>
+                                                            {isAccepted && (
+                                                                <Button className="btn btn-danger w-100" disabled={isDisabled} onClick={() => cancelAcception()}>
+                                                                    Cancel
+                                                                </Button>
+                                                            )}
+                                                            {!isAccepted && (
+                                                                <Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
+                                                                    Reject Quote
+                                                                </Button>
+                                                            )}
+                                                        </Box>
+                                                    </>
+                                                }
+
                                             </TableCell>
                                         );
                                     })}
@@ -572,15 +599,28 @@ const ViewQuotes = () => {
                 {user.access_type === 'Portal Admin' &&
 
                     <Box className="modal-footer" sx={{ py: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: { sm: '200px', xs: 'calc(50% - 4px)' }, width: '100%' } }}>
-                        <Button className="btn btn-blue" onClick={() => acceptRejectQuote(viewedQuote?.id, 'accept')}>Accept Quote</Button>
-                        <Button className="btn btn-danger" onClick={() => acceptRejectQuote(viewedQuote?.id, 'reject')}>Reject Quote</Button>
+                        {viewedQuote?.quoteStatus === 'rejected' ?
+                            <>
+                                <Button className="btn btn-defualt" disabled={true}>
+                                    Quote Rejected
+                                </Button>
+                            </>
+                            :
+                            <>
+                                <Button className="btn btn-blue" onClick={() => acceptRejectQuote(viewedQuote?.id, 'accept')}>Accept Quote</Button>
+                                <Button className="btn btn-danger" onClick={() => rejectQuote(viewedQuote?.id)}>Reject Quote</Button>
+                            </>
+                        }
                     </Box>
                 }
             </CustomModal>
 
             {/* Rejection Reason Modal */}
-            <CustomModal headerText='Rejection Reason' open={rejectionModal} setOpen={setRejectionModal} dataClose={() => setRejectionModal(false)}>
-                <Typography component="form" onSubmit={handleSubmit(onSubmit)}>
+            <CustomModal sx={{ '.MuiDialog-container .MuiPaper-root': { maxWidth: '400px' } }} headerText={<Box sx={{ fontSize: '18px' }}>Rejection Reason <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }} >
+                Submit Quote Rejection Reason
+            </Typography ></Box >
+            } open={rejectionModal} setOpen={setRejectionModal} dataClose={() => setRejectionModal(false)}>
+                < Typography component="form" onSubmit={handleSubmit(onRejectionSubmit)} >
                     <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }} required={true}>Massage</InputLabel>
                     <FormControl fullWidth>
                         <TextField
@@ -594,19 +634,24 @@ const ViewQuotes = () => {
                                     message: "Message must be at least 5 characters",
                                 },
                             })}
+                            placeholder="Write your reason for rejecting the quote..."
                             error={!!errors.message}
                             helperText={errors.message?.message}
                         />
                     </FormControl>
+                    <Divider sx={{ mb: 2, mt: 4 }} />
                     <Box className="modal-footer" sx={{ pb: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: '150px', width: '100%' } }}>
                         <Button className="btn btn-outlined" onClick={handleClose}>Cancel</Button>
-                        <Button className="btn btn-blue" type="submit">Send</Button>
+                        <Button className="btn btn-blue" type="submit" >Send</Button>
                     </Box>
-                </Typography>
-            </CustomModal>
+                </Typography >
+            </CustomModal >
 
             {/* Send to travel agent modal */}
-            <CustomModal headerText='Sent To Travel Agent' open={travelAgentModal} setOpen={setTravelAgentModal} dataClose={() => setTravelAgentModal(false)}>
+            < CustomModal headerText={<Box sx={{ fontSize: '18px' }}>Sent To Travel Agent <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }} >
+                Submit Your Commission
+            </Typography ></Box >
+            } open={travelAgentModal} setOpen={setTravelAgentModal} dataClose={() => setTravelAgentModal(false)}>
                 <Typography component="form" onSubmit={travelAgentHandleSubmit(travelAgentSubmit)}>
                     <CustomTextField
                         inputLabel={<>Commission Percentage <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography></>}
@@ -664,7 +709,7 @@ const ViewQuotes = () => {
                     </Box>
                 </Typography>
 
-            </CustomModal>
+            </CustomModal >
         </>
     )
 }

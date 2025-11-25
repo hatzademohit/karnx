@@ -22,6 +22,7 @@ export interface ModalCompProps {
   dataClose?: any;
   isFooterButton?: boolean;
   className?: string;
+  sx?: {};
 }
 
 const CustomModal: React.FC<ModalCompProps> = ({
@@ -33,7 +34,8 @@ const CustomModal: React.FC<ModalCompProps> = ({
   dataAction,
   dataClose,
   className,
-  isFooterButton = false
+  isFooterButton = false,
+  sx = {},
 }) => {
   const {theme} = useAuth();
   return (
@@ -51,6 +53,7 @@ const CustomModal: React.FC<ModalCompProps> = ({
       // }}
       aria-labelledby="draggable-dialog-title"
       className='dialog-modal'
+      sx={sx}
     >
       <Box className={`custom-modal ${className}`}>
         <DialogTitle className='modal-header' component='h2' variant='h2'>
