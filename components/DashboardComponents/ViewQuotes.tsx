@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField } from "@mui/material";
+import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField, FormControlLabel, Checkbox } from "@mui/material";
 import { CustomModal, CustomTextField } from "@/components";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
@@ -13,9 +13,6 @@ import { useAuth } from "@/app/context/AuthContext";
 
 interface RejectionFormData {
     message: string;
-}
-interface PriceFormData {
-    commissionPercentage: string;
 }
 
 const ViewQuotes = () => {
@@ -31,6 +28,8 @@ const ViewQuotes = () => {
     const theme = useTheme();
     const { user } = useAuth();
     const [quoteIdForRejection, setQuoteIdForRejection] = useState<number | null>(null);
+    const [sameReason, setSameReason] = useState(false);
+    const [sharedReason, setSharedReason] = useState("");
     // {
     //     id: 3,
     //     departure: '08:30 - 17:00',
@@ -143,13 +142,16 @@ const ViewQuotes = () => {
         handleSubmit: travelAgentHandleSubmit,
         formState: { errors: travelAgentErrors },
         reset: travelAgentReset,
-    } = useForm<PriceFormData>({
+        setValue: travelAgentSetValue,
+        watch: travelAgentWatch,
+    } = useForm<any>({
         defaultValues: {
             commissionPercentage: "",
+            rejectionReason: ''
         },
     });
 
-    const travelAgentSubmit = (data: PriceFormData) => {
+    const travelAgentSubmit = (data: any) => {
         console.log("Submitted Data:", data);
         console.log("Quote ID:", viewedQuote?.id);
     };
@@ -409,7 +411,7 @@ const ViewQuotes = () => {
                         Close
                     </Button>
                     {user.access_type === 'Portal Admin' &&
-                        <Button className="btn btn-blue" onClick={() => quoteSendToTravelAgent()}>
+                        <Button className="btn btn-blue" disabled={acceptedQuoteId == null || acceptedQuoteId == 0} onClick={() => quoteSendToTravelAgent()}>
                             Send To Travel Agent
                         </Button>
                     }
@@ -654,7 +656,7 @@ const ViewQuotes = () => {
             </CustomModal >
 
             {/* Send to travel agent modal */}
-            < CustomModal headerText={<Box sx={{ fontSize: '18px' }}>Sent To Travel Agent <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }} >
+            <CustomModal headerText={<Box sx={{ fontSize: '18px' }}>Sent To Travel Agent <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }} >
                 Submit Your Commission
             </Typography ></Box >
             } open={travelAgentModal} setOpen={setTravelAgentModal} dataClose={() => setTravelAgentModal(false)}>
@@ -665,7 +667,7 @@ const ViewQuotes = () => {
                         size="large"
                         type="number"
                         error={!!travelAgentErrors.commissionPercentage}
-                        helperText={travelAgentErrors.commissionPercentage?.message}
+                        helperText={travelAgentErrors.commissionPercentage?.message as string}
                         {...travelAgentRegister("commissionPercentage", {
                             required: "Commission percentage is required",
                             pattern: {
@@ -678,6 +680,70 @@ const ViewQuotes = () => {
                                     : "Percentage must be between 0 and 100",
                         })}
                     />
+                    <Card elevation={2} sx={{ mt: 2 }}>
+                        <CardContent>
+                            <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
+                                <Typography variant="h4" color={theme.common?.blueColor}>
+                                    Rejected Quotes
+                                </Typography>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            size="small"
+                                            checked={sameReason}
+                                            onChange={(e) => {
+                                                setSameReason(e.target.checked);
+                                                if (e.target.checked) {
+                                                    const firstValue = travelAgentWatch(`rejectionReason[0]`) || "";
+                                                    setSharedReason(firstValue);
+                                                    quotes.forEach(q =>
+                                                        travelAgentSetValue(`rejectionReason`, firstValue)
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    }
+                                    label="Same reason for others"
+                                />
+
+                            </Box>
+                            {/* {quotes.filter((q) => q.id !== acceptedQuoteId).map((quote) => { */}
+
+                            {quotes.map((quote, index) => {
+                                travelAgentSetValue(`rejectedQuote[${index}]`, quote.id);
+                                return (
+                                    <React.Fragment key={quote.id}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
+                                            <Typography sx={{ lineHeight: '14px' }}>
+                                                {quote?.client?.name}
+                                                <Typography component='span' sx={{ fontSize: '12px', display: 'inline-block', width: '100%' }} color="text.secondary">
+                                                    Quote Amount:  {quote?.total}
+                                                </Typography>
+                                            </Typography>
+                                            <CustomTextField
+                                                placeholder="Enter rejection reason"
+                                                size="small"
+                                                error={!!travelAgentErrors.rejectionReason}
+                                                helperText={travelAgentErrors.rejectionReason?.message as string}
+                                                value={sameReason ? sharedReason : travelAgentWatch(`rejectionReason[${index}]`)}
+                                                onChange={(e) => {
+                                                    if (sameReason) {
+                                                        setSharedReason(e.target.value);
+                                                        quotes.forEach(q => travelAgentSetValue(`rejectionReason`, e.target.value));
+                                                    } else {
+                                                        travelAgentSetValue(`rejectionReason[${index}]`, e.target.value);
+                                                    }
+                                                }}
+                                                sx={{ maxWidth: '250px' }}
+                                            />
+
+                                        </Box>
+                                        {(quotes.length != 0) && (index != quotes.length - 1) && <Divider sx={{ my: 1 }} />}
+                                    </React.Fragment>
+                                )
+                            })}
+                        </CardContent>
+                    </Card>
                     <Card elevation={2} sx={{ mt: 2 }}>
                         <CardContent>
                             <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>
