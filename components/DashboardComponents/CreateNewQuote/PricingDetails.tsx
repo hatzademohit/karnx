@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { CustomTextField, CustomDatePicker, SingleSelectRadio } from "@/components";
 import dayjs from "dayjs";
-import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
 
 const fields = [
     { name: "baseFare", label: "Base Fare", numeric: true },
@@ -15,10 +17,24 @@ const fields = [
 ];
 
 const PricingDetails = (editedData) => {
+    const callApi = useApiFunction();
     const { control, setValue } = useFormContext();
     const theme = useTheme()
     const watchedValues = useWatch({ control });
-    const { cancellationPolicyList } = useInquiryDetails();
+    const [cancellationPolicyList, setcancellationPolicyList] = useState<any>([]);
+
+    const getCancellationPolicies = async () => {
+        try {
+            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/form-fields-data/cancelation-policies` });
+            if (res?.status === true) {
+                setcancellationPolicyList(res.data);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            toast.error('Network error while fetching cancellation policies');
+        }
+    };
 
     const totalAmount = useMemo(() => {
         return Object.entries(watchedValues || {}).reduce((sum, [key, value]) => {
@@ -34,6 +50,10 @@ const PricingDetails = (editedData) => {
     useEffect(() => {
         setValue("totalAmount", totalAmount);
     }, [totalAmount, setValue]);
+
+    useEffect(() => {
+        getCancellationPolicies();
+    }, []);
 
     return (
         <Box>

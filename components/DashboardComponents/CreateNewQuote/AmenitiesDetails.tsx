@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Card, CardContent, Typography, useTheme } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined';
@@ -23,13 +23,16 @@ const IconMap: Record<string, React.ReactElement> = {
   FreeBreakfastOutlinedIcon: <FreeBreakfastOutlinedIcon />,
 };
 import { CustomTextField } from "@/components";
-import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
+import { toast } from "react-toastify";
+import { apiBaseUrl } from "@/karnx/api";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
 
 const AmenitiesDetails = (editedData) => {
+  const callApi = useApiFunction();
   const { control, watch, setValue } = useFormContext();
   const selected = watch("amenities") || [];
   const theme = useTheme();
-  const { amentiesList } = useInquiryDetails();
+  const [amentiesList, setAmentiesListList] = useState<any>([]);
 
   const toggleAmenity = (a: string) => {
     const updated = selected.includes(a)
@@ -37,6 +40,23 @@ const AmenitiesDetails = (editedData) => {
       : [...selected, a];
     setValue("amenities", updated);
   };
+
+  const getAvailableAmenties = async () => {
+    try {
+      const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/form-fields-data/available-amenities` });
+      if (res?.status === true) {
+        setAmentiesListList(res.data);
+      } else {
+        toast.error(res?.message || '');
+      }
+    } catch (e) {
+
+    }
+  }
+
+  useEffect(() => {
+    getAvailableAmenties();
+  }, []);
 
   return (
     <Box>

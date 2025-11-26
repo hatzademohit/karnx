@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, Grid, useTheme, FormHelperText } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import { CustomDateTimePicker, CustomTimePicker } from "@/components"
 import dayjs from "dayjs";
-import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
 
 const AircraftFlightDetails = (editedData) => {
+	const callApi = useApiFunction();
 	const { control, watch, formState: { errors } } = useFormContext();
 	const selectedAircraft = watch("aircraft");
 	const theme = useTheme();
-	const { aircraftList } = useInquiryDetails();
+	const [aircraftList, setAircraftList] = useState<any>([]);
+
+	const getAircrafts = async () => {
+		try {
+			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/get-aircraft` });
+			if (res?.status === true) {
+				setAircraftList(res.data);
+			} else {
+				toast.error(res?.message || '');
+			}
+		} catch (e) {
+			toast.error('Network error while fetching aircraft');
+		}
+	};
+
+	useEffect(() => {
+		getAircrafts();
+	}, []);
 
 	return (
 		<Box>
