@@ -31,5 +31,6 @@ import CustomDatePicker from "./DatePicker/CustomDatePicker"
 import AutoComplteCheckbox from "./SelectOption/AutoCompleteCheckbox";
 import ViewQuotes from "./DashboardComponents/ViewQuotes";
 import NoQuotes from "./DashboardComponents/NoQuotes";
+import QuoteDetails from "./DashboardComponents/QuoteDetails";
 
-export { CustomTextField, RHFCustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker, AutoComplteCheckbox, ViewQuotes, NoQuotes };
+export { CustomTextField, RHFCustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker, AutoComplteCheckbox, ViewQuotes, NoQuotes, QuoteDetails };

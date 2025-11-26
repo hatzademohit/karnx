@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField, FormControlLabel, Checkbox } from "@mui/material";
-import { CustomModal, CustomTextField } from "@/components";
+import { CustomModal, CustomTextField, QuoteDetails } from "@/components";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { useForm } from "react-hook-form";
@@ -461,7 +461,12 @@ const ViewQuotes = () => {
                 </Box>
             </Box>
 
-            {/* View Modal */}
+            {/* view quotes component */}
+            <Grid container spacing={{ md: 2, xs: 1 }}>
+                <QuoteDetails viewedQuote={viewedQuote} />
+            </Grid>
+
+            {/* View quote modal */}
             <CustomModal headerText={<Box>Quote Details <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
                 {viewedQuote.clientName}
             </Typography></Box>} open={viewQuoteDetails} setOpen={setViewQuoteDetails} dataClose={() => setViewQuoteDetails(false)} className="modal-lg">
