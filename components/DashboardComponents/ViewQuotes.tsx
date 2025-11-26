@@ -654,7 +654,7 @@ const ViewQuotes = () => {
             } open={travelAgentModal} setOpen={setTravelAgentModal} dataClose={() => setTravelAgentModal(false)}>
                 <Typography component="form" onSubmit={travelAgentHandleSubmit(travelAgentSubmit)}>
                     <CustomTextField
-                        inputLabel={<>Commission Percentage <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography></>}
+                        inputLabel={<>Commission Percentage %<Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography></>}
                         placeholder="Add your Commission Percentage"
                         size="large"
                         type="number"
@@ -703,7 +703,7 @@ const ViewQuotes = () => {
                                 {/* {quotes.filter((q) => q.id !== acceptedQuoteId).map((quote) => { */}
 
                                 {quotes.map((quote, index) => {
-                                    if (quote.id !== acceptedQuoteId) {
+                                    if (quote.id !== acceptedQuoteId && quote.is_selected !== 'rejected') {
                                         return (
                                             <React.Fragment key={quote.id}>
                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
