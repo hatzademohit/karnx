@@ -151,6 +151,13 @@ const ViewQuotes = () => {
         },
     });
 
+    useEffect(() => {
+        quotes.filter((q) => q.id !== acceptedQuoteId).map((quote, index) => {
+            travelAgentSetValue(`rejectedQuote.${index}`, quote.id);
+            travelAgentSetValue(`rejectionReason.${index}`, "");
+        });
+    }, [acceptedQuoteId]);
+
     const travelAgentSubmit = (data: any) => {
         console.log("Submitted Data:", data);
         console.log("Quote ID:", viewedQuote?.id);
@@ -689,8 +696,8 @@ const ViewQuotes = () => {
                                                 if (e.target.checked) {
                                                     const firstValue = travelAgentWatch(`rejectionReason[0]`) || "";
                                                     setSharedReason(firstValue);
-                                                    quotes.forEach(q =>
-                                                        travelAgentSetValue(`rejectionReason`, firstValue)
+                                                    quotes.forEach((item, index) =>
+                                                        travelAgentSetValue(`rejectionReason[${index}]`, firstValue)
                                                     );
                                                 }
                                             }}
@@ -703,7 +710,6 @@ const ViewQuotes = () => {
                             {/* {quotes.filter((q) => q.id !== acceptedQuoteId).map((quote) => { */}
 
                             {quotes.map((quote, index) => {
-                                travelAgentSetValue(`rejectedQuote[${index}]`, quote.id);
                                 return (
                                     <React.Fragment key={quote.id}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
@@ -718,11 +724,11 @@ const ViewQuotes = () => {
                                                 size="small"
                                                 error={!!travelAgentErrors.rejectionReason}
                                                 helperText={travelAgentErrors.rejectionReason?.message as string}
-                                                value={sameReason ? sharedReason : travelAgentWatch(`rejectionReason[${index}]`)}
+                                                value={sameReason ? sharedReason : travelAgentWatch(`rejectionReason[${index}]`) || ""}
                                                 onChange={(e) => {
                                                     if (sameReason) {
                                                         setSharedReason(e.target.value);
-                                                        quotes.forEach(q => travelAgentSetValue(`rejectionReason`, e.target.value));
+                                                        quotes.forEach((item, qindex) => travelAgentSetValue(`rejectionReason[${qindex}]`, e.target.value));
                                                     } else {
                                                         travelAgentSetValue(`rejectionReason[${index}]`, e.target.value);
                                                     }
