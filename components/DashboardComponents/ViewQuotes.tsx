@@ -17,9 +17,10 @@ interface RejectionFormData {
 
 const ViewQuotes = () => {
     const callApi = useApiFunction();
-    const { inquiryId, setShowDetailsTabs } = useInquiryDetails();
+    const { inquiryId, setShowDetailsTabs, inquiryRowData } = useInquiryDetails();
     const [quotes, setQuotes] = useState([]);
     const [nonRejectedQuotes, setNonRejectedQuotes] = useState([]);
+    const [openBoxQuote, setOpenBoxQuote] = useState([]);
     const [bestQuotes, setBestQuotes] = useState<any>(null);
     const [acceptedQuoteId, setAcceptedQuoteId] = useState<Number>(null);
     const [acceptedQuote, setAcceptedQuote] = useState<any>([]);
@@ -68,13 +69,15 @@ const ViewQuotes = () => {
             additionalNotes: quote.additional_notes || '',
             quoteStatus: quote.is_selected || '',
         };
+        setOpenBoxQuote(quote);
         setViewedQuote(quoteViewData);
         setViewQuoteDetails(true);
     };
 
-    const acceptQuote = (id, acceptedQuote) => {
+    const acceptQuote = (id, acceptedQuote = []) => {
         setAcceptedQuote(acceptedQuote);
         setAcceptedQuoteId(id);
+        setViewQuoteDetails(false);
     }
 
     const cancelAcception = () => {
@@ -89,7 +92,6 @@ const ViewQuotes = () => {
 
     const quoteSendToTravelAgent = () => {
         // acceptedQuoteId
-        console.log(quotes);
         setTravelAgentModal(true);
     }
 
@@ -136,19 +138,44 @@ const ViewQuotes = () => {
     });
 
     useEffect(() => {
-        quotes.filter((q) => q.id !== acceptedQuoteId).map((quote, index) => {
-            travelAgentSetValue(`rejectedQuote.${index}`, quote.id);
-            travelAgentSetValue(`rejectionReason.${index}`, "");
+        let rejectQId = [];
+        quotes.filter((q) => q.id !== acceptedQuoteId && q.is_selected !== 'rejected').map((quote, index) => {
+            //if (quote.is_selected !== 'rejected') {
+            // console.log(rejectQId.indexOf(quote.id));
+            if (rejectQId.indexOf(quote.id) === -1) {
+                rejectQId.push(quote.id);
+                travelAgentSetValue(`rejectedQuote.${index}`, quote.id);
+                travelAgentSetValue(`rejectionReason.${index}`, "");
+            }
+            // travelAgentSetValue(`rejectedQuote.${index}`, quote.id);
+            // travelAgentSetValue(`rejectionReason.${index}`, "");
+            //}
         });
     }, [acceptedQuoteId]);
 
-    const travelAgentSubmit = (data: any) => {
-        console.log("Submitted Data:", data);
-        console.log("Quote ID:", viewedQuote?.id);
+    const travelAgentSubmit = async (data: any) => {
+        try {
+            const bodyParam = {
+                inquiryId,
+                acceptedQId: acceptedQuoteId,
+                kxMgrCommissionPercent: data.commissionPercentage,
+                message: data.rejectionReason,
+                quoteIds: data.rejectedQuote,
+            };
+            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/accept-quote`, body: bodyParam });
+            if (res?.status === true) {
+                toast.success(res?.message || '');
+                setShowDetailsTabs(false);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while sending quote to travel agent');
+        }
     };
 
     const handleCancel = () => {
-        console.log("Cancelled quote id:", viewedQuote?.id);
+        // console.log("Cancelled quote dd id:", viewedQuote?.id);
         setTravelAgentModal(false);
         travelAgentReset();
     };
@@ -173,9 +200,6 @@ const ViewQuotes = () => {
         //console.log(quotes);
     }, []);
 
-    const acceptRejectQuote = async (quoteId: number, action: 'accept' | 'reject') => {
-
-    };
 
     const parseToHoursMinutes = (value: any) => {
         if (value == null || value === "") return { hours: 0, minutes: 0 };
@@ -348,8 +372,15 @@ const ViewQuotes = () => {
                             {renderRow("Catering", "catering_fees")}
                             {renderRow("Key Amenities", "available_amenities", true)}
                             {renderRow("Included Service", "special_offers_promotions", true)}
-                            {renderRow("Rejected Reason", "rejected_reason", true)}
+                            {(user.access_type === 'Portal Admin') || (user.access_type === 'Aircraft Operator' && quotes[0]?.is_selected === 'rejected') ?
+                                <>
+                                    {renderRow("Rejected Reason", "rejected_reason", true)}
+                                </>
+                                :
+                                <>
 
+                                </>
+                            }
 
                             {user.access_type === 'Portal Admin' &&
                                 <TableRow>
@@ -371,17 +402,28 @@ const ViewQuotes = () => {
 
                                                     </>
                                                     :
+
                                                     <>
                                                         <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                                                            <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id, q)}>
-                                                                {isAccepted ? "Quote Accepted" : "Accept Quote"}
-                                                            </Button>
+                                                            {['selected', 'approved'].includes(q.is_selected) ?
+                                                                <>
+                                                                    <Button className="btn btn-green w-100" >
+                                                                        Quote Accepted
+                                                                    </Button>
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id, q)}>
+                                                                        {isAccepted ? "Quote Accepted" : "Accept Quote"}
+                                                                    </Button>
+                                                                </>
+                                                            }
                                                             {isAccepted && (
                                                                 <Button className="btn btn-danger w-100" disabled={isDisabled} onClick={() => cancelAcception()}>
                                                                     Cancel
                                                                 </Button>
                                                             )}
-                                                            {!isAccepted && (
+                                                            {!isAccepted && !['selected', 'approved'].includes(q.is_selected) && (
                                                                 <Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
                                                                     Reject Quote
                                                                 </Button>
@@ -607,8 +649,16 @@ const ViewQuotes = () => {
                             </>
                             :
                             <>
-                                <Button className="btn btn-blue" onClick={() => acceptRejectQuote(viewedQuote?.id, 'accept')}>Accept Quote</Button>
-                                <Button className="btn btn-danger" onClick={() => rejectQuote(viewedQuote?.id)}>Reject Quote</Button>
+                                {['selected', 'approved'].includes(viewedQuote.quoteStatus) ?
+                                    <>
+                                        <Button className="btn btn-green">Quote Accepted</Button>
+                                    </>
+                                    :
+                                    <>
+                                        <Button className="btn btn-blue" onClick={() => acceptQuote(viewedQuote?.id, openBoxQuote)}>Accept Quote</Button>
+                                        <Button className="btn btn-danger" onClick={() => rejectQuote(viewedQuote?.id)}>Reject Quote</Button>
+                                    </>
+                                }
                             </>
                         }
                     </Box>
@@ -700,9 +750,9 @@ const ViewQuotes = () => {
                                     />
 
                                 </Box>
-                                {/* {quotes.filter((q) => q.id !== acceptedQuoteId).map((quote) => { */}
+                                {quotes.filter((q) => q.id !== acceptedQuoteId).map((quote, index) => {
 
-                                {quotes.map((quote, index) => {
+                                    // {quotes.map((quote, index) => {
                                     if (quote.id !== acceptedQuoteId && quote.is_selected !== 'rejected') {
                                         return (
                                             <React.Fragment key={quote.id}>

@@ -12,8 +12,8 @@ const QuoteTabs: React.FC<QuoteTabsProps> = ({ travelTab = false, inquiryId }) =
 	const { user } = useAuth()
 	const { inquiryRowData } = useInquiryDetails();
 	const inqStsId = inquiryRowData?.status_id;
-	const statusIdViewQuote = [5, 10, 11, 12, 13, 14, 6, 7, 9];
-	const statusIdNoQuote = [2, 3, 4];
+	const statusIdViewQuote = [5, 10, 11, 12, 13, 14, 15, 6, 7, 8, 9];
+	const statusIdNoQuote = [1, 2, 3, 4];
 	return (
 		<>
 			{statusIdViewQuote.includes(inqStsId) &&

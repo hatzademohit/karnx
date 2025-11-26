@@ -112,7 +112,7 @@ const TravelAgent = () => {
                     </Button>
                 ),
             },
-            { headerName: 'Operators', flex: 1, field: 'operators' },
+            { headerName: 'Operator', flex: 1, field: 'operator' },
             { headerName: 'Value', flex: 1, field: 'value' },
             {
                 headerName: 'Action',

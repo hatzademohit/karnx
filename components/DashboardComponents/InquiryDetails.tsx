@@ -26,14 +26,14 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
     ...(!hideOperatorTabs
       ? [
         {
-          label: `Operators (${inquiryRowData.operator_assigned || assignedOperatorLength})`,
+          label: `Operator(s) (${inquiryRowData.operator_assigned || assignedOperatorLength})`,
           icon: <SettingsOutlinedIcon fontSize="small" />,
           content: <OperatorsTab inquiryId={inquiryData.id} />,
         },
       ]
       : []),
     {
-      label: `Quotes ${user.access_type !== 'Aircraft Operator' ? `(${inquiryRowData.quote_received})` : ''}`,
+      label: `Quote(s) ${user.access_type !== 'Aircraft Operator' ? `(${inquiryRowData.quote_received})` : ''}`,
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
       content: <QuoteTabs travelTab={itsTravelAgent} inquiryId={inquiryData.id} />,
     },
