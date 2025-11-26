@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [karnxToken, setKarnxToken] = useState<string>()
   const [permissions, setPermissions] = useState<string[]>([]);
   const [role, setRole] = useState<string>("");
-  const [loader, setLoader] = useState<boolean>(false);
+  const [loaderCount, setLoaderCount] = useState(0);
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [severity, setSeverity] = useState<string>('success')
   const [alertMessage, setAlertMessage] = useState<string>();
@@ -72,11 +72,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fullDate = new Date();
   const formattedTime = `${String(fullDate.getHours()).padStart(2, '0')}:${String(fullDate.getMinutes()).padStart(2, '0')}`;
 
+  const setLoader = (value: boolean) => {
+    setLoaderCount((prev) => (value ? prev + 1 : Math.max(prev - 1, 0)));
+  };
+  const loader = loaderCount > 0;
+
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     const storedLoginTime = localStorage.getItem("loginTime");
     const isPublicRoute = publicRoutes.includes(pathname);
-    
+
     if (!storedUser && !isPublicRoute) {
       router.push("/");
       return;
@@ -181,7 +186,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Clear middleware session cookies
         try {
           await fetch("/api/session/clear", { method: "POST" });
-        } catch {}
+        } catch { }
         router.push("/");
       })
       .catch((error) => {
