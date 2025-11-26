@@ -32,7 +32,6 @@ const ViewQuotes = () => {
     const [quoteIdForRejection, setQuoteIdForRejection] = useState<number | null>(null);
     const [sameReason, setSameReason] = useState(false);
     const [sharedReason, setSharedReason] = useState("");
-    const totalCommissionSum = useRef(0);
 
     const applyCurrencyFormat = (value: any) => {
         if (value == null) return '';
@@ -715,7 +714,7 @@ const ViewQuotes = () => {
                                     if (quote.id !== acceptedQuoteId && quote.is_selected !== 'rejected') {
                                         return (
                                             <React.Fragment key={quote.id}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, justifyContent: 'space-between' }}>
                                                     <Typography sx={{ lineHeight: '14px' }}>
                                                         {quote?.client?.name}
                                                         <Typography component='span' sx={{ fontSize: '12px', display: 'inline-block', width: '100%' }} color="text.secondary">

@@ -241,7 +241,7 @@ const BookingStatusMaster = () => {
                 inputLabel="Status"
                 size="small"
                 name="status"
-                value={selectedBookingStatus?.is_active || ""}
+                value={status.find((item) => selectedBookingStatus?.is_active === item.id)?.status || ""}
                 onChange={(e) => setSelectedBookingStatus({ ...selectedBookingStatus, is_active: e.target.value })}
               >
                 {status.map((status) => (
