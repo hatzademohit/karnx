@@ -31,26 +31,6 @@ const ViewQuotes = () => {
     const [quoteIdForRejection, setQuoteIdForRejection] = useState<number | null>(null);
     const [sameReason, setSameReason] = useState(false);
     const [sharedReason, setSharedReason] = useState("");
-    // {
-    //     id: 3,
-    //     departure: '08:30 - 17:00',
-    //     return: '09:30 - 18:15',
-    //     flightTime: "6h 30m",
-    //     returnTime: "6h 35m",
-    //     model: 'Dassault Falcon 8X',
-    //     validityInYear: '2025',
-    //     capacity: '19 Seats',
-    //     range: '6,450 nm',
-    //     speed: 'Mach 0.90',
-    //     baseFire: "95,00,000",
-    //     fluel: "25,00,000",
-    //     taxes: "10,00,000",
-    //     fees: '2,00,000',
-    //     catering: '1,00,000',
-    //     AdditionalServices: '45,000',
-    //     aircraftAmenities: ['Wi-Fi tututu', 'In-seat power', 'Entertainment system', 'Conference area'],
-    //     includedServices: ['Gourmet service', 'Exclusive travel itineraries', 'Concierge service'],
-    // }
 
     const applyCurrencyFormat = (value: any) => {
         if (value == null) return '';
@@ -153,6 +133,13 @@ const ViewQuotes = () => {
             rejectionReason: ''
         },
     });
+
+    useEffect(() => {
+        quotes.filter((q) => q.id !== acceptedQuoteId).map((quote, index) => {
+            travelAgentSetValue(`rejectedQuote.${index}`, quote.id);
+            travelAgentSetValue(`rejectionReason.${index}`, "");
+        });
+    }, [acceptedQuoteId]);
 
     const travelAgentSubmit = (data: any) => {
         console.log("Submitted Data:", data);
@@ -699,8 +686,8 @@ const ViewQuotes = () => {
                                                 if (e.target.checked) {
                                                     const firstValue = travelAgentWatch(`rejectionReason[0]`) || "";
                                                     setSharedReason(firstValue);
-                                                    quotes.forEach(q =>
-                                                        travelAgentSetValue(`rejectionReason`, firstValue)
+                                                    quotes.forEach((item, index) =>
+                                                        travelAgentSetValue(`rejectionReason[${index}]`, firstValue)
                                                     );
                                                 }
                                             }}
@@ -714,14 +701,13 @@ const ViewQuotes = () => {
 
                             {quotes.map((quote, index) => {
                                 if (quote.id !== acceptedQuoteId) {
-                                    travelAgentSetValue(`rejectedQuote[${index}]`, quote.id);
                                     return (
                                         <React.Fragment key={quote.id}>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
                                                 <Typography sx={{ lineHeight: '14px' }}>
                                                     {quote?.client?.name}
                                                     <Typography component='span' sx={{ fontSize: '12px', display: 'inline-block', width: '100%' }} color="text.secondary">
-                                                        Quote Amount:  {applyCurrencyFormat(quote?.total)}
+                                                        Quote Amount:  {quote?.total}
                                                     </Typography>
                                                 </Typography>
                                                 <CustomTextField
@@ -729,11 +715,11 @@ const ViewQuotes = () => {
                                                     size="small"
                                                     error={!!travelAgentErrors.rejectionReason}
                                                     helperText={travelAgentErrors.rejectionReason?.message as string}
-                                                    value={sameReason ? sharedReason : travelAgentWatch(`rejectionReason[${index}]`)}
+                                                    value={sameReason ? sharedReason : travelAgentWatch(`rejectionReason[${index}]`) || ""}
                                                     onChange={(e) => {
                                                         if (sameReason) {
                                                             setSharedReason(e.target.value);
-                                                            quotes.forEach(q => travelAgentSetValue(`rejectionReason`, e.target.value));
+                                                            quotes.forEach((item, qindex) => travelAgentSetValue(`rejectionReason[${qindex}]`, e.target.value));
                                                         } else {
                                                             travelAgentSetValue(`rejectionReason[${index}]`, e.target.value);
                                                         }
