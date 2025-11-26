@@ -23,48 +23,48 @@ const UserMaster = () => {
   const [rowCount, setRowCount] = useState(0);
   const [search, setSearch] = useState("");
   const [sortModel, setSortModel] = useState<any>([{ field: "name", sort: "asc" }]);
-  const [status, setStatus] = useState<any[]>([{id: 1, status: 'Active'}, {id: 2, status: 'Inactive'}]);
+  const [status, setStatus] = useState<any[]>([{ id: 1, status: 'Active' }, { id: 2, status: 'Inactive' }]);
 
   const { user, setLoader, theme } = useAuth();
   const clientId = user?.client_id;
   // Fetch Users
   const fetchUsers = async () => {
-  setLoader(true)
-  try {
-    const sortBy = sortModel[0]?.field || "id";
-    const order = sortModel[0]?.sort || "asc";
-    const limit = pageSize;
-    const res = await fetch(
-      `${apiBaseUrl}/user?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
-        },
-      }
-    );
+    setLoader(true)
+    try {
+      const sortBy = sortModel[0]?.field || "id";
+      const order = sortModel[0]?.sort || "asc";
+      const limit = pageSize;
+      const res = await fetch(
+        `${apiBaseUrl}/user?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
+          },
+        }
+      );
 
-    const json = await res.json();
+      const json = await res.json();
 
-    const withSrNo = json.data.data.map((user: any, index: number) => ({ 
-      ...user,
-      srNo: page * pageSize + index + 1,
-      gender: user.gender != null ?user.gender.charAt(0).toUpperCase() + user.gender.slice(1):'',      
-      status: user.is_active == 1 ? "Active" : "Inactive",
-    }));
+      const withSrNo = json.data.data.map((user: any, index: number) => ({
+        ...user,
+        srNo: page * pageSize + index + 1,
+        gender: user.gender != null ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : '',
+        status: user.is_active == 1 ? "Active" : "Inactive",
+      }));
 
-    setData(withSrNo);
-    setRowCount(json.total); // from Laravel pagination response
-    //toast.success(json.message);
-    setLoader(false)
-  } catch (error) {
-    setLoader(false)
-    console.error("Error fetching users:", error);
-  }
-};
+      setData(withSrNo);
+      setRowCount(json.total); // from Laravel pagination response
+      //toast.success(json.message);
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+      console.error("Error fetching users:", error);
+    }
+  };
 
-// Fetch roles from API
+  // Fetch roles from API
   useEffect(() => {
     const fetchRoles = async () => {
       setLoader(true)
@@ -159,9 +159,9 @@ const UserMaster = () => {
     const res = await fetch(url, {
       method,
       headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
-        },
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
+      },
       body: JSON.stringify(selectedUser),
     });
 
@@ -172,7 +172,7 @@ const UserMaster = () => {
       setAddRow(false);
       setSelectedUser(null);
       setModalName(false);
-    }else{
+    } else {
       const errorData = await res.json();
       toast.error(errorData.message || "Something went wrong! Please try again later.");
     }
@@ -184,16 +184,16 @@ const UserMaster = () => {
       const res = await fetch(`${apiBaseUrl}/user/${selectedUser.id}`, {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
-          },
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
+        },
       });
       if (res.ok) {
-          const data = await res.json();
-          toast.success(data.message || "Record deleted successfully");
-          fetchUsers();
-          setDeleteModal(false);
-          
+        const data = await res.json();
+        toast.success(data.message || "Record deleted successfully");
+        fetchUsers();
+        setDeleteModal(false);
+
       } else {
         const errorData = await res.json();
         toast.error(errorData.message || "Failed to delete user"); // ❌ error toast
@@ -205,7 +205,7 @@ const UserMaster = () => {
       setLoader(false)
     }
 
-    
+
   };
   return (
     <Box>
@@ -234,7 +234,7 @@ const UserMaster = () => {
         headerText={modalName ? "Edit User" : "Add User"}
       >
         <Grid container spacing={2}>
-          <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
+          <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
             <CustomTextField
               inputLabel="Email"
               placeholder="Enter Email"
@@ -243,14 +243,14 @@ const UserMaster = () => {
               InputProps={{ readOnly: modalName }}
             />
           </Grid>
-          <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
+          <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
             <SingleSelect   // gives value and onChange from react-hook-form
-                inputLabel="Role"
-                size="small"
-                name="role"
-                value={selectedUser?.role_id || ""}
-                onChange={(e) => setSelectedUser({ ...selectedUser, role_id: e.target.value })}
-              >
+              inputLabel="Role"
+              size="small"
+              name="role"
+              value={roles.find((item) => selectedUser?.role_id === item.id)?.name || ""}
+              onChange={(e) => setSelectedUser({ ...selectedUser, role_id: e.target.value })}
+            >
               {roles.map((role) => (
                 <MenuItem key={role.id} value={role.id}>
                   {role.name}
@@ -258,15 +258,15 @@ const UserMaster = () => {
               ))}
             </SingleSelect>
           </Grid>
-          { modalName &&  
-            <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
+          {modalName &&
+            <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
               <SingleSelect
-                  inputLabel="Status"
-                  size="small"
-                  name="status"
-                  value={selectedUser?.is_active || ""}
-                  onChange={(e) => setSelectedUser({ ...selectedUser, is_active: e.target.value })}
-                >
+                inputLabel="Status"
+                size="small"
+                name="status"
+                value={status.find((item) => selectedUser?.is_active === item.id)?.status || ""}
+                onChange={(e) => setSelectedUser({ ...selectedUser, is_active: e.target.value })}
+              >
                 {status.map((status) => (
                   <MenuItem key={status.id} value={status.id}>
                     {status.status}
@@ -276,21 +276,21 @@ const UserMaster = () => {
             </Grid>
           }
           {user?.client_id == 1 && !modalName &&
-          <Grid size={{lg: 6, md: 6, sm: 12, xs: 12}}>
-            <SingleSelect
+            <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+              <SingleSelect
                 inputLabel="Client Name"
                 size="small"
                 name="client_id"
-                value={selectedUser?.client_id || ""}
+                value={clients.find((item) => selectedUser?.client_id === item.id)?.name || ""}
                 onChange={(e) => setSelectedUser({ ...selectedUser, client_id: e.target.value })}
               >
-              {clients.map((client) => (
-                <MenuItem key={client.id} value={client.id}>
-                  {client.name}
-                </MenuItem>
-              ))}
-            </SingleSelect>
-          </Grid>
+                {clients.map((client) => (
+                  <MenuItem key={client.id} value={client.id}>
+                    {client.name}
+                  </MenuItem>
+                ))}
+              </SingleSelect>
+            </Grid>
           }
           {/* more fields */}
           <Grid size={{ xs: 12 }}>

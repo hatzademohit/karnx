@@ -9,7 +9,7 @@ import { apiBaseUrl } from '@/karnx/api';
 import { toast } from 'react-toastify';
 import { useAuth } from "@/app/context/AuthContext";
 
-interface RoleProps{
+interface RoleProps {
   name: string;
   id: string;
   client_id: number;
@@ -34,37 +34,37 @@ const RoleMaster = () => {
   // Fetch Users
   const fetchRecords = async () => {
     setLoader(true)
-  try {
-    const sortBy = sortModel[0]?.field || "id";
-    const order = sortModel[0]?.sort || "asc";
+    try {
+      const sortBy = sortModel[0]?.field || "id";
+      const order = sortModel[0]?.sort || "asc";
 
-    const res = await fetch(
-      `${apiBaseUrl}/role?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
-        },
-      }
-    );
+      const res = await fetch(
+        `${apiBaseUrl}/role?client_id=${clientId}&page=${page + 1}&limit=${pageSize}&search=${search}&sortBy=${sortBy}&order=${order}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 your login token
+          },
+        }
+      );
 
-    const json = await res.json();
+      const json = await res.json();
 
-    const withSrNo = json.data.map((role: any, index: number) => ({ 
-      ...role,
-      srNo: page * pageSize + index + 1,     
-      status: role.is_active == 1 ? "Active" : "Inactive",      
-    }));
+      const withSrNo = json.data.map((role: any, index: number) => ({
+        ...role,
+        srNo: page * pageSize + index + 1,
+        status: role.is_active == 1 ? "Active" : "Inactive",
+      }));
 
-    setData(withSrNo);
-    setRowCount(json.total); // from Laravel pagination response
-    setLoader(false)
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    setLoader(false)
-  }
-};
+      setData(withSrNo);
+      setRowCount(json.total); // from Laravel pagination response
+      setLoader(false)
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setLoader(false)
+    }
+  };
 
 
   useEffect(() => {
@@ -138,9 +138,9 @@ const RoleMaster = () => {
     const res = await fetch(url, {
       method,
       headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.token}`, // 👈 your login token
-        },
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.token}`, // 👈 your login token
+      },
       body: JSON.stringify(roles),
     });
 
@@ -149,7 +149,7 @@ const RoleMaster = () => {
       setAddRow(false);
       const data = await res.json();
       toast.success(data.message || "Record updated successfully");
-    }else{
+    } else {
       const errorData = await res.json();
       toast.error(errorData.message || "Something went wrong! Please try again later.");
     }
@@ -160,16 +160,16 @@ const RoleMaster = () => {
       const res = await fetch(`${apiBaseUrl}/role/${roles.id}`, {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.token}`, // 👈 your login token
-          },
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.token}`, // 👈 your login token
+        },
       });
       if (res.ok) {
-          const data = await res.json();
-          toast.success(data.message || "Record deleted successfully");
-          fetchRecords();
-          setDeleteModal(false);
-          
+        const data = await res.json();
+        toast.success(data.message || "Record deleted successfully");
+        fetchRecords();
+        setDeleteModal(false);
+
       } else {
         const errorData = await res.json();
         toast.error(errorData.message || "Failed to delete user"); // ❌ error toast
@@ -177,7 +177,7 @@ const RoleMaster = () => {
     } catch (err) {
       console.error("Error deleting user:", err);
       toast.error("Something went wrong! Please try again later.");
-    }    
+    }
   };
 
   return (
@@ -187,7 +187,7 @@ const RoleMaster = () => {
       <MUIDataGrid
         gridColumns={columns}
         gridRows={data}
-       // paginationMode="server"
+        // paginationMode="server"
         sortingMode="server"
         rowCount={rowCount}
         page={page}
@@ -207,7 +207,7 @@ const RoleMaster = () => {
         headerText={modalName ? "Edit Role" : "Add Role"}
       >
         <Grid container spacing={2}>
-         <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+          <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
             <CustomTextField
               inputLabel="Role Name"
               placeholder="Enter Role Name"
@@ -216,21 +216,21 @@ const RoleMaster = () => {
             />
           </Grid>
           {user?.client_id == 1 && !modalName &&
-         <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
-            <SingleSelect
+            <Grid size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+              <SingleSelect
                 inputLabel="Client Name"
                 size="small"
                 name="client_id"
-                value={roles?.client_id || ""}
+                value={clients.find((item) => roles?.client_id === item.id)?.name || ""}
                 onChange={(e) => setRecords({ ...roles, client_id: e.target.value })}
               >
-              {clients && clients?.map((client) => (
-                <MenuItem key={client.id} value={client.id}>
-                  {client.name}
-                </MenuItem>
-              ))}
-            </SingleSelect>
-          </Grid>
+                {clients && clients?.map((client) => (
+                  <MenuItem key={client.id} value={client.id}>
+                    {client.name}
+                  </MenuItem>
+                ))}
+              </SingleSelect>
+            </Grid>
           }
           {/* more fields */}
           <Grid size={{ lg: 12, md: 12 }}>

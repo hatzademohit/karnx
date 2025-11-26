@@ -1,6 +1,5 @@
 'use client'
 import { useAuth } from "@/app/context/AuthContext";
-import MUIDataGrid from "@/components/TableComp/MUIDataGrid";
 import {
   Box,
   Button,
@@ -14,12 +13,9 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
-import { GridColDef, GridSortModel } from "@mui/x-data-grid";
+import { GridSortModel } from "@mui/x-data-grid";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { apiBaseUrl } from "../api";
 import { toast } from "react-toastify";
@@ -66,14 +62,13 @@ type FormState = {
 };
 
 const FleetOverview = () => {
-  const { theme, hasPermission, user } = useAuth();
+  const { theme, hasPermission, user, setLoader } = useAuth();
   // Listing state
   const [fleetRows, setFleetRows] = useState<FleetRow[]>([]);
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
-  const [loading, setLoading] = useState<boolean>(false);
 
   // Form/dialog state
   const [openForm, setOpenForm] = useState(false);
@@ -189,7 +184,7 @@ const FleetOverview = () => {
   // Fetch assets (server-side)
   const fetchAssets = useCallback(async () => {
     try {
-      setLoading(true);
+      setLoader(true);
 
       const params = new URLSearchParams();
       params.set("page", String(page + 1)); // API 1-based
@@ -245,7 +240,7 @@ const FleetOverview = () => {
       setFleetRows([]);
       setRowCount(0);
     } finally {
-      setLoading(false);
+      setLoader(false);
     }
   }, [page, pageSize, sortModel, parseImages]);
 
@@ -456,75 +451,6 @@ const FleetOverview = () => {
     }
   };
 
-  // Columns
-  // const columns: GridColDef[] = useMemo(
-  //   () => [
-  //     {
-  //       field: "imageUrls",
-  //       headerName: "Image",
-  //       width: 110,
-  //       sortable: false,
-  //       filterable: false,
-  //       renderCell: (params) => {
-  //         const first = (params.row.imageUrls && params.row.imageUrls[0]) || "";
-  //         return (
-  //           <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-  //             <Avatar
-  //               variant="rounded"
-  //               src={first}
-  //               alt={params.row.asset_name}
-  //               sx={{ width: 90, height: 56, borderRadius: 1 }}
-  //             />
-  //           </Box>
-  //         );
-  //       },
-  //     },
-  //     {
-  //       field: "client_id",
-  //       headerName: "Client",
-  //       width: 180,
-  //       valueGetter: (params) => {
-  //         const row = params?.row as any;
-  //         return row?.client?.name ?? row?.client_id ?? "";
-  //       },
-  //     },
-  //     { field: "asset_name", headerName: "Asset Name", flex: 1, minWidth: 180 },
-  //     { field: "registration_no", headerName: "Registration No", minWidth: 160 },
-  //     { field: "aircraft_model", headerName: "Aircraft Model", minWidth: 160 },
-  //     { field: "aircraft_type", headerName: "Aircraft Type", minWidth: 140 },
-  //     { field: "capacity", headerName: "Capacity", minWidth: 110, type: "number" },
-  //     { field: "cabin_size", headerName: "Cabin Size", minWidth: 140 },
-  //     { field: "status", headerName: "Status", minWidth: 120 },
-  //     {
-  //       field: "actions",
-  //       headerName: "Actions",
-  //       width: 120,
-  //       sortable: false,
-  //       filterable: false,
-  //       renderCell: (params) => (
-  //         <Stack direction="row" spacing={1} alignItems="center" height='100%'>
-  //           <Tooltip title="View" arrow>
-  //             <IconButton size="small" onClick={() => handleView(params.row)}>
-  //               <VisibilityIcon fontSize="small" />
-  //             </IconButton>
-  //           </Tooltip>
-  //           <Tooltip title="Edit" arrow>
-  //             <IconButton size="small" onClick={() => handleEdit(params.row)}>
-  //               <EditIcon fontSize="small" />
-  //             </IconButton>
-  //           </Tooltip>
-  //           {/*<Tooltip title="Delete" arrow>
-  //             <IconButton size="small" color="error" onClick={() => handleDelete(params.row)}>
-  //               <DeleteIcon fontSize="small" />
-  //             </IconButton>
-  //           </Tooltip>*/}
-  //         </Stack>
-  //       ),
-  //     },
-  //   ],
-  //   []
-  // );
-
   // Show-entries select
   /*const pageSizeSelector = (
     <FormControl size="small" sx={{ minWidth: 160 }}>
@@ -557,33 +483,6 @@ const FleetOverview = () => {
         <Typography component="h2" variant="h2" sx={{ color: theme?.heading?.color, mb: 2 }}>
           Fleet Master
         </Typography>
-
-        {/* <MUIDataGrid
-          gridColumns={columns}
-          gridRows={fleetRows}
-          // Toolbar
-          buttonText="Add Fleet"
-          onClick={handleOpenAdd}
-          exportButtton={false}
-          fileName="fleet"
-          fileHeading="Fleet"
-          rowHeight={64}
-          //selectFilter={pageSizeSelector}
-          // Server-side controls
-          paginationMode="server"
-          sortingMode="server"
-          rowCount={rowCount}
-          page={page}
-          pageSize={pageSize === Number.MAX_SAFE_INTEGER ? rowCount || 1000000 : pageSize}
-          onPageSizeChange={(model: { page: number; pageSize: number }) => {
-            setPage(model.page);
-            setPageSize(model.pageSize);
-          }}
-          onSortModelChange={(model: GridSortModel) => {
-            setSortModel(model);
-            setPage(0);
-          }}
-        /> */}
 
         <CardDataGrid
           buttonText={hasPermission && hasPermission(['fleet create']) ? 'Add Fleet' : undefined}
@@ -643,15 +542,9 @@ const FleetOverview = () => {
             </Grid>
 
             <Grid size={{ lg: 4, md: 6, sm: 12 }}>
-              {/* <CustomTextField
-                inputLabel="Aircraft Type"
-                value={form.aircraft_type_id}
-                onChange={(e) => handleFormChange("aircraft_type_id", e.target.value)}
-                size="small"
-              /> */}
               <SingleSelect
                 inputLabel="Aircraft Type"
-                value={form.aircraft_type_id || 0}
+                value={assetType.find((item) => form.aircraft_type_id === item.id)?.name || ""}
                 onChange={(e) => handleFormChange("aircraft_type_id", Number(e.target.value))}
                 size='small'
               >

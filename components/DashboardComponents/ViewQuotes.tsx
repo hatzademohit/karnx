@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField, FormControlLabel, Checkbox } from "@mui/material";
 import { CustomModal, CustomTextField } from "@/components";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
@@ -131,6 +131,7 @@ const ViewQuotes = () => {
         setValue: travelAgentSetValue,
         watch: travelAgentWatch,
     } = useForm<any>({
+        mode: 'onChange',
         defaultValues: {
             commissionPercentage: "",
             rejectionReason: ''
@@ -312,6 +313,14 @@ const ViewQuotes = () => {
         </TableRow>
     );
 
+    const commissionCalculate = (key) => {
+        const currency = Number(applyCurrencyFormat(key));
+        const percentage = (currency * Number(travelAgentWatch("commissionPercentage"))) / 100;
+        const totalCommission = Number(applyCurrencyFormat(key)) + percentage;
+        const displayValue = Number(travelAgentWatch("commissionPercentage")) <= 0 ? currency : `${currency.toFixed(2)} + ${percentage.toFixed(2)} = ${totalCommission.toFixed(2)}`;
+        return displayValue;
+    };
+
     return (
         <>
             <Box>
@@ -452,6 +461,7 @@ const ViewQuotes = () => {
                 </Box>
             </Box>
 
+            {/* View Modal */}
             <CustomModal headerText={<Box>Quote Details <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
                 {viewedQuote.clientName}
             </Typography></Box>} open={viewQuoteDetails} setOpen={setViewQuoteDetails} dataClose={() => setViewQuoteDetails(false)} className="modal-lg">
@@ -717,12 +727,12 @@ const ViewQuotes = () => {
                                 message: "Enter a valid number (e.g. 5 or 10.5)",
                             },
                             validate: (value) =>
-                                Number(value) >= 0 && Number(value) <= 100
+                                Number(value) >= 0 && Number(value) <= 99
                                     ? true
-                                    : "Percentage must be between 0 and 100",
+                                    : "Percentage must be between 0 and 99",
                         })}
                     />
-                    {nonRejectedQuotes.length > 0 &&
+                    {nonRejectedQuotes?.length > 0 &&
                         <Card elevation={2} sx={{ mt: 2 }}>
                             <CardContent>
                                 <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
@@ -756,7 +766,7 @@ const ViewQuotes = () => {
                                     if (quote.id !== acceptedQuoteId && quote.is_selected !== 'rejected') {
                                         return (
                                             <React.Fragment key={quote.id}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, justifyContent: 'space-between' }}>
                                                     <Typography sx={{ lineHeight: '14px' }}>
                                                         {quote?.client?.name}
                                                         <Typography component='span' sx={{ fontSize: '12px', display: 'inline-block', width: '100%' }} color="text.secondary">
@@ -796,14 +806,14 @@ const ViewQuotes = () => {
                             </Typography>
 
                             {[
-                                ["Base Fare:", applyCurrencyFormat(acceptedQuote.base_fare)],
-                                ["Fuel Surcharge:", applyCurrencyFormat(acceptedQuote.fluel_cost)],
-                                ["Taxes:", applyCurrencyFormat(acceptedQuote.taxes_fees)],
-                                ["Handling Fees:", applyCurrencyFormat(acceptedQuote.handling_fees)],
-                                ["Catering:", applyCurrencyFormat(acceptedQuote.catering_fees)],
-                                ["Crew Fees:", applyCurrencyFormat(acceptedQuote.crew_fees)],
+                                ["Base Fare:", commissionCalculate(acceptedQuote.base_fare)],
+                                ["Fuel Surcharge:", commissionCalculate(acceptedQuote.fluel_cost)],
+                                ["Taxes:", commissionCalculate(acceptedQuote.taxes_fees)],
+                                ["Handling Fees:", commissionCalculate(acceptedQuote.handling_fees)],
+                                ["Catering:", commissionCalculate(acceptedQuote.catering_fees)],
+                                ["Crew Fees:", commissionCalculate(acceptedQuote.crew_fees)],
                             ].map(([label, value]) => (
-                                <Box key={label} sx={{ display: "flex", justifyContent: "space-between", mb: '5px', }}>
+                                <Box key={label as any} sx={{ display: "flex", justifyContent: "space-between", mb: '5px', }}>
                                     <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
                                         {label}
                                     </Typography>
@@ -815,7 +825,7 @@ const ViewQuotes = () => {
 
                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                 <Typography variant="h6">Total</Typography>
-                                <Typography variant="h6"> {applyCurrencyFormat(acceptedQuote.total)} </Typography>
+                                <Typography variant="h6"> {commissionCalculate(acceptedQuote?.total)} </Typography>
                             </Box>
                         </CardContent>
                     </Card>

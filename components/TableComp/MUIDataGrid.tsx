@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import { exportToExcel } from './ExportExcel'
 
-export interface MUIDataGridProps{
+export interface MUIDataGridProps {
   headingText?: string;
   gridColumns?: any;
   gridRows?: any;
@@ -27,7 +27,7 @@ export interface MUIDataGridProps{
   paginationMode?: any;
 }
 
-const MUIDataGrid:React.FC<MUIDataGridProps> = ({
+const MUIDataGrid: React.FC<MUIDataGridProps> = ({
   headingText,
   gridColumns,
   gridRows,
@@ -38,7 +38,7 @@ const MUIDataGrid:React.FC<MUIDataGridProps> = ({
   exportButtton,
   fileName,
   fileHeading,
-  rowHeight= 43,
+  rowHeight = 43,
   getRowClassName,
   sortingMode,
   rowCount,
@@ -48,30 +48,30 @@ const MUIDataGrid:React.FC<MUIDataGridProps> = ({
   onSortModelChange,
   paginationMode
 }) => {
-const [searchText, setSearchText] = useState("");
-const theme = useTheme();
+  const [searchText, setSearchText] = useState("");
+  const theme = useTheme();
 
-const filteredRows = useMemo(() => {  
-  if (!gridRows || gridRows.length === 0) return [];
-  if (searchText.trim().length > 0) {
-    return gridRows.filter((row) =>
-      Object.values(row).some((value) =>
-        String(value).toLowerCase().includes(searchText.toLowerCase())
-      )
-    );
+  const filteredRows = useMemo(() => {
+    if (!gridRows || gridRows.length === 0) return [];
+    if (searchText.trim().length > 0) {
+      return gridRows.filter((row) =>
+        Object.values(row).some((value) =>
+          String(value).toLowerCase().includes(searchText.toLowerCase())
+        )
+      );
+    }
+    return gridRows;
+  }, [searchText, gridRows]);
+
+  const handleExportExcel = () => {
+    exportToExcel(gridRows, gridColumns, fileName, fileHeading)
   }
-  return gridRows;
-}, [searchText, gridRows]);
 
-const handleExportExcel = () => {
-  exportToExcel(gridRows, gridColumns, fileName, fileHeading)
-}
-
-  return(
-    <Box className='page-wrapper' sx={{width: '100%'}}>
+  return (
+    <Box className='page-wrapper' sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', mb: '5px', justifyContent: 'space-between', alignContent: 'center', gap: '10px' }}>
-        { buttonText && <Button variant="outlined" className="btn btn-blue" disableElevation onClick={onClick}>{buttonText}</Button> }
-        {headingText && <Typography component='h3' variant="h3" sx={{color: theme?.common?.redColor}}>{headingText}</Typography>}
+        {buttonText && <Button variant="outlined" className="btn btn-blue" disableElevation onClick={onClick}>{buttonText}</Button>}
+        {headingText && <Typography component='h3' variant="h3" sx={{ color: theme?.common?.redColor }}>{headingText}</Typography>}
         {selectFilter}
         {exportButtton &&
           <Button
@@ -90,13 +90,13 @@ const handleExportExcel = () => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           placeholder='Search...'
-          sx= {{ maxWidth: '250px', width: '100%', ml: 'auto' }}
-          size= 'small'
+          sx={{ maxWidth: '250px', width: '100%', ml: 'auto' }}
+          size='small'
           className='input-search'
           slotProps={{
             input: {
-                startAdornment: <SearchIcon sx={{color: "rgba(0, 0, 0, 0.54)"}} />,
-                endAdornment: <IconButton size="small" onClick={ () => setSearchText('')}><CloseIcon sx={{color: "rgba(0, 0, 0, 0.54)"}} /></IconButton>,
+              startAdornment: <SearchIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />,
+              endAdornment: <IconButton size="small" onClick={() => setSearchText('')}><CloseIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} /></IconButton>,
             },
           }}
         />
@@ -109,7 +109,7 @@ const handleExportExcel = () => {
           pagination: {
             paginationModel: { page: page, pageSize: pageSize },
           },
-        }}  
+        }}
         pageSizeOptions={[10, 20, 25, 50, 100]}
         disableColumnMenu
         rowHeight={rowHeight}

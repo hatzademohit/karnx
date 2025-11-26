@@ -196,34 +196,34 @@ const RoleUserPermission: React.FC = () => {
   };
 
   // -------------- Mutations
- const handlePermissionChange = (moduleId: string | number, permissionId: string | number, checked: boolean) => {
-  setPermissions((prev: any[]) => {
-    const index = prev.findIndex((p: any) => p.module_id === moduleId);
-    if (index === -1) {
-      return [...prev, {
-        module_id: moduleId,
-        permissions: { [permissionId]: checked }
-      }];
-    } else {
-      const next = [...prev];
-      next[index] = {
-        ...next[index],
-        permissions: {
-          ...next[index].permissions,
-          [permissionId]: checked,
-        }
-      };
-      return next;
-    }
-  });
-};
+  const handlePermissionChange = (moduleId: string | number, permissionId: string | number, checked: boolean) => {
+    setPermissions((prev: any[]) => {
+      const index = prev.findIndex((p: any) => p.module_id === moduleId);
+      if (index === -1) {
+        return [...prev, {
+          module_id: moduleId,
+          permissions: { [permissionId]: checked }
+        }];
+      } else {
+        const next = [...prev];
+        next[index] = {
+          ...next[index],
+          permissions: {
+            ...next[index].permissions,
+            [permissionId]: checked,
+          }
+        };
+        return next;
+      }
+    });
+  };
 
   const handleSavePermissions = async () => {
     setLoader(true);
     // Build payload compatible with backend. If your backend expects permission IDs instead of names,
     // convert below using `permissionIdToName` inverse.
     const payload = permissions.map((p) => ({
-        permissions: Object.keys(p.permissions).filter((key) => p.permissions[key]),        
+      permissions: Object.keys(p.permissions).filter((key) => p.permissions[key]),
     }));
 
     let url = "";
@@ -275,47 +275,47 @@ const RoleUserPermission: React.FC = () => {
       </Typography>
 
       <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} className="custom-tabs" sx={{ mb: "24px" }}>
-        { hasPermission('role permission update') && (
-            <Tab label="By Role" />
+        {hasPermission('role permission update') && (
+          <Tab label="By Role" />
         )}
 
-        { hasPermission('user permission update') && (
+        {hasPermission('user permission update') && (
           <Tab label="By User" />
         )}
       </Tabs>
 
       <Box sx={{ p: 2, border: '1px solid #cccccc' }}>
-		<Grid container spacing={2} sx={{ mb: 4 }}>
-			<Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
-				{activeTab === 0 ? (
-					<SingleSelect
-						inputLabel='Role'
-						value={selectedRole}
-						onChange={(e) => setSelectedRole(e.target.value)}
-						size='small'
-					>
-						{roles.map((role) => (
-						<MenuItem key={role.id} value={role.id}>
-							{role.name}
-						</MenuItem>
-						))}
-					</SingleSelect>
-				) : (
-					<SingleSelect
-						inputLabel='User'
-						value={selectedUser}
-						onChange={(e) => setSelectedUser(e.target.value)}
-						size='small'
-					>
-						{users.map((u) => (
-						<MenuItem key={u.id} value={u.id}>
-							{u.name}
-						</MenuItem>
-						))}
-					</SingleSelect>
-				)}
-            </Grid>
+        <Grid container spacing={2} sx={{ mb: 4 }}>
+          <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
+            {activeTab === 0 ? (
+              <SingleSelect
+                inputLabel='Role'
+                value={roles.find((item) => selectedRole === item.id)?.name || ""}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                size='small'
+              >
+                {roles.map((role) => (
+                  <MenuItem key={role.id} value={role.id}>
+                    {role.name}
+                  </MenuItem>
+                ))}
+              </SingleSelect>
+            ) : (
+              <SingleSelect
+                inputLabel='User'
+                value={users.find((item) => selectedUser === item.id)?.name || ""}
+                onChange={(e) => setSelectedUser(e.target.value)}
+                size='small'
+              >
+                {users.map((u) => (
+                  <MenuItem key={u.id} value={u.id}>
+                    {u.name}
+                  </MenuItem>
+                ))}
+              </SingleSelect>
+            )}
           </Grid>
+        </Grid>
 
         {(activeTab === 0 ? selectedRole : selectedUser) ? (
           <Box>
@@ -349,7 +349,7 @@ const RoleUserPermission: React.FC = () => {
                         background: "#f9f9f9",
                       }}
                     >
-                      <Box sx={{ mb: 0.7, borderBottom: "1px solid #c1bebeff",  bottomdisplay: "inline-block", pb: 0.5}}>
+                      <Box sx={{ mb: 0.7, borderBottom: "1px solid #c1bebeff", bottomdisplay: "inline-block", pb: 0.5 }}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -358,8 +358,9 @@ const RoleUserPermission: React.FC = () => {
                               onChange={(e) => {
                                 setPermissions((prev) =>
                                   prev.map((p) =>
-                                    p.module_id === module.id ? { ...p,
-                                      permissions: { ...p.permissions, ...Object.fromEntries(childKeys.map((k) => [k, e.target.checked])),},
+                                    p.module_id === module.id ? {
+                                      ...p,
+                                      permissions: { ...p.permissions, ...Object.fromEntries(childKeys.map((k) => [k, e.target.checked])), },
                                     } : p
                                   )
                                 );

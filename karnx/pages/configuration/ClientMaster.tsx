@@ -16,7 +16,7 @@ const ClientMaster = () => {
   const [modalName, setModalName] = useState<boolean>(false)
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedClient, setSelectedClient] = useState<any>(null);
-  const [status, setStatus] = useState<any[]>([{id: 1, status: 'Active'}, {id: 0, status: 'Inactive'}]);
+  const [status, setStatus] = useState<any[]>([{ id: 1, status: 'Active' }, { id: 0, status: 'Inactive' }]);
 
   // Pagination, Search, Sort states
   const [page, setPage] = useState(0);
@@ -321,7 +321,7 @@ const ClientMaster = () => {
                 inputLabel="Status"
                 size="small"
                 name="status"
-                value={selectedClient?.is_active || ""}
+                value={status.find((item) => selectedClient?.is_active === item.id)?.status || ""}
                 onChange={(e) => setSelectedClient({ ...selectedClient, is_active: e.target.value })}
               >
                 {status.map((status) => (
