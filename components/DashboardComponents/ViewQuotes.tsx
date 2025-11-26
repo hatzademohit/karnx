@@ -21,6 +21,7 @@ const ViewQuotes = () => {
     const [quotes, setQuotes] = useState([]);
     const [bestQuotes, setBestQuotes] = useState<any>(null);
     const [acceptedQuoteId, setAcceptedQuoteId] = useState<Number>(null);
+    const [acceptedQuote, setAcceptedQuote] = useState<any>([]);
     const [viewQuoteDetails, setViewQuoteDetails] = useState<boolean>(false);
     const [rejectionModal, setRejectionModal] = useState<boolean>(false);
     const [travelAgentModal, setTravelAgentModal] = useState<boolean>(false);
@@ -90,12 +91,14 @@ const ViewQuotes = () => {
         setViewQuoteDetails(true);
     };
 
-    const acceptQuote = (id) => {
+    const acceptQuote = (id, acceptedQuote) => {
+        setAcceptedQuote(acceptedQuote);
         setAcceptedQuoteId(id);
     }
 
     const cancelAcception = () => {
         setAcceptedQuoteId(null);
+        setAcceptedQuote([]);
     }
 
     const rejectQuote = (id) => {
@@ -381,7 +384,7 @@ const ViewQuotes = () => {
                                                     :
                                                     <>
                                                         <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                                                            <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id)}>
+                                                            <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id, q)}>
                                                                 {isAccepted ? "Quote Accepted" : "Accept Quote"}
                                                             </Button>
                                                             {isAccepted && (
@@ -710,37 +713,39 @@ const ViewQuotes = () => {
                             {/* {quotes.filter((q) => q.id !== acceptedQuoteId).map((quote) => { */}
 
                             {quotes.map((quote, index) => {
-                                travelAgentSetValue(`rejectedQuote[${index}]`, quote.id);
-                                return (
-                                    <React.Fragment key={quote.id}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
-                                            <Typography sx={{ lineHeight: '14px' }}>
-                                                {quote?.client?.name}
-                                                <Typography component='span' sx={{ fontSize: '12px', display: 'inline-block', width: '100%' }} color="text.secondary">
-                                                    Quote Amount:  {quote?.total}
+                                if (quote.id !== acceptedQuoteId) {
+                                    travelAgentSetValue(`rejectedQuote[${index}]`, quote.id);
+                                    return (
+                                        <React.Fragment key={quote.id}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1, justifyContent: 'space-between' }}>
+                                                <Typography sx={{ lineHeight: '14px' }}>
+                                                    {quote?.client?.name}
+                                                    <Typography component='span' sx={{ fontSize: '12px', display: 'inline-block', width: '100%' }} color="text.secondary">
+                                                        Quote Amount:  {applyCurrencyFormat(quote?.total)}
+                                                    </Typography>
                                                 </Typography>
-                                            </Typography>
-                                            <CustomTextField
-                                                placeholder="Enter rejection reason"
-                                                size="small"
-                                                error={!!travelAgentErrors.rejectionReason}
-                                                helperText={travelAgentErrors.rejectionReason?.message as string}
-                                                value={sameReason ? sharedReason : travelAgentWatch(`rejectionReason[${index}]`)}
-                                                onChange={(e) => {
-                                                    if (sameReason) {
-                                                        setSharedReason(e.target.value);
-                                                        quotes.forEach(q => travelAgentSetValue(`rejectionReason`, e.target.value));
-                                                    } else {
-                                                        travelAgentSetValue(`rejectionReason[${index}]`, e.target.value);
-                                                    }
-                                                }}
-                                                sx={{ maxWidth: '250px' }}
-                                            />
+                                                <CustomTextField
+                                                    placeholder="Enter rejection reason"
+                                                    size="small"
+                                                    error={!!travelAgentErrors.rejectionReason}
+                                                    helperText={travelAgentErrors.rejectionReason?.message as string}
+                                                    value={sameReason ? sharedReason : travelAgentWatch(`rejectionReason[${index}]`)}
+                                                    onChange={(e) => {
+                                                        if (sameReason) {
+                                                            setSharedReason(e.target.value);
+                                                            quotes.forEach(q => travelAgentSetValue(`rejectionReason`, e.target.value));
+                                                        } else {
+                                                            travelAgentSetValue(`rejectionReason[${index}]`, e.target.value);
+                                                        }
+                                                    }}
+                                                    sx={{ maxWidth: '250px' }}
+                                                />
 
-                                        </Box>
-                                        {(quotes.length != 0) && (index != quotes.length - 1) && <Divider sx={{ my: 1 }} />}
-                                    </React.Fragment>
-                                )
+                                            </Box>
+                                            {(quotes.length != 0) && (index != quotes.length - 1) && <Divider sx={{ my: 1 }} />}
+                                        </React.Fragment>
+                                    )
+                                }
                             })}
                         </CardContent>
                     </Card>
