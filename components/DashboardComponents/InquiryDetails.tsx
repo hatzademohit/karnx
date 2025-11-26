@@ -15,7 +15,7 @@ export interface InquiryDetailsProps {
 }
 const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperatorTabs, itsTravelAgent }) => {
   const theme = useTheme();
-  const { assignedOperatorLength } = useInquiryDetails();
+  const { assignedOperatorLength, inquiryRowData } = useInquiryDetails();
   const { user } = useAuth()
   const tabs = [
     {
@@ -26,14 +26,14 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
     ...(!hideOperatorTabs
       ? [
         {
-          label: `Operators (${assignedOperatorLength})`,
+          label: `Operators (${inquiryRowData.operator_assigned || assignedOperatorLength})`,
           icon: <SettingsOutlinedIcon fontSize="small" />,
           content: <OperatorsTab inquiryId={inquiryData.id} />,
         },
       ]
       : []),
     {
-      label: `Quotes ${user.access_type !== 'Aircraft Operator' ? '(0)' : ''}`,
+      label: `Quotes ${user.access_type !== 'Aircraft Operator' ? `(${inquiryRowData.quote_received})` : ''}`,
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
       content: <QuoteTabs travelTab={itsTravelAgent} inquiryId={inquiryData.id} />,
     },

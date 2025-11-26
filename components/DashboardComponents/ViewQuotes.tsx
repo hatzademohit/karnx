@@ -53,7 +53,7 @@ const ViewQuotes = () => {
     // }
 
     const applyCurrencyFormat = (value: any) => {
-        if (value == null) return '0';
+        if (value == null) return '';
 
         return value.toLocaleString("en-IN");
     };
@@ -119,7 +119,7 @@ const ViewQuotes = () => {
     const onRejectionSubmit = async (data: RejectionFormData) => {
         const quoteId = quoteIdForRejection;
         try {
-            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/reject-quote`, body: { quoteId, inquiryId } });
+            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/reject-quote`, body: { quoteId, inquiryId, message: data.message } });
             if (res?.status === true) {
                 toast.success(res?.message || '');
                 setRejectionModal(false);
@@ -271,16 +271,22 @@ const ViewQuotes = () => {
                                                     {q[key]}
                                                 </Typography>
                                             </> :
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    whiteSpace: "pre-line",
-                                                    color: isRich ? "text.secondary" : "text.primary",
-                                                    fontWeight: isRich ? 400 : 500,
-                                                }}
-                                            >
-                                                {applyCurrencyFormat(q[key])}
-                                            </Typography>
+                                            label == 'Rejected Reason' && q.is_selected === 'rejected' && q[key] !== '' && q[key] !== null ?
+                                                <>
+                                                    <Typography sx={{ color: "red", fontWeight: 600 }}>
+                                                        {q[key]}
+                                                    </Typography>
+                                                </> :
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        whiteSpace: "pre-line",
+                                                        color: isRich ? "text.secondary" : "text.primary",
+                                                        fontWeight: isRich ? 400 : 500,
+                                                    }}
+                                                >
+                                                    {applyCurrencyFormat(q[key])}
+                                                </Typography>
                         }
                     </TableCell>
                 )
@@ -348,6 +354,7 @@ const ViewQuotes = () => {
                             {renderRow("Catering", "catering_fees")}
                             {renderRow("Key Amenities", "available_amenities", true)}
                             {renderRow("Included Service", "special_offers_promotions", true)}
+                            {renderRow("Rejected Reason", "rejected_reason", true)}
 
 
                             {user.access_type === 'Portal Admin' &&
