@@ -20,9 +20,9 @@ const QuoteDetails = ({ viewedQuote }) => {
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
                                     <FlightTakeoffIcon />
                                     <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>Departure:</Typography>
-                                    <Typography variant="h5">{viewedQuote.departure}</Typography>
+                                    <Typography variant="h5">{viewedQuote?.departure}</Typography>
                                     <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
-                                        Duration: {viewedQuote.flightTime}
+                                        Duration: {viewedQuote?.flightTime}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -31,9 +31,9 @@ const QuoteDetails = ({ viewedQuote }) => {
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
                                     <FlightLandIcon />
                                     <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>Return:</Typography>
-                                    <Typography variant="h5">{viewedQuote.return}</Typography>
+                                    <Typography variant="h5">{viewedQuote?.return}</Typography>
                                     <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
-                                        Duration: {viewedQuote.returnTime}
+                                        Duration: {viewedQuote?.returnTime}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -54,31 +54,31 @@ const QuoteDetails = ({ viewedQuote }) => {
                                 <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
                                     Model:
                                 </Typography>
-                                <Typography variant="h6">{viewedQuote.model}</Typography>
+                                <Typography variant="h6">{viewedQuote?.model}</Typography>
                             </Box>
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
                                 <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
                                     Year:
                                 </Typography>
-                                <Typography variant="h6">{viewedQuote.validityInYear}</Typography>
+                                <Typography variant="h6">{viewedQuote?.validityInYear}</Typography>
                             </Box>
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
                                 <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
                                     Capacity:
                                 </Typography>
-                                <Typography variant="h6">{viewedQuote.capacity}</Typography>
+                                <Typography variant="h6">{viewedQuote?.capacity}</Typography>
                             </Box>
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
                                 <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
                                     Range:
                                 </Typography>
-                                <Typography variant="h6">{viewedQuote.range}</Typography>
+                                <Typography variant="h6">{viewedQuote?.range}</Typography>
                             </Box>
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
                                 <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
                                     Speed:
                                 </Typography>
-                                <Typography variant="h6">{viewedQuote.speed}</Typography>
+                                <Typography variant="h6">{viewedQuote?.speed}</Typography>
                             </Box>
                         </Box>
                     </CardContent>
@@ -94,12 +94,12 @@ const QuoteDetails = ({ viewedQuote }) => {
                         </Typography>
 
                         {[
-                            ["Base Fare:", viewedQuote.baseFire],
-                            ["Fuel Surcharge:", viewedQuote.fluelCost],
-                            ["Taxes:", viewedQuote.taxesFees],
-                            ["Handling Fees:", viewedQuote.handlingFees],
-                            ["Catering:", viewedQuote.cateringFees],
-                            ["Crew Fees:", viewedQuote.crewFees],
+                            ["Base Fare:", viewedQuote?.baseFire],
+                            ["Fuel Surcharge:", viewedQuote?.fluelCost],
+                            ["Taxes:", viewedQuote?.taxesFees],
+                            ["Handling Fees:", viewedQuote?.handlingFees],
+                            ["Catering:", viewedQuote?.cateringFees],
+                            ["Crew Fees:", viewedQuote?.crewFees],
                         ].map(([label, value]) => (
                             <Box key={label} sx={{ display: "flex", justifyContent: "space-between", mb: '5px', }}>
                                 <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
@@ -113,7 +113,7 @@ const QuoteDetails = ({ viewedQuote }) => {
 
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Typography variant="h6">Total</Typography>
-                            <Typography variant="h6"> {viewedQuote.total} </Typography>
+                            <Typography variant="h6"> {viewedQuote?.total} </Typography>
                         </Box>
                     </CardContent>
                 </Card>
@@ -132,7 +132,7 @@ const QuoteDetails = ({ viewedQuote }) => {
                         </Typography>
                         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
                             {(viewedQuote?.aircraftAmenities ?? []).map((amenitie) => (
-                                <Typography key={amenitie.name} component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>{amenitie.name}</Typography>
+                                <Typography key={amenitie?.name} component="span" className="custom-pill" sx={{ backgroundColor: '#DCFCE7' }}>{amenitie?.name}</Typography>
                             ))}
                         </Box>
 
@@ -140,9 +140,52 @@ const QuoteDetails = ({ viewedQuote }) => {
                             Included Services
                         </Typography>
                         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                            {/* {viewedQuote.includedServices.map((services) => ( */}
-                            <Typography key={viewedQuote.includedServices} component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>{viewedQuote.includedServices}</Typography>
+                            {/* {viewedQuote?.includedServices.map((services) => ( */}
+                            <Typography key={viewedQuote?.includedServices} component="span" className="custom-pill" sx={{ backgroundColor: '#FEF3C7' }}>{viewedQuote?.includedServices}</Typography>
                             {/* ))} */}
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Grid>
+
+            {/* Additional sections can be added here if needed */}
+            {/* <Grid size={{ xs: 12 }}>
+                <Card elevation={2}>
+                    <CardContent>
+                        <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}> Additional Options </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1.5, backgroundColor: '#F1F3FF', p: 2, borderRadius: 1 }}>
+                                <Typography> Michelin-star chef catering </Typography>
+                                <Typography variant="h5">  3,50,000 </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1.5, backgroundColor: '#F1F3FF', p: 2, borderRadius: 1 }}>
+                                <Typography> Michelin-star chef catering </Typography>
+                                <Typography variant="h5">  3,50,000 </Typography>
+                            </Box>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Grid> */}
+
+            {/* Terms & Conditions  */}
+            <Grid size={{ xs: 12 }}>
+                <Card elevation={2}>
+                    <CardContent>
+                        <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>Terms & Conditions</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Typography> {viewedQuote?.cancelationCondition}  </Typography>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Grid>
+
+            {/* Additional Notes  */}
+            <Grid size={{ xs: 12 }}>
+                <Card elevation={2} sx={{ backgroundColor: '#F1F3FF' }}>
+                    <CardContent>
+                        <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>Additional Notes </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Typography> {viewedQuote?.additionalNotes} </Typography>
                         </Box>
                     </CardContent>
                 </Card>

@@ -1,5 +1,5 @@
 import React from "react";
-import { ViewQuotes, NoQuotes } from "@/components";
+import { ViewQuotes, NoQuotes, TravelAgentQuoteView } from "@/components";
 import { useAuth } from "@/app/context/AuthContext";
 import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
@@ -22,6 +22,7 @@ const QuoteTabs: React.FC<QuoteTabsProps> = ({ travelTab = false, inquiryId }) =
 			{statusIdNoQuote.includes(inqStsId) &&
 				<NoQuotes />
 			}
+			<TravelAgentQuoteView />
 		</>
 	);
 };
