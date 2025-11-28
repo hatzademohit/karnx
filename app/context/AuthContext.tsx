@@ -110,8 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const diffMinutes = currentTotalMinutes - loginTotalMinutes;
     // Session expired
     if (diffMinutes > 60) {
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("loginTime");
+      localStorage.clear();
       logout();
       // setUser(null);
       router.push("/");
@@ -178,11 +177,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     axios.request(config)
       .then(async (response) => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("loggedInUser");
-        localStorage.removeItem("loginTime");
-        localStorage.removeItem("permissions");
-        localStorage.removeItem("role");
+        localStorage.clear();
         // Clear middleware session cookies
         try {
           await fetch("/api/session/clear", { method: "POST" });
