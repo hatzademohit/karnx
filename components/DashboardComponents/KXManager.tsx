@@ -21,6 +21,7 @@ interface KXManagerCardCount {
     clients_decision?: number;
     confirmed_booking?: number;
     response_time?: number | string;
+    clients_decision_expiring_soon?: number;
 }
 
 const KXManager = () => {
@@ -36,7 +37,7 @@ const KXManager = () => {
     const cardInfoData = [
         { count: result?.new_inquiries || 0, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today', icon: <ErrorOutlineIcon /> },
         { count: result?.quote_pending || 0, label: 'Quotes Pending', status: 'Operator Response', desc: 'Avg 4.2h response', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.clients_decision || 0, label: 'Client Decisions', status: 'Pending Review', desc: '2 expiring soon', icon: <AlarmOnIcon /> },
+        { count: result?.clients_decision || 0, label: 'Client Decisions', status: 'Pending Review', desc: `${result?.clients_decision_expiring_soon} expiring soon`, icon: <AlarmOnIcon /> },
         { count: result?.confirmed_booking || 0, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue', icon: <CheckCircleOutlineIcon /> },
         { count: result?.response_time || 0, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
     ]

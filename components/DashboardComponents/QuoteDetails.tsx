@@ -2,9 +2,37 @@ import React from "react";
 import { Box, Typography, Divider, Grid, Card, CardContent, useTheme } from "@mui/material";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
-
-const QuoteDetails = ({ viewedQuote }) => {
+import { applyCurrencyFormat, parseToHoursMinutes } from "@/utils/commonFunctions";
+const QuoteDetails = ({ quote }) => {
     const theme = useTheme();
+    const { hours, minutes } = parseToHoursMinutes(quote.estimated_flight_time);
+    const viewedQuote = {
+        clientName: quote.client.name + ' · ' + quote.aircraft.asset_name,
+        id: quote.id,
+        departure: '08:30 - 17:00',
+        return: '09:30 - 18:15',
+        flightTime: hours + `h ` + minutes + `m`,
+        returnTime: "6h 35m",
+        model: quote.aircraft.aircraft_model,
+        validityInYear: '2025',
+        capacity: applyCurrencyFormat(quote.aircraft.capacity) + ' passangers',
+        range: applyCurrencyFormat(quote.aircraft.flying_range) + ' nm',
+        speed: 'Mach ' + applyCurrencyFormat(quote.aircraft.speed),
+
+        baseFire: applyCurrencyFormat(quote.base_fare),
+        fluelCost: applyCurrencyFormat(quote.fluel_cost),
+        taxesFees: applyCurrencyFormat(quote.taxes_fees),
+        crewFees: applyCurrencyFormat(quote.crew_fees),
+        handlingFees: applyCurrencyFormat(quote.handling_fees),
+        cateringFees: applyCurrencyFormat(quote.catering_fees),
+
+        aircraftAmenities: quote?.available_amenities,//['Wi-Fi tututu', 'In-seat power', 'Entertainment system', 'Conference area'],
+        includedServices: quote.special_offers_promotions,
+        total: applyCurrencyFormat(quote.total),
+        cancelationCondition: quote.cancelation_policy ? quote.cancelation_policy.name : '',
+        additionalNotes: quote.additional_notes || '',
+        quoteStatus: quote.is_selected || '',
+    };
     return (
         <>
             {/* Flight Details */}

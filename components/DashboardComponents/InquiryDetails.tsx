@@ -51,7 +51,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
             Created on {inquiryData?.created_on}
           </Typography>
         </Box>
-        <Chip label={inquiryData?.status} color="info" variant="filled" />
+        <Chip label={inquiryData?.status} sx={{ backgroundColor: inquiryData?.status_color, color: '#fff' }} variant="filled" />
       </Stack>
 
       {/* Tabs */}
