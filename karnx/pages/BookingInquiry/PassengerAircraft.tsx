@@ -4,7 +4,7 @@ import { PassengerInformation, PreferredServices, CrewRequirements, PurposeofTra
 import { useStep } from "@/app/context/StepProvider";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { passengerAircraftSchema, passengerAircraftSchemaType } from "./ValidationSchema";
+import { passengerAircraftSchema, passengerAircraftSchemaType } from "@/utils/ValidationSchema";
 
 const PassengerAircraft = () => {
     const { activeStep, handleBackClick, formData, setFormData, handleNextClick } = useStep();

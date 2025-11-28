@@ -62,7 +62,7 @@ const TravellerDetails = () => {
     return (
         <>
             <Grid size={{ xs: 12 }}>
-                <Box sx={{ mt: 3 }}>
+                <Box>
                     <Typography variant="h4">
                         Traveller Details
                     </Typography>

@@ -2,7 +2,7 @@
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TravellerDetails, ContactDetails, GSTDetails, BillingAddress, TravelAgentCommission } from "@/components";
-import { travelAgentSchema } from '@/karnx/pages/BookingInquiry/ValidationSchema'
+import { travelAgentSchema } from '@/utils/ValidationSchema'
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
@@ -31,7 +31,7 @@ const TravelAgentFullQuoteView = () => {
     return (
         <FormProvider {...methods}>
             <Typography component="form" onSubmit={methods.handleSubmit(onSubmit)}>
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={2}>
                     <TravellerDetails />
                     <ContactDetails />
                     <BillingAddress />

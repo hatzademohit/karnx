@@ -8,7 +8,7 @@ import { useEffect, useMemo } from "react";
 import { useStep } from "@/app/context/StepProvider";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { oneWaySchema, roundTripSchema, multiCitySchema } from "./ValidationSchema";
+import { oneWaySchema, roundTripSchema, multiCitySchema } from "@/utils/ValidationSchema";
 import { useAuth } from "@/app/context/AuthContext";
 
 const FlightDetails = () => {
@@ -40,7 +40,7 @@ const FlightDetails = () => {
             roundTriptoReturn: formData?.roundTriptoReturn || '',
             roundTripreturnDate: formData?.roundTripreturnDate || null,
             // Multi-city fields
-            multiCity:  formData?.multiCity?.map((item) => {
+            multiCity: formData?.multiCity?.map((item) => {
                 return {
                     multiCityfrom: item.multiCityfrom || '',
                     multiCityto: item.multiCityto || '',

@@ -3,7 +3,7 @@ import { CustomTextField } from "@/components";
 import { useStep } from "@/app/context/StepProvider";
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { contactSummarySchema, contactSummarySchemaType } from "./ValidationSchema";
+import { contactSummarySchema, contactSummarySchemaType } from "@/utils/ValidationSchema";
 import { useAuth } from "@/app/context/AuthContext";
 import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

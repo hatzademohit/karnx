@@ -24,7 +24,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '@/app/context/AuthContext';
 import { useForm, FormProvider, Controller, useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CompanyProfileSchema } from '../BookingInquiry/ValidationSchema';
+import { CompanyProfileSchema } from '@/utils/ValidationSchema';
 
 const labelSx = { color: '#6b7280', fontSize: 14 };
 

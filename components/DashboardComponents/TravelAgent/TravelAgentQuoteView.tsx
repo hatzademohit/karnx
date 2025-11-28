@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import { QuoteDetails, TravelAgentFullQuoteView } from "@/components";
 import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
@@ -8,7 +8,7 @@ import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const TravelAgentQuoteView = () => {
     const callApi = useApiFunction();
-    const [viewedQuote, setViewedQuote] = useState<any>(null);
+    const [acceptQuote, setAcceptQuote] = useState(false);
     const { inquiryId, inquiryRowData } = useInquiryDetails();
     const [getQuote, setQuote] = useState<any>(
         { client: { name: '' }, aircraft: { asset_name: '' } }
@@ -44,7 +44,20 @@ const TravelAgentQuoteView = () => {
             </Box>
             <Grid container spacing={{ md: 2, xs: 1 }}>
                 <QuoteDetails quote={getQuote} />
-                <TravelAgentFullQuoteView />
+                <Grid size={{ xs: 12 }}>
+                    <Divider className="cust-divider" />
+                </Grid>
+                {!acceptQuote &&
+                    <Grid size={{ xs: 12 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                            <Button className="btn btn-blue" onClick={() => setAcceptQuote(true)}>Accept Quote</Button>
+                            <Button className="btn btn-danger" onClick={() => setAcceptQuote(false)}>Reject Quote</Button>
+                            <Button className="btn btn-outlined" onClick={() => setAcceptQuote(false)}>Revise Quote</Button>
+                        </Box>
+                    </Grid>
+                }
+                {acceptQuote && <TravelAgentFullQuoteView />}
+
             </Grid>
         </Box>
     )
