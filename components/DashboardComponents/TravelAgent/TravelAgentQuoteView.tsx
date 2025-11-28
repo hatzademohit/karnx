@@ -23,15 +23,37 @@ const TravelAgentQuoteView = () => {
                 toast.error(res?.message || '');
             }
         } catch (e) {
-            toast.error('Network error while fetching cancellation policies');
+            // toast.error('Network error while fetching cancellation policies');
         }
     };
 
     useEffect(() => {
         fetchQuotes();
-
     }, []);
 
+    const handleQuoteAction = async (action) => {
+        try {
+            const bodyParam = {
+                action,
+                inquiryId,
+                message: '',
+                quoteId: getQuote.id,
+            };
+            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/accept-quote`, body: bodyParam });
+            if (res?.status === true) {
+                toast.success(res?.message || '');
+                if (action === 'accepted') {
+                    setAcceptQuote(true);
+                } else if (action === 'rejected' || action === 'requote') {
+
+                }
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while sending quote to travel agent');
+        }
+    };
     return (
         <Box sx={{ p: 2, border: '1px solid #E6E6E6' }}>
             <Box sx={{ mb: 2 }}>
@@ -50,9 +72,9 @@ const TravelAgentQuoteView = () => {
                 {!acceptQuote &&
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                            <Button className="btn btn-blue" onClick={() => setAcceptQuote(true)}>Accept Quote</Button>
-                            <Button className="btn btn-danger" onClick={() => setAcceptQuote(false)}>Reject Quote</Button>
-                            <Button className="btn btn-outlined" onClick={() => setAcceptQuote(false)}>Revise Quote</Button>
+                            <Button className="btn btn-blue" onClick={() => handleQuoteAction('accepted')}>Accept Quote</Button>
+                            <Button className="btn btn-danger" onClick={() => handleQuoteAction('rejected')}>Reject Quote</Button>
+                            <Button className="btn btn-warning" color="warning" onClick={() => handleQuoteAction('requote')}>Revise Quote</Button>
                         </Box>
                     </Grid>
                 }

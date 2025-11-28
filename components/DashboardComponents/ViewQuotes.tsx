@@ -161,7 +161,7 @@ const ViewQuotes = () => {
                 message: data.rejectionReason,
                 quoteIds: data.rejectedQuote,
             };
-            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/accept-quote`, body: bodyParam });
+            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/approve-quote`, body: bodyParam });
             if (res?.status === true) {
                 toast.success(res?.message || '');
                 setShowDetailsTabs(false);
