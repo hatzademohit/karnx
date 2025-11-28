@@ -250,6 +250,25 @@ export const karnxTheme = createTheme({
                 },
             },
         },
+        MuiSwitch: {
+            styleOverrides: {
+                switchBase: {
+                    transitionDuration: "300ms",
+                    "&.Mui-checked": {
+                        color: "#03045E",
+                        "& + .MuiSwitch-track": {
+                            backgroundColor: "#03045ED6", // active color
+                            opacity: 1,
+                        },
+                    },
+                },
+                track: {
+                    backgroundColor: "#BDBDBD",
+                    opacity: 1,
+                    transition: "background-color 300ms",
+                },
+            },
+        },
     },
     palette: {
         text: {

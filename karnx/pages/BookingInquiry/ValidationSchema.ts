@@ -234,3 +234,43 @@ export const CompanyProfileSchema = yup.object().shape({
   country: yup.string().required('Country is required'),
   pinCode: yup.string().required('Pin Code is required'),
 })
+
+export const travelAgentSchema = yup.object({
+  adults: yup.array().of(
+    yup.object({
+      name: yup.string().required("Name is required"),
+      age: yup.number().required("Age required").min(12).max(100)
+    })
+  ),
+  children: yup.array().of(
+    yup.object({
+      name: yup.string().required(),
+      age: yup.number().required().min(2).max(11),
+    })
+  ),
+  infants: yup.array().of(
+    yup.object({
+      name: yup.string().required(),
+      age: yup.number().required().min(0).max(2),
+    })
+  ),
+  // contact detail
+  contactName: yup.string().required('Name is required'),
+  contactEmail: yup.string().required('Email is required').email("Invalid email"),
+  contactPhone: yup.string().required("Phone number required").matches(/^\d{10}$/, "Phone must be exactly 10 digits"),
+  // billing address
+  pinCode: yup.string().required("Pin Code is required"),
+  address: yup.string().required("Address is required"),
+  city: yup.string().required("City is required"),
+
+  // gstin
+  enableGST: yup.boolean(),
+  gstin: yup.string().when("enableGST", {
+    is: true,
+    then: (schema) => schema.required("GST Number required").matches(
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
+      "Invalid GSTIN format"
+    ).length(15, "GSTIN must be 15 characters"),
+    otherwise: (schema) => schema.optional(),
+  }),
+});
