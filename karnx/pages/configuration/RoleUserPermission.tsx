@@ -339,7 +339,7 @@ const RoleUserPermission: React.FC = () => {
                 const allChecked = childVals.length > 0 && childVals.every(Boolean);
                 const someChecked = childVals.some(Boolean) && !allChecked;
                 return (
-                  <Grid size={{ lg: 2, md: 3, sm: 4, xs: 12 }} key={module?.id}>
+                  <Grid size={{ lg: 2, md: 3, sm: 4, xs: 12 }} key={module?.slug} className={`className-${module?.slug}`}>
                     <Box
                       sx={{
                         border: "1px solid #ddd",
