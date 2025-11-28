@@ -631,8 +631,7 @@ const ViewQuotes = () => {
                         <Button className="btn btn-blue" type="submit">Send</Button>
                     </Box>
                 </Typography>
-
-            </CustomModal >
+            </CustomModal>
         </>
     )
 }
