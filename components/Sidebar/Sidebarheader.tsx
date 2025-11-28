@@ -70,7 +70,7 @@ const closedMixin = (theme: any) => ({
   width: `${closeDrawerWidth}px`,
   [theme.breakpoints.up('sm')]: {
     // width: `calc(${theme.spacing(8)} + 1px)`,
-  width: `${closeDrawerWidth}px`,
+    width: `${closeDrawerWidth}px`,
   },
 });
 
@@ -134,14 +134,14 @@ export const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function Sidebarheader({children}: {
+export default function Sidebarheader({ children }: {
   children: React.ReactNode;
 }) {
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <Box className="box" sx={{ display: 'flex'}}>
+    <>
       <CssBaseline />
       <SeperateAppBar
         open={open}
@@ -151,9 +151,9 @@ export default function Sidebarheader({children}: {
       <SeperateDrawer
         open={open}
         theme={theme}
-        handleDrawerOpen={ () => setOpen(!open) }
+        handleDrawerOpen={() => setOpen(!open)}
       />
-        {children}
-    </Box>
+      {children}
+    </>
   );
 }

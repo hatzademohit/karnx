@@ -36,15 +36,15 @@ const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick,
   const { hasPermission } = useAuth();
 
   const filteredData = useMemo(() => {
-  const term = search.toLowerCase();
-  if (!term) return data;
+    const term = search.toLowerCase();
+    if (!term) return data;
 
-  return data.filter((item) => {
-    // Convert entire item (including nested fields) to a string
-    const itemString = JSON.stringify(item).toLowerCase();
-    return itemString.includes(term);
-  });
-}, [search, data]);
+    return data.filter((item) => {
+      // Convert entire item (including nested fields) to a string
+      const itemString = JSON.stringify(item).toLowerCase();
+      return itemString.includes(term);
+    });
+  }, [search, data]);
 
   // 📄 Pagination logic
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -179,14 +179,15 @@ const CardDataGrid: React.FC<FleetCardGridProps> = ({ data, buttonText, onClick,
                     <Button size="small" className="btn btn-blue" onClick={() => viewClick(item)}>
                       View Details
                     </Button>
-                    <Button
-                      size="small"
-                      className="btn btn-outlined"
-                      onClick={hasPermission && hasPermission(['fleet edit']) ? () => editClick && editClick(item) : undefined}
-                      style={hasPermission && hasPermission(['fleet edit']) ? undefined : { display: 'none' }}
-                    >
-                      Edit Details
-                    </Button>
+                    {hasPermission && hasPermission(['fleet update']) &&
+                      <Button
+                        size="small"
+                        className="btn btn-outlined"
+                        onClick={() => editClick && editClick(item)}
+                      >
+                        Edit Details
+                      </Button>
+                    }
                   </Box>
                 </Box>
               </CardContent>

@@ -57,7 +57,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
     const { theme } = useAuth()
 
     return (
-      <>
+      <Box className="w-100">
         {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography>}</InputLabel>}
         <TextField
           fullWidth
@@ -85,7 +85,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           id={inputLabel || label || id}
         // multiline={multiline}
         />
-      </>
+      </Box>
     );
   }
 )

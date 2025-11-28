@@ -691,6 +691,7 @@ const FleetOverview = () => {
         </DialogActions>
       </CustomModal>
 
+      {/* View  Dialog */}
       <CustomModal open={openView} setOpen={setOpenView} dataClose={() => setOpenView(false)} headerText={`Fleet Details`} className="modal-lg">
         {viewRow && (
           <Stack spacing={2}>
