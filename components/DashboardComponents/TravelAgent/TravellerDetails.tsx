@@ -40,7 +40,7 @@ const TravellerDetails = () => {
         setLists({ ...lists, [type]: updated });
         setValue(type, updated.filter((i) => i.selected));
     };
-    // handal errors 
+    // Generic handal errors 
     const validateAge = (type: "adults" | "children" | "infants", age: string) => {
         if (!age) return "";
         const value = Number(age);
