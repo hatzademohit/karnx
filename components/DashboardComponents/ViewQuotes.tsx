@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 import dayjs from "dayjs";
 import { useAuth } from "@/app/context/AuthContext";
+import { applyCurrencyFormat, parseToHoursMinutes } from "@/utils/commonFunctions";
 
 interface RejectionFormData {
     message: string;
@@ -34,40 +35,37 @@ const ViewQuotes = () => {
     const [sameReason, setSameReason] = useState(false);
     const [sharedReason, setSharedReason] = useState("");
 
-    const applyCurrencyFormat = (value: any) => {
-        if (value == null) return '';
 
-        return value.toLocaleString("en-IN");
-    };
     const openQuoteDetails = (quote: any) => {
         const { hours, minutes } = parseToHoursMinutes(quote.estimated_flight_time);
         const quoteViewData = {
             clientName: quote.client.name + ' · ' + quote.aircraft.asset_name,
 
-            id: quote.id,
-            departure: '08:30 - 17:00',
-            return: '09:30 - 18:15',
-            flightTime: hours + `h ` + minutes + `m`,
-            returnTime: "6h 35m",
-            model: quote.aircraft.aircraft_model,
-            validityInYear: '2025',
-            capacity: applyCurrencyFormat(quote.aircraft.capacity) + ' passangers',
-            range: applyCurrencyFormat(quote.aircraft.flying_range) + ' nm',
-            speed: 'Mach ' + applyCurrencyFormat(quote.aircraft.speed),
-
-            baseFire: applyCurrencyFormat(quote.base_fare),
-            fluelCost: applyCurrencyFormat(quote.fluel_cost),
-            taxesFees: applyCurrencyFormat(quote.taxes_fees),
-            crewFees: applyCurrencyFormat(quote.crew_fees),
-            handlingFees: applyCurrencyFormat(quote.handling_fees),
-            cateringFees: applyCurrencyFormat(quote.catering_fees),
-
-            aircraftAmenities: quote?.available_amenities,//['Wi-Fi tututu', 'In-seat power', 'Entertainment system', 'Conference area'],
-            includedServices: quote.special_offers_promotions,
-            total: applyCurrencyFormat(quote.total),
-            cancelationCondition: quote.cancelation_policy ? quote.cancelation_policy.name : '',
-            additionalNotes: quote.additional_notes || '',
+            /* id: quote.id,
+             departure: '08:30 - 17:00',
+             return: '09:30 - 18:15',
+             flightTime: hours + `h ` + minutes + `m`,
+             returnTime: "6h 35m",
+             model: quote.aircraft.aircraft_model,
+             validityInYear: '2025',
+             capacity: applyCurrencyFormat(quote.aircraft.capacity) + ' passangers',
+             range: applyCurrencyFormat(quote.aircraft.flying_range) + ' nm',
+             speed: 'Mach ' + applyCurrencyFormat(quote.aircraft.speed),
+ 
+             baseFire: applyCurrencyFormat(quote.base_fare),
+             fluelCost: applyCurrencyFormat(quote.fluel_cost),
+             taxesFees: applyCurrencyFormat(quote.taxes_fees),
+             crewFees: applyCurrencyFormat(quote.crew_fees),
+             handlingFees: applyCurrencyFormat(quote.handling_fees),
+             cateringFees: applyCurrencyFormat(quote.catering_fees),
+ 
+             aircraftAmenities: quote?.available_amenities,//['Wi-Fi tututu', 'In-seat power', 'Entertainment system', 'Conference area'],
+             includedServices: quote.special_offers_promotions,
+             total: applyCurrencyFormat(quote.total),
+             cancelationCondition: quote.cancelation_policy ? quote.cancelation_policy.name : '',
+             additionalNotes: quote.additional_notes || '', */
             quoteStatus: quote.is_selected || '',
+            quote: quote
         };
         setOpenBoxQuote(quote);
         setViewedQuote(quoteViewData);
@@ -202,30 +200,6 @@ const ViewQuotes = () => {
     }, []);
 
 
-    const parseToHoursMinutes = (value: any) => {
-        if (value == null || value === "") return { hours: 0, minutes: 0 };
-        let hours = 0;
-        let minutes = 0;
-        // If value contains colon → treat as HH:MM
-        if (String(value).includes(":")) {
-            const [h, m] = String(value).split(":");
-            hours = parseInt(h) || 0;
-            minutes = parseInt(m) || 0;
-        } else {
-            // Otherwise treat as decimal → 2.65 means 2 hours + (.65 * 60)
-            const num = parseFloat(value);
-            if (!isNaN(num)) {
-                hours = Math.floor(num);
-                minutes = Math.round((num - hours) * 60);
-            }
-        }
-        // Normalize if minutes >= 60
-        if (minutes >= 60) {
-            hours += Math.floor(minutes / 60);
-            minutes = minutes % 60;
-        }
-        return { hours, minutes };
-    }
     const renderRow = (label: string, key: keyof typeof quotes[0], isRich?: boolean) => (
         <TableRow>
             <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
@@ -314,13 +288,13 @@ const ViewQuotes = () => {
     );
 
     const commissionCalculate = (key) => {
-        const currency = Number(applyCurrencyFormat(key));
+        const currency = Number(key ?? 0);
         const percentage = (currency * Number(travelAgentWatch("commissionPercentage"))) / 100;
-        const totalCommission = Number(applyCurrencyFormat(key)) + percentage;
-        const displayValue = Number(travelAgentWatch("commissionPercentage")) <= 0 ? currency : `${currency.toFixed(2)} + ${percentage.toFixed(2)} = ${totalCommission.toFixed(2)}`;
-        return displayValue;
-    };
+        const totalCommission = Number(key ?? 0) + percentage;
+        const displayValue = (Number(travelAgentWatch("commissionPercentage")) <= 0) ? applyCurrencyFormat(currency) : `${applyCurrencyFormat((currency.toFixed(2)))} + ${applyCurrencyFormat(percentage.toFixed(2))} = ${applyCurrencyFormat(totalCommission.toFixed(2))}`;
 
+        return displayValue;
+    }
     return (
         <>
             <Box>
@@ -468,7 +442,7 @@ const ViewQuotes = () => {
 
                 {/* view quotes component */}
                 <Grid container spacing={{ md: 2, xs: 1 }}>
-                    <QuoteDetails viewedQuote={viewedQuote} />
+                    <QuoteDetails quote={viewedQuote.quote} />
                 </Grid>
                 {user.access_type === 'Portal Admin' &&
 
