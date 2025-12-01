@@ -539,13 +539,22 @@ hr.cust-divider {
   padding: 5px;
 }
 
-.quote-comparison-table thead th[data-disabled="true"],
-.quote-comparison-table tbody td[data-disabled="true"] {
+.quote-comparison-table table {
+  table-layout: fixed;
+}
+
+.quote-comparison-table table thead th:first-child,
+.quote-comparison-table table tbody td:first-child {
+  width: 250px;
+}
+
+.quote-comparison-table table thead th[data-disabled="true"],
+.quote-comparison-table table tbody td[data-disabled="true"] {
   opacity: 0.5;
   position: relative;
 }
 
-.quote-comparison-table tbody td[data-disabled="true"]:has(.submit-rejection-reason) {
+.quote-comparison-table table tbody td[data-disabled="true"]:has(.submit-rejection-reason) {
   opacity: 0.8;
 }
 

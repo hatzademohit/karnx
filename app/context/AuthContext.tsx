@@ -182,12 +182,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
           await fetch("/api/session/clear", { method: "POST" });
         } catch { }
-        router.push("/");
       })
       .catch((error) => {
         console.log(error);
       }).finally(() => {
         setLoader(false);
+        router.push("/");
       })
   };
 

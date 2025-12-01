@@ -150,8 +150,7 @@ export default function Sidebarheader({ children }: {
 
       <SeperateDrawer
         open={open}
-        theme={theme}
-        handleDrawerOpen={() => setOpen(!open)}
+        setOpen={setOpen}
       />
       {children}
     </>

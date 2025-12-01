@@ -562,7 +562,7 @@ const ViewQuotes = () => {
                                     if (quote.id !== acceptedQuoteId && quote.is_selected !== 'rejected') {
                                         return (
                                             <React.Fragment key={quote.id}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, justifyContent: 'space-between' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, justifyContent: 'space-between', '.textflied-container': { maxWidth: '250px', width: '100%' } }}>
                                                     <Typography sx={{ lineHeight: '14px' }}>
                                                         {quote?.client?.name}
                                                         <Typography component='span' sx={{ fontSize: '12px', display: 'inline-block', width: '100%' }} color="text.secondary">
