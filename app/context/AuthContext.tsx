@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const loginTotalMinutes = loginHour * 60 + loginMinute;
     const diffMinutes = currentTotalMinutes - loginTotalMinutes;
     // Session expired
-    if (diffMinutes > 60) {
+    if (diffMinutes > 60 || diffMinutes <= 60) {
       localStorage.clear();
       logout();
       // setUser(null);

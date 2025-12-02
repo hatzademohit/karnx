@@ -68,9 +68,9 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
               <Typography variant="body2" color="text.secondary">
                 Route(s)
               </Typography>
-              {data?.route.length > 0 && data?.route.map(function (rt) {
+              {data?.route.length > 0 && data?.route.map(function (rt, index) {
                 return (
-                  <Typography variant="h5">
+                  <Typography variant="h5" key={index + rt?.departure_location}>
                     <FlightTakeoff fontSize="small" sx={{ mr: 0.5 }} />
                     {rt?.departure_location} → {rt?.arrival_location}
                   </Typography>
