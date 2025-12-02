@@ -16,6 +16,7 @@ import { Controller } from "react-hook-form";
 import { useStep } from "@/app/context/StepProvider";
 import dayjs from "dayjs";
 import { useFieldArray } from "react-hook-form";
+import { useEffect } from "react";
 
 interface AppendDeleteTableProps {
   control: any;
@@ -42,6 +43,13 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
     control,
     name: "multiCity"
   });
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({ multiCityfrom: "", multiCityto: "", multiCitydepartureDate: "" });
+      append({ multiCityfrom: "", multiCityto: "", multiCitydepartureDate: "" });
+    }
+  }, []);
 
   return (
     <Box>
