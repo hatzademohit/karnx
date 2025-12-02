@@ -9,7 +9,11 @@ interface InquiryDetailsTabProps {
 }
 
 interface InquiryDetailsValue {
-  route: string;
+  route: [{
+    flight_departure_time: string,
+    departure_location: string,
+    arrival_location: string
+  }];
   date: string;
   passangers: string;
   aircraft: string;
@@ -27,6 +31,8 @@ interface InquiryDetailsValue {
   pet_travels: [];
   uploaded_documents_path: [];
   required_documents_name: [];
+  trip_type: string;
+
 }
 
 const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
@@ -49,23 +55,41 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
           </Typography>
 
           <Grid container spacing={{ md: 2, xs: 1 }}>
+
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">
-                Route
+                Trip Type
               </Typography>
               <Typography variant="h5">
-                <FlightTakeoff fontSize="small" sx={{ mr: 0.5 }} />
-                {data?.route}
+                {data?.trip_type}
               </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <Typography variant="body2" color="text.secondary">
+                Route(s)
+              </Typography>
+              {data?.route.length > 0 && data?.route.map(function (rt) {
+                return (
+                  <Typography variant="h5">
+                    <FlightTakeoff fontSize="small" sx={{ mr: 0.5 }} />
+                    {rt?.departure_location} → {rt?.arrival_location}
+                  </Typography>
+                );
+
+              })}
             </Grid>
 
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="body2" color="text.secondary">
                 Departure Date
               </Typography>
-              <Typography variant="h5">
-                {data?.date}
-              </Typography>
+              {data?.route.length > 0 && data?.route.map(function (rt) {
+                return (
+                  <Typography variant="h5">
+                    {rt?.flight_departure_time}
+                  </Typography>
+                );
+              })}
             </Grid>
 
             <Grid size={{ xs: 12, sm: 4 }}>
@@ -94,8 +118,8 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
                 {data?.traveling_purpose}
               </Typography>
             </Grid>
-          </Grid>
 
+          </Grid>
           <Box
             sx={{
               bgcolor: "#F2F2F2",

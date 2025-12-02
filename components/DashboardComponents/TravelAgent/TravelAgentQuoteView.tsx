@@ -9,7 +9,7 @@ import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 const TravelAgentQuoteView = () => {
     const callApi = useApiFunction();
     const [acceptQuote, setAcceptQuote] = useState(false);
-    const { inquiryId, inquiryRowData } = useInquiryDetails();
+    const { inquiryId, inquiryRowData, setShowDetailsTabs } = useInquiryDetails();
     const [getQuote, setQuote] = useState<any>(
         { client: { name: '' }, aircraft: { asset_name: '' } }
     );
@@ -45,7 +45,7 @@ const TravelAgentQuoteView = () => {
                 if (action === 'accepted') {
                     setAcceptQuote(true);
                 } else if (action === 'rejected' || action === 'requote') {
-
+                    setShowDetailsTabs(false);
                 }
             } else {
                 toast.error(res?.message || '');
