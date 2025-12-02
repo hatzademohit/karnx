@@ -38,13 +38,25 @@ export const roundTripSchema = yup.object({
 });
 
 export const multiCitySchema = yup.object({
-  multiCity: yup.array().of(
-    yup.object().shape({
-      multiCityfrom: yup.string().required("Departure is required"),
-      multiCityto: yup.string().required("Destination is required"),
-      multiCitydepartureDate: yup.date().required("Departure date is required"),
-    })
-  ),
+  multiCity: yup.array().when("isFlexibleDates", {
+    is: true,
+    then: schema =>
+      schema.of(
+        yup.object({
+          multiCityfrom: yup.string().required("Departure is required"),
+          multiCityto: yup.string().required("Destination is required"),
+          multiCitydepartureDate: yup.string().notRequired(),
+        })
+      ),
+    otherwise: schema =>
+      schema.of(
+        yup.object({
+          multiCityfrom: yup.string().required("Departure is required"),
+          multiCityto: yup.string().required("Destination is required"),
+          multiCitydepartureDate: yup.string().required("Departure date is required"),
+        })
+      ),
+  }),
   multiCityfromReturn: yup.string().required("Departure is required"),
   multiCitytoReturn: yup.string().required("Destination is required"),
   multiCityreturnDate: yup.string().when("isFlexibleDates", {
