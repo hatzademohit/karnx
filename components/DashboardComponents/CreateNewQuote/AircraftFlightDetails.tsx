@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const AircraftFlightDetails = (editedData) => {
 	const callApi = useApiFunction();
@@ -13,6 +14,8 @@ const AircraftFlightDetails = (editedData) => {
 	const selectedAircraft = watch("aircraft");
 	const theme = useTheme();
 	const [aircraftList, setAircraftList] = useState<any>([]);
+	const [bookingDetails, setbookingDetails] = useState<any>([]);
+	const { inquiryRowData, inquiryId } = useInquiryDetails();
 
 	const getAircrafts = async () => {
 		try {
@@ -23,12 +26,24 @@ const AircraftFlightDetails = (editedData) => {
 				toast.error(res?.message || '');
 			}
 		} catch (e) {
-			toast.error('Network error while fetching aircraft');
+			//toast.error('Network error while fetching aircraft');
 		}
 	};
-
+	const getBookingInqueryDetails = async () => {
+		try {
+			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/get-booking-flight-details/${inquiryId}` });
+			if (res?.status === true) {
+				setbookingDetails(res.data);
+			} else {
+				toast.error(res?.message || '');
+			}
+		} catch (e) {
+			//toast.error('Network error while fetching aircraft');
+		}
+	}
 	useEffect(() => {
 		getAircrafts();
+		getBookingInqueryDetails();
 	}, []);
 
 	return (
