@@ -1,5 +1,4 @@
 "use client";
-import React, { useState } from "react";
 import {
   Box,
   Table,
@@ -16,6 +15,7 @@ import { CustomDateTimePicker, SwapComp } from "@/components";
 import { Controller } from "react-hook-form";
 import { useStep } from "@/app/context/StepProvider";
 import dayjs from "dayjs";
+import { useFieldArray } from "react-hook-form";
 
 interface AppendDeleteTableProps {
   control: any;
@@ -25,8 +25,8 @@ interface AppendDeleteTableProps {
 }
 
 const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTableProps) => {
-  const [rows, setRows] = useState<number[]>([1, 2]); // Just store row IDs
-  const { airportCity } = useStep();
+  const { airportCity, formData } = useStep();
+  console.log(formData.multiCity)
 
   const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map((airport) => ({
     label: `${airport.airport_name} (${airport.code}), ${airport.city_name}, ${airport.country_name}`,
@@ -34,19 +34,22 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
     code: airport.code,
   }));
 
-  // Add new row
-  const handleAddRow = () => setRows((prev) => [...prev, Date.now()]);
+  const handleAddRow = () => {
+    append({ multiCityfrom: "", multiCityto: "", multiCitydepartureDate: "" });
+  };
 
-  // Delete row
-  const handleDeleteRow = (id: number) => setRows((prev) => prev.filter((r) => r !== id));
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "multiCity"
+  });
 
   return (
     <Box>
       <TableContainer className="table-append">
         <Table size="small">
           <TableBody>
-            {rows.map((rowId, index) => (
-              <TableRow key={rowId}>
+            {fields.map((item, index) => (
+              <TableRow key={item.id}>
                 <TableCell colSpan={2}>
                   {/* From-To using Controller */}
                   <Controller
@@ -58,31 +61,32 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
                         name={`multiCity[${index}].multiCityto`}
                         control={control}
                         defaultValue=""
-                        render={({ field: toField }) =>{
+                        render={({ field: toField }) => {
                           const multiCityto = watch(`multiCity[${index}].multiCityto`);
                           const multiCityfrom = watch(`multiCity[${index}].multiCityfrom`);
-                        return(
-                          <SwapComp
-                            fromOptions={airportOptions.filter((airport) => airport.id != multiCityto)}
-                            toOptions={airportOptions.filter((airport) => airport.id != multiCityfrom) }
-                            fromValue={airportOptions.find((airport) => airport.id == multiCityfrom) || ''}
-                            toValue={airportOptions.find((airport) => airport.id == multiCityto) || ''}
-                            onFromChange={(val: any) => {
-                              setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
-                            }}
-                            onToChange={(val: any) =>
-                              setValue(`multiCity[${index}].multiCityto`, val?.id, { shouldValidate: true, shouldDirty: true })
-                            }
-                            onSwap={(from: any, to: any) => {
-                              setValue(`multiCity[${index}].multiCityfrom`, from?.id, { shouldValidate: true, shouldDirty: true });
-                              setValue(`multiCity[${index}].multiCityto`, to?.id, { shouldValidate: true, shouldDirty: true });
-                            }}
-                            fromError={!!errors?.multiCity?.[index]?.multiCityfrom}
-                            fromHelpertext={errors?.multiCity?.[index]?.multiCityfrom?.message}
-                            toError={!!errors?.multiCity?.[index]?.multiCityto}
-                            toHelpertext={errors?.multiCity?.[index]?.multiCityto?.message}
-                          />
-                        )}}
+                          return (
+                            <SwapComp
+                              fromOptions={airportOptions.filter((airport) => airport.id != multiCityto)}
+                              toOptions={airportOptions.filter((airport) => airport.id != multiCityfrom)}
+                              fromValue={airportOptions.find((airport) => airport.id == multiCityfrom) || ''}
+                              toValue={airportOptions.find((airport) => airport.id == multiCityto) || ''}
+                              onFromChange={(val: any) => {
+                                setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
+                              }}
+                              onToChange={(val: any) =>
+                                setValue(`multiCity[${index}].multiCityto`, val?.id, { shouldValidate: true, shouldDirty: true })
+                              }
+                              onSwap={(from: any, to: any) => {
+                                setValue(`multiCity[${index}].multiCityfrom`, from?.id, { shouldValidate: true, shouldDirty: true });
+                                setValue(`multiCity[${index}].multiCityto`, to?.id, { shouldValidate: true, shouldDirty: true });
+                              }}
+                              fromError={!!errors?.multiCity?.[index]?.multiCityfrom}
+                              fromHelpertext={errors?.multiCity?.[index]?.multiCityfrom?.message}
+                              toError={!!errors?.multiCity?.[index]?.multiCityto}
+                              toHelpertext={errors?.multiCity?.[index]?.multiCityto?.message}
+                            />
+                          )
+                        }}
                       />
                     )}
                   />
@@ -111,7 +115,7 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
 
                 <TableCell align="center" sx={{ position: 'relative' }}>
                   <Box sx={{ position: 'absolute', top: '35px' }}>
-                    <IconButton onClick={() => handleDeleteRow(rowId)}>
+                    <IconButton onClick={() => remove(index)}>
                       <ClearRoundedIcon />
                     </IconButton>
                   </Box>
@@ -130,31 +134,32 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
                       name="multiCitytoReturn"
                       control={control}
                       defaultValue=""
-                      render={({ field: toField }) =>{
+                      render={({ field: toField }) => {
                         const multiCityfromReturn = watch('multiCityfromReturn');
                         const multiCitytoReturn = watch('multiCitytoReturn');
-                        return(
-                        <SwapComp
-                          fromOptions={airportOptions.filter((airport) => airport.id != multiCitytoReturn)}
-                          toOptions={airportOptions.filter((airport) => airport.id != multiCityfromReturn) }
-                          fromValue={airportOptions.find((airport) => airport.id == multiCityfromReturn) || ''}
-                          toValue={airportOptions.find((airport) => airport.id == multiCitytoReturn) || ''}
-                          onFromChange={(val: any) => {
-                            setValue("multiCityfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
-                          }}
-                          onToChange={(val: any) =>
-                            setValue("multiCitytoReturn", val?.id, { shouldValidate: true, shouldDirty: true })
-                          }
-                          onSwap={(from: any, to: any) => {
-                            setValue("multiCityfromReturn", from?.id, { shouldValidate: true, shouldDirty: true });
-                            setValue("multiCitytoReturn", to?.id, { shouldValidate: true, shouldDirty: true });
-                          }}
-                          fromError={!!errors?.multiCityfromReturn}
-                          fromHelpertext={errors?.multiCityfromReturn?.message}
-                          toError={!!errors?.multiCitytoReturn}
-                          toHelpertext={errors?.multiCitytoReturn?.message}
-                        />
-                      )}}
+                        return (
+                          <SwapComp
+                            fromOptions={airportOptions.filter((airport) => airport.id != multiCitytoReturn)}
+                            toOptions={airportOptions.filter((airport) => airport.id != multiCityfromReturn)}
+                            fromValue={airportOptions.find((airport) => airport.id == multiCityfromReturn) || ''}
+                            toValue={airportOptions.find((airport) => airport.id == multiCitytoReturn) || ''}
+                            onFromChange={(val: any) => {
+                              setValue("multiCityfromReturn", val?.id, { shouldValidate: true, shouldDirty: true });
+                            }}
+                            onToChange={(val: any) =>
+                              setValue("multiCitytoReturn", val?.id, { shouldValidate: true, shouldDirty: true })
+                            }
+                            onSwap={(from: any, to: any) => {
+                              setValue("multiCityfromReturn", from?.id, { shouldValidate: true, shouldDirty: true });
+                              setValue("multiCitytoReturn", to?.id, { shouldValidate: true, shouldDirty: true });
+                            }}
+                            fromError={!!errors?.multiCityfromReturn}
+                            fromHelpertext={errors?.multiCityfromReturn?.message}
+                            toError={!!errors?.multiCitytoReturn}
+                            toHelpertext={errors?.multiCitytoReturn?.message}
+                          />
+                        )
+                      }}
                     />
                   )}
                 />
