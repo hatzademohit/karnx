@@ -166,22 +166,13 @@ const ContactSummary = () => {
     useEffect(() => {
         setTripType(radioTabActive);
         let depLocation; let arrLocation;
-        if (tripType === 0) {
+        if (radioTabActive === 0) {
             depLocation = formData.oneWayfrom;
             arrLocation = formData.oneWayto;
-        } else if (tripType === 1) {
+        } else if (radioTabActive === 1) {
             depLocation = formData.roundTripfrom;
             arrLocation = formData.roundTripto;
-        } else if (tripType === 2) {
-            // formData.multiCity.forEach((leg: any, index: number) => {
-            //     if (index === 0) {
-            //         depLocation = [{ id: leg.multiCityfrom }];
-            //         arrLocation = [{ id: leg.multiCityto }];
-            //     } else {
-            //         depLocation.push({ id: leg.multiCityfrom });
-            //         arrLocation.push({ id: leg.multiCityto });
-            //     }
-            // });
+        } else if (radioTabActive === 2) {
             depLocation = formData.multiCity[0].multiCityfrom;
             arrLocation = formData.multiCity[formData.multiCity.length - 1].multiCityto;
         }
@@ -195,9 +186,9 @@ const ContactSummary = () => {
                 routeArray['toRoute'] = airport.code;
             }
         });
-
+        console.log('useEffect called', tripType, radioTabActive)
         setRoute(routeArray);
-    }, [formData, airportCity, radioTabActive]);
+    }, [formData, airportCity, radioTabActive, activeStep]);
 
     return (
         <FormProvider {...methods}>

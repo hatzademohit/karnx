@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { DrawerHeader } from '../Sidebar/Sidebarheader';
 import { Drawer } from '../Sidebar/Sidebarheader';
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem } from '@mui/material';
@@ -17,16 +17,14 @@ import { useAuth } from '@/app/context/AuthContext';
 
 interface SeperateDrawerProps {
   open: boolean;
-  theme?: any;
-  handleDrawerOpen?: () => void;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function SeperateDrawer({
   open,
-  theme,
-  handleDrawerOpen,
+  setOpen
 }: SeperateDrawerProps) {
-
+  const drawerRef = useRef(null);
   const pathname = usePathname();
   const { hasPermission } = useAuth();
 
@@ -42,9 +40,21 @@ export default function SeperateDrawer({
     // { menu: 'Booking Inquiry', icon: <Groups2OutlinedIcon />, path: '/booking-inquiry', permission: 'user read' },
   ]
 
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+        setOpen(false);  // close sidebar
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <>
       <Drawer
+        ref={drawerRef}
         className={`sidebar ${open ? "open-sidebar" : "close-sidebar"}`}
         variant="permanent"
         open={open}
@@ -80,7 +90,7 @@ export default function SeperateDrawer({
                         <ListItemButton className={`menu-icon-btn`}
                           sx={{ minHeight: 40, height: 40, justifyContent: open ? "initial" : "center", px: "10.5px", mb: '8px' }}
                           disableRipple
-                          onClick={handleDrawerOpen}
+                          onClick={() => setOpen(!open)}
                         >
                           <ListItemIcon className="menu-icon"
                             sx={{ minWidth: 0, mr: open ? 3 : "0px", justifyContent: "center", transition: "all 0.3s ease", color: 'inherit' }}
@@ -94,7 +104,7 @@ export default function SeperateDrawer({
                         </ListItemButton>
                         :
                         <Link href={data.path}>
-                          <ListItemButton className={`menu-icon-btn ${pathname == data.path ? "active" : "inactive"}`}
+                          <ListItemButton onClick={() => setOpen(false)} className={`menu-icon-btn ${pathname == data.path ? "active" : "inactive"}`}
                             sx={{ minHeight: 40, height: 40, justifyContent: open ? "initial" : "center", px: "10.5px", mb: '8px' }}
                             disableRipple
                           >
