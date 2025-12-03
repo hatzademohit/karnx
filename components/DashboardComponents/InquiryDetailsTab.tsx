@@ -32,6 +32,7 @@ interface InquiryDetailsValue {
   uploaded_documents_path: [];
   required_documents_name: [];
   trip_type: string;
+  is_flexible_date: number;
 
 }
 
@@ -133,7 +134,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
           >
             <Event fontSize="small" color="action" />
             <Typography variant="body2">
-              <strong>Flexible Dates:</strong> {data?.flexible_date_range ?? 'NA'}
+              <strong>Flexible Dates:</strong> {data?.is_flexible_date == 1 ? data?.flexible_date_range : 'NA'}
             </Typography>
           </Box>
         </CardContent>

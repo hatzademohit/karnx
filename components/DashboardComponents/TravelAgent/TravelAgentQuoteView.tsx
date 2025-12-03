@@ -32,6 +32,9 @@ const TravelAgentQuoteView = () => {
 
     useEffect(() => {
         fetchQuotes();
+        if ([11, 12, 13, 17].includes(inquiryRowData?.status_id)) {
+            setAcceptQuote(true);
+        }
     }, []);
 
     const handleQuoteAction = async (action) => {
@@ -47,7 +50,6 @@ const TravelAgentQuoteView = () => {
                 toast.success(res?.message || '');
                 if (action === 'accepted') {
                     setAcceptQuote(true);
-                } else if (action === 'rejected' || action === 'requote') {
                 }
             } else {
                 toast.error(res?.message || '');

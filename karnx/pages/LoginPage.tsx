@@ -47,29 +47,35 @@ const LoginPage = () => {
         password: data.password,
       });
 
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
-      localStorage.setItem("role", response.data.role);
-      localStorage.setItem('loggedInUser', JSON.stringify(user));
-      // localStorage.setItem('loginTime', currentTime); // session manager
+      if (response.status) {
+        const { token, user } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
+        localStorage.setItem("role", response.data.role);
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+        // localStorage.setItem('loginTime', currentTime); // session manager
 
-      // Set session cookies for middleware-based access control
-      await fetch("/api/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token,
-          role: response.data.role,
-          access_type: response.data.access_type,
-          permissions: response.data.permissions,
-        }),
-      });
+        // Set session cookies for middleware-based access control
+        await fetch("/api/session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            token,
+            role: response.data.role,
+            access_type: response.data.access_type,
+            permissions: response.data.permissions,
+          }),
+        });
 
-      setAlertMessage(response.data.message);
-      setOpenAlert(true);
-      setSeverity('success');
-      router.push("/dashboard");
+        setAlertMessage(response.data.message);
+        setOpenAlert(true);
+        setSeverity('success');
+        router.push("/dashboard");
+      } else {
+        setAlertMessage(response.data.message || "Invalid credentials");
+        setOpenAlert(true);
+        setSeverity('error');
+      }
     } catch (error: any) {
       if (error.response) {
         setAlertMessage(error.response.data.message || "Invalid credentials");
