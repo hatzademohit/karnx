@@ -186,7 +186,6 @@ const ContactSummary = () => {
                 routeArray['toRoute'] = airport.code;
             }
         });
-        console.log('useEffect called', tripType, radioTabActive)
         setRoute(routeArray);
     }, [formData, airportCity, radioTabActive, activeStep]);
 

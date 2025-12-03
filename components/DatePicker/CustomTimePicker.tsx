@@ -37,7 +37,7 @@ export default function CustomTimePicker({
                     {timelabel} {asterisk && <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography>}
                 </InputLabel>
             )}
-            <DemoContainer components={['TimePicker']}>
+            <DemoContainer components={['TimePicker']} sx={{ padding: 0 }}>
                 <TimePicker
                     value={value}
                     onChange={onChange}

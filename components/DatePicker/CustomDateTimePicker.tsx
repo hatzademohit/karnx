@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import dayjs, { Dayjs } from "dayjs";
-import { InputLabel, styled, Typography, useTheme } from "@mui/material";
+import { Box, InputLabel, styled, Typography, useTheme } from "@mui/material";
 
 interface CustomDateTimePickerProps {
   label?: string;
@@ -21,6 +21,7 @@ interface CustomDateTimePickerProps {
   error?: boolean;
   helperText?: string;
   minDate?: Date;
+  subText?: string;
 }
 
 // ✅ Styled wrapper that enforces highlight on selected values
@@ -47,22 +48,28 @@ export default function CustomDateTimePicker({
   minDateTime = dayjs(),
   maxDateTime,
   disabled = false,
-  name, 
+  name,
   required = false,
   error = false,
   helperText,
-  minDate
+  minDate,
+  subText
 }: CustomDateTimePickerProps) {
-const [open, setOpen] = React.useState(false);
-const theme = useTheme()
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme()
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {datatimelabel && (
-        <InputLabel sx={{ fontFamily: "poppins-semibold", width: "fit-content", color: "#333333" }}>
-          {datatimelabel} { required === true ? <Typography component='span' sx={{color: theme?.common?.redColor}}>*</Typography> : ''}
-        </InputLabel>
-      )}
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        {datatimelabel && (
+          <InputLabel sx={{ fontFamily: "poppins-semibold", width: "fit-content", color: "#333333" }}>
+            {datatimelabel} {required === true ? <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography> : ''}
+          </InputLabel>
+        )}
+        {subText && (
+          <Typography variant="body2" color="text.secondary">{subText}</Typography>
+        )}
+      </Box>
       <DateTimePicker
         label={label}
         value={value}
@@ -76,26 +83,26 @@ const theme = useTheme()
         viewRenderers={
           withClock
             ? {
-                hours: (params) => (
-                  <ClockWrapper>{renderTimeViewClock(params)}</ClockWrapper>
-                ),
-                minutes: (params) => (
-                  <ClockWrapper>{renderTimeViewClock(params)}</ClockWrapper>
-                ),
-                seconds: (params) => (
-                  <ClockWrapper>{renderTimeViewClock(params)}</ClockWrapper>
-                ),
-              }
+              hours: (params) => (
+                <ClockWrapper>{renderTimeViewClock(params)}</ClockWrapper>
+              ),
+              minutes: (params) => (
+                <ClockWrapper>{renderTimeViewClock(params)}</ClockWrapper>
+              ),
+              seconds: (params) => (
+                <ClockWrapper>{renderTimeViewClock(params)}</ClockWrapper>
+              ),
+            }
             : {
-                hours: null,
-                minutes: null,
-                seconds: null,
-              }
+              hours: null,
+              minutes: null,
+              seconds: null,
+            }
         }
         slotProps={{
-          textField: { 
+          textField: {
             size: "medium", fullWidth: true, variant: "outlined",
-            error: error,  helperText: helperText,
+            error: error, helperText: helperText,
             onClick: () => setOpen(true),
           },
           layout: {
@@ -107,8 +114,8 @@ const theme = useTheme()
                 backgroundColor: theme?.common?.redColor,
                 color: "#fff",
               },
-                "& .MuiClockPointer-root": {
-                backgroundColor: theme?.common?.redColor, 
+              "& .MuiClockPointer-root": {
+                backgroundColor: theme?.common?.redColor,
                 fontFamily: 'poppins',
               },
               "& .MuiClockPointer-thumb": {

@@ -18,25 +18,26 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	const theme = useTheme();
 	const callApi = useApiFunction();
 	const [quoteDetails, setQuoteDetails] = useState<any>([]);
-	const { setShowDetailsTabs, inquiryId } = useInquiryDetails()
-	const getQuoteDetails = async () => {
-		try {
-			const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
-			if (res?.status === true) {
-				setQuoteDetails(res.data);
-			} else {
-				toast.error(res?.message || '');
-			}
-		} catch (e) {
-			toast.error('Network error while fetching cancellation policies');
-		}
-	};
+	const { setShowDetailsTabs, inquiryId, bookingDetails } = useInquiryDetails()
+	// const getQuoteDetails = async () => {
+	// 	try {
+	// 		const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
+	// 		if (res?.status === true) {
+	// 			setQuoteDetails(res.data);
+	// 		} else {
+	// 			toast.error(res?.message || '');
+	// 		}
+	// 	} catch (e) {
+	// 		toast.error('Network error while fetching cancellation policies');
+	// 	}
+	// };
 
-	useEffect(() => {
-		getQuoteDetails();
-	}, [inquiryId]);
+	// useEffect(() => {
+	// 	getQuoteDetails();
+	// }, [inquiryId]);
 
 	const methods = useForm({
+		shouldUnregister: false,
 		mode: "onChange",
 	});
 
@@ -44,11 +45,13 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 		handleSubmit,
 		trigger,
 		reset,
+		watch,
 		formState: { isValid },
 	} = methods;
 
 	const onSubmit = async (data: any) => {
 		if (!isValid) return;
+		console.log(data)
 		try {
 			const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/submit-quote`, body: { ...data, inquiryId } });
 			if (res?.status === true) {
@@ -62,26 +65,71 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 		}
 	};
 
-	useEffect(() => (
+	useEffect(() => {
 		reset({
-			aircraft: quoteDetails?.aircraft_id ?? "",
-			estimatedFlightTime: quoteDetails?.estimated_flight_time ?? "",
-			baseFare: quoteDetails?.base_fare ?? "",
-			fuel: quoteDetails?.fluel_cost ?? "",
-			taxes: quoteDetails?.taxes_fees ?? "",
-			crewFees: quoteDetails?.crew_fees ?? "",
-			handlingFees: quoteDetails?.handling_fees ?? "",
-			catering: quoteDetails?.catering_fees ?? "",
-			totalAmount: quoteDetails?.total ?? 0,
-			quoteValidUntil: quoteDetails?.validate_till ?? "",
-			cancellationPolicy: quoteDetails?.cancellation_policy_id ?? "",
-			amenities: quoteDetails?.amenities_ids ? quoteDetails.amenities_ids.split(",").map(Number) : [],
-			specialOffers: quoteDetails?.special_offers_promotions ?? "",
-			addtionalNotes: quoteDetails?.additional_notes ?? "",
-		})
-	), [reset, quoteDetails])
+			estimate: bookingDetails?.flight_time?.map((item) => ({
+				departureArrivalDateTime: item?.departure_time ?? "",
+				// estimatedFlightTime: ""
+			}))
+		});
+	}, [bookingDetails])
+
+	// for edit quote
+	useEffect(() => {
+		if (!quoteDetails) return;
+		reset({
+			aircraft: quoteDetails?.aircraft ?? "",
+			baseFare: quoteDetails?.baseFare ?? "",
+			fuel: quoteDetails?.fuel ?? "",
+			taxes: quoteDetails?.taxes ?? "",
+			crewFees: quoteDetails?.crewFees ?? "",
+			handlingFees: quoteDetails?.handlingFees ?? "",
+			catering: quoteDetails?.catering ?? "",
+			totalAmount: quoteDetails?.totalAmount ?? 0,
+			quoteValidUntil: quoteDetails?.quoteValidUntil ?? "",
+			cancellationPolicy: quoteDetails?.cancellationPolicy ?? "",
+			amenities: typeof quoteDetails?.amenities === "string"
+				? quoteDetails?.amenities.split(",").map(Number)
+				: Array.isArray(quoteDetails?.amenities)
+					? quoteDetails?.amenities
+					: [],
+
+			specialOffers: quoteDetails?.specialOffers ?? "",
+			addtionalNotes: quoteDetails?.addtionalNotes ?? "",
+			estimate: quoteDetails?.estimate?.map((item) => ({
+				departureArrivalDateTime: item?.departureArrivalDateTime ?? "",
+				estimatedFlightTime: item?.estimatedFlightTime ?? ""
+			}))
+		});
+		// reset({
+		// 	aircraft: quoteDetails?.aircraft_id ?? quoteDetails?.aircraft ?? "",
+		// 	baseFare: quoteDetails?.base_fare ?? quoteDetails?.baseFare ?? "",
+		// 	fuel: quoteDetails?.fluel_cost ?? quoteDetails?.fuel ?? "",
+		// 	taxes: quoteDetails?.taxes_fees ?? quoteDetails?.taxes ?? "",
+		// 	crewFees: quoteDetails?.crew_fees ?? quoteDetails?.crewFees ?? "",
+		// 	handlingFees: quoteDetails?.handling_fees ?? quoteDetails?.handlingFees ?? "",
+		// 	catering: quoteDetails?.catering_fees ?? quoteDetails?.catering ?? "",
+		// 	totalAmount: quoteDetails?.total ?? quoteDetails?.totalAmount ?? 0,
+		// 	quoteValidUntil: quoteDetails?.validate_till ?? quoteDetails?.quoteValidUntil ?? "",
+		// 	cancellationPolicy: quoteDetails?.cancellation_policy_id ?? quoteDetails?.cancellationPolicy ?? "",
+		// 	amenities: quoteDetails?.amenities_ids ? quoteDetails.amenities_ids.split(",").map(Number) : [],
+		// 	specialOffers: quoteDetails?.special_offers_promotions ?? quoteDetails?.specialOffers ?? "",
+		// 	addtionalNotes: quoteDetails?.additional_notes ?? quoteDetails?.addtionalNotes ?? "",
+		// 	estimate: quoteDetails?.estimate?.map((item) => ({
+		// 		departureArrivalDateTime: item?.departureArrivalDateTime ?? "",
+		// 		estimatedFlightTime: item?.estimatedFlightTime ?? ""
+		// 	}))
+		// });
+	}, [quoteDetails, reset]);
+
+	useEffect(() => {
+		if (quoteDetails) reset(quoteDetails);
+	}, [activeStep, quoteDetails, reset]);
+
 
 	const handleNext = async () => {
+		const formData = watch();
+		setQuoteDetails(prev => ({ ...prev, ...formData }));
 		const valid = await trigger();
 		if (valid) setActiveStep((prev) => prev + 1);
 	};
