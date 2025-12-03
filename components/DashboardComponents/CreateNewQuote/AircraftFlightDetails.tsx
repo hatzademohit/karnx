@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, Grid, useTheme, FormHelperText } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
-import { CustomDateTimePicker, CustomTimePicker } from "@/components"
-import dayjs from "dayjs";
+import { EstimateFlightTime } from "@/components"
 import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
@@ -11,11 +10,9 @@ import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 const AircraftFlightDetails = (editedData) => {
 	const callApi = useApiFunction();
 	const { control, watch, formState: { errors } } = useFormContext();
-	const selectedAircraft = watch("aircraft");
 	const theme = useTheme();
 	const [aircraftList, setAircraftList] = useState<any>([]);
-	const [bookingDetails, setbookingDetails] = useState<any>([]);
-	const { inquiryRowData, inquiryId } = useInquiryDetails();
+	const { inquiryRowData, inquiryId, setbookingDetails } = useInquiryDetails();
 
 	const getAircrafts = async () => {
 		try {
@@ -66,7 +63,7 @@ const AircraftFlightDetails = (editedData) => {
 							{aircraftList.length != 0 && aircraftList.map((aircraft) => (
 								<Grid size={{ lg: 4, md: 6, sm: 12, xs: 12 }} key={aircraft.asset_name}>
 									<Card onClick={() => field.onChange(aircraft.id)}
-										sx={{ cursor: "pointer", border: selectedAircraft === aircraft.id ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
+										sx={{ cursor: "pointer", border: editedData?.editedData?.aircraft === aircraft.id ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
 										<CardContent sx={{ p: `16px !important` }}>
 											<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 												<Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -96,62 +93,7 @@ const AircraftFlightDetails = (editedData) => {
 						</>
 					)}
 				/>
-				{/* one way trip */}
-				<Grid size={{ xs: 12 }}>
-					<Controller
-						name="estimatedFlightTime"
-						control={control}
-						rules={{ required: "Estimated flight time is required" }}
-						render={({ field, fieldState }) => (
-							<CustomTimePicker
-								{...field}
-								value={field.value ? dayjs(field.value) : null}
-								onChange={(newValue) => field.onChange(newValue)}
-								timelabel="Estimate Flight Time"
-								asterisk
-								error={!!fieldState.error}
-								helperText={fieldState.error?.message}
-							/>
-						)}
-					/>
-				</Grid>
-				{/* for multi and round trip */}
-				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-					<Controller
-						name="estimatedDepartureDate"
-						control={control}
-						rules={{ required: "Estimated departure date & time is required" }}
-						render={({ field, fieldState }) => (
-							<CustomDateTimePicker
-								{...field}
-								value={field.value ? dayjs(field.value) : null}
-								datatimelabel="Departure Date & Time"
-								withClock
-								error={!!fieldState.error}
-								helperText={fieldState.error?.message}
-								minDateTime={dayjs().add(1, 'day').startOf('day')}
-							/>
-						)}
-					/>
-				</Grid>
-				<Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-					<Controller
-						name="estimatedReturnDate"
-						control={control}
-						rules={{ required: "Estimated return date & time is required" }}
-						render={({ field, fieldState }) => (
-							<CustomDateTimePicker
-								{...field}
-								value={field.value ? dayjs(field.value) : null}
-								datatimelabel="Return Date & Time"
-								withClock
-								error={!!fieldState.error}
-								helperText={fieldState.error?.message}
-								minDateTime={dayjs().add(1, 'day').startOf('day')}
-							/>
-						)}
-					/>
-				</Grid>
+				<EstimateFlightTime control={control} />
 			</Grid>
 		</Box>
 	);

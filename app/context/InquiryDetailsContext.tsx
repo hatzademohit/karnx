@@ -9,6 +9,8 @@ interface InquiryDetailsContextType {
     setInquiryId: React.Dispatch<React.SetStateAction<number | null>>
     inquiryRowData?: any | null;
     setinquiryRowData?: React.Dispatch<React.SetStateAction<any | null>>
+    bookingDetails: any;
+    setbookingDetails: React.Dispatch<React.SetStateAction<any>>
 }
 
 export const InquiryDetailsContext = createContext<InquiryDetailsContextType | undefined>({
@@ -20,6 +22,8 @@ export const InquiryDetailsContext = createContext<InquiryDetailsContextType | u
     inquiryId: null,
     inquiryRowData: [],
     setinquiryRowData: () => { },
+    bookingDetails: [],
+    setbookingDetails: () => { },
 })
 
 export const InquiryDetailsProvider = ({ children }: { children: React.ReactNode }) => {
@@ -28,9 +32,10 @@ export const InquiryDetailsProvider = ({ children }: { children: React.ReactNode
     const [showDetailsTabs, setShowDetailsTabs] = useState<boolean>(false)
     const [inquiryId, setInquiryId] = useState<number | null>(null);
     const [inquiryRowData, setinquiryRowData] = useState<any | null>([]);
+    const [bookingDetails, setbookingDetails] = useState<any>([]);
 
     return (
-        <InquiryDetailsContext.Provider value={{ assignedOperatorLength, setAssignedOperatorLength, showDetailsTabs, setShowDetailsTabs, inquiryId, setInquiryId, inquiryRowData, setinquiryRowData }}>
+        <InquiryDetailsContext.Provider value={{ assignedOperatorLength, setAssignedOperatorLength, showDetailsTabs, setShowDetailsTabs, inquiryId, setInquiryId, inquiryRowData, setinquiryRowData, bookingDetails, setbookingDetails }}>
             {children}
         </InquiryDetailsContext.Provider>
     )

@@ -48,10 +48,6 @@ const PricingDetails = (editedData) => {
     }, [watchedValues, fields]);
 
     useEffect(() => {
-        setValue("totalAmount", totalAmount);
-    }, [totalAmount, setValue]);
-
-    useEffect(() => {
         getCancellationPolicies();
     }, []);
 

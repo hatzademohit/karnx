@@ -12,7 +12,7 @@ const TravelAgentQuoteView = () => {
     const [acceptQuote, setAcceptQuote] = useState(false);
     const [openRejection, setOpenRejection] = useState(false);
     const [findMethod, setFindMethod] = useState<string>()
-    const { inquiryId, inquiryRowData } = useInquiryDetails();
+    const { inquiryId, inquiryRowData, setinquiryRowData } = useInquiryDetails();
     const [getQuote, setQuote] = useState<any>(
         { client: { name: '' }, aircraft: { asset_name: '' } }
     );
@@ -38,6 +38,11 @@ const TravelAgentQuoteView = () => {
     }, []);
 
     const handleQuoteAction = async (action) => {
+        setinquiryRowData((prev) => ({
+            ...prev,
+            status: "accepted",
+            status_color: '#eeeeee'
+        }));
         try {
             const bodyParam = {
                 action,
