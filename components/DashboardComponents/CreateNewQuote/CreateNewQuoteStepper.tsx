@@ -51,7 +51,6 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 
 	const onSubmit = async (data: any) => {
 		if (!isValid) return;
-		console.log(data)
 		try {
 			const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/submit-quote`, body: { ...data, inquiryId } });
 			if (res?.status === true) {
@@ -77,30 +76,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	// for edit quote
 	useEffect(() => {
 		if (!quoteDetails) return;
-		reset({
-			aircraft: quoteDetails?.aircraft ?? "",
-			baseFare: quoteDetails?.baseFare ?? "",
-			fuel: quoteDetails?.fuel ?? "",
-			taxes: quoteDetails?.taxes ?? "",
-			crewFees: quoteDetails?.crewFees ?? "",
-			handlingFees: quoteDetails?.handlingFees ?? "",
-			catering: quoteDetails?.catering ?? "",
-			totalAmount: quoteDetails?.totalAmount ?? 0,
-			quoteValidUntil: quoteDetails?.quoteValidUntil ?? "",
-			cancellationPolicy: quoteDetails?.cancellationPolicy ?? "",
-			amenities: typeof quoteDetails?.amenities === "string"
-				? quoteDetails?.amenities.split(",").map(Number)
-				: Array.isArray(quoteDetails?.amenities)
-					? quoteDetails?.amenities
-					: [],
-
-			specialOffers: quoteDetails?.specialOffers ?? "",
-			addtionalNotes: quoteDetails?.addtionalNotes ?? "",
-			estimate: quoteDetails?.estimate?.map((item) => ({
-				departureArrivalDateTime: item?.departureArrivalDateTime ?? "",
-				estimatedFlightTime: item?.estimatedFlightTime ?? ""
-			}))
-		});
+		reset()
 		// reset({
 		// 	aircraft: quoteDetails?.aircraft_id ?? quoteDetails?.aircraft ?? "",
 		// 	baseFare: quoteDetails?.base_fare ?? quoteDetails?.baseFare ?? "",

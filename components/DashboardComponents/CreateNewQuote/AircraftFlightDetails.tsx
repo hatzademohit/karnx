@@ -10,7 +10,6 @@ import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 const AircraftFlightDetails = (editedData) => {
 	const callApi = useApiFunction();
 	const { control, watch, formState: { errors } } = useFormContext();
-	const selectedAircraft = watch("aircraft");
 	const theme = useTheme();
 	const [aircraftList, setAircraftList] = useState<any>([]);
 	const { inquiryRowData, inquiryId, setbookingDetails } = useInquiryDetails();
@@ -64,7 +63,7 @@ const AircraftFlightDetails = (editedData) => {
 							{aircraftList.length != 0 && aircraftList.map((aircraft) => (
 								<Grid size={{ lg: 4, md: 6, sm: 12, xs: 12 }} key={aircraft.asset_name}>
 									<Card onClick={() => field.onChange(aircraft.id)}
-										sx={{ cursor: "pointer", border: selectedAircraft === aircraft.id ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
+										sx={{ cursor: "pointer", border: editedData?.editedData?.aircraft === aircraft.id ? `1px solid #BC0019` : "1px solid #eeeeee", borderRadius: 3 }}>
 										<CardContent sx={{ p: `16px !important` }}>
 											<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 												<Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
