@@ -78,19 +78,19 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 		if (!quoteDetails) return;
 		reset()
 		// reset({
-		// 	aircraft: quoteDetails?.aircraft_id ?? quoteDetails?.aircraft ?? "",
-		// 	baseFare: quoteDetails?.base_fare ?? quoteDetails?.baseFare ?? "",
-		// 	fuel: quoteDetails?.fluel_cost ?? quoteDetails?.fuel ?? "",
-		// 	taxes: quoteDetails?.taxes_fees ?? quoteDetails?.taxes ?? "",
-		// 	crewFees: quoteDetails?.crew_fees ?? quoteDetails?.crewFees ?? "",
-		// 	handlingFees: quoteDetails?.handling_fees ?? quoteDetails?.handlingFees ?? "",
-		// 	catering: quoteDetails?.catering_fees ?? quoteDetails?.catering ?? "",
-		// 	totalAmount: quoteDetails?.total ?? quoteDetails?.totalAmount ?? 0,
-		// 	quoteValidUntil: quoteDetails?.validate_till ?? quoteDetails?.quoteValidUntil ?? "",
-		// 	cancellationPolicy: quoteDetails?.cancellation_policy_id ?? quoteDetails?.cancellationPolicy ?? "",
+		// 	aircraft: quoteDetails?.aircraft_id ?? "",
+		// 	baseFare: quoteDetails?.base_fare ?? "",
+		// 	fuel: quoteDetails?.fluel_cost ?? "",
+		// 	taxes: quoteDetails?.taxes_fees ?? "",
+		// 	crewFees: quoteDetails?.crew_fees ?? "",
+		// 	handlingFees: quoteDetails?.handling_fees ?? "",
+		// 	catering: quoteDetails?.catering_fees ?? "",
+		// 	totalAmount: quoteDetails?.total ?? 0,
+		// 	quoteValidUntil: quoteDetails?.validate_till ?? "",
+		// 	cancellationPolicy: quoteDetails?.cancellation_policy_id ?? "",
 		// 	amenities: quoteDetails?.amenities_ids ? quoteDetails.amenities_ids.split(",").map(Number) : [],
-		// 	specialOffers: quoteDetails?.special_offers_promotions ?? quoteDetails?.specialOffers ?? "",
-		// 	addtionalNotes: quoteDetails?.additional_notes ?? quoteDetails?.addtionalNotes ?? "",
+		// 	specialOffers: quoteDetails?.special_offers_promotions ?? "",
+		// 	addtionalNotes: quoteDetails?.additional_notes ?? "",
 		// 	estimate: quoteDetails?.estimate?.map((item) => ({
 		// 		departureArrivalDateTime: item?.departureArrivalDateTime ?? "",
 		// 		estimatedFlightTime: item?.estimatedFlightTime ?? ""
