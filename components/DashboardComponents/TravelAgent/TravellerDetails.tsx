@@ -89,7 +89,7 @@ const TravellerDetails = () => {
                                 />
                             ))}
                         </Box>
-                        <Grid container spacing={1}>
+                        <Grid container spacing={1} className="adult-section">
                             <Grid size={{ xs: 12, lg: 5 }}>
                                 <CustomTextField
                                     inputLabel="Name"
@@ -129,7 +129,7 @@ const TravellerDetails = () => {
                 </Card>
             </Grid>
             {/* Show added child */}
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 6 }} className="child-section">
                 <Card elevation={2}>
                     <CardContent>
                         <Typography variant="h5" color={theme.common?.redColor} sx={{ mb: 1 }}>
@@ -185,7 +185,7 @@ const TravellerDetails = () => {
                 </Card>
             </Grid>
             {/* Show added infants */}
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Grid size={{ xs: 12, md: 6 }} className="infants-section">
                 <Card elevation={2}>
                     <CardContent>
                         <Typography variant="h5" color={theme.common?.redColor} sx={{ mb: 1 }}>
