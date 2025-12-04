@@ -196,6 +196,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
   };
 
+  const handleSessionExpired = () => {
+    localStorage.clear();
+    toast.error("Your session has expired. Please log in again");
+    router.push("/");
+  };
+
   const validateSession = async () => {
     try {
       const res = await fetch(`${apiBaseUrl}/check-token`, {
@@ -206,15 +212,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       })
       if (res.ok != true) {
-        localStorage.clear();
-        toast.success('Your session has expired. Please log in again');
-        router.push("/")
+        handleSessionExpired()
         return false;
       }
     } catch (error) {
-      localStorage.clear();
-      toast.success('Your session has expired. Please log in again');
-      router.push("/")
+      handleSessionExpired()
       return false;
     }
     return true;
