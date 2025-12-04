@@ -71,7 +71,8 @@ const LoginPage = () => {
         setAlertMessage(response.data.message);
         setOpenAlert(true);
         setSeverity('success');
-        router.push("/dashboard");
+        //router.push("/dashboard");
+        window.location.href = "/dashboard";
       } else {
         setAlertMessage(response.data.message || "Invalid credentials");
         setOpenAlert(true);
