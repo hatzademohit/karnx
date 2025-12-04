@@ -56,16 +56,16 @@ const LoginPage = () => {
         // localStorage.setItem('loginTime', currentTime); // session manager
 
         // Set session cookies for middleware-based access control
-        await fetch("/api/session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token,
-            role: response.data.role,
-            access_type: response.data.access_type,
-            permissions: response.data.permissions,
-          }),
-        });
+        // await fetch("/api/session", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     token,
+        //     role: response.data.role,
+        //     access_type: response.data.access_type,
+        //     permissions: response.data.permissions,
+        //   }),
+        // });
 
         setAlertMessage(response.data.message);
         setOpenAlert(true);

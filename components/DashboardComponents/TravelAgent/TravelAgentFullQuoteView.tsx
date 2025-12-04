@@ -30,10 +30,6 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
             city: "",
         },
     });
-    const { errors } = methods.formState;;
-    useEffect(() => {
-        //console.log(errors)
-    }, [errors])
 
     const onSubmit = async (data: any) => {
         //console.log("FORM VALUES:", quoteId);

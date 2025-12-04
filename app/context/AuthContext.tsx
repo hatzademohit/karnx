@@ -175,20 +175,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    axios.request(config)
-      .then(async (response) => {
-        localStorage.clear();
-        // Clear middleware session cookies
-        try {
-          await fetch("/api/session/clear", { method: "POST" });
-        } catch { }
-      })
-      .catch((error) => {
-        console.log(error);
-      }).finally(() => {
-        setLoader(false);
-        router.push("/");
-      })
+    // axios.request(config)
+    //   .then(async (response) => {
+    //     localStorage.clear();
+    //     // Clear middleware session cookies
+    //     try {
+    //       await fetch("/api/session/clear", { method: "POST" });
+    //     } catch { }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   }).finally(() => {
+    //     setLoader(false);
+    //     router.push("/");
+    //   })
   };
 
   return (
