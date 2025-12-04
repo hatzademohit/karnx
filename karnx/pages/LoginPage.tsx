@@ -38,7 +38,7 @@ const LoginPage = () => {
   const inputChange = () => {
     setInputType(inputType === 'text' ? 'password' : 'text');
   };
-  const { setAlertMessage, setLoader, setOpenAlert, setSeverity, currentTime, theme } = useAuth();
+  const { setAlertMessage, setLoader, setOpenAlert, setSeverity, currentTime, theme, setKarnxToken } = useAuth();
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
@@ -53,6 +53,7 @@ const LoginPage = () => {
         localStorage.setItem("permissions", JSON.stringify(response.data.permissions));
         localStorage.setItem("role", response.data.role);
         localStorage.setItem('loggedInUser', JSON.stringify(user));
+        setKarnxToken(token);
         // localStorage.setItem('loginTime', currentTime); // session manager
 
         // Set session cookies for middleware-based access control

@@ -34,6 +34,7 @@ interface AuthContextType {
   role?: string;
   karnxToken?: string;
   theme?: any;
+  setKarnxToken: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -54,6 +55,7 @@ const AuthContext = createContext<AuthContextType>({
   role: '',
   karnxToken: '',
   theme: null,
+  setKarnxToken: () => { },
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -194,7 +196,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={{
       user, setUser, login, logout, currentTime: formattedTime, setLoader, openAlert, setOpenAlert, severity
-      , setSeverity, alertMessage, setAlertMessage, hasPermission, role, karnxToken, theme
+      , setSeverity, alertMessage, setAlertMessage, hasPermission, role, karnxToken, theme, setKarnxToken
     }}>
       {loader && <PageLoader />}
       {openAlert && <AlertMassage severity={severity} alertText={alertMessage} onClose={() => setOpenAlert(false)} />}
