@@ -5,10 +5,16 @@ import { TravellerDetails, ContactDetails, GSTDetails, BillingAddress, TravelAge
 import { travelAgentSchema } from '@/utils/ValidationSchema'
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
+import { apiBaseUrl } from "@/karnx/api";
+import { toast } from "react-toastify";
+import useApiFunction from "@/karnx/Hooks/useApiFunction";
+import { useFormContext } from "react-hook-form";
+import { useEffect } from "react";
 
-const TravelAgentFullQuoteView = () => {
-
-    const { setShowDetailsTabs } = useInquiryDetails()
+const TravelAgentFullQuoteView = (quoteId: any) => {
+    // const { errors } = useFormContext()
+    const { setShowDetailsTabs, inquiryId } = useInquiryDetails();
+    const callApi = useApiFunction();
     const methods = useForm({
         resolver: yupResolver(travelAgentSchema),
         mode: 'onChange',
@@ -18,14 +24,35 @@ const TravelAgentFullQuoteView = () => {
             infants: [],
             enableGST: false,
             gstin: "",
-            contactEmail: "",
-            contactPhone: "",
+            contact_email: "",
+            contact_phone: "",
+            contact_name: '',
             city: "",
         },
     });
+    const { errors } = methods.formState;;
+    useEffect(() => {
+        //console.log(errors)
+    }, [errors])
 
-    const onSubmit = (data: any) => {
-        console.log("FORM VALUES:", data);
+    const onSubmit = async (data: any) => {
+        //console.log("FORM VALUES:", quoteId);
+        try {
+            const bodyParam = {
+                inquiryId,
+                quoteId,
+                data
+            };
+            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/confirm-booking`, body: bodyParam });
+            if (res?.status === true) {
+                toast.success(res?.message || '');
+                setShowDetailsTabs(false);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while sending quote to travel agent');
+        }
     };
 
     return (

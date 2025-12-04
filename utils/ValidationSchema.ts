@@ -267,11 +267,11 @@ export const travelAgentSchema = yup.object({
     })
   ),
   // contact detail
-  contactName: yup.string().required('Name is required'),
-  contactEmail: yup.string().required('Email is required').email("Invalid email"),
-  contactPhone: yup.string().required("Phone number required").matches(/^\d{10}$/, "Phone must be exactly 10 digits"),
+  contact_name: yup.string().required('Name is required'),
+  contact_email: yup.string().required('Email is required').email("Invalid email"),
+  contact_phone: yup.string().required("Phone number required").matches(/^\d{10}$/, "Phone must be exactly 10 digits"),
   // billing address
-  pinCode: yup.string().required("Pin Code is required"),
+  pincode: yup.string().required("Pin Code is required"),
   address: yup.string().required("Address is required"),
   city: yup.string().required("City is required"),
 

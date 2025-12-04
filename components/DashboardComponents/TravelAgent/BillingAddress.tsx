@@ -17,10 +17,10 @@ const BillingAddress = () => {
                         <Grid size={{ xs: 12, md: 12, lg: 4 }}>
                             <CustomTextField
                                 inputLabel="Pincode"
-                                {...register("pinCode")}
+                                {...register("pincode")}
                                 asterisk={true}
-                                error={!!errors.pinCode}
-                                helperText={errors.pinCode?.message as string}
+                                error={!!errors.pincode}
+                                helperText={errors.pincode?.message as string}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 12, lg: 4 }}>

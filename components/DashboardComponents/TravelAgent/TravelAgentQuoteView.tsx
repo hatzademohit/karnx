@@ -38,11 +38,7 @@ const TravelAgentQuoteView = () => {
     }, []);
 
     const handleQuoteAction = async (action) => {
-        setinquiryRowData((prev) => ({
-            ...prev,
-            status: "accepted",
-            status_color: '#eeeeee'
-        }));
+
         try {
             const bodyParam = {
                 action,
@@ -55,6 +51,12 @@ const TravelAgentQuoteView = () => {
                 toast.success(res?.message || '');
                 if (action === 'accepted') {
                     setAcceptQuote(true);
+                    setinquiryRowData((prev) => ({
+                        ...prev,
+                        status: "Quote Accepted",
+                        status_color: '#b4f7ab',
+                        status_id: 17,
+                    }));
                 }
             } else {
                 toast.error(res?.message || '');
@@ -107,7 +109,7 @@ const TravelAgentQuoteView = () => {
                             </Box>
                         </Grid>
                     }
-                    {acceptQuote && <TravelAgentFullQuoteView />}
+                    {acceptQuote && <TravelAgentFullQuoteView quoteId={getQuote.id} />}
                 </Grid>
             </Box>
             <CustomModal sx={{ '.MuiDialog-container .MuiPaper-root': { maxWidth: '400px' } }} headerText={

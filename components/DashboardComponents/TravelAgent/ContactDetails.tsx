@@ -18,28 +18,28 @@ const ContactDetails = () => {
                         <Grid size={{ xs: 12, md: 12, lg: 4 }}>
                             <CustomTextField
                                 inputLabel="Contact Name"
-                                {...register("contactName")}
+                                {...register("contact_name")}
                                 asterisk={true}
-                                error={!!errors.contactName}
-                                helperText={errors.contactName?.message as string}
+                                error={!!errors.contact_name}
+                                helperText={errors.contact_name?.message as string}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 12, lg: 4 }}>
                             <CustomTextField
                                 inputLabel="Contact Email"
-                                {...register("contactEmail")}
+                                {...register("contact_email")}
                                 asterisk={true}
-                                error={!!errors.contactEmail}
-                                helperText={errors.contactEmail?.message as string}
+                                error={!!errors.contact_email}
+                                helperText={errors.contact_email?.message as string}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 12, lg: 4 }}>
                             <CustomTextField
                                 inputLabel="Contact Phone"
-                                {...register("contactPhone")}
+                                {...register("contact_phone")}
                                 asterisk={true}
-                                error={!!errors.contactPhone}
-                                helperText={errors.contactPhone?.message as string}
+                                error={!!errors.contact_phone}
+                                helperText={errors.contact_phone?.message as string}
                             />
                         </Grid>
                     </Grid>
