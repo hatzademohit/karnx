@@ -12,6 +12,10 @@ type EstimateFlightTimeProps = {
 const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
 
     const { bookingDetails } = useInquiryDetails();
+    const formatName = (value) => {
+        if (!value) return "";
+        return value.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+    };
 
     return (
         <>
@@ -24,7 +28,7 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                                     Trip Type:
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    {bookingDetails?.trip_type}
+                                    {formatName(bookingDetails?.trip_type)}
                                 </Typography>
                             </Box>
                             {bookingDetails?.is_flexible_dates != 0 &&
@@ -47,12 +51,12 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                         <Controller
                             name={`estimate.${index}.departureArrivalDateTime`}
                             control={control}
-                            rules={{ required: "Departure and Arrival Date & Time is required" }}
+                            rules={{ required: "Departure Date & Time is required" }}
                             render={({ field, fieldState }) => (
                                 <CustomDateTimePicker
                                     {...field}
                                     value={field.value ? dayjs(field.value) : null}
-                                    datatimelabel="Departure and Arrival Date & Time"
+                                    datatimelabel="Departure Date & Time"
                                     subText={`(${item?.departure_city} → ${item?.arrival_city})`}
                                     withClock
                                     error={!!fieldState.error}

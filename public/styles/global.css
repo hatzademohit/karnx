@@ -620,6 +620,10 @@ hr.cust-divider {
   pointer-events: none;
 }
 
+.MuiFormControl-root.Mui-disabled .MuiPickersInputBase-root * {
+  color: #333333;
+}
+
 :where(.adult-section, .child-section, .infants-section):has(.Mui-error) button.MuiButtonBase-root.MuiButton-root,
 button.MuiButtonBase-root.MuiButton-root.Mui-disabled {
   pointer-events: none;

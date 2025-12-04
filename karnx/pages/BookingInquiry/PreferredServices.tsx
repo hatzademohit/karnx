@@ -1,8 +1,9 @@
-import { Box, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import { useStep } from '@/app/context/StepProvider';
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useAuth } from "@/app/context/AuthContext";
+
 const PreferredServices = () => {
     const { theme } = useAuth()
     const { aircraftTypeOptions } = useStep();
@@ -18,10 +19,45 @@ const PreferredServices = () => {
                 <Typography variant="h3" sx={{ color: theme?.common?.redColor, mt: '15px' }}>Preferred Aircraft & Services</Typography>
                 {errors.preferredServices && (
                     <Typography color="error" className="fs12" sx={{ mt: 1 }}>
-                        { errors?.preferredServices?.root?.message as string || errors?.preferredServices?.message as string }
+                        {errors?.preferredServices?.root?.message as string || errors?.preferredServices?.message as string}
                     </Typography>
                 )}
             </Grid>
+            {/* preferredServices single select */}
+            {/* <Grid size={{ xs: 12 }}>
+                <Controller
+                    name={`preferredServices`} // store values as {1: true, 2: false}
+                    control={control}
+                    render={({ field }) => (
+                        <RadioGroup
+                            name="travel-purpose"
+                            {...field}
+                            value={Array.isArray(field.value) ? field.value[0] : ""} // extract first value for selection
+                            onChange={(_, val) => {
+                                field.onChange([val]); // store in array
+                                console.log([val]);
+                            }}
+                        >
+                            <Grid container spacing={2}>
+                                {preferredServicesData && preferredServicesData.map((services) => (
+                                    <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }} key={services.id}>
+                                        <Box sx={{ border: '1px solid #E6E6E6', padding: '10px 12px' }}>
+                                            <FormControlLabel
+                                                label={<Box sx={{ lineHeight: '16px' }}> {services.name} <Typography sx={{ fontFamily: 'poppins-lt', color: '#808080', fontSize: '12px' }}> {services.description} </Typography></Box>}
+                                                value={String(services.id)}
+                                                control={<Radio />}
+                                            // control={<Radio size="small" value={Array(services.id)} />}
+                                            />
+                                        </Box>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </RadioGroup>
+                    )}
+                />
+            </Grid> */}
+
+            {/* preferredServices multi select */}
             {preferredServicesData && preferredServicesData.map((services) => (
                 <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }} key={services.id}>
                     <Box sx={{ border: '1px solid #E6E6E6', padding: '10px 12px' }}>
