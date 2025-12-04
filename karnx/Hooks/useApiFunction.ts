@@ -19,11 +19,13 @@ export interface CallApiArgs extends RequestInit {
 }
 
 export default function useApiFunction() {
-  const { karnxToken, setLoader } = useAuth();
+  const { karnxToken, setLoader, validateSession } = useAuth();
 
   const callApi = useCallback(async <T = any>({ url, method = "GET", body, headers, ...rest }: CallApiArgs): Promise<T> => {
     setLoader(true);
     try {
+      const valid = await validateSession();
+      if (!valid) return;
       const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
 
       const baseHeaders: Record<string, string> = {

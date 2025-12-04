@@ -7,6 +7,7 @@ import { PageLoader, AlertMassage } from "@/components";
 import axios from "axios";
 import { apiBaseUrl } from '@/karnx/api';
 import { useTheme } from "@mui/material/styles";
+import { toast } from "react-toastify";
 interface User {
   id: number;
   name: string;
@@ -35,6 +36,7 @@ interface AuthContextType {
   karnxToken?: string;
   theme?: any;
   setKarnxToken: React.Dispatch<React.SetStateAction<string>>;
+  validateSession?: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -56,6 +58,7 @@ const AuthContext = createContext<AuthContextType>({
   karnxToken: '',
   theme: null,
   setKarnxToken: () => { },
+  validateSession: async () => false,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -193,10 +196,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
   };
 
+  const validateSession = async () => {
+    try {
+      const res = await fetch(`${apiBaseUrl}/check-token`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${karnxToken}`,
+        },
+      })
+      if (res.ok != true) {
+        localStorage.clear();
+        toast.success('Your session has expired. Please log in again');
+        router.push("/")
+        return false;
+      }
+    } catch (error) {
+      localStorage.clear();
+      toast.success('Your session has expired. Please log in again');
+      router.push("/")
+      return false;
+    }
+    return true;
+  };
+
   return (
     <AuthContext.Provider value={{
       user, setUser, login, logout, currentTime: formattedTime, setLoader, openAlert, setOpenAlert, severity
-      , setSeverity, alertMessage, setAlertMessage, hasPermission, role, karnxToken, theme, setKarnxToken
+      , setSeverity, alertMessage, setAlertMessage, hasPermission, role, karnxToken, theme, setKarnxToken, validateSession
     }}>
       {loader && <PageLoader />}
       {openAlert && <AlertMassage severity={severity} alertText={alertMessage} onClose={() => setOpenAlert(false)} />}
