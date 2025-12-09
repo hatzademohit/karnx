@@ -14,19 +14,27 @@ import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
 import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import useApiFunction from '@/karnx/Hooks/useApiFunction';
+import { toast } from 'react-toastify';
 
 interface KXManagerCardCount {
     new_inquiries?: number;
+    new_inquiries_ids?: string;
     quote_pending?: number;
+    quote_pending_ids?: string;
     clients_decision?: number;
+    clients_decision_ids?: string;
     confirmed_booking?: number;
+    confirmed_booking_ids?: string;
     response_time?: number | string;
+    response_time_ids?: string;
     clients_decision_expiring_soon?: number;
 }
 
 const KXManager = () => {
 
     const theme = useTheme();
+    const callApi = useApiFunction();
     const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     const [introducingPopupOpen, setIntroducingPopupOpen] = useState<boolean>(false);
 
@@ -35,18 +43,32 @@ const KXManager = () => {
     );
 
     const cardInfoData = [
-        { count: result?.new_inquiries || 0, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today', icon: <ErrorOutlineIcon /> },
-        { count: result?.quote_pending || 0, label: 'Quotes Pending', status: 'Operator Response', desc: 'Avg 4.2h response', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.clients_decision || 0, label: 'Client Decisions', status: 'Pending Review', desc: `${result?.clients_decision_expiring_soon} expiring soon`, icon: <AlarmOnIcon /> },
-        { count: result?.confirmed_booking || 0, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue', icon: <CheckCircleOutlineIcon /> },
-        { count: result?.response_time || 0, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
+        { count: result?.new_inquiries || 0, ids: result?.new_inquiries_ids, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today', icon: <ErrorOutlineIcon /> },
+        { count: result?.quote_pending || 0, ids: result?.quote_pending_ids, label: 'Quotes Pending', status: 'Operator Response', desc: 'Avg 4.2h response', icon: <AccessTimeOutlinedIcon /> },
+        { count: result?.clients_decision || 0, ids: result?.clients_decision_ids, label: 'Client Decisions', status: 'Pending Review', desc: `${result?.clients_decision_expiring_soon} expiring soon`, icon: <AlarmOnIcon /> },
+        { count: result?.confirmed_booking || 0, ids: result?.confirmed_booking_ids, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue', icon: <CheckCircleOutlineIcon /> },
+        { count: result?.response_time || 0, ids: result?.response_time_ids, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
     ]
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
+    const [data, setInqueryTableData] = useState([]);
 
-    const { data, refetch: fetchInquiries } = useApi<any[]>(
-        `${apiBaseUrl}/dashboard/kxmanager-charter-inquiries`
-    );
+    const fetchInquiries = async (param: any) => {
+        try {
+            const ids = param ? `?ids=${param}` : '';
+            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/dashboard/kxmanager-charter-inquiries${ids}` });
+            if (res?.status === true) {
+                setInqueryTableData(res.data);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while fetching aircraft');
+        }
+    }
+    // const { data, refetch: fetchInquiries } = useApi<any[]>(
+    //     `${apiBaseUrl}/dashboard/kxmanager-charter-inquiries`, {body: ''},
+    // );
 
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)
@@ -125,7 +147,7 @@ const KXManager = () => {
 
     useEffect(() => {
         if (!showDetailsTabs) {
-            fetchInquiries();
+            fetchInquiries('');
             fetchCardCount();
         }
     }, [showDetailsTabs]);
@@ -136,7 +158,7 @@ const KXManager = () => {
                 <>
                     <Grid container spacing={{ md: 3, xs: 2 }}>
                         {cardInfoData && cardInfoData.map((item, index) => (
-                            <Grid size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }} key={index}>
+                            <Grid size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }} key={index} onClick={() => fetchInquiries((item.ids).toString())}>
                                 <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} InfoIcon={item.icon} />
                             </Grid>
                         ))}

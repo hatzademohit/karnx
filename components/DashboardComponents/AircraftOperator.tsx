@@ -13,24 +13,31 @@ import { RecentInquiries, Next24Hours, InquiryDetails } from '@/components/Dashb
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
 import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
+import useApiFunction from '@/karnx/Hooks/useApiFunction';
+import { toast } from 'react-toastify';
 
 interface AircraftOperatorCardCount {
     assigned_inquiries?: number;
+    assigned_inquiries_ids?: string;
     quote_pending?: number;
+    quote_pending_ids?: string;
     upcoming_flights?: number;
+    upcoming_flights_ids?: string;
     live_flights?: number;
+    live_flights_ids?: string;
     completed_bookings?: number | string;
+    completed_bookings_ids?: string;
 }
 const AircraftOperator = () => {
-
+    const callApi = useApiFunction();
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
     const { setShowDetailsTabs, showDetailsTabs, setInquiryId, setinquiryRowData } = useInquiryDetails()
-
+    const [data, setInqueryTableData] = useState([]);
     /** get card count from API*/
     useEffect(() => {
         if (!showDetailsTabs) {
-            fetchInquiries();
+            fetchInquiries('');
             fetchCardCount();
         }
     }, [showDetailsTabs]);
@@ -40,11 +47,11 @@ const AircraftOperator = () => {
     );
 
     const cardInfoData = [
-        { count: result?.assigned_inquiries || 0, label: 'Assigned Inquiries', icon: <DescriptionOutlinedIcon /> },
-        { count: result?.quote_pending || 0, label: 'Pending Quotes', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.upcoming_flights || 0, label: 'Upcoming Flights', icon: <AirplanemodeActiveIcon /> },
-        { count: result?.live_flights || 0, label: 'Live Flights', icon: <LocationOnOutlinedIcon /> },
-        { count: result?.completed_bookings || 0, label: 'Completed Bookings', icon: <CheckOutlinedIcon /> },
+        { count: result?.assigned_inquiries || 0, ids: result?.assigned_inquiries_ids, label: 'Assigned Inquiries', icon: <DescriptionOutlinedIcon /> },
+        { count: result?.quote_pending || 0, ids: result?.quote_pending_ids, label: 'Quotes Pending', icon: <AccessTimeOutlinedIcon /> },
+        { count: result?.upcoming_flights || 0, ids: result?.upcoming_flights_ids, label: 'Upcoming Flights', icon: <AirplanemodeActiveIcon /> },
+        { count: result?.live_flights || 0, ids: result?.live_flights_ids, label: 'Live Flights', icon: <LocationOnOutlinedIcon /> },
+        { count: result?.completed_bookings || 0, ids: result?.completed_bookings_ids, label: 'Completed Bookings', icon: <CheckOutlinedIcon /> },
     ];
 
     const viewInquiryDetails = (inquiryRow) => {
@@ -54,9 +61,23 @@ const AircraftOperator = () => {
         setinquiryRowData(inquiryRow);
     }
 
-    const { data, refetch: fetchInquiries } = useApi<any[]>(
-        `${apiBaseUrl}/dashboard/aircraft-operator-charter-inquiries`
-    );
+    // const { data, refetch: fetchInquiries } = useApi<any[]>(
+    //     `${apiBaseUrl}/dashboard/aircraft-operator-charter-inquiries`
+    // );
+
+    const fetchInquiries = async (param: any) => {
+        try {
+            const ids = param ? `?ids=${param}` : '';
+            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/dashboard/aircraft-operator-charter-inquiries${ids}` });
+            if (res?.status === true) {
+                setInqueryTableData(res.data);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while fetching aircraft');
+        }
+    }
 
     useEffect(() => {
         setColumns([
@@ -131,7 +152,7 @@ const AircraftOperator = () => {
             {!showDetailsTabs &&
                 <Grid container spacing={{ md: 3, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
-                        <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index}>
+                        <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index} onClick={() => { fetchInquiries((item.ids).toString()); }}>
                             <InfoCard InfoNumber={item.count} InfoText={item.label} InfoIcon={item.icon} />
                         </Grid>
                     ))}
