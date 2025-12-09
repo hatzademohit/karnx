@@ -17,12 +17,14 @@ interface ApiResponse<T> {
 export function useResponceApi<T = unknown>(url: string, options?: ApiOptions): ApiResponse<T> {
     const [data, setData] = useState<T | any>(null);
     const [error, setError] = useState<string | null>(null);
-    const { karnxToken, setLoader } = useAuth();
+    const { karnxToken, setLoader, validateSession } = useAuth();
 
     const fetchData = useCallback(async () => {
         setLoader(true);
         setError(null);
         try {
+            const valid = await validateSession();
+            if (!valid) return;
             const isFormData = typeof FormData !== 'undefined' && options?.body instanceof FormData;
 
             const baseHeaders: Record<string, string> = {
