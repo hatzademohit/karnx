@@ -68,6 +68,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 		reset({
 			estimate: bookingDetails?.flight_time?.map((item) => ({
 				departureArrivalDateTime: item?.departure_time ?? "",
+				flight_details_id: item?.flight_details_id ?? "",
 				// estimatedFlightTime: ""
 			}))
 		});

@@ -1,39 +1,42 @@
 import { InfoCard, MUIDataGrid } from '@/components'
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { InquiryDetails } from '@/components/DashboardComponents';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
 import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
+import useApiFunction from '@/karnx/Hooks/useApiFunction';
+import { toast } from 'react-toastify';
 
 interface TravelAgentCardCount {
     this_month_mybooking?: number;
+    this_month_mybooking_ids?: string;
     my_booking_active_clients?: number;
     total_inquiries_this_month?: number;
+    total_inquiries_this_month_ids?: string;
     inquiry_pending_this_month?: number;
+    inquiry_pending_this_month_ids?: string;
     confirmed_booking_this_week?: number;
+    confirmed_booking_this_week_ids?: string;
     earning?: number | string;
 }
 
 const TravelAgent = () => {
-
+    const callApi = useApiFunction();
     const router = useRouter()
     const searchParams = useSearchParams();
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
     const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
+    const [data, setInqueryTableData] = useState([]);
     /** get card count from API*/
     useEffect(() => {
         if (!showDetailsTabs) {
-            fetchCharterInquiries();
+            fetchCharterInquiries('');
             fetchCardCount();
         }
     }, [showDetailsTabs]);
@@ -43,18 +46,31 @@ const TravelAgent = () => {
     );
 
     const cardInfoData = [
-        { count: result?.this_month_mybooking || 0, label: 'My Bookings', status: 'This Month' },
-        { count: result?.my_booking_active_clients || 0, label: 'Active Clients', status: 'Currently booking with you' },
-        { count: result?.total_inquiries_this_month || 0, label: 'Total Inquiries', status: 'This Month' },
-        { count: result?.inquiry_pending_this_month || 0, label: 'Inquiries Pending', status: 'This Month' },
-        { count: result?.confirmed_booking_this_week || 0, label: 'Confirmed Bookings', status: 'This Week' },
-        { count: /*'$'*/ + result?.earning || 0, label: 'Earnings', status: '+22% from BLRt month' },
+        { count: result?.this_month_mybooking || 0, ids: result?.this_month_mybooking_ids, label: 'My Bookings', status: 'This Month' },
+        //{ count: result?.my_booking_active_clients || 0, label: 'Active Clients', status: 'Currently booking with you' },
+        { count: result?.total_inquiries_this_month || 0, ids: result?.total_inquiries_this_month_ids, label: 'Total Inquiries', status: 'This Month' },
+        { count: result?.inquiry_pending_this_month || 0, ids: result?.inquiry_pending_this_month_ids, label: 'Inquiries Pending', status: 'This Month' },
+        { count: result?.confirmed_booking_this_week || 0, ids: result?.confirmed_booking_this_week_ids, label: 'Confirmed Bookings', status: 'This Week' },
+        //{ count: '$' + result?.earning || 0, label: 'Earnings', status: '+22% from BLRt month' },
     ];
 
-    const { data: data, refetch: fetchCharterInquiries } = useApi<any[]>(
-        `${apiBaseUrl}/dashboard/travelagent-charter-inquiries`
-    );
+    // const { data: data, refetch: fetchCharterInquiries } = useApi<any[]>(
+    //     `${apiBaseUrl}/dashboard/travelagent-charter-inquiries`
+    // );
 
+    const fetchCharterInquiries = async (param: any) => {
+        try {
+            const ids = param ? `?ids=${param}` : '';
+            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/dashboard/travelagent-charter-inquiries${ids}` });
+            if (res?.status === true) {
+                setInqueryTableData(res.data);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while fetching aircraft');
+        }
+    }
 
     const viewInquiryDetails = (inquiryRow) => {
         setShowDetailsTabs(true)
@@ -136,7 +152,7 @@ const TravelAgent = () => {
             {!showDetailsTabs &&
                 <Grid container spacing={{ md: 2, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
-                        <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index}>
+                        <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index} onClick={() => { fetchCharterInquiries((item.ids).toString()); }}>
                             <InfoCard InfoNumber={(item.count != undefined) ? item.count : 0} InfoText={item.label} InfoStatus={item.status} />
                         </Grid>
                     ))}
