@@ -8,11 +8,11 @@ export const oneWaySchema = yup.object({
     then: schema => schema.notRequired(),
     otherwise: schema => schema.required("Departure date is required"),
   }),
-  flexibleRange: yup.string().nullable().when('isFlexibleDates', {
-    is: false,
-    then: schema => schema.notRequired(),
-    otherwise: schema => schema.required("Please enter specifics"),
-  })
+  // flexibleRange: yup.string().nullable().when('isFlexibleDates', {
+  //   is: false,
+  //   then: schema => schema.notRequired(),
+  //   otherwise: schema => schema.required("Please enter specifics"),
+  // })
 });
 
 export const roundTripSchema = yup.object({
@@ -30,11 +30,11 @@ export const roundTripSchema = yup.object({
     then: schema => schema.notRequired(),
     otherwise: schema => schema.required("Return date is required"),
   }),
-  flexibleRange: yup.string().nullable().when('isFlexibleDates', {
-    is: false,
-    then: schema => schema.notRequired(),
-    otherwise: schema => schema.required("Please enter specifics"),
-  })
+  // flexibleRange: yup.string().nullable().when('isFlexibleDates', {
+  //   is: false,
+  //   then: schema => schema.notRequired(),
+  //   otherwise: schema => schema.required("Please enter specifics"),
+  // })
 });
 
 export const multiCitySchema = yup.object({
@@ -64,11 +64,11 @@ export const multiCitySchema = yup.object({
     then: schema => schema.notRequired(),
     otherwise: schema => schema.required("Return date is required"),
   }),
-  flexibleRange: yup.string().nullable().when('isFlexibleDates', {
-    is: false,
-    then: schema => schema.notRequired(),
-    otherwise: schema => schema.required("Please enter specifics"),
-  })
+  // flexibleRange: yup.string().nullable().when('isFlexibleDates', {
+  //   is: false,
+  //   then: schema => schema.notRequired(),
+  //   otherwise: schema => schema.required("Please enter specifics"),
+  // })
 });
 
 export type passengerAircraftSchemaType = {
@@ -195,25 +195,19 @@ export const passengerAircraftSchema = yup.object().shape({
   // 
   documentFile: yup
     .mixed<File[]>() // Expecting an array of files
-    .nullable()
-    .test("file-required", "Please upload a document", (value) => {
-      return Array.isArray(value) && value.length > 0;
-    }),
+    .nullable().notRequired(),
+  // .test("file-required", "Please upload a document", (value) => {
+  //   return Array.isArray(value) && value.length > 0;
+  // }),
 
-  requiredDocumentUploaded: yup.array().default([]), // Default value as an empty array
+  requiredDocumentUploaded: yup.array().nullable().notRequired().default([]), // Default value as an empty array
 });
 
 export type contactSummarySchemaType = {
-  contactName: string;
-  contactEmail: string;
-  contactPhone: string;
   specialRequirements: string;
 }
 
 export const contactSummarySchema = yup.object().shape({
-  contactName: yup.string().required("Contact Name is required"),
-  contactEmail: yup.string().email("Invalid email format").required("Contact Email is required"),
-  contactPhone: yup.string().required("Contact Phone is required").matches(/^\d{10}$/, "Contact Phone must be exactly 10 digits"),
   specialRequirements: yup.string().notRequired(),
 });
 

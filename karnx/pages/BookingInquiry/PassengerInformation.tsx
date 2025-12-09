@@ -20,7 +20,7 @@ const PassengerInformation = () => {
 
     useEffect(() => {
         setSpecialAssistance(medicalSupOptions || []);
-    }, [ ]);
+    }, []);
 
     useEffect(() => {
         setValue("totalPassengers", adults + children + infants);
@@ -35,10 +35,7 @@ const PassengerInformation = () => {
     };
 
     return (
-        <>
-            <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: theme?.common?.redColor }}>Passenger Information</Typography>
-            </Grid>
+        <Grid container spacing={2}>
             {[
                 { name: "adults", label: "Adults", min: 1 },
                 { name: "children", label: "Children (2-12 yrs)", min: 0 },
@@ -276,7 +273,7 @@ const PassengerInformation = () => {
                     )}
                 />
             </Grid>
-        </>
+        </Grid>
     )
 }
 

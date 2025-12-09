@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CustomModal, InfoCard, MUIDataGrid } from '@/components'
 import { Box, Button, Grid, IconButton, Typography, useTheme } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import AlarmOnIcon from '@mui/icons-material/AlarmOn';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { ActivityTimeLine, PriorityTasks, InquiryDetails } from '@/components/DashboardComponents';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
@@ -35,11 +30,11 @@ const KXManager = () => {
     );
 
     const cardInfoData = [
-        { count: result?.new_inquiries || 0, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today', icon: <ErrorOutlineIcon /> },
-        { count: result?.quote_pending || 0, label: 'Quotes Pending', status: 'Operator Response', desc: 'Avg 4.2h response', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.clients_decision || 0, label: 'Client Decisions', status: 'Pending Review', desc: `${result?.clients_decision_expiring_soon} expiring soon`, icon: <AlarmOnIcon /> },
-        { count: result?.confirmed_booking || 0, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue', icon: <CheckCircleOutlineIcon /> },
-        { count: result?.response_time || 0, label: 'Response Time', status: 'Average', desc: '12% improvement', icon: <TrendingUpIcon /> },
+        { count: result?.new_inquiries || 0, label: 'New Inquiries', status: 'Unprocessed', desc: '+2 today' },
+        { count: result?.quote_pending || 0, label: 'Quotes Pending', status: 'Operator Response', desc: 'Avg 4.2h response' },
+        { count: result?.clients_decision || 0, label: 'Client Decisions', status: 'Pending Review', desc: `${result?.clients_decision_expiring_soon} expiring soon` },
+        { count: result?.confirmed_booking || 0, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue' },
+        { count: result?.response_time || 0, label: 'Response Time', status: 'Average', desc: '12% improvement' },
     ]
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
@@ -137,7 +132,7 @@ const KXManager = () => {
                     <Grid container spacing={{ md: 3, xs: 2 }}>
                         {cardInfoData && cardInfoData.map((item, index) => (
                             <Grid size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }} key={index}>
-                                <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} InfoIcon={item.icon} />
+                                <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} />
                             </Grid>
                         ))}
                     </Grid>

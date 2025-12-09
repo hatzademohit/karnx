@@ -5,6 +5,7 @@ import { useStep } from "@/app/context/StepProvider";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { passengerAircraftSchema, passengerAircraftSchemaType } from "@/utils/ValidationSchema";
+import { CustomAccordion } from "@/components";
 
 const PassengerAircraft = () => {
     const { activeStep, handleBackClick, formData, setFormData, handleNextClick } = useStep();
@@ -51,17 +52,50 @@ const PassengerAircraft = () => {
         handleNextClick();
     };
 
+    const accordionItems = [
+        {
+            id: "panel1",
+            title: "Passenger Information",
+            errors: "All Flieds are required",
+            asterisk: true,
+            content: (<PassengerInformation />)
+        },
+        {
+            id: "panel2",
+            title: "Preferred Aircraft & Services",
+            errors: "All Flieds are required",
+            asterisk: true,
+            content: (<PreferredServices />)
+        },
+        {
+            id: "panel3",
+            title: "Purpose of Travel",
+            errors: "All Flieds are required",
+            asterisk: true,
+            content: (<PurposeofTravel />)
+        },
+        {
+            id: "panel4",
+            title: "Crew Requirements",
+            content: (<CrewRequirements />)
+        },
+        {
+            id: "panel5",
+            title: "Catering & Extra Services",
+            errors: "All Flieds are required",
+            content: (<CateringExtraServices />)
+        },
+        {
+            id: "panel6",
+            title: "Document Upload & Review",
+            content: (<DocumentUploadReview />)
+        },
+    ];
+
     return (
         <FormProvider {...methods}>
             <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px' }}>
-                <Grid container spacing={2}>
-                    <PassengerInformation />
-                    <PreferredServices />
-                    <CrewRequirements />
-                    <PurposeofTravel />
-                    <CateringExtraServices />
-                    <DocumentUploadReview />
-                </Grid>
+                <CustomAccordion items={accordionItems} />
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
                 <Button

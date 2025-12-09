@@ -16,10 +16,7 @@ const CateringExtraServices = () => {
     }, [cateringDietaryOptions, errors]);
 
     return (
-        <>
-            <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: theme?.common?.redColor, mt: '10px' }}>Catering & Extra Services</Typography>
-            </Grid>
+        <Grid container spacing={2}>
             <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                 <FormControlLabel
                     label="Catering Required"
@@ -122,7 +119,7 @@ const CateringExtraServices = () => {
                     </Box>
                 </Grid>
             )}
-        </>
+        </Grid>
     )
 }
 

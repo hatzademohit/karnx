@@ -1,32 +1,29 @@
 'use client'
-import { FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
+import { FormControl, FormControlLabel, FormHelperText, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useStep } from "@/app/context/StepProvider";
 import { Controller, useFormContext } from "react-hook-form";
 import { useAuth } from "@/app/context/AuthContext";
 const PurposeofTravel = () => {
-    const {theme} = useAuth()
-        const { travelingPurposeOption } = useStep();
-        const [travelingPurpose, setTravelingPurpose] = useState<any[]>([]);
-        const { control, formState: { errors } } = useFormContext();
-    
-        useEffect(() => {
-            setTravelingPurpose(travelingPurposeOption || []);
-        }, [travelingPurposeOption]);
+    const { theme } = useAuth()
+    const { travelingPurposeOption } = useStep();
+    const [travelingPurpose, setTravelingPurpose] = useState<any[]>([]);
+    const { control, formState: { errors } } = useFormContext();
+
+    useEffect(() => {
+        setTravelingPurpose(travelingPurposeOption || []);
+    }, [travelingPurposeOption]);
 
     return (
-        <>
-            <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: theme?.common?.redColor, mt: '15px' }}>Purpose of Travel</Typography>
-                {errors.travelPurpose && (
-                    <Typography color="error" className="fs12" sx={{ mt: 1 }}>
-                        {errors.travelPurpose.message as string}
-                    </Typography>
-                )}
-            </Grid>
+        <Grid container spacing={2}>
+            {errors.travelPurpose && (
+                <FormHelperText error className="w-100">
+                    {errors.travelPurpose.message as string}
+                </FormHelperText>
+            )}
             <Grid size={{ xs: 12 }}>
                 <FormControl>
-                     <Controller
+                    <Controller
                         name="travelPurpose"
                         control={control}
                         defaultValue=""
@@ -44,7 +41,7 @@ const PurposeofTravel = () => {
                     />
                 </FormControl>
             </Grid>
-        </>
+        </Grid>
     )
 }
 

@@ -163,6 +163,11 @@ button.table-icon-btn {
   border-radius: 8px;
 }
 
+button.MuiButtonBase-root.Mui-disabled.MuiIconButton-root.Mui-disabled:not(.MuiAutocomplete-popupIndicator) {
+  background-color: #dfdfdf;
+  border: 1px solid #cecbcb;
+}
+
 button.table-icon-btn svg {
   font-size: 18px;
 }
@@ -194,6 +199,26 @@ span.custom-pill {
   font-family: 'poppins-lt';
   color: #333333;
   border-radius: 4px;
+}
+
+.cust-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cust-accordion.MuiPaper-root.MuiPaper-elevation,
+.cust-accordion.MuiPaper-root.MuiPaper-elevation .MuiButtonBase-root.MuiAccordionSummary-root {
+  border-radius: 20px;
+}
+
+.cust-accordion.MuiPaper-root.MuiPaper-elevation:has(.Mui-error) .error-msg {
+  display: inline-block;
+}
+
+.cust-accordion.MuiPaper-root.MuiPaper-elevation:has(.Mui-error),
+.cust-accordion.MuiPaper-root.MuiPaper-elevation:has(.Mui-error) .MuiButtonBase-root.MuiAccordionSummary-root {
+  background-color: #ffeeee;
 }
 
 .dialog-modal {
@@ -375,8 +400,8 @@ span.custom-pill {
 }
 
 .card-count {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   background-color: #F6F7FF;
   border-radius: 50%;
   display: flex;
@@ -493,6 +518,18 @@ hr.cust-divider {
   table-layout: fixed;
 }
 
+.table-append table tr:not(:first-child) .from-flied .MuiFormControl-root.MuiFormControl-fullWidth {
+  cursor: not-allowed;
+}
+
+.table-append table tr:not(:first-child) .from-flied .MuiFormControl-root.MuiFormControl-fullWidth * {
+  pointer-events: none;
+}
+
+.table-append table tr:not(:first-child) .from-flied .MuiFormControl-root.MuiFormControl-fullWidth .MuiAutocomplete-endAdornment {
+  display: none;
+}
+
 .table-append tbody td {
   padding: 8px;
   border: 0;
@@ -515,7 +552,7 @@ hr.cust-divider {
 }
 
 .passengers-travelling-info-box {
-  padding: 25px;
+  padding: 10px 25px;
   background-color: #F6F7FF;
   border-radius: 8px;
 }
@@ -625,7 +662,7 @@ hr.cust-divider {
 }
 
 :where(.adult-section, .child-section, .infants-section):has(.Mui-error) button.MuiButtonBase-root.MuiButton-root,
-button.MuiButtonBase-root.MuiButton-root.Mui-disabled {
+:where(.adult-section, .child-section, .infants-section) button.MuiButtonBase-root.MuiButton-root.Mui-disabled {
   pointer-events: none;
   background-color: rgba(0, 0, 0, 0.26);
   cursor: default;

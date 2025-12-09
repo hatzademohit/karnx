@@ -17,13 +17,7 @@ const CrewRequirements = () => {
     }, [crewRequirementOptions]);
 
     return (
-        <>
-            <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: theme?.common?.redColor, mt: '15px' }}>
-                    Crew Requirements
-                </Typography>
-            </Grid>
-
+        <Grid container spacing={2}>
             {crewReqRequirement.map((crew) => (
                 <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }} key={crew.var_key}>
                     <Controller
@@ -70,7 +64,7 @@ const CrewRequirements = () => {
                     )}
                 />
             </Grid>
-        </>
+        </Grid>
     );
 }
 

@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { CustomTextField } from "@/components";
+import { CustomAccordion, CustomTextField } from "@/components";
 import { useStep } from "@/app/context/StepProvider";
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -103,9 +103,6 @@ const ContactSummary = () => {
         resolver: yupResolver(contactSummarySchema),
         mode: "onChange",
         defaultValues: {
-            contactName: formData?.contactName || '',
-            contactEmail: formData?.contactEmail || '',
-            contactPhone: formData?.contactPhone || '',
             specialRequirements: formData?.specialRequirements || '',
         },
     });
@@ -189,81 +186,13 @@ const ContactSummary = () => {
         setRoute(routeArray);
     }, [formData, airportCity, radioTabActive, activeStep]);
 
-    return (
-        <FormProvider {...methods}>
-            <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px' }}>
+    const accordionItems = [
+        {
+            id: "panel1",
+            title: "Inquiry Summary",
+            errors: "All Flieds are required",
+            content: (
                 <Grid container spacing={2}>
-                    <Grid size={{ xs: 12 }}>
-                        <Typography variant="h3" sx={{ color: theme?.common?.redColor }}>Contact Information</Typography>
-                    </Grid>
-                    <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                        <Controller
-                            name="contactName"
-                            control={control}
-                            defaultValue=""
-                            render={({ field, fieldState }) => (
-                                <CustomTextField
-                                    required={true}
-                                    inputLabel="Contact Name"
-                                    {...field}
-                                    onChange={makeOnChange('contactName', field.onChange)}
-                                    error={!!fieldState.error}
-                                    helperText={fieldState.error?.message}
-                                />
-                            )}
-                        />
-                    </Grid>
-                    <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                        <Controller
-                            name="contactEmail"
-                            control={control}
-                            defaultValue=""
-                            render={({ field, fieldState }) => (
-                                <CustomTextField
-                                    required={true}
-                                    inputLabel="Contact Email"
-                                    {...field}
-                                    onChange={makeOnChange('contactEmail', field.onChange)}
-                                    error={!!fieldState.error}
-                                    helperText={fieldState.error?.message}
-                                />
-                            )}
-                        />
-                    </Grid>
-                    <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                        <Controller
-                            name="contactPhone"
-                            control={control}
-                            defaultValue=""
-                            render={({ field, fieldState }) => (
-                                <CustomTextField
-                                    required={true}
-                                    inputLabel="Contact Phone"
-                                    {...field}
-                                    onChange={makeOnChange('contactPhone', field.onChange)}
-                                    error={!!fieldState.error}
-                                    helperText={fieldState.error?.message}
-                                />
-                            )}
-                        />
-                    </Grid>
-                    <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
-                        <Controller
-                            name="specialRequirements"
-                            control={control}
-                            defaultValue=""
-                            render={({ field }) => (
-                                <CustomTextField
-                                    inputLabel="Special Requirements...."
-                                    {...field}
-                                    onChange={makeOnChange('specialRequirements', field.onChange)}
-                                />
-                            )}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12 }}>
-                        <Typography variant="h3" sx={{ color: theme?.common?.redColor, mt: '14px' }}>Inquiry Summary</Typography>
-                    </Grid>
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Box sx={{ display: 'flex', gap: '10px' }}>
                             <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Contact:</Typography>
@@ -279,10 +208,7 @@ const ContactSummary = () => {
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Box sx={{ display: 'flex', gap: '10px' }}>
                             <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Date:</Typography>
-                            {formData.isFlexibleDates &&
-                                <Typography sx={{ fontSize: '14px', color: '#808080' }}>{formData.flexibleRange}</Typography>
-                            }
-                            {tripType === 0 && formData.isFlexibleDates === false &&
+                            {tripType === 0 &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{dayjs(formData.oneWaydepartureDate).format("MMMM DD, YYYY")}</Typography>
                             }
                             {tripType === 1 && formData.isFlexibleDates === false &&
@@ -321,7 +247,29 @@ const ContactSummary = () => {
                             }
                         </Box>
                     </Grid>
+                    <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                        <Controller
+                            name="specialRequirements"
+                            control={control}
+                            defaultValue=""
+                            render={({ field }) => (
+                                <CustomTextField
+                                    inputLabel="Special Requirements...."
+                                    {...field}
+                                    onChange={makeOnChange('specialRequirements', field.onChange)}
+                                />
+                            )}
+                        />
+                    </Grid>
                 </Grid>
+            )
+        }
+    ];
+
+    return (
+        <FormProvider {...methods}>
+            <Box sx={{ border: '1px solid #E6E6E6', borderBottom: 0, padding: '24px' }}>
+                <CustomAccordion items={accordionItems} />
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", p: '24px', pt: '0', gap: 2, border: '1px solid #e3e3e3', borderTop: 0 }}>
                 <Button

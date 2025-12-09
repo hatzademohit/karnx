@@ -26,8 +26,7 @@ interface AppendDeleteTableProps {
 }
 
 const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTableProps) => {
-  const { airportCity, formData } = useStep();
-  console.log(formData.multiCity)
+  const { airportCity } = useStep();
 
   const airportOptions: any = (Array.isArray(airportCity) ? airportCity : []).map((airport) => ({
     label: `${airport.airport_name} (${airport.code}), ${airport.city_name}, ${airport.country_name}`,
@@ -70,6 +69,7 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
                         control={control}
                         defaultValue=""
                         render={({ field: toField }) => {
+                          const arrLength = fields?.length;
                           const multiCityto = watch(`multiCity[${index}].multiCityto`);
                           const multiCityfrom = watch(`multiCity[${index}].multiCityfrom`);
                           return (
@@ -81,17 +81,25 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
                               onFromChange={(val: any) => {
                                 setValue(`multiCity[${index}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
                               }}
-                              onToChange={(val: any) =>
-                                setValue(`multiCity[${index}].multiCityto`, val?.id, { shouldValidate: true, shouldDirty: true })
-                              }
-                              onSwap={(from: any, to: any) => {
-                                setValue(`multiCity[${index}].multiCityfrom`, from?.id, { shouldValidate: true, shouldDirty: true });
-                                setValue(`multiCity[${index}].multiCityto`, to?.id, { shouldValidate: true, shouldDirty: true });
+                              onToChange={(val: any) => {
+                                setValue(`multiCity[${index}].multiCityto`, val?.id, { shouldValidate: true, shouldDirty: true });
+                                if ((arrLength - 1) === index) {
+                                  console.log((arrLength - 1) === index)
+                                  setValue(`multiCityfromReturn`, val?.id, { shouldValidate: true, shouldDirty: true });
+                                } else {
+                                  setValue(`multiCity[${index + 1}].multiCityfrom`, val?.id, { shouldValidate: true, shouldDirty: true });
+                                }
                               }}
+                              // onSwap={(from: any, to: any) => {
+                              //   setValue(`multiCity[${index}].multiCityfrom`, from?.id, { shouldValidate: true, shouldDirty: true });
+                              //   setValue(`multiCity[${index}].multiCityto`, to?.id, { shouldValidate: true, shouldDirty: true });
+                              // }}
                               fromError={!!errors?.multiCity?.[index]?.multiCityfrom}
                               fromHelpertext={errors?.multiCity?.[index]?.multiCityfrom?.message}
                               toError={!!errors?.multiCity?.[index]?.multiCityto}
                               toHelpertext={errors?.multiCity?.[index]?.multiCityto?.message}
+                              swapButtonDisabled={true}
+                            // formDisabled={index != 0}
                             />
                           )
                         }}
@@ -147,6 +155,7 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
                         const multiCitytoReturn = watch('multiCitytoReturn');
                         return (
                           <SwapComp
+                            fromLabel='Return From'
                             fromOptions={airportOptions.filter((airport) => airport.id != multiCitytoReturn)}
                             toOptions={airportOptions.filter((airport) => airport.id != multiCityfromReturn)}
                             fromValue={airportOptions.find((airport) => airport.id == multiCityfromReturn) || ''}
@@ -165,6 +174,7 @@ const AppendDeleteTable = ({ control, setValue, errors, watch }: AppendDeleteTab
                             fromHelpertext={errors?.multiCityfromReturn?.message}
                             toError={!!errors?.multiCitytoReturn}
                             toHelpertext={errors?.multiCitytoReturn?.message}
+                            swapButtonDisabled={true}
                           />
                         )
                       }}
