@@ -5,7 +5,8 @@ module.exports = {
   env: {
     REACT_APP_API_BASE_URL: 'http://' + backEnd + '/api',
     FILE_STORAGE_URL: 'http://127.0.0.1:8000/storage/',
-    REACT_APP_API_WEB_URL: 'http://' + hostname + '/api'
+    REACT_APP_API_WEB_URL: 'http://' + hostname + '/api',
+    RAZORPAY_KEY: 'rzp_test_PfUUSYbitNukEH',
   },
   images: {
     remotePatterns: [
