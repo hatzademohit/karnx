@@ -9,11 +9,11 @@ type SwapCompProps = {
   fromPlaceholder?: string;
   toLabel?: string;
   toPlaceholder?: string;
-  options?: string[];
-  fromOptions?: string[];
-  toOptions?: string[];
-  fromValue: string;
-  toValue: string;
+  options?: any;
+  fromOptions?: any;
+  toOptions?: any;
+  fromValue: any;
+  toValue: any;
   onFromChange: (val: string) => void;
   onToChange: (val: string) => void;
   onSwap?: (from: string, to: string) => void;

@@ -57,13 +57,13 @@ export const multiCitySchema = yup.object({
         })
       ),
   }),
-  multiCityfromReturn: yup.string().required("Departure is required"),
-  multiCitytoReturn: yup.string().required("Destination is required"),
-  multiCityreturnDate: yup.string().when("isFlexibleDates", {
-    is: true,
-    then: schema => schema.notRequired(),
-    otherwise: schema => schema.required("Return date is required"),
-  }),
+  // multiCityfromReturn: yup.string().required("Departure is required"),
+  // multiCitytoReturn: yup.string().required("Destination is required"),
+  // multiCityreturnDate: yup.string().when("isFlexibleDates", {
+  //   is: true,
+  //   then: schema => schema.notRequired(),
+  //   otherwise: schema => schema.required("Return date is required"),
+  // }),
   // flexibleRange: yup.string().nullable().when('isFlexibleDates', {
   //   is: false,
   //   then: schema => schema.notRequired(),

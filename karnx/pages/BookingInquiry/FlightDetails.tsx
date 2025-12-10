@@ -47,10 +47,10 @@ const FlightDetails = () => {
                     multiCitydepartureDate: item.multiCitydepartureDate || null,
                 };
             }),
-            multiCityfromReturn: formData?.multiCityfromReturn || '',
-            multiCitytoReturn: formData?.multiCitytoReturn || '',
-            multiCityreturnDate: formData?.multiCityreturnDate || null,
-            //tripType: radioTabActive,
+            // multiCityfromReturn: formData?.multiCityfromReturn || '',
+            // multiCitytoReturn: formData?.multiCitytoReturn || '',
+            // multiCityreturnDate: formData?.multiCityreturnDate || null,
+            tripType: radioTabActive,
         },
     });
 

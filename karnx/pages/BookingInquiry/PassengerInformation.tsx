@@ -114,7 +114,7 @@ const PassengerInformation = () => {
                                 />
                             </Grid>
 
-                            <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                            <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }} sx={{ '.MuiFormControl-root.white-bg-input': { display: 'block', '& .MuiInputBase-formControl': { width: '100%' } } }}>
                                 <Controller
                                     name="petSize"
                                     control={control}
