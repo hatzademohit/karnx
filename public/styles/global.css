@@ -163,10 +163,10 @@ button.table-icon-btn {
   border-radius: 8px;
 }
 
-button.MuiButtonBase-root.Mui-disabled.MuiIconButton-root.Mui-disabled:not(.MuiAutocomplete-popupIndicator) {
+/* button.MuiButtonBase-root.Mui-disabled.MuiIconButton-root.Mui-disabled:not(.MuiAutocomplete-popupIndicator) {
   background-color: #dfdfdf;
   border: 1px solid #cecbcb;
-}
+} */
 
 button.table-icon-btn svg {
   font-size: 18px;

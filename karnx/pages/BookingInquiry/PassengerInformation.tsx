@@ -1,18 +1,18 @@
 'use client'
-import { Box, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, Radio, RadioGroup, Typography } from "@mui/material";
+import { Box, Checkbox, FormControl, FormControlLabel, Grid, IconButton, MenuItem, Radio, RadioGroup, Typography } from "@mui/material";
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { useEffect, useState } from "react";
-import { CustomTextField } from "@/components";
+import { CustomTextField, SingleSelect } from "@/components";
 import { useStep } from '@/app/context/StepProvider';
 import { Controller, useFormContext } from "react-hook-form";
-import { useAuth } from "@/app/context/AuthContext";
 
 const PassengerInformation = () => {
-    const { theme } = useAuth()
+
     const [specialAssistance, setSpecialAssistance] = useState<any[]>([]);
     const { medicalSupOptions } = useStep();
     const { control, watch, setValue, formState: { errors } } = useFormContext();
+    const [petSize, setPetSize] = useState<any>([]);
 
     const adults = watch("adults") || 1;
     const children = watch("children") || 0;
@@ -26,13 +26,19 @@ const PassengerInformation = () => {
         setValue("totalPassengers", adults + children + infants);
     }, [adults, children, infants, setValue])
 
-    const [otherAssistance, setOtherAssistance] = useState<any>();
-
     const handleChange = (name: string, action: "inc" | "dec", min = 0) => {
         const currentValue = watch(name) || 0;
         const newValue = action === "inc" ? currentValue + 1 : Math.max(min, currentValue - 1);
         setValue(name, newValue);
     };
+
+    useEffect(() => {
+        setPetSize([
+            { name: "Small(0kg - 2kg)", id: 1 },
+            { name: "Medium(3kg - 8kg)", id: 2 },
+            { name: "Large(8kg & more)", id: 3 },
+        ]);
+    }, [])
 
     return (
         <Grid container spacing={2}>
@@ -112,16 +118,34 @@ const PassengerInformation = () => {
                                 <Controller
                                     name="petSize"
                                     control={control}
-                                    render={({ field, fieldState }) => (
-                                        <CustomTextField
-                                            inputLabel="Pet Size"
-                                            placeholder="Enter Pet Weight"
-                                            className="white-bg-input"
-                                            {...field}
-                                            error={!!fieldState.error}
-                                            helperText={fieldState.error?.message}
-                                        />
-                                    )}
+                                    render={({ field, fieldState }) => {
+                                        const selectedOption = petSize.find((opt) => opt.id === field.value);
+                                        return (
+                                            // <CustomTextField
+                                            //     inputLabel="Pet Size"
+                                            //     placeholder="Enter Pet Weight"
+                                            //     className="white-bg-input"
+                                            //     {...field}
+                                            //     error={!!fieldState.error}
+                                            //     helperText={fieldState.error?.message}
+                                            // />
+                                            <SingleSelect
+                                                className="white-bg-input"
+                                                inputLabel="Pet Size"
+                                                value={selectedOption ? selectedOption.name : ""}
+                                                onChange={(e) => { field.onChange(e.target.value); console.log(e.target.value) }} // store the ID
+                                                error={!!errors.petSize}
+                                                helperText={errors.petSize?.message as string}
+                                                size="small"
+                                            >
+                                                {petSize && petSize.map((opt) => (
+                                                    <MenuItem value={opt.id} key={opt.id}>
+                                                        {opt.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </SingleSelect>
+                                        )
+                                    }}
                                 />
                             </Grid>
                             <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
@@ -209,7 +233,6 @@ const PassengerInformation = () => {
                                         <Controller
                                             name="otherAssistance" // Name of the field in form data
                                             control={control}
-                                            defaultValue={otherAssistance || ''} // Default value is empty if `otherAssistance` is not set
                                             render={({ field, fieldState }) => (
                                                 <CustomTextField
                                                     {...field} // Spread the field props from react-hook-form (value, onChange, etc.)

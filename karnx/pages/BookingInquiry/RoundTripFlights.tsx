@@ -68,6 +68,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                         <CustomDateTimePicker
                             {...field}
                             value={field.value ? dayjs(field.value) : null}
+                            onChange={(val) => { field.onChange(val); setValue('roundTripreturnDate', null) }}
                             datatimelabel="Departure Date & Time"
                             withClock
                             error={!!errors.roundTripdepartureDate}
@@ -83,17 +84,22 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                 <Controller
                     name="roundTripreturnDate"
                     control={control}
-                    render={({ field }) => (
-                        <CustomDateTimePicker
-                            {...field}
-                            datatimelabel="Return Date & Time"
-                            value={field.value ? dayjs(field.value) : null}
-                            withClock
-                            error={!!errors.roundTripreturnDate}
-                            helperText={errors.roundTripreturnDate?.message}
-                            minDateTime={dayjs().add(1, 'day').startOf('day')}
-                        />
-                    )}
+                    render={({ field }) => {
+                        const roundTripdepartureDate = watch('roundTripdepartureDate')
+                        return (
+                            <CustomDateTimePicker
+                                {...field}
+                                datatimelabel="Return Date & Time"
+                                value={field.value ? dayjs(field.value) : null}
+                                withClock
+                                error={!!errors.roundTripreturnDate}
+                                helperText={errors.roundTripreturnDate?.message}
+                                minDateTime={roundTripdepartureDate ? (dayjs.isDayjs(roundTripdepartureDate)
+                                    ? roundTripdepartureDate : dayjs(roundTripdepartureDate)) : dayjs().add(1, "day").startOf("day")
+                                }
+                            />
+                        )
+                    }}
                 />
             </Grid>
 
