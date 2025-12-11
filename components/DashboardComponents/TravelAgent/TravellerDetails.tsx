@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Typography, Checkbox, FormControlLabel, Grid, Alert, CardContent, Card, useTheme, Divider } from "@mui/material";
 import { CustomTextField } from "@/components/CustomTextField/CustomTextField";
 
@@ -12,6 +12,7 @@ const TravellerDetails = () => {
         children: watch("children"),
         infants: watch("infants"),
     };
+    //console.log(formData, 'mukesh dd');
     type Person = { name: string; age: string; selected: boolean };
     const [inputs, setInputs] = useState({
         adults: { name: "", age: "" },
@@ -59,6 +60,9 @@ const TravellerDetails = () => {
     const childAgeError = validateAge("children", inputs.children.age);
     const infantAgeError = validateAge("infants", inputs.infants.age);
 
+    useEffect(() => {
+        setLists(formData)
+    }, [formData?.adults, formData?.children, formData?.infants]);
     return (
         <>
             <Grid size={{ xs: 12 }}>
@@ -84,7 +88,7 @@ const TravellerDetails = () => {
                         <Box mt={1}>
                             {lists?.adults?.map((item: any, index: number) => (
                                 <FormControlLabel key={index}
-                                    control={<Checkbox size="small" checked={item.selected} onChange={() => handleToggle("adults", index)} />}
+                                    control={<Checkbox size="small" checked={item.selected == 1 ? true : item.selected} onChange={() => handleToggle("adults", index)} />}
                                     label={`${item.name}, age ${item.age}`}
                                 />
                             ))}
@@ -139,7 +143,7 @@ const TravellerDetails = () => {
                             {lists?.children?.map((item: any, index: number) => (
                                 <FormControlLabel key={index}
                                     control={
-                                        <Checkbox size="small" checked={item.selected} onChange={() => handleToggle("children", index)} />
+                                        <Checkbox size="small" checked={item.selected == 1 ? true : item.selected} onChange={() => handleToggle("children", index)} />
                                     }
                                     label={`${item.name}, age ${item.age}`}
                                 />
@@ -195,7 +199,7 @@ const TravellerDetails = () => {
                             {lists?.infants?.map((item: any, index: number) => (
                                 <FormControlLabel key={index}
                                     control={
-                                        <Checkbox size="small" checked={item.selected} onChange={() => handleToggle("infants", index)} />
+                                        <Checkbox size="small" checked={item.selected == 1 ? true : item.selected} onChange={() => handleToggle("infants", index)} />
                                     }
                                     label={`${item.name}, age ${item.age}`}
                                 />
