@@ -63,7 +63,7 @@ export default function CustomDateTimePicker({
       <Box sx={{ display: 'flex', gap: 1 }}>
         {datatimelabel && (
           <InputLabel sx={{ fontFamily: "poppins-semibold", width: "fit-content", color: "#333333" }}>
-            {datatimelabel} {required === true ? <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography> : ''}
+            {datatimelabel} {required === true ? <Typography component='span' sx={{ color: 'red' }}>*</Typography> : ''}
           </InputLabel>
         )}
         {subText && (

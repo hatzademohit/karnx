@@ -72,6 +72,7 @@ const SwapComp: React.FC<SwapCompProps> = ({
           placeholder={fromPlaceholder}
           options={fromOptions || options}
           size="medium"
+          required={true}
           value={fromValue}
           onChange={(_: any, val: any) => onFromChange(val ?? "")}
           error={fromError}
@@ -116,6 +117,7 @@ const SwapComp: React.FC<SwapCompProps> = ({
           placeholder={toPlaceholder}
           options={toOptions || options}
           size="medium"
+          required={true}
           value={toValue}
           onChange={(_: any, val: any) => onToChange(val ?? "")}
           error={toError}

@@ -32,16 +32,6 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                                     {formatName(bookingDetails?.trip_type)}
                                 </Typography>
                             </Box>
-                            {bookingDetails?.is_flexible_dates != 0 &&
-                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <Typography variant="h5">
-                                        Flexible Dates:
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {bookingDetails?.flexible_range}
-                                    </Typography>
-                                </Box>
-                            }
                         </Box>
                     </CardContent>
                 </Card>

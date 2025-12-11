@@ -119,24 +119,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
                 {data?.traveling_purpose}
               </Typography>
             </Grid>
-
           </Grid>
-          <Box
-            sx={{
-              bgcolor: "#F2F2F2",
-              borderRadius: 2,
-              p: 1.5,
-              mt: 2,
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            <Event fontSize="small" color="action" />
-            <Typography variant="body2">
-              <strong>Flexible Dates:</strong> {data?.is_flexible_date == 1 ? data?.flexible_date_range : 'NA'}
-            </Typography>
-          </Box>
         </CardContent>
       </Card>
 
