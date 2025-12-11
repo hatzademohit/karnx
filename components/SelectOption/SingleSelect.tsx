@@ -19,6 +19,7 @@ export interface SelectProps {
     inputLabel?: string;
     disabled?: boolean;
     className?: string;
+    asterisk?: boolean;
 }
 
 const SingleSelect: React.FC<SelectProps> = ({
@@ -36,12 +37,13 @@ const SingleSelect: React.FC<SelectProps> = ({
     inputLabel,
     disabled = false,
     className,
+    asterisk = false,
 }) => {
 
     return (
         <>
 
-            {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel}</InputLabel>}
+            {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: 'red' }}>*</Typography>}</InputLabel>}
             <FormControl fullWidth size={size} variant={variant} className={className}>
                 <Select
                     labelId="demo-simple-select-label"

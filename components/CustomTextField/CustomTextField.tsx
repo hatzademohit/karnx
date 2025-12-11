@@ -1,7 +1,5 @@
 import React, { forwardRef } from 'react';
 import { TextField, InputLabel, Box, Typography } from '@mui/material';
-import { useAuth } from '@/app/context/AuthContext';
-
 export interface CustomTextFieldProps {
   name?: string;
   type?: string;
@@ -54,11 +52,10 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
     multiline,
     ...props
   }, ref) => {
-    const { theme } = useAuth()
 
     return (
       <Box className="w-100 textflied-container">
-        {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography>}</InputLabel>}
+        {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: 'red' }}>*</Typography>}</InputLabel>}
         <TextField
           fullWidth
           inputRef={ref}

@@ -74,6 +74,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                             error={!!errors.roundTripdepartureDate}
                             helperText={errors.roundTripdepartureDate?.message}
                             minDateTime={dayjs().add(1, 'day').startOf('day')}
+                            required={true}
                         />
                     )}
                 />
@@ -93,6 +94,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                                 value={field.value ? dayjs(field.value) : null}
                                 withClock
                                 error={!!errors.roundTripreturnDate}
+                                required={true}
                                 helperText={errors.roundTripreturnDate?.message}
                                 minDateTime={roundTripdepartureDate ? (dayjs.isDayjs(roundTripdepartureDate)
                                     ? roundTripdepartureDate : dayjs(roundTripdepartureDate)) : dayjs().add(1, "day").startOf("day")

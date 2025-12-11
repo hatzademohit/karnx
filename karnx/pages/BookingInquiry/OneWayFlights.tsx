@@ -70,6 +70,7 @@ const OneWayFlights = ({ control, errors, setValue, watch }: any) => {
               error={!!errors.oneWaydepartureDate}
               helperText={errors.oneWaydepartureDate?.message}
               minDateTime={dayjs().add(1, 'day').startOf('day')}
+              required={true}
             />
           )}
         />
