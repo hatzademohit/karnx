@@ -1,15 +1,10 @@
 import { InfoCard, MUIDataGrid } from '@/components'
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import { RecentInquiries, Next24Hours, InquiryDetails } from '@/components/DashboardComponents';
+import { InquiryDetails } from '@/components/DashboardComponents';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
 import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
@@ -47,11 +42,11 @@ const AircraftOperator = () => {
     );
 
     const cardInfoData = [
-        { count: result?.assigned_inquiries || 0, ids: result?.assigned_inquiries_ids, label: 'Assigned Inquiries', icon: <DescriptionOutlinedIcon /> },
-        { count: result?.quote_pending || 0, ids: result?.quote_pending_ids, label: 'Quotes Pending', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.upcoming_flights || 0, ids: result?.upcoming_flights_ids, label: 'Upcoming Flights', icon: <AirplanemodeActiveIcon /> },
-        { count: result?.live_flights || 0, ids: result?.live_flights_ids, label: 'Live Flights', icon: <LocationOnOutlinedIcon /> },
-        { count: result?.completed_bookings || 0, ids: result?.completed_bookings_ids, label: 'Completed Bookings', icon: <CheckOutlinedIcon /> },
+        { count: result?.assigned_inquiries || 0, ids: result?.assigned_inquiries_ids, label: 'Assigned Inquiries' },
+        { count: result?.quote_pending || 0, ids: result?.quote_pending_ids, label: 'Quotes Pending' },
+        { count: result?.upcoming_flights || 0, ids: result?.upcoming_flights_ids, label: 'Upcoming Flights' },
+        { count: result?.live_flights || 0, ids: result?.live_flights_ids, label: 'Live Flights' },
+        { count: result?.completed_bookings || 0, ids: result?.completed_bookings_ids, label: 'Completed Bookings' },
     ];
 
     const viewInquiryDetails = (inquiryRow) => {
@@ -153,7 +148,7 @@ const AircraftOperator = () => {
                 <Grid container spacing={{ md: 3, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
                         <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index} onClick={() => { fetchInquiries((item.ids).toString()); }}>
-                            <InfoCard InfoNumber={item.count} InfoText={item.label} InfoIcon={item.icon} />
+                            <InfoCard InfoNumber={item.count} InfoText={item.label} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>

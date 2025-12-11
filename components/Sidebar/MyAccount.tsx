@@ -105,20 +105,23 @@ export default function MyAccount() {
           width: 'fit-content',
           '&:hover': {
             backgroundColor: 'transparent',
-          }, 
+          },
           '& img': { width: { md: 30, sm: 25, xs: 20 }, height: { md: 30, sm: 25, xs: 20 } }
         }}
       >
         {
-          user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{ borderRadius: '50%', objectFit: 'cover' }} /> : 
-          <Typography component="span" sx={{ backgroundColor: '#F6F7FF', padding: '6px', borderRadius: '50%', width: '40px', height: '40px' }}>
-            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: theme?.common?.blueColor }} />
-          </Typography>
+          user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{ borderRadius: '50%', objectFit: 'cover' }} /> :
+            <Typography component="span" sx={{ backgroundColor: '#F6F7FF', padding: '6px', borderRadius: '50%', width: '40px', height: '40px' }}>
+              <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top: '3px', color: theme?.common?.blueColor }} />
+            </Typography>
         }
-        <Typography sx={{display: 'flex', flexDirection: 'column', textAlign: 'start'}}>
-          <Typography component='span'
-            sx={{ color: '#333333' }}
-          >{ (user?.name) ? user.name : 'Operator'  }</Typography>
+        <Typography sx={{ display: 'flex', flexDirection: 'column', textAlign: 'start' }}>
+          <Typography component='span' sx={{ color: '#333333', lineHeight: '16px' }}>
+            {(user?.name) ? user.name : 'Operator'}
+          </Typography>
+          <Typography component='span' variant='body2' sx={{ fontSize: '14px !important' }}>
+            {`User Role`}
+          </Typography>
         </Typography>
       </Button>
       <StyledMenu
@@ -130,22 +133,22 @@ export default function MyAccount() {
         open={open}
         onClose={handleClose}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', padding: "6px 16px", gap: '15px'}}>
-        {
-          user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{borderRadius: '50%', objectFit: 'cover' }} /> : 
-          <Typography component="span">
-            <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top:'3px', color: theme?.common?.blueColor }} />
-          </Typography>
-        }
+        <Box sx={{ display: 'flex', alignItems: 'center', padding: "6px 16px", gap: '15px' }}>
+          {
+            user?.avatar ? <Image src={fileStorageUrl + user?.avatar} alt='img-not-found' width={30} height={30} style={{ borderRadius: '50%', objectFit: 'cover' }} /> :
+              <Typography component="span">
+                <AccountCircleOutlinedIcon sx={{ fontSize: '22px', position: 'relative', top: '3px', color: theme?.common?.blueColor }} />
+              </Typography>
+          }
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography component='h5' variant='h5'>
-              { (user?.name) ? user.name : 'Operator'  }
+              {(user?.name) ? user.name : 'Operator'}
             </Typography>
             <Typography>
-              User Role: { role ? role : ''  }
+              User Role: {role ? role : ''}
             </Typography>
             <Typography>
-              User Id: { (user?.id) ? user.id : ''  }
+              User Id: {(user?.id) ? user.id : ''}
             </Typography>
           </Box>
         </Box>

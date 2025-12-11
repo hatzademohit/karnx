@@ -9,11 +9,11 @@ type SwapCompProps = {
   fromPlaceholder?: string;
   toLabel?: string;
   toPlaceholder?: string;
-  options?: string[];
-  fromOptions?: string[];
-  toOptions?: string[];
-  fromValue: string;
-  toValue: string;
+  options?: any;
+  fromOptions?: any;
+  toOptions?: any;
+  fromValue: any;
+  toValue: any;
   onFromChange: (val: string) => void;
   onToChange: (val: string) => void;
   onSwap?: (from: string, to: string) => void;
@@ -22,10 +22,12 @@ type SwapCompProps = {
   toError?: boolean;
   toHelpertext?: string;
   disabled?: boolean;
+  formDisabled?: boolean;
+  swapButtonDisabled?: boolean;
 };
 
 const SwapComp: React.FC<SwapCompProps> = ({
-  fromLabel = "From",
+  fromLabel = "Start From",
   fromPlaceholder = "Departure airport",
   toLabel = "To",
   toPlaceholder = "Destination airport",
@@ -42,10 +44,12 @@ const SwapComp: React.FC<SwapCompProps> = ({
   toError,
   toHelpertext,
   disabled = false,
+  formDisabled = false,
+  swapButtonDisabled = false
 }) => {
 
-  const {theme} = useAuth();
-  
+  const { theme } = useAuth();
+
   const handleSwap = () => {
     onFromChange(toValue);
     onToChange(fromValue);
@@ -62,7 +66,7 @@ const SwapComp: React.FC<SwapCompProps> = ({
       }}
     >
       {/* From Field */}
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }} className='from-flied'>
         <SimpleAutoComplete
           inputLabel={fromLabel}
           placeholder={fromPlaceholder}
@@ -72,37 +76,39 @@ const SwapComp: React.FC<SwapCompProps> = ({
           onChange={(_: any, val: any) => onFromChange(val ?? "")}
           error={fromError}
           helperText={fromHelpertext}
-          disabled={disabled}
+          disabled={disabled || formDisabled}
         />
       </Box>
 
       {/* Swap Button */}
-      <Box
-        sx={{
-          position: "absolute",
-          width: "40px",
-          height: "40px",
-          margin: "auto",
-          top: "28px",
-          left: 0,
-          right: 0
-        }}
-      >
-        <IconButton
-          disabled={disabled}
-          onClick={handleSwap}
+      {!swapButtonDisabled &&
+        <Box
+          className="btn-swap"
           sx={{
-            border: "1px solid #e6e6e6",
-            color: theme?.common?.blueColor,
-            backgroundColor: "#ffffff",
-            zIndex: 9,
-            "&:hover": { backgroundColor: theme?.common?.blueColor, color: "#ffffff" },
+            position: "absolute",
+            width: "40px",
+            height: "40px",
+            margin: "auto",
+            top: "28px",
+            left: 0,
+            right: 0
           }}
         >
-          <SwapHorizRoundedIcon />
-        </IconButton>
-      </Box>
-
+          <IconButton
+            disabled={disabled}
+            onClick={handleSwap}
+            sx={{
+              border: "1px solid #e6e6e6",
+              color: theme?.common?.blueColor,
+              backgroundColor: "#ffffff",
+              zIndex: 9,
+              "&:hover": { backgroundColor: theme?.common?.blueColor, color: "#ffffff" },
+            }}
+          >
+            <SwapHorizRoundedIcon />
+          </IconButton>
+        </Box>
+      }
       {/* To Field */}
       <Box sx={{ width: "100%" }}>
         <SimpleAutoComplete

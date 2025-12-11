@@ -30,7 +30,7 @@ const TableComp: React.FC<TableCompProps> = ({
   const [value, setValue] = useState<number>(80);
 
   return (
-    <Box className={`react-table database-tbl ${className}`} sx={{ '& .MuiToolbar-root.MuiToolbar-gutters > div:has(.MuiCollapse-root.MuiCollapse-horizontal .MuiFormControl-root .MuiInputBase-root)' : { marginLeft: 'auto', padding: '4px 0', alignItems: 'center' }, '.MuiToolbar-root.MuiToolbar-gutters': {minHeight: '36px'}}} data-btn={addButton}>
+    <Box className={`react-table database-tbl ${className}`} sx={{ '& .MuiToolbar-root.MuiToolbar-gutters > div:has(.MuiCollapse-root.MuiCollapse-horizontal .MuiFormControl-root .MuiInputBase-root)': { marginLeft: 'auto', padding: '4px 0', alignItems: 'center' }, '.MuiToolbar-root.MuiToolbar-gutters': { minHeight: '36px' } }} data-btn={addButton}>
       <MaterialReactTable
         columns={columns}
         data={data}
@@ -38,7 +38,8 @@ const TableComp: React.FC<TableCompProps> = ({
         enableFullScreenToggle={false}
         enableColumnActions={false}
         enableHiding={false}
-        enableColumnFilters={false}
+        // enableColumnFilters={false}
+        enableColumnFilters={true}
         enableStickyHeader
         muiSearchTextFieldProps={{
           placeholder: 'Search...',

@@ -17,29 +17,28 @@ const OneWayFlights = ({ control, errors, setValue, watch }: any) => {
   }));
 
   return (
-    <Box sx={{ border: "1px solid #E5E7EB", padding: "20px", borderRadius: "10px" }}>
-      <Grid container spacing={2}>
-        <Grid size={{ lg: 8, md: 8, sm: 12, xs: 12 }}>
-          <Controller
-            name="oneWayfrom"
-            control={control}
-            render={({ field }) => (
-              <Controller
-                name="oneWayto"
-                control={control}
-                render={({ field: tofiled }) => {
-                  const oneWayfrom = watch('oneWayfrom');
-                  const oneWayto = watch('oneWayto');
-                  return(
+    <Grid container spacing={2}>
+      <Grid size={{ lg: 8, md: 8, sm: 12, xs: 12 }}>
+        <Controller
+          name="oneWayfrom"
+          control={control}
+          render={({ field }) => (
+            <Controller
+              name="oneWayto"
+              control={control}
+              render={({ field: tofiled }) => {
+                const oneWayfrom = watch('oneWayfrom');
+                const oneWayto = watch('oneWayto');
+                return (
                   <SwapComp
                     fromOptions={airportOptions.filter((airport) => airport.id != oneWayto)}
                     toOptions={airportOptions.filter((airport) => airport.id != oneWayfrom)}
-                    fromValue={airportOptions.find((airport) => airport.id == oneWayfrom) || null }
-                    toValue={airportOptions.find((airport) => airport.id == oneWayto) || null }
+                    fromValue={airportOptions.find((airport) => airport.id == oneWayfrom) || null}
+                    toValue={airportOptions.find((airport) => airport.id == oneWayto) || null}
                     onFromChange={(val: any) => {
                       setValue("oneWayfrom", val?.id, { shouldValidate: true, shouldDirty: true });
                     }}
-                    onToChange={(val: any) => { 
+                    onToChange={(val: any) => {
                       setValue("oneWayto", val?.id, { shouldValidate: true, shouldDirty: true });
                     }}
                     onSwap={(from: any, to: any) => {
@@ -51,31 +50,31 @@ const OneWayFlights = ({ control, errors, setValue, watch }: any) => {
                     toError={!!errors.oneWayto}
                     toHelpertext={errors.oneWayto?.message}
                   />
-                )}}
-              />
-            )}
-          />
-        </Grid>
-
-        <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
-          <Controller
-            name="oneWaydepartureDate"
-            control={control}
-            render={({ field }) => (
-              <CustomDateTimePicker
-                {...field}
-                value={field.value ? dayjs(field.value) : null}
-                datatimelabel="Departure Date & Time"
-                withClock
-                error={!!errors.oneWaydepartureDate}
-                helperText={errors.oneWaydepartureDate?.message}
-                minDateTime={dayjs().add(1, 'day').startOf('day')}
-              />
-            )}
-          />
-        </Grid>
+                )
+              }}
+            />
+          )}
+        />
       </Grid>
-    </Box>
+
+      <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
+        <Controller
+          name="oneWaydepartureDate"
+          control={control}
+          render={({ field }) => (
+            <CustomDateTimePicker
+              {...field}
+              value={field.value ? dayjs(field.value) : null}
+              datatimelabel="Departure Date & Time"
+              withClock
+              error={!!errors.oneWaydepartureDate}
+              helperText={errors.oneWaydepartureDate?.message}
+              minDateTime={dayjs().add(1, 'day').startOf('day')}
+            />
+          )}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

@@ -17,10 +17,7 @@ const DocumentUploadReview = () => {
         setRequiredDocument(requiredDocumentUploadOptions || []);
     }, [requiredDocumentUploadOptions]);
     return (
-        <>
-            <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: theme?.common?.redColor }}>Document Upload & Review</Typography>
-            </Grid>
+        <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
                 <Controller
                     name="documentFile"
@@ -83,7 +80,7 @@ const DocumentUploadReview = () => {
                     ))}
                 </FormControl>
             </Grid>
-        </>
+        </Grid>
     )
 }
 

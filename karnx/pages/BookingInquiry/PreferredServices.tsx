@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, FormHelperText, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import { useStep } from '@/app/context/StepProvider';
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -14,15 +14,12 @@ const PreferredServices = () => {
     }, [aircraftTypeOptions]);
 
     return (
-        <>
-            <Grid size={{ xs: 12 }}>
-                <Typography variant="h3" sx={{ color: theme?.common?.redColor, mt: '15px' }}>Preferred Aircraft & Services</Typography>
-                {errors.preferredServices && (
-                    <Typography color="error" className="fs12" sx={{ mt: 1 }}>
-                        {errors?.preferredServices?.root?.message as string || errors?.preferredServices?.message as string}
-                    </Typography>
-                )}
-            </Grid>
+        <Grid container spacing={2}>
+            {errors.preferredServices && (
+                <FormHelperText error className="w-100">
+                    {errors?.preferredServices?.root?.message as string || errors?.preferredServices?.message as string}
+                </FormHelperText>
+            )}
             {/* preferredServices single select */}
             {/* <Grid size={{ xs: 12 }}>
                 <Controller
@@ -100,7 +97,7 @@ const PreferredServices = () => {
                     </Box>
                 </Grid>
             ))}
-        </>
+        </Grid>
     )
 }
 

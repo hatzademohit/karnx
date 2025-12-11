@@ -1,15 +1,11 @@
 import { InfoCard, MUIDataGrid } from '@/components'
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { InquiryDetails } from '@/components/DashboardComponents';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
 import { useInquiryDetails } from '@/app/context/InquiryDetailsContext';
@@ -50,12 +46,12 @@ const TravelAgent = () => {
     );
 
     const cardInfoData = [
-        { count: result?.this_month_mybooking || 0, ids: result?.this_month_mybooking_ids, label: 'My Bookings', status: 'This Month', icon: <ErrorOutlineIcon /> },
-        //{ count: result?.my_booking_active_clients || 0, label: 'Active Clients', status: 'Currently booking with you', icon: <ErrorOutlineIcon /> },
-        { count: result?.total_inquiries_this_month || 0, ids: result?.total_inquiries_this_month_ids, label: 'Total Inquiries', status: 'This Month', icon: <AccessTimeOutlinedIcon /> },
-        { count: result?.inquiry_pending_this_month || 0, ids: result?.inquiry_pending_this_month_ids, label: 'Inquiries Pending', status: 'This Month', icon: <AlarmOnIcon /> },
-        { count: result?.confirmed_booking_this_week || 0, ids: result?.confirmed_booking_this_week_ids, label: 'Confirmed Bookings', status: 'This Week', icon: <CheckOutlinedIcon /> },
-        //{ count: '$' + result?.earning || 0, label: 'Earnings', status: '+22% from BLRt month', icon: <CheckOutlinedIcon /> },
+        { count: result?.this_month_mybooking || 0, ids: result?.this_month_mybooking_ids, label: 'My Bookings', status: 'This Month' },
+        //{ count: result?.my_booking_active_clients || 0, label: 'Active Clients', status: 'Currently booking with you' },
+        { count: result?.total_inquiries_this_month || 0, ids: result?.total_inquiries_this_month_ids, label: 'Total Inquiries', status: 'This Month' },
+        { count: result?.inquiry_pending_this_month || 0, ids: result?.inquiry_pending_this_month_ids, label: 'Inquiries Pending', status: 'This Month' },
+        { count: result?.confirmed_booking_this_week || 0, ids: result?.confirmed_booking_this_week_ids, label: 'Confirmed Bookings', status: 'This Week' },
+        //{ count: '$' + result?.earning || 0, label: 'Earnings', status: '+22% from BLRt month' },
     ];
 
     // const { data: data, refetch: fetchCharterInquiries } = useApi<any[]>(
@@ -154,10 +150,10 @@ const TravelAgent = () => {
     return (
         <>
             {!showDetailsTabs &&
-                <Grid container spacing={{ md: 3, xs: 2 }}>
+                <Grid container spacing={{ md: 2, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
                         <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index} onClick={() => { fetchCharterInquiries((item.ids).toString()); }}>
-                            <InfoCard InfoNumber={(item.count != undefined) ? item.count : 0} InfoText={item.label} InfoStatus={item.status} InfoIcon={item.icon} />
+                            <InfoCard InfoNumber={(item.count != undefined) ? item.count : 0} InfoText={item.label} InfoStatus={item.status} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>

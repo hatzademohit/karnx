@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 
 const fields = [
-    { name: "baseFare", label: "Base Fare", numeric: true },
-    { name: "fuel", label: "Fuel", numeric: true },
+    { name: "baseFare", label: "Base Fees", numeric: true },
+    { name: "fuel", label: "Fuel Fees", numeric: true },
     { name: "taxes", label: "Taxes & Fees", numeric: true },
     { name: "crewFees", label: "Crew Fees", numeric: true },
     { name: "handlingFees", label: "Handling Fees", numeric: true },
-    { name: "catering", label: "Catering", numeric: true },
+    { name: "catering", label: "Catering Fees", numeric: true },
 ];
 
 const PricingDetails = (editedData) => {

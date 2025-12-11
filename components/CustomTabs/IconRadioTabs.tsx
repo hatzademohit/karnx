@@ -25,7 +25,7 @@ function TabPanel({
   index: number;
 }) {
   return (
-    <Box role="tabpanel" hidden={value !== index} sx={{mt: '15px'}}>
+    <Box role="tabpanel" hidden={value !== index}>
       {value === index && children}
     </Box>
   );
@@ -51,16 +51,19 @@ function RadioTabs({ children, defaultValue = 0, centered = true, onchange }: Ra
         centered={centered}
         TabIndicatorProps={{ style: { display: "none" } }}
         sx={{
-            justifyContent: 'flex-start',
-            gap: '50px',
-            "& .MuiTab-root": {
-                textTransform: "none",
-                display: 'flex',
-                flexDirection: 'row',
-                minHeight: 'unset',
-                padding: 0,
-                "&.Mui-selected": {
-                color: "#0b3d91",
+          justifyContent: 'flex-start',
+          gap: '50px',
+          '& .MuiTabs-list': {
+            justifyContent: 'flex-start'
+          },
+          "& .MuiTab-root": {
+            textTransform: "none",
+            display: 'flex',
+            flexDirection: 'row',
+            minHeight: 'unset',
+            padding: 0,
+            "&.Mui-selected": {
+              color: "#0b3d91",
             },
           },
         }}
