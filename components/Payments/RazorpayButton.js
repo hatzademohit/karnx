@@ -13,8 +13,14 @@ const loadRazorpay = () => {
     });
 };
 
-const handlePayment = async () => {
+const paymentAmount = () => {
+    return 500;
+}
+export async function handlePayment(inquiryId, quoteId) {
+
+    console.log('554141', inquiryId, quoteId.quoteId);
     const { karnxToken, setLoader } = useAuth();
+    console.log(karnxToken, 554141);
     setLoader(true);
     const loaded = await loadRazorpay();
     if (!loaded) return alert("Razorpay SDK failed");
@@ -25,7 +31,7 @@ const handlePayment = async () => {
         {
             method: "POST",
             headers: { "Content-Type": "application/json", 'Barter': `Bearer ${karnxToken || ""}` },
-            body: JSON.stringify({ amount: 500 }) // ₹500
+            body: JSON.stringify({ amount: paymentAmount() }) // ₹500
         }
     );
 

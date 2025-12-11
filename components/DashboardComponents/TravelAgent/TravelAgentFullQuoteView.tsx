@@ -14,7 +14,7 @@ import { useEffect } from "react";
 
 const TravelAgentFullQuoteView = (quoteId: any) => {
     // const { errors } = useFormContext()
-    const { setShowDetailsTabs, inquiryId } = useInquiryDetails();
+    const { setShowDetailsTabs, inquiryId, inquiryRowData } = useInquiryDetails();
     const callApi = useApiFunction();
     const methods = useForm({
         resolver: yupResolver(travelAgentSchema),
@@ -29,6 +29,8 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
             contact_phone: "",
             contact_name: '',
             city: "",
+            address: "",
+            pincode: "",
         },
     });
 
@@ -42,12 +44,16 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
         });
     };
 
-    const handlePayment = async () => {
+    const paymentAmount = () => {
+        return 500;
+    }
+
+    const handlePayment = async (data) => {
         const loaded = await loadRazorpay();
         if (!loaded) return alert("Razorpay SDK failed");
 
         // Step 1: Create Order from Laravel
-        const response = await callApi({ method: 'POST', url: `${apiBaseUrl}/booking-payment/create-order`, body: { amount: 5000, currency: "INR" } });
+        const response = await callApi({ method: 'POST', url: `${apiBaseUrl}/booking-payment/create-order`, body: { amount: paymentAmount(), currency: "INR" } });
         const order = response;
         // Step 2: Open Razorpay Gateway
         const options = {
@@ -58,17 +64,28 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
             description: "Payment",
             order_id: order.id,
             handler: async function (response) {
-
+                response['booking_inquiries_id'] = inquiryId;
+                response['quoteId'] = quoteId.quoteId;
                 // Step 3: Verify payment with Laravel;
                 let param = { booking_inquiries_id: inquiryId, quoteId };
-                const verify = await callApi({ method: 'POST', url: `${apiBaseUrl}/booking-payment/verify-payment`, body: { param, response } });
+                const verify = await callApi({ method: 'POST', url: `${apiBaseUrl}/booking-payment/verify-payment`, body: response });
                 const result = verify;//await verify.json();
-                //console.log(result);
                 if (result.status === "success") {
-                    return result.status; //alert("Payment Successful ✅");
+                    const bodyParam = {
+                        inquiryId,
+                        quoteId,
+                        data
+                    };
+                    const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/confirm-booking`, body: bodyParam });
+                    if (res?.status === true) {
+                        toast.success(res?.message || '');
+                        setShowDetailsTabs(false);
+                    } else {
+                        toast.error(res?.message || '');
+                    }
+                    return result.status;
                 } else {
-                    return result.status; //alert("Payment Failed ❌");
-                    //alert("Payment Failed ❌");
+                    return result.status;
                 }
             },
             method: {
@@ -84,32 +101,54 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
     };
 
     const onSubmit = async (data: any) => {
-        //console.log("FORM VALUES:", quoteId);
-
         try {
-            const paymentStatus: any = await handlePayment();
-            if (paymentStatus === 'success') {
-                const bodyParam = {
-                    inquiryId,
-                    quoteId,
-                    data
-                };
-                const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/confirm-booking`, body: bodyParam });
-                if (res?.status === true) {
-                    toast.success(res?.message || '');
-                    setShowDetailsTabs(false);
-                } else {
-                    toast.error(res?.message || '');
-                }
-            } else if (paymentStatus === 'failed') {
-                //toast.error('Payment failed');
-            }
-
+            const paymentStatus: any = await handlePayment(data);
         } catch (e) {
             //toast.error('Network error while sending quote to travel agent');
         }
     };
 
+    const getBookingTravellerDetails = async () => {
+        const response = await callApi({ method: 'GET', url: `${apiBaseUrl}/booking-travellers/get-traveller-details/${inquiryId}` });
+        const data = response.data;
+
+        methods.setValue('adults', data.passangers.adult);
+        methods.setValue('children', data.passangers.child);
+        methods.setValue('infants', data.passangers.infant);
+        console.log(data.passangers);
+        // methods.setValue('enableGST', data.enableGST);
+        // methods.setValue('gstin', data.gstin);
+        methods.setValue('contact_email', data?.contact_details?.contact_email);
+        methods.setValue('contact_phone', data?.contact_details?.contact_phone);
+        methods.setValue('contact_name', data?.contact_details?.contact_name);
+        methods.setValue('city', data?.contact_details?.city);
+        methods.setValue('pincode', data?.contact_details?.pincode);
+        methods.setValue('address', data?.contact_details?.address);
+    };
+    const getTravellerPassangers = async () => {
+
+        const response = await callApi({ method: 'GET', url: `${apiBaseUrl}/booking-travellers/get-traveller-passanger` });
+        const data = response.data;
+        console.log(data.adult);
+        // methods.setValue('adults', data.adult);
+        // methods.setValue('children', data.child);
+        // methods.setValue('infants', data.infant);
+        methods.reset({
+            adults: data.adult,
+            children: data.child,
+            infants: data.infant,
+        })
+        // methods.setValue('enableGST', data.enableGST);
+        // methods.setValue('gstin', data.gstin);
+        // methods.setValue('contact_email', data.contact_email);
+        // methods.setValue('contact_phone', data.contact_phone);
+        // methods.setValue('contact_name', data.contact_name);
+        // methods.setValue('city', data.city);
+    };
+    useEffect(() => {
+        getBookingTravellerDetails();
+        getTravellerPassangers();
+    }, [inquiryId, inquiryRowData.status_id]);
     return (
         <FormProvider {...methods}>
             <Typography component="form" onSubmit={methods.handleSubmit(onSubmit)}>
@@ -122,6 +161,7 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
                 </Grid>
                 <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>
                     <Button variant="outlined" className="btn btn-outlined" onClick={() => setShowDetailsTabs(false)}>Close</Button>
+                    {/* {[17].indexOf(inquiryRowData.status_id) !== -1 ? <Button type="submit" variant="contained" className="btn btn-blue">Confirm Booking</Button> : null} */}
                     <Button type="submit" variant="contained" className="btn btn-blue">Confirm Booking</Button>
                 </Box>
             </Typography>

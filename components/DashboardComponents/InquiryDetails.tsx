@@ -33,7 +33,7 @@ const InquiryDetails: React.FC<InquiryDetailsProps> = ({ inquiryData, hideOperat
       ]
       : []),
     {
-      label: `Quote(s) ${user.access_type !== 'Aircraft Operator' ? `(${inquiryRowData.quote_received})` : ''}`,
+      label: `Quote${user.access_type !== 'Aircraft Operator' ? user.access_type === 'Aircraft Travel Agent' ? `` : `(s) (${inquiryRowData.quote_received})` : ''}`,
       icon: <MonetizationOnOutlinedIcon fontSize="small" />,
       content: <QuoteTabs travelTab={itsTravelAgent} inquiryId={inquiryData.id} />,
     },
