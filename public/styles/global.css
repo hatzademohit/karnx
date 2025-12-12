@@ -36,6 +36,10 @@ body:has(.login-page) {
   z-index: 999999;
 }
 
+.MuiDialog-root.MuiModal-root {
+  z-index: 999999;
+}
+
 .MuiFormHelperText-root.Mui-error {
   margin: 2px 0;
 }
@@ -686,7 +690,7 @@ hr.cust-divider {
 }
 
 /* date picker */
-.MuiPickersLayout-contentWrapper:has(.MuiDateCalendar-root, .MuiTimeClock-root) {
+.MuiPaper-root.MuiPaper-elevation .MuiPickersLayout-contentWrapper:has(.MuiDateCalendar-root, .MuiTimeClock-root) {
   padding-bottom: 0 !important;
 }
 
