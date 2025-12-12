@@ -92,14 +92,14 @@ const TravelAgent = () => {
                     </Box>
                 ),
             },
-            {
-                headerName: 'Client', flex: 1, field: 'client', minWidth: 100, renderCell: (params) => (
-                    <Box sx={{ alignContent: 'center', height: '100%' }}>
-                        <Typography className="fs14"> {params.row.clientName} </Typography>
-                        <Typography className="fs12" sx={{ color: '#808080' }}> {params.row.clientEmail} </Typography>
-                    </Box>
-                ),
-            },
+            // {
+            //     headerName: 'Client', flex: 1, field: 'client', minWidth: 100, renderCell: (params) => (
+            //         <Box sx={{ alignContent: 'center', height: '100%' }}>
+            //             <Typography className="fs14"> {params.row.clientName} </Typography>
+            //             <Typography className="fs12" sx={{ color: '#808080' }}> {params.row.clientEmail} </Typography>
+            //         </Box>
+            //     ),
+            // },
             {
                 headerName: 'Route', flex: 1, field: 'route', minWidth: 115, renderCell: (params) => (
                     <Box>
