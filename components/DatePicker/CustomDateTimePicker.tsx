@@ -6,6 +6,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import dayjs, { Dayjs } from "dayjs";
 import { Box, InputLabel, styled, Typography, useTheme } from "@mui/material";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker"
 
 interface CustomDateTimePickerProps {
   label?: string;
@@ -71,6 +72,8 @@ export default function CustomDateTimePicker({
         )}
       </Box>
       <DateTimePicker
+        // <MobileDateTimePicker
+        ampm={false}
         label={label}
         value={value}
         onChange={onChange}
@@ -80,6 +83,8 @@ export default function CustomDateTimePicker({
         onClose={() => setOpen(false)}
         minDateTime={minDateTime}
         maxDateTime={maxDateTime}
+        // closeOnSelect={true}
+        disablePast={true}
         viewRenderers={
           withClock
             ? {
@@ -126,6 +131,21 @@ export default function CustomDateTimePicker({
               "& .MuiClock-pin": {
                 backgroundColor: theme?.common?.redColor,
               },
+              "& .MuiPickerView-root": {
+                maxHeight: "300px",     // shrink calendar/time area
+              },
+              "& .MuiClock-root": {
+                transform: "scale(0.85)",  // shrink clock
+              },
+              "& .MuiCalendarPicker-root": {
+                transform: "scale(0.90)",  // shrink calendar
+              },
+              "& .MuiPickersLayout-contentWrapper": {
+                padding: "8px !important", // reduce padding
+              },
+              "& .MuiPickersToolbar-root": {
+                padding: "8px !important", // shrink top toolbar
+              }
             },
           },
         }}

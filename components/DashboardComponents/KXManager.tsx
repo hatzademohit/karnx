@@ -25,6 +25,10 @@ interface KXManagerCardCount {
     response_time_ids?: string;
     clients_decision_expiring_soon?: number;
 }
+type cardActiveProps = {
+    class: string;
+    index: number;
+}
 
 const KXManager = () => {
 
@@ -32,6 +36,7 @@ const KXManager = () => {
     const callApi = useApiFunction();
     const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     const [introducingPopupOpen, setIntroducingPopupOpen] = useState<boolean>(false);
+    const [isCardActiveClass, setIsCardActiveClass] = useState<cardActiveProps>();
 
     const { data: result, refetch: fetchCardCount } = useApi<KXManagerCardCount>(
         `${apiBaseUrl}/dashboard/kxmanager-cardcount`
@@ -144,6 +149,7 @@ const KXManager = () => {
         if (!showDetailsTabs) {
             fetchInquiries('');
             fetchCardCount();
+            setIsCardActiveClass(undefined)
         }
     }, [showDetailsTabs]);
 
@@ -153,8 +159,8 @@ const KXManager = () => {
                 <>
                     <Grid container spacing={{ md: 3, xs: 2 }}>
                         {cardInfoData && cardInfoData.map((item, index) => (
-                            <Grid size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }} key={index} onClick={() => fetchInquiries((item.ids).toString())}>
-                                <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} />
+                            <Grid size={{ xl: 2.4, lg: 3, md: 4, sm: 6, xs: 12 }} key={index} onClick={() => { fetchInquiries((item.ids).toString()); setIsCardActiveClass({ class: 'active', index: index }) }}>
+                                <InfoCard InfoNumber={item.count} InfoText={item.label} InfoStatus={item.status} InfoDesc={item.desc} className={index === isCardActiveClass?.index && isCardActiveClass?.class} />
                             </Grid>
                         ))}
                     </Grid>
@@ -172,6 +178,7 @@ const KXManager = () => {
                                     gridColumns={columns}
                                     gridRows={data}
                                     rowHeight={70}
+                                    clearFilter={() => { fetchInquiries(''); setIsCardActiveClass(undefined) }}
                                 />
                             </Box>
                         </Grid>

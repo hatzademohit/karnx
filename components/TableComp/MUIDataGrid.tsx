@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, Button, IconButton, TextField, Typography, useTheme } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import { exportToExcel } from './ExportExcel'
@@ -12,7 +12,7 @@ export interface MUIDataGridProps {
   onClick?: () => void;
   buttonText?: any;
   selectFilter?: any;
-  extraElement?: any;
+  clearFilter?: any;
   exportButtton?: boolean;
   fileName?: string;
   fileHeading?: string;
@@ -34,7 +34,7 @@ const MUIDataGrid: React.FC<MUIDataGridProps> = ({
   onClick,
   buttonText,
   selectFilter,
-  extraElement,
+  clearFilter,
   exportButtton,
   fileName,
   fileHeading,
@@ -82,24 +82,26 @@ const MUIDataGrid: React.FC<MUIDataGridProps> = ({
             Export
           </Button>
         }
-        {extraElement}
-        <TextField
-          autoComplete='off'
-          variant="outlined"
-          fullWidth
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          placeholder='Search...'
-          sx={{ maxWidth: '250px', width: '100%', ml: 'auto' }}
-          size='small'
-          className='input-search'
-          slotProps={{
-            input: {
-              startAdornment: <SearchIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />,
-              endAdornment: <IconButton size="small" onClick={() => setSearchText('')}><CloseIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} /></IconButton>,
-            },
-          }}
-        />
+        <Box sx={{ ml: 'auto', display: 'flex', gap: '10px', color: 'rgba(0, 0, 0, 0.54)' }}>
+          {clearFilter && <Button size="small" onClick={clearFilter} variant="outlined" color="inherit" sx={{ whiteSpace: 'nowrap', fontFamily: 'poppins', minWidth: 'unset' }}><CloseIcon sx={{ fontSize: '16px' }} /> Clear Fliter </Button>}
+          <TextField
+            autoComplete='off'
+            variant="outlined"
+            fullWidth
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            placeholder='Search...'
+            sx={{ maxWidth: '250px', width: '100%' }}
+            size='small'
+            className='input-search'
+            slotProps={{
+              input: {
+                startAdornment: <SearchIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />,
+                endAdornment: <IconButton size="small" onClick={() => setSearchText('')}><CloseIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} /></IconButton>,
+              },
+            }}
+          />
+        </Box>
       </Box>
       <DataGrid
         rows={filteredRows}

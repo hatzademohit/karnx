@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FlightIcon from '@mui/icons-material/Flight';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { InquiryDetails } from '@/components/DashboardComponents';
 import { apiBaseUrl } from '@/karnx/api';
 import { useApi } from '@/karnx/Hooks/useApi';
@@ -24,20 +23,24 @@ interface TravelAgentCardCount {
     confirmed_booking_this_week_ids?: string;
     earning?: number | string;
 }
+type cardActiveProps = {
+    class: string;
+    index: number;
+}
 
 const TravelAgent = () => {
     const callApi = useApiFunction();
-    const router = useRouter()
-    const searchParams = useSearchParams();
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
     const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     const [data, setInqueryTableData] = useState([]);
+    const [isCardActiveClass, setIsCardActiveClass] = useState<cardActiveProps>();
     /** get card count from API*/
     useEffect(() => {
         if (!showDetailsTabs) {
             fetchCharterInquiries('');
             fetchCardCount();
+            setIsCardActiveClass(undefined)
         }
     }, [showDetailsTabs]);
 
@@ -152,8 +155,8 @@ const TravelAgent = () => {
             {!showDetailsTabs &&
                 <Grid container spacing={{ md: 2, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
-                        <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index} onClick={() => { fetchCharterInquiries((item.ids).toString()); }}>
-                            <InfoCard InfoNumber={(item.count != undefined) ? item.count : 0} InfoText={item.label} InfoStatus={item.status} />
+                        <Grid size={{ xl: 3, lg: 4, md: 4, sm: 6, xs: 12 }} key={index} onClick={() => { fetchCharterInquiries((item.ids).toString()); setIsCardActiveClass({ class: 'active', index: index }) }}>
+                            <InfoCard InfoNumber={(item.count != undefined) ? item.count : 0} InfoText={item.label} InfoStatus={item.status} className={index === isCardActiveClass?.index && isCardActiveClass?.class} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
@@ -163,6 +166,7 @@ const TravelAgent = () => {
                                 gridColumns={columns}
                                 gridRows={data}
                                 rowHeight={70}
+                                clearFilter={() => { fetchCharterInquiries(''); setIsCardActiveClass(undefined) }}
                             />
                         </Box>
                     </Grid>

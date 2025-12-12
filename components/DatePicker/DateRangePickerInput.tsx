@@ -53,9 +53,9 @@ const DateRangePickerInput: React.FC<DateRangePickerInputProps> = ({
   const formattedValue =
     range[0].startDate && range[0].endDate
       ? `${format(range[0].startDate, "dd/MM/yyyy")} - ${format(
-          range[0].endDate,
-          "dd/MM/yyyy"
-        )}`
+        range[0].endDate,
+        "dd/MM/yyyy"
+      )}`
       : "";
 
   return (
@@ -83,7 +83,7 @@ const DateRangePickerInput: React.FC<DateRangePickerInputProps> = ({
             rangeColors={[theme?.common?.blueColor]}
           />
           <Box textAlign="right">
-            <Button sx={{backgroundColor: theme?.common?.blueColor}} variant="contained" size="small" onClick={handleClose}>
+            <Button sx={{ backgroundColor: theme?.common?.blueColor }} variant="contained" size="small" onClick={handleClose}>
               OK
             </Button>
           </Box>
