@@ -23,17 +23,24 @@ interface AircraftOperatorCardCount {
     completed_bookings?: number | string;
     completed_bookings_ids?: string;
 }
+type cardActiveProps = {
+    class: string;
+    index: number;
+}
 const AircraftOperator = () => {
     const callApi = useApiFunction();
     const [columns, setColumns] = useState([])
     const [inqueryData, setInqueryData] = useState(null);
     const { setShowDetailsTabs, showDetailsTabs, setInquiryId, setinquiryRowData } = useInquiryDetails()
     const [data, setInqueryTableData] = useState([]);
+    const [isCardActiveClass, setIsCardActiveClass] = useState<cardActiveProps>();
+
     /** get card count from API*/
     useEffect(() => {
         if (!showDetailsTabs) {
             fetchInquiries('');
             fetchCardCount();
+            setIsCardActiveClass(undefined)
         }
     }, [showDetailsTabs]);
 
@@ -147,8 +154,8 @@ const AircraftOperator = () => {
             {!showDetailsTabs &&
                 <Grid container spacing={{ md: 3, xs: 2 }}>
                     {cardInfoData && cardInfoData.map((item, index) => (
-                        <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index} onClick={() => { fetchInquiries((item.ids).toString()); }}>
-                            <InfoCard InfoNumber={item.count} InfoText={item.label} />
+                        <Grid size={{ lg: 2.4, md: 3, sm: 6, xs: 12 }} key={index} onClick={() => { fetchInquiries((item.ids).toString()); setIsCardActiveClass({ class: 'active', index: index }) }}>
+                            <InfoCard InfoNumber={item.count} InfoText={item.label} className={index === isCardActiveClass?.index && isCardActiveClass?.class} />
                         </Grid>
                     ))}
                     <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
@@ -158,6 +165,7 @@ const AircraftOperator = () => {
                                 gridColumns={columns}
                                 gridRows={data}
                                 rowHeight={70}
+                                clearFilter={() => { fetchInquiries(''); setIsCardActiveClass(undefined) }}
                             />
                         </Box>
                     </Grid>

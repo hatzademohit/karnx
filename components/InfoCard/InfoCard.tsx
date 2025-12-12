@@ -7,11 +7,12 @@ interface InfoCardProps {
     InfoText?: string;
     InfoStatus?: string;
     InfoDesc?: string;
+    className?: string;
 }
-const InfoCard: React.FC<InfoCardProps> = ({ InfoNumber, InfoText, InfoStatus, InfoDesc }) => {
+const InfoCard: React.FC<InfoCardProps> = ({ InfoNumber, InfoText, InfoStatus, InfoDesc, className }) => {
     const { theme } = useAuth()
     return (
-        <Box className='info-card'>
+        <Box className={`info-card ${className}`}>
             <Box>
                 <Typography sx={{ fontFamily: 'poppins-lt' }}>{InfoText}</Typography>
                 {InfoStatus && <Typography sx={{ fontSize: '14px', color: '#6B7280' }}>{InfoStatus}</Typography>}

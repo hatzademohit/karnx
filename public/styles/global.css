@@ -397,6 +397,22 @@ span.custom-pill {
   background: rgba(255, 255, 255, 1);
   border-left: 4px solid rgba(188, 0, 25, 1);
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  position: relative;
+}
+
+.info-card.active::before {
+  content: '✔';
+  position: absolute;
+  background-color: #49b949;
+  width: 15px;
+  height: 15px;
+  top: 2px;
+  border-radius: 50%;
+  text-align: center;
+  color: #ffffff;
+  font-size: 10px;
+  left: 2px;
 }
 
 .card-count {
@@ -667,4 +683,20 @@ hr.cust-divider {
   background-color: rgba(0, 0, 0, 0.26);
   cursor: default;
   color: #ffffff;
+}
+
+/* date picker */
+.MuiPickersLayout-contentWrapper:has(.MuiDateCalendar-root, .MuiTimeClock-root) {
+  padding-bottom: 0 !important;
+}
+
+.MuiPickersLayout-root:has(.MuiDateCalendar-root, .MuiTimeClock-root) {
+  position: relative;
+}
+
+.MuiPickersLayout-root:has(.MuiDateCalendar-root, .MuiTimeClock-root) .MuiDialogActions-root.MuiDialogActions-spacing {
+  position: absolute;
+  left: auto;
+  right: 0;
+  bottom: 0;
 }
