@@ -62,7 +62,8 @@ const TravellerDetails = () => {
 
     useEffect(() => {
         setLists(formData)
-    }, [formData?.adults, formData?.children, formData?.infants]);
+        // }, [formData?.adults, formData?.children, formData?.infants]);
+    }, []);
     return (
         <>
             <Grid size={{ xs: 12 }}>

@@ -34,9 +34,9 @@ const PassengerInformation = () => {
 
     useEffect(() => {
         setPetSize([
-            { name: "Small(0kg - 2kg)", id: 1 },
-            { name: "Medium(3kg - 8kg)", id: 2 },
-            { name: "Large(8kg & more)", id: 3 },
+            { name: "Small(0kg - 2kg)", id: 'Small(0kg - 2kg)' },
+            { name: "Medium(3kg - 8kg)", id: 'Medium(3kg - 8kg)' },
+            { name: "Large(8kg & more)", id: 'Large(8kg & more)' },
         ]);
     }, [])
 
