@@ -3,18 +3,20 @@ import { Box, Typography, Divider, Grid, Card, CardContent, useTheme } from "@mu
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { applyCurrencyFormat, parseToHoursMinutes } from "@/utils/commonFunctions";
+import dayjs from "dayjs";
 const QuoteDetails = ({ quote }) => {
     const theme = useTheme();
     const { hours, minutes } = parseToHoursMinutes(quote.estimated_flight_time);
     const viewedQuote = {
         clientName: quote.client.name + ' · ' + quote.aircraft.asset_name,
         id: quote.id,
-        departure: '08:30 - 17:00',
-        return: '09:30 - 18:15',
-        flightTime: hours + `h ` + minutes + `m`,
-        returnTime: "6h 35m",
+        // departure: '08:30 - 17:00',
+        // return: '09:30 - 18:15',
+        // flightTime: hours + `h ` + minutes + `m`,
+        // returnTime: "6h 35m",
+        flightDetails: quote.inquiry_quote_flight_time,
         model: quote.aircraft.aircraft_model,
-        validityInYear: '2025',
+        validityInYear: quote.aircraft.model_year,
         capacity: applyCurrencyFormat(quote.aircraft.capacity) + ' passangers',
         range: applyCurrencyFormat(quote.aircraft.flying_range) + ' nm',
         speed: 'Mach ' + applyCurrencyFormat(quote.aircraft.speed),
@@ -42,36 +44,47 @@ const QuoteDetails = ({ quote }) => {
                         <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>
                             Flight Details
                         </Typography>
+                        {viewedQuote.flightDetails && viewedQuote.flightDetails.map(function (fd: any) {
+                            let arrivalDateTime = dayjs(fd.departure_date_time).add(fd.flight_duration, "minute").format("MMM DD, YYYY HH:mm");
+                            const { hours, minutes } = parseToHoursMinutes(fd.flight_duration);
+                            return (
+                                <Grid key={fd.id} container spacing={{ md: 2, xs: 1 }}>
+                                    <Grid size={{ xs: 5 }}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+                                            <FlightTakeoffIcon />
+                                            <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>Departure: {fd.dep_arrive_location.airport_departure_location.code}</Typography>
+                                            <Typography variant="h5">{dayjs(fd.departure_date_time).format("MMM DD, YYYY HH:mm")}</Typography>
+                                            {/* <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
+                                                Duration: 0h 2m
+                                            </Typography> */}
+                                        </Box>
+                                    </Grid>
+                                    <Grid size={{ xs: 2 }} className="mt-4">
+                                        <Typography variant="h5" style={{ marginLeft: "19px" }}> → </Typography>
+                                        <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>{hours}h {minutes}m</Typography>
+                                    </Grid>
+                                    <Grid size={{ xs: 5 }}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+                                            <FlightLandIcon />
+                                            <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>Arrival: {fd.dep_arrive_location.airport_arrival_location.code}</Typography>
+                                            <Typography variant="h5">{arrivalDateTime}</Typography>
+                                            {/* <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
+                                                Duration: 0h 2m
+                                            </Typography> */}
+                                        </Box>
+                                    </Grid>
+                                    <Divider sx={{ my: 1 }} />
+                                </Grid>
 
-                        <Grid container spacing={{ md: 2, xs: 1 }}>
-                            <Grid size={{ xs: 6 }}>
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
-                                    <FlightTakeoffIcon />
-                                    <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>Departure:</Typography>
-                                    <Typography variant="h5">{viewedQuote?.departure}</Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
-                                        Duration: {viewedQuote?.flightTime}
-                                    </Typography>
-                                </Box>
-                            </Grid>
-
-                            <Grid size={{ xs: 6 }}>
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
-                                    <FlightLandIcon />
-                                    <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>Return:</Typography>
-                                    <Typography variant="h5">{viewedQuote?.return}</Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
-                                        Duration: {viewedQuote?.returnTime}
-                                    </Typography>
-                                </Box>
-                            </Grid>
-                        </Grid>
+                            );
+                        })}
                     </CardContent>
                 </Card>
-            </Grid>
+            </Grid >
 
             {/* Aircraft Specifications */}
-            <Grid size={{ xs: 12, md: 6 }}>
+            < Grid size={{ xs: 12, md: 6 }
+            }>
                 <Card elevation={2}>
                     <CardContent>
                         <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>
@@ -111,10 +124,10 @@ const QuoteDetails = ({ quote }) => {
                         </Box>
                     </CardContent>
                 </Card>
-            </Grid>
+            </Grid >
 
             {/* Price Breakdown */}
-            <Grid size={{ xs: 12, md: 6 }}>
+            < Grid size={{ xs: 12, md: 6 }}>
                 <Card elevation={2}>
                     <CardContent>
                         <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>
@@ -122,11 +135,11 @@ const QuoteDetails = ({ quote }) => {
                         </Typography>
 
                         {[
-                            ["Base Fare:", viewedQuote?.baseFire],
-                            ["Fuel Surcharge:", viewedQuote?.fluelCost],
-                            ["Taxes:", viewedQuote?.taxesFees],
+                            ["Base Fees:", viewedQuote?.baseFire],
+                            ["Fuel Fees:", viewedQuote?.fluelCost],
+                            ["Taxes & Fees:", viewedQuote?.taxesFees],
                             ["Handling Fees:", viewedQuote?.handlingFees],
-                            ["Catering:", viewedQuote?.cateringFees],
+                            ["Catering Fees:", viewedQuote?.cateringFees],
                             ["Crew Fees:", viewedQuote?.crewFees],
                         ].map(([label, value]) => (
                             <Box key={label} sx={{ display: "flex", justifyContent: "space-between", mb: '5px', }}>
@@ -145,10 +158,10 @@ const QuoteDetails = ({ quote }) => {
                         </Box>
                     </CardContent>
                 </Card>
-            </Grid>
+            </Grid >
 
             {/* Amenities & Services */}
-            <Grid size={{ xs: 12, md: 6 }}>
+            < Grid size={{ xs: 12, md: 6 }}>
                 <Card elevation={2}>
                     <CardContent>
                         <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>
@@ -174,7 +187,7 @@ const QuoteDetails = ({ quote }) => {
                         </Box>
                     </CardContent>
                 </Card>
-            </Grid>
+            </Grid >
 
             {/* Additional sections can be added here if needed */}
             {/* <Grid size={{ xs: 12 }}>

@@ -232,8 +232,8 @@ const ViewQuotes = () => {
                                 label == 'Flight Time' ?
                                     <>
                                         {(() => {
-                                            const ft = q && (q as any)[key] && (q as any)[key].estimated_flight_time;
-                                            const { hours, minutes } = parseToHoursMinutes(ft);
+                                            //const ft = q && (q as any)[key] && (q as any)[key].estimated_flight_time;
+                                            const { hours, minutes } = parseToHoursMinutes(q.estimated_flight_time);
                                             return (
                                                 <Typography color="text.secondary">
                                                     {`${hours}h ${minutes}m`}
@@ -349,10 +349,12 @@ const ViewQuotes = () => {
                             {renderRow("Aircraft", "aircraft")}
                             {renderRow("Price", "total")}
                             {renderRow("Flight Time", "estimated_flight_time")}
-                            {renderRow("Base Fare", "base_fare")}
-                            {renderRow("Fuel", "fluel_cost")}
+                            {renderRow("Base Fees", "base_fare")}
+                            {renderRow("Fuel Fees", "fluel_cost")}
                             {renderRow("Taxes & Fees", "taxes_fees")}
-                            {renderRow("Catering", "catering_fees")}
+                            {renderRow("Catering Fees", "catering_fees")}
+                            {renderRow("Handling Fees", "handling_fees")}
+                            {renderRow("Crew Fees", "crew_fees")}
                             {renderRow("Key Amenities", "available_amenities", true)}
                             {renderRow("Included Service", "special_offers_promotions", true)}
                             {(user.access_type === 'Portal Admin') || (user.access_type === 'Aircraft Operator' && quotes[0]?.is_selected === 'rejected') ?
