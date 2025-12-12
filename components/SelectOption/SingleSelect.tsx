@@ -3,6 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { FormHelperText, MenuItem, Typography } from '@mui/material';
+import { useResponsive } from '@/karnx/Hooks/useResponsive';
 
 export interface SelectProps {
     variant?: any;
@@ -39,12 +40,13 @@ const SingleSelect: React.FC<SelectProps> = ({
     className,
     asterisk = false,
 }) => {
+    const { isMd } = useResponsive();
 
     return (
         <>
 
             {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: 'red' }}>*</Typography>}</InputLabel>}
-            <FormControl fullWidth size={size} variant={variant} className={className}>
+            <FormControl fullWidth size={isMd ? "small" : size} variant={variant} className={className}>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"

@@ -7,6 +7,7 @@ import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import dayjs, { Dayjs } from "dayjs";
 import { Box, InputLabel, styled, Typography, useTheme } from "@mui/material";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker"
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 interface CustomDateTimePickerProps {
   label?: string;
@@ -58,6 +59,7 @@ export default function CustomDateTimePicker({
 }: CustomDateTimePickerProps) {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme()
+  const { isMd } = useResponsive();
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -106,7 +108,7 @@ export default function CustomDateTimePicker({
         }
         slotProps={{
           textField: {
-            size: "medium", fullWidth: true, variant: "outlined",
+            size: isMd ? 'small' : 'medium', fullWidth: true, variant: "outlined",
             error: error, helperText: helperText,
             onClick: () => setOpen(true),
           },

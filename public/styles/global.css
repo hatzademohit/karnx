@@ -362,6 +362,10 @@ span.custom-pill {
   font: inherit;
 }
 
+body:has(.open-sidebar) .sidebar-toggle {
+  pointer-events: none;
+}
+
 .custom-tabs .MuiTabs-flexContainer {
   gap: 12px;
   border-bottom: 1px solid #cccccc;
@@ -690,7 +694,7 @@ hr.cust-divider {
 }
 
 /* date picker */
-.MuiPaper-root.MuiPaper-elevation .MuiPickersLayout-contentWrapper:has(.MuiDateCalendar-root, .MuiTimeClock-root) {
+/* .MuiPaper-root.MuiPaper-elevation .MuiPickersLayout-contentWrapper:has(.MuiDateCalendar-root, .MuiTimeClock-root) {
   padding-bottom: 0 !important;
 }
 
@@ -703,4 +707,4 @@ hr.cust-divider {
   left: auto;
   right: 0;
   bottom: 0;
-}
+} */

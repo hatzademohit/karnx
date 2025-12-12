@@ -189,7 +189,7 @@ const ContactSummary = () => {
         {
             id: "panel1",
             title: "Inquiry Summary",
-            errors: "All Flieds are required",
+            errors: "Fields are required",
             content: (
                 <Grid container spacing={2}>
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>

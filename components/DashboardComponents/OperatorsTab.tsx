@@ -118,7 +118,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                             <FlightOutlinedIcon />
                                         </IconButton>
                                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <Typography variant="h4">{op.name}</Typography>
+                                            <Typography variant="h5">{op.name}</Typography>
                                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                 <StarOutlinedIcon sx={{ color: '#FFD700' }} />
                                                 <Typography component="span" sx={{ fontFamily: 'poppins-semibold', fontSize: '14px', color: '#4D4D4D' }}> {op.rating}</Typography>

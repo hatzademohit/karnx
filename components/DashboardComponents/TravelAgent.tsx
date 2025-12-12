@@ -166,7 +166,7 @@ const TravelAgent = () => {
                                 gridColumns={columns}
                                 gridRows={data}
                                 rowHeight={70}
-                                clearFilter={() => { fetchCharterInquiries(''); setIsCardActiveClass(undefined) }}
+                                clearFilter={() => { isCardActiveClass && fetchCharterInquiries(''); setIsCardActiveClass(undefined) }}
                             />
                         </Box>
                     </Grid>

@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { TextField, InputLabel, Box, Typography } from '@mui/material';
+import { useResponsive } from '@/karnx/Hooks/useResponsive';
 export interface CustomTextFieldProps {
   name?: string;
   type?: string;
@@ -52,6 +53,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
     multiline,
     ...props
   }, ref) => {
+    const { isMd } = useResponsive();
 
     return (
       <Box className="w-100 textflied-container">
@@ -75,7 +77,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           placeholder={placeholder ? placeholder : `Enter ${inputLabel}`}
           className={className}
           inputProps={{ maxLength: maxlength }}
-          size={size}
+          size={isMd ? "small" : size}
           InputLabelProps={{ shrink: InputLabelProps }}
           InputProps={InputProps}
           autoComplete='off'

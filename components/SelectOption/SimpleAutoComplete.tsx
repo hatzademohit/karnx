@@ -3,6 +3,7 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Box, FormControl, InputLabel, Typography } from "@mui/material";
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 export interface SimpleAutoCompleteProps {
   variant?: any;
@@ -42,6 +43,8 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
   helperText,
   disabled,
 }) => {
+
+  const { isMd } = useResponsive();
   const [inputValue, setInputValue] = React.useState("");
 
   return (
@@ -67,7 +70,8 @@ const SimpleAutoComplete: React.FC<SimpleAutoCompleteProps> = ({
             setInputValue(newInputValue);
           }}
           options={options}
-          size={size}
+          // size={size}
+          size={isMd ? "small" : size}
           sx={style}
           disableClearable={disableClearable}
           getOptionLabel={(option) =>

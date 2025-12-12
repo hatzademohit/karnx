@@ -6,6 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { InputLabel, Typography, styled, useTheme } from "@mui/material";
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 interface CustomTimePickerProps {
     timelabel?: string;
@@ -27,6 +28,7 @@ export default function CustomTimePicker({
     ampm = false,
 }: CustomTimePickerProps) {
 
+    const { isMd } = useResponsive();
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
 
@@ -52,7 +54,7 @@ export default function CustomTimePicker({
                     onClose={() => setOpen(false)}
                     slotProps={{
                         textField: {
-                            size: "medium", fullWidth: true, variant: "outlined",
+                            size: isMd ? 'small' : 'medium', fullWidth: true, variant: "outlined",
                             error: error, helperText: helperText,
                             onClick: () => setOpen(true)
                         },

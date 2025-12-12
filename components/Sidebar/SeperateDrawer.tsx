@@ -43,7 +43,7 @@ export default function SeperateDrawer({
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (drawerRef.current && !drawerRef.current.contains(event.target)) {
-        setOpen(false);  // close sidebar
+        setOpen(false);
       }
     }
 
@@ -59,6 +59,7 @@ export default function SeperateDrawer({
         variant="permanent"
         open={open}
         sx={{ position: 'absolute' }}
+        onClose={() => setOpen(false)}
       >
         <DrawerHeader />
         <List component='ul' className="List-menu-sidebar">

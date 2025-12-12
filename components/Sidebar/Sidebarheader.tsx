@@ -26,12 +26,14 @@ export const Main = styled('main', {
   padding: '10px',
   [theme.breakpoints.up('sm')]: {
     padding: 16,
+    width: `calc(100% - ${closeDrawerWidth}px)`,
+    marginLeft: `${closeDrawerWidth}px`,
   },
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  width: `calc(100% - ${closeDrawerWidth}px)`,
+  width: '100%',
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -40,8 +42,8 @@ export const Main = styled('main', {
     width: 'calc(100% - 200px)',
   }),
   overflow: 'hidden',
-  marginLeft: `${closeDrawerWidth}px`,
-  marginTop: headerHeightXs,
+  marginLeft: `0`,
+  marginTop: headerHeightXs + 10,
   [theme.breakpoints.up('md')]: {
     marginTop: headerHeightMd,
   },
@@ -56,7 +58,7 @@ const openedMixin = (theme: any) => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: 'hidden' as const, // Explicitly type the overflowX property
+  overflowX: 'hidden' as const,
 });
 
 const closedMixin = (theme: any) => ({
@@ -64,11 +66,9 @@ const closedMixin = (theme: any) => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: 'hidden' as const, // Explicitly type the overflowX property
-  // width: `calc(${theme.spacing(7)} + 1px)`,
-  width: `${closeDrawerWidth}px`,
+  overflowX: 'hidden' as const,
+  width: 0,
   [theme.breakpoints.up('sm')]: {
-    // width: `calc(${theme.spacing(8)} + 1px)`,
     width: `${closeDrawerWidth}px`,
   },
 });
@@ -78,7 +78,7 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  minHeight: `${headerHeightXs}px !important`,
+  minHeight: `${headerHeightXs + 10}px !important`,
   [theme.breakpoints.up('md')]: {
     minHeight: `${headerHeightMd}px !important`,
   },
@@ -145,6 +145,7 @@ export default function Sidebarheader({ children }: {
       <SeperateAppBar
         open={open}
         theme={theme}
+        setOpen={setOpen}
       />
 
       <SeperateDrawer

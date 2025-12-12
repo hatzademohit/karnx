@@ -12,16 +12,21 @@ import AddIcon from '@mui/icons-material/Add';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import { useAuth } from '@/app/context/AuthContext';
+import StartIcon from '@mui/icons-material/Start';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useResponsive } from '@/karnx/Hooks/useResponsive';
 
 interface SeperateAppBarProps {
   open: boolean;
   theme?: any;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const SeperateAppBar: FC<SeperateAppBarProps> = ({
   open,
   theme,
+  setOpen,
 }) => {
-
+  const { isXs } = useResponsive()
   const router = useRouter()
   const pathname = usePathname();
   const { hasPermission } = useAuth();
@@ -60,6 +65,12 @@ const SeperateAppBar: FC<SeperateAppBarProps> = ({
                 <NotificationsNoneIcon />
               </Badge>
             </IconButton> */}
+            {isXs && <IconButton size='small' className='sidebar-toggle' sx={{ color: 'rgba(3, 4, 94, 1)' }}
+              onClick={(e) => setOpen(true)}
+            >
+              <MenuIcon />
+            </IconButton>}
+            {/* {isXs && <IconButton size='small' sx={{ color: 'rgba(3, 4, 94, 1)' }} onClick={() => setOpen(!open)}><MenuIcon /></IconButton>} */}
             <Tooltip title="Configuration Setting" arrow placement='top'>
               <IconButton onClick={() => router.push('/configuration')} sx={{ color: 'rgba(3, 4, 94, 1)' }}>
                 <SettingsOutlinedIcon />

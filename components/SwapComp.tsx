@@ -87,10 +87,10 @@ const SwapComp: React.FC<SwapCompProps> = ({
           className="btn-swap"
           sx={{
             position: "absolute",
-            width: "40px",
-            height: "40px",
+            width: { md: '40px', xs: '30px' },
+            height: { md: '40px', xs: '30px' },
             margin: "auto",
-            top: "28px",
+            top: { md: '28px', xs: '23px' },
             left: 0,
             right: 0
           }}
@@ -103,10 +103,12 @@ const SwapComp: React.FC<SwapCompProps> = ({
               color: theme?.common?.blueColor,
               backgroundColor: "#ffffff",
               zIndex: 9,
+              width: 'inherit',
+              height: 'inherit',
               "&:hover": { backgroundColor: theme?.common?.blueColor, color: "#ffffff" },
             }}
           >
-            <SwapHorizRoundedIcon />
+            <SwapHorizRoundedIcon sx={{ fontSize: 'inherit' }} />
           </IconButton>
         </Box>
       }

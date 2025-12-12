@@ -5,6 +5,7 @@ import { format } from "date-fns/format";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { useAuth } from "@/app/context/AuthContext";
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 interface DateRangePickerInputProps {
   label?: string;
@@ -20,6 +21,7 @@ const DateRangePickerInput: React.FC<DateRangePickerInputProps> = ({
   disabled = false,
 }) => {
   const { theme } = useAuth()
+  const { isMd } = useResponsive();
   const [range, setRange] = useState<Range[]>([
     {
       startDate: value?.startDate || new Date(),
@@ -65,7 +67,7 @@ const DateRangePickerInput: React.FC<DateRangePickerInputProps> = ({
         value={formattedValue}
         onClick={handleOpen}
         fullWidth
-        size="small"
+        size={isMd ? 'small' : 'medium'}
         InputProps={{ readOnly: true }}
         disabled={disabled}
       />

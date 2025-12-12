@@ -37,6 +37,9 @@ const KXManager = () => {
     const { setInquiryId, setinquiryRowData, showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
     const [introducingPopupOpen, setIntroducingPopupOpen] = useState<boolean>(false);
     const [isCardActiveClass, setIsCardActiveClass] = useState<cardActiveProps>();
+    const [columns, setColumns] = useState([])
+    const [inqueryData, setInqueryData] = useState(null);
+    const [data, setInqueryTableData] = useState([]);
 
     const { data: result, refetch: fetchCardCount } = useApi<KXManagerCardCount>(
         `${apiBaseUrl}/dashboard/kxmanager-cardcount`
@@ -49,9 +52,6 @@ const KXManager = () => {
         { count: result?.confirmed_booking || 0, ids: result?.confirmed_booking_ids, label: 'Confirmed Bookings', status: 'This Week', desc: '$2.4M revenue' },
         { count: result?.response_time || 0, ids: result?.response_time_ids, label: 'Response Time', status: 'Average', desc: '12% improvement' },
     ]
-    const [columns, setColumns] = useState([])
-    const [inqueryData, setInqueryData] = useState(null);
-    const [data, setInqueryTableData] = useState([]);
 
     const fetchInquiries = async (param: any) => {
         try {
@@ -178,7 +178,7 @@ const KXManager = () => {
                                     gridColumns={columns}
                                     gridRows={data}
                                     rowHeight={70}
-                                    clearFilter={() => { fetchInquiries(''); setIsCardActiveClass(undefined) }}
+                                    clearFilter={() => { isCardActiveClass && fetchInquiries(''); setIsCardActiveClass(undefined) }}
                                 />
                             </Box>
                         </Grid>

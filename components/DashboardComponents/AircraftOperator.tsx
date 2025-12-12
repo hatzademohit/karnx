@@ -165,7 +165,7 @@ const AircraftOperator = () => {
                                 gridColumns={columns}
                                 gridRows={data}
                                 rowHeight={70}
-                                clearFilter={() => { fetchInquiries(''); setIsCardActiveClass(undefined) }}
+                                clearFilter={() => { isCardActiveClass && fetchInquiries(''); setIsCardActiveClass(undefined) }}
                             />
                         </Box>
                     </Grid>
