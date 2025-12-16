@@ -74,16 +74,16 @@ const ViewQuotes = () => {
 
     const edidQuoteDetails = async () => {
         setCreateNewQuote(true);
-        // try {
-        //     const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
-        //     if (res?.status === true) {
-        //         setQuoteDetails(res.data);
-        //     } else {
-        //         toast.error(res?.message || '');
-        //     }
-        // } catch (e) {
-        //     toast.error('Network error while fetching cancellation policies');
-        // }
+        try {
+            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
+            if (res?.status === true) {
+                setQuoteDetails(res.data);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            toast.error('Network error while fetching cancellation policies');
+        }
     }
 
     const acceptQuote = (id, acceptedQuote = []) => {
@@ -154,7 +154,6 @@ const ViewQuotes = () => {
         let rejectQId = [];
         quotes.filter((q) => q.id !== acceptedQuoteId && q.is_selected !== 'rejected').map((quote, index) => {
             //if (quote.is_selected !== 'rejected') {
-            // console.log(rejectQId.indexOf(quote.id));
             if (rejectQId.indexOf(quote.id) === -1) {
                 rejectQId.push(quote.id);
                 travelAgentSetValue(`rejectedQuote.${index}`, quote.id);
@@ -188,7 +187,6 @@ const ViewQuotes = () => {
     };
 
     const handleCancel = () => {
-        // console.log("Cancelled quote dd id:", viewedQuote?.id);
         setTravelAgentModal(false);
         travelAgentReset();
     };
@@ -210,7 +208,6 @@ const ViewQuotes = () => {
 
     useEffect(() => {
         fetchQuotes();
-        //console.log(quotes);
     }, []);
 
 
@@ -222,7 +219,6 @@ const ViewQuotes = () => {
             {quotes.length > 0 && quotes.map((q) => {
                 let isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
                 isDisabled = (q.is_selected === 'rejected');
-                //console.log(q[key]);
                 return (
                     <TableCell key={q.id} sx={{ verticalAlign: "top" }} data-disabled={isDisabled}>
                         {label == 'Aircraft' ?

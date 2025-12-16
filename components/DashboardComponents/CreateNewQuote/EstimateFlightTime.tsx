@@ -54,7 +54,7 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                         </Grid>
                         <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                             <Controller
-                                name={`estimate.${index}.departureArrivalDateTime`}
+                                name={`estimate.${index}.departure_time`}
                                 control={control}
                                 rules={{ required: "Departure Date & Time is required" }}
                                 render={({ field, fieldState }) => (
@@ -74,7 +74,7 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                         </Grid>
                         <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                             <Controller
-                                name={`estimate.${index}.estimatedFlightTime`}
+                                name={`estimate.${index}.estimated_flight_time`}
                                 control={control}
                                 rules={{ required: "Estimated flight time is required" }}
                                 render={({ field, fieldState }) => (

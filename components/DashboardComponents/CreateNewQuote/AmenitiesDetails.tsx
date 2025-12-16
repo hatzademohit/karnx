@@ -30,7 +30,7 @@ import useApiFunction from "@/karnx/Hooks/useApiFunction";
 const AmenitiesDetails = (editedData) => {
   const callApi = useApiFunction();
   const { control, watch, setValue } = useFormContext();
-  const selected = watch("amenities") || [];
+  const selected = watch("amenities_ids") || [];
   const theme = useTheme();
   const [amentiesList, setAmentiesListList] = useState<any>([]);
 
@@ -38,7 +38,7 @@ const AmenitiesDetails = (editedData) => {
     const updated = selected.includes(a)
       ? selected.filter((x: string) => x !== a)
       : [...selected, a];
-    setValue("amenities", updated);
+    setValue("amenities_ids", updated);
   };
 
   const getAvailableAmenties = async () => {
@@ -91,7 +91,7 @@ const AmenitiesDetails = (editedData) => {
         }
         <Grid size={{ lg: 6, xs: 12 }}>
           <Controller
-            name="specialOffers"
+            name="special_offers_promotions"
             control={control}
             render={({ field }) => (
               <CustomTextField {...field} inputLabel="Special Offers or Promotions" size='medium' />
@@ -100,7 +100,7 @@ const AmenitiesDetails = (editedData) => {
         </Grid>
         <Grid size={{ lg: 6, xs: 12 }}>
           <Controller
-            name="addtionalNotes"
+            name="additional_notes"
             control={control}
             render={({ field }) => (
               <CustomTextField {...field} inputLabel="Additional Notes" size='medium' />
