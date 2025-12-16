@@ -62,7 +62,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     };
 
     const fetchAssignedOperators = async (inquiryId) => {
-        console.log(selectedOperators);
+        //console.log(selectedOperators);
         const fetched = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-operator/get-assigned-operators?inquiry_id=${encodeURIComponent(inquiryId)}&selected=${selectedOperators}` });
         if (fetched?.status === true) {
             //toast.success(fetched?.message);
@@ -313,6 +313,10 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                             </CardContent>
                         </Card>
                     ))}
+
+                    {getOperatorList.length === 0 &&
+                        <Typography sx={{ textAlign: 'center', py: 4 }}>No operators found.</Typography>
+                    }
                     <Divider sx={{ my: 2 }} />
                     <Box className="modal-footer"
                         sx={{
