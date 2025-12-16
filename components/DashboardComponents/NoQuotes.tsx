@@ -8,8 +8,7 @@ import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const NoQuotes = () => {
     const { user } = useAuth();
-    const [createNewQuote, setCreateNewQuote] = useState<boolean>(false);
-    const { inquiryRowData } = useInquiryDetails();
+    const { inquiryRowData, createNewQuote, setCreateNewQuote } = useInquiryDetails();
     const inqStsId = inquiryRowData?.status_id;
     const addQuote = () => {
         setCreateNewQuote(true);

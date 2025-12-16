@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField, FormControlLabel, Checkbox } from "@mui/material";
-import { CustomModal, CustomTextField, QuoteDetails } from "@/components";
+import { CreateNewQuoteStepper, CustomModal, CustomTextField, QuoteDetails } from "@/components";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { useForm } from "react-hook-form";
@@ -18,7 +18,7 @@ interface RejectionFormData {
 
 const ViewQuotes = () => {
     const callApi = useApiFunction();
-    const { inquiryId, setShowDetailsTabs, inquiryRowData } = useInquiryDetails();
+    const { inquiryId, setShowDetailsTabs, createNewQuote, setCreateNewQuote, setQuoteDetails } = useInquiryDetails();
     const [quotes, setQuotes] = useState([]);
     const [nonRejectedQuotes, setNonRejectedQuotes] = useState([]);
     const [openBoxQuote, setOpenBoxQuote] = useState([]);
@@ -71,6 +71,20 @@ const ViewQuotes = () => {
         setViewedQuote(quoteViewData);
         setViewQuoteDetails(true);
     };
+
+    const edidQuoteDetails = async () => {
+        setCreateNewQuote(true);
+        // try {
+        //     const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
+        //     if (res?.status === true) {
+        //         setQuoteDetails(res.data);
+        //     } else {
+        //         toast.error(res?.message || '');
+        //     }
+        // } catch (e) {
+        //     toast.error('Network error while fetching cancellation policies');
+        // }
+    }
 
     const acceptQuote = (id, acceptedQuote = []) => {
         setAcceptedQuote(acceptedQuote);
@@ -297,146 +311,153 @@ const ViewQuotes = () => {
     }
     return (
         <>
-            <Box>
-                {user.access_type === 'Portal Admin' &&
-                    <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", flexWrap: 'wrap', gap: '4px' }}>
-                        <Box>
-                            <Typography variant="h4">
-                                Quote Comparison
-                            </Typography>
-                            <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
-                                {quotes?.length || 0} quotes received for this inquiry
+            {!createNewQuote &&
+                <Box>
+                    {user.access_type === 'Portal Admin' &&
+                        <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", flexWrap: 'wrap', gap: '4px' }}>
+                            <Box>
+                                <Typography variant="h4">
+                                    Quote Comparison
+                                </Typography>
+                                <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
+                                    {quotes?.length || 0} quotes received for this inquiry
+                                </Typography>
+                            </Box>
+                            <Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
+                                Best Quote Price: {applyCurrencyFormat(bestQuotes?.total)}
                             </Typography>
                         </Box>
-                        <Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
-                            Best Quote Price: {applyCurrencyFormat(bestQuotes?.total)}
-                        </Typography>
-                    </Box>
-                }
-                <Divider sx={{ my: 2 }} />
-                {/* Table */}
-                <Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
-                    <Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
-                        <TableHead>
-                            <TableRow sx={{ '& th': { borderColor: '#eee' } }}>
-                                <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
-                                    <Typography variant="h4">
-                                        Specifications
-                                    </Typography>
-                                </TableCell>
-                                {quotes.length > 0 && quotes.map((quote) => {
-                                    const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
-                                    let image = quote.aircraft.images;
-                                    image = JSON.parse(image);
-                                    return (
-                                        <TableCell key={quote.id} data-disabled={isDisabled}>
-                                            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
-                                                <img src={fileStorageUrl + image[0]} alt={quote.aircraft.asset_name} style={{ width: 'auto', maxWidth: '300px', height: '250px' }} />
-                                                <Typography variant="h4">
-                                                    {quote.client.name}
-                                                </Typography>
-                                                <Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
-                                                    View Details
-                                                </Button>
-                                            </Box>
-                                        </TableCell>
-                                    )
-                                })}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {renderRow("Rating", "rating")}
-                            {renderRow("Aircraft", "aircraft")}
-                            {renderRow("Price", "total")}
-                            {renderRow("Flight Time", "estimated_flight_time")}
-                            {renderRow("Base Fees", "base_fare")}
-                            {renderRow("Fuel Fees", "fluel_cost")}
-                            {renderRow("Taxes & Fees", "taxes_fees")}
-                            {renderRow("Catering Fees", "catering_fees")}
-                            {renderRow("Handling Fees", "handling_fees")}
-                            {renderRow("Crew Fees", "crew_fees")}
-                            {renderRow("Key Amenities", "available_amenities", true)}
-                            {renderRow("Included Service", "special_offers_promotions", true)}
-                            {(user.access_type === 'Portal Admin') || (user.access_type === 'Aircraft Operator' && quotes[0]?.is_selected === 'rejected') ?
-                                <>
-                                    {renderRow("Rejected Reason", "rejected_reason", true)}
-                                </>
-                                :
-                                <>
-
-                                </>
-                            }
-
-                            {user.access_type === 'Portal Admin' &&
-                                <TableRow>
-                                    <TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: { md: 'sticky', xs: 'static' }, left: 0, zIndex: 1 }}>
-                                        <Typography variant="h5">Select</Typography>
+                    }
+                    <Divider sx={{ my: 2 }} />
+                    {/* Table */}
+                    <Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
+                        <Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
+                            <TableHead>
+                                <TableRow sx={{ '& th': { borderColor: '#eee' } }}>
+                                    <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
+                                        <Typography variant="h4">
+                                            Specifications
+                                        </Typography>
                                     </TableCell>
-                                    {quotes.map((q) => {
-                                        const isAccepted = acceptedQuoteId === q.id;
-                                        const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                                    {quotes.length > 0 && quotes.map((quote) => {
+                                        const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
+                                        let image = quote.aircraft.images;
+                                        image = JSON.parse(image);
                                         return (
-                                            <TableCell key={q.id} data-disabled={isDisabled}>
-                                                {q.is_selected === 'rejected' ?
-                                                    <>
-                                                        <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                                                            <Button className="btn btn-defualt w-100" disabled={true}>
-                                                                Quote Rejected
-                                                            </Button>
-                                                        </Box>
-
-                                                    </>
-                                                    :
-
-                                                    <>
-                                                        <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                                                            {['selected', 'approved'].includes(q.is_selected) ?
-                                                                <>
-                                                                    <Button className="btn btn-green w-100" >
-                                                                        Quote Accepted
-                                                                    </Button>
-                                                                </>
-                                                                :
-                                                                <>
-                                                                    <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id, q)}>
-                                                                        {isAccepted ? "Quote Accepted" : "Accept Quote"}
-                                                                    </Button>
-                                                                </>
-                                                            }
-                                                            {isAccepted && (
-                                                                <Button className="btn btn-danger w-100" disabled={isDisabled} onClick={() => cancelAcception()}>
-                                                                    Cancel
-                                                                </Button>
-                                                            )}
-                                                            {!isAccepted && !['selected', 'approved'].includes(q.is_selected) && (
-                                                                <Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
-                                                                    Reject Quote
-                                                                </Button>
-                                                            )}
-                                                        </Box>
-                                                    </>
-                                                }
-
+                                            <TableCell key={quote.id} data-disabled={isDisabled}>
+                                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
+                                                    <img src={fileStorageUrl + image[0]} alt={quote.aircraft.asset_name} style={{ width: 'auto', maxWidth: '300px', height: '250px' }} />
+                                                    <Typography variant="h4">
+                                                        {quote.client.name}
+                                                    </Typography>
+                                                    <Box className="w-100" sx={{ display: 'flex', gap: 1 }}>
+                                                        <Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
+                                                            View Details
+                                                        </Button>
+                                                        <Button className="btn btn-outlined w-100" onClick={() => edidQuoteDetails()} disabled={isDisabled}>
+                                                            Edit Quote
+                                                        </Button>
+                                                    </Box>
+                                                </Box>
                                             </TableCell>
-                                        );
+                                        )
                                     })}
                                 </TableRow>
-                            }
-                        </TableBody>
-                    </Table>
-                </Box>
-                <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
-                    <Button variant="outlined" className="btn btn-outlined" onClick={() => setShowDetailsTabs(false)}>
-                        Close
-                    </Button>
-                    {user.access_type === 'Portal Admin' &&
-                        <Button className="btn btn-blue" disabled={acceptedQuoteId == null || acceptedQuoteId == 0} onClick={() => quoteSendToTravelAgent()}>
-                            Send To Travel Agent
-                        </Button>
-                    }
-                </Box>
-            </Box>
+                            </TableHead>
+                            <TableBody>
+                                {renderRow("Rating", "rating")}
+                                {renderRow("Aircraft", "aircraft")}
+                                {renderRow("Price", "total")}
+                                {renderRow("Flight Time", "estimated_flight_time")}
+                                {renderRow("Base Fees", "base_fare")}
+                                {renderRow("Fuel Fees", "fluel_cost")}
+                                {renderRow("Taxes & Fees", "taxes_fees")}
+                                {renderRow("Catering Fees", "catering_fees")}
+                                {renderRow("Handling Fees", "handling_fees")}
+                                {renderRow("Crew Fees", "crew_fees")}
+                                {renderRow("Key Amenities", "available_amenities", true)}
+                                {renderRow("Included Service", "special_offers_promotions", true)}
+                                {(user.access_type === 'Portal Admin') || (user.access_type === 'Aircraft Operator' && quotes[0]?.is_selected === 'rejected') ?
+                                    <>
+                                        {renderRow("Rejected Reason", "rejected_reason", true)}
+                                    </>
+                                    :
+                                    <>
 
+                                    </>
+                                }
+
+                                {user.access_type === 'Portal Admin' &&
+                                    <TableRow>
+                                        <TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: { md: 'sticky', xs: 'static' }, left: 0, zIndex: 1 }}>
+                                            <Typography variant="h5">Select</Typography>
+                                        </TableCell>
+                                        {quotes.map((q) => {
+                                            const isAccepted = acceptedQuoteId === q.id;
+                                            const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                                            return (
+                                                <TableCell key={q.id} data-disabled={isDisabled}>
+                                                    {q.is_selected === 'rejected' ?
+                                                        <>
+                                                            <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                                                                <Button className="btn btn-defualt w-100" disabled={true}>
+                                                                    Quote Rejected
+                                                                </Button>
+                                                            </Box>
+
+                                                        </>
+                                                        :
+
+                                                        <>
+                                                            <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                                                                {['selected', 'approved'].includes(q.is_selected) ?
+                                                                    <>
+                                                                        <Button className="btn btn-green w-100" >
+                                                                            Quote Accepted
+                                                                        </Button>
+                                                                    </>
+                                                                    :
+                                                                    <>
+                                                                        <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id, q)}>
+                                                                            {isAccepted ? "Quote Accepted" : "Accept Quote"}
+                                                                        </Button>
+                                                                    </>
+                                                                }
+                                                                {isAccepted && (
+                                                                    <Button className="btn btn-danger w-100" disabled={isDisabled} onClick={() => cancelAcception()}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                )}
+                                                                {!isAccepted && !['selected', 'approved'].includes(q.is_selected) && (
+                                                                    <Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
+                                                                        Reject Quote
+                                                                    </Button>
+                                                                )}
+                                                            </Box>
+                                                        </>
+                                                    }
+
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                }
+                            </TableBody>
+                        </Table>
+                    </Box>
+                    <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
+                        <Button variant="outlined" className="btn btn-outlined" onClick={() => setShowDetailsTabs(false)}>
+                            Close
+                        </Button>
+                        {user.access_type === 'Portal Admin' &&
+                            <Button className="btn btn-blue" disabled={acceptedQuoteId == null || acceptedQuoteId == 0} onClick={() => quoteSendToTravelAgent()}>
+                                Send To Travel Agent
+                            </Button>
+                        }
+                    </Box>
+                </Box>
+            }
+            {createNewQuote && user.access_type === 'Aircraft Operator' && <CreateNewQuoteStepper />}
             {/* View quote modal */}
             <CustomModal headerText={<Box>Quote Details <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
                 {viewedQuote.clientName}

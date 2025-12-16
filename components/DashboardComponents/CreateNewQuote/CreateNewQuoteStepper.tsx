@@ -17,8 +17,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	const [activeStep, setActiveStep] = useState(0);
 	const theme = useTheme();
 	const callApi = useApiFunction();
-	const [quoteDetails, setQuoteDetails] = useState<any>([]);
-	const { setShowDetailsTabs, inquiryId, bookingDetails } = useInquiryDetails()
+	const { setShowDetailsTabs, inquiryId, bookingDetails, quoteDetails, setQuoteDetails } = useInquiryDetails()
 	// const getQuoteDetails = async () => {
 	// 	try {
 	// 		const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
