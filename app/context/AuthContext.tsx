@@ -15,6 +15,8 @@ interface User {
   client_id?: number;
   avatar?: any;
   access_type?: string; // e.g., 'admin', 'operator', etc.
+  [key: string]: any;
+  roles: any;
 }
 
 interface AuthContextType {

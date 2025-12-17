@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import Image from 'next/image';
 import { fileStorageUrl } from "@/karnx/api";
+import { get } from 'http';
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
     elevation={0}
@@ -84,6 +85,9 @@ export default function MyAccount() {
     setAnchorEl(null);
     router.push('/profile/my-profile');
   }
+  let userSesion: any = null;
+  userSesion = typeof window !== 'undefined' ? localStorage.getItem('loggedInUser') : null;
+  userSesion = userSesion ? JSON.parse(userSesion) : null;
   return (
     <Box>
       <Button
@@ -120,7 +124,7 @@ export default function MyAccount() {
             {(user?.name) ? user.name : 'Operator'}
           </Typography>
           <Typography component='span' variant='body2' sx={{ fontSize: '14px !important' }}>
-            {`User Role`}
+            {userSesion.roles[0].description ? userSesion.roles[0].description : ''}
           </Typography>
         </Typography>
       </Button>
