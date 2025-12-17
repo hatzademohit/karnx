@@ -48,8 +48,9 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                                 rules={{ required: "Departure Date & Time is required" }}
                                 render={({ field, fieldState }) => (
                                     <TextField
+                                        key={`flight_details_id_${index}`}
                                         {...field}
-                                        value={field.value ?? null}
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
