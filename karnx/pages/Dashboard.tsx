@@ -8,14 +8,14 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 const Dashboard = () => {
     const { user } = useAuth();
-    const { showDetailsTabs, setShowDetailsTabs } = useInquiryDetails();
+    const { showDetailsTabs, setShowDetailsTabs, setAdultsChild, setbookingDetails, setQuoteDetails, setCreateNewQuote } = useInquiryDetails();
 
     return (
         <Box>
             <Box sx={{ mb: '10px', display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'space-between' }}>
                 {/* <Typography component='h1' variant="h1">Dashboard</Typography> */}
                 {showDetailsTabs &&
-                    <Button sx={{ ml: 'auto' }} onClick={() => setShowDetailsTabs(false)}><KeyboardBackspaceIcon sx={{ mr: 0.5 }} />Back to Inquiries</Button>
+                    <Button sx={{ ml: 'auto' }} onClick={() => { setShowDetailsTabs(false); setAdultsChild([]); setbookingDetails([]); setQuoteDetails([]); setCreateNewQuote(false) }}><KeyboardBackspaceIcon sx={{ mr: 0.5 }} />Back to Inquiries</Button>
                 }
             </Box>
             {/* <CustomTabs defaultValue={0}> */}
