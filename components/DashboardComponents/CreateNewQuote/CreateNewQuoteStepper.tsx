@@ -89,8 +89,8 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	}, [reset, quoteDetails]);
 
 	const handleNext = async () => {
-		const formData = watch();
-		setQuoteDetails(prev => ({ ...prev, ...formData }));
+		// const formData = watch();
+		// setQuoteDetails(prev => ({ ...prev, ...formData }));
 		const valid = await trigger();
 		if (valid) setActiveStep((prev) => prev + 1);
 	};
