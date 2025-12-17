@@ -18,6 +18,8 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
         return value.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
     };
 
+    console.log(bookingDetails);
+
     return (
         <>
             <Grid size={{ xs: 12 }}>
