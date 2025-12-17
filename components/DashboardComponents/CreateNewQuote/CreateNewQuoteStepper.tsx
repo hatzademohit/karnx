@@ -50,7 +50,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	};
 
 	useEffect(() => {
-		if (quoteDetails) return;
+		if (quoteDetails?.length >= 1 || quoteDetails?.length == undefined) return;
 		reset({
 			estimate: bookingDetails?.flight_time?.map((item) => ({
 				departure_time: item?.departure_time ?? "",
