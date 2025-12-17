@@ -18,7 +18,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	const [activeStep, setActiveStep] = useState(0);
 	const theme = useTheme();
 	const callApi = useApiFunction();
-	const { setShowDetailsTabs, inquiryId, bookingDetails, quoteDetails, setQuoteDetails } = useInquiryDetails();
+	const { setShowDetailsTabs, inquiryId, bookingDetails, quoteDetails, setQuoteDetails, setCreateNewQuote } = useInquiryDetails();
 
 	const methods = useForm({
 		shouldUnregister: false,
@@ -39,7 +39,8 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 			const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/submit-quote`, body: { ...data, inquiryId } });
 			if (res?.status === true) {
 				toast.success(res?.message || '');
-				setShowDetailsTabs(false)
+				setShowDetailsTabs(false);
+				setCreateNewQuote(false)
 			} else {
 				toast.error(res?.message || '');
 			}
@@ -60,7 +61,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 
 	// for edit quote
 	useEffect(() => {
-		if (!quoteDetails) return reset();
+		if (quoteDetails?.length <= 0) return;
 		reset({
 			aircraft_id: quoteDetails?.aircraft_id ?? "",
 			base_fare: quoteDetails?.base_fare ?? "",
@@ -87,14 +88,9 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 		});
 	}, [reset, quoteDetails]);
 
-	// useEffect(() => {
-	// 	if (quoteDetails) reset(quoteDetails);
-	// }, [activeStep, quoteDetails, reset]);
-
-
 	const handleNext = async () => {
 		const formData = watch();
-		// setQuoteDetails(prev => ({ ...prev, ...formData }));
+		setQuoteDetails(prev => ({ ...prev, ...formData }));
 		const valid = await trigger();
 		if (valid) setActiveStep((prev) => prev + 1);
 	};

@@ -14,7 +14,7 @@ import { useEffect } from "react";
 
 const TravelAgentFullQuoteView = (quoteId: any) => {
     // const { errors } = useFormContext()
-    const { setShowDetailsTabs, inquiryId, inquiryRowData } = useInquiryDetails();
+    const { setShowDetailsTabs, inquiryId, inquiryRowData, setAdultsChild } = useInquiryDetails();
     const callApi = useApiFunction();
     const methods = useForm({
         resolver: yupResolver(travelAgentSchema),
@@ -112,10 +112,9 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
         const response = await callApi({ method: 'GET', url: `${apiBaseUrl}/booking-travellers/get-traveller-details/${inquiryId}` });
         const data = response.data;
 
-        methods.setValue('adults', data.passangers.adult);
-        methods.setValue('children', data.passangers.child);
-        methods.setValue('infants', data.passangers.infant);
-        console.log(data.passangers);
+        // methods.setValue('adults', data.passangers.adult);
+        // methods.setValue('children', data.passangers.child);
+        // methods.setValue('infants', data.passangers.infant);
         // methods.setValue('enableGST', data.enableGST);
         // methods.setValue('gstin', data.gstin);
         methods.setValue('contact_email', data?.contact_details?.contact_email);
@@ -125,11 +124,11 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
         methods.setValue('pincode', data?.contact_details?.pincode);
         methods.setValue('address', data?.contact_details?.address);
     };
+
     const getTravellerPassangers = async () => {
 
         const response = await callApi({ method: 'GET', url: `${apiBaseUrl}/booking-travellers/get-traveller-passanger` });
         const data = response.data;
-        console.log(data.adult);
         // methods.setValue('adults', data.adult);
         // methods.setValue('children', data.child);
         // methods.setValue('infants', data.infant);
@@ -138,6 +137,7 @@ const TravelAgentFullQuoteView = (quoteId: any) => {
             children: data.child,
             infants: data.infant,
         })
+        setAdultsChild([data?.adult, data?.child, data?.infant]);
         // methods.setValue('enableGST', data.enableGST);
         // methods.setValue('gstin', data.gstin);
         // methods.setValue('contact_email', data.contact_email);
