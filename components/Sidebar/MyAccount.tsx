@@ -85,8 +85,8 @@ export default function MyAccount() {
     setAnchorEl(null);
     router.push('/profile/my-profile');
   }
-
-  let userSesion = typeof window !== 'undefined' ? localStorage.getItem('loggedInUser') : null;
+  let userSesion: any = null;
+  userSesion = typeof window !== 'undefined' ? localStorage.getItem('loggedInUser') : null;
   userSesion = userSesion ? JSON.parse(userSesion) : null;
   return (
     <Box>
