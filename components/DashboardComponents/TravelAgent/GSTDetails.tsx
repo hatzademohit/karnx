@@ -1,4 +1,4 @@
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Card, CardContent, FormControlLabel, Grid, Switch, Typography, useTheme } from "@mui/material";
 import { CustomTextField } from "@/components/CustomTextField/CustomTextField";
 
@@ -15,11 +15,26 @@ const GSTDetails = () => {
                     <Typography color="#333333" variant="body2" sx={{ mb: 1 }}>
                         To claim credit of GST charged by airlines, please enter your GST details
                     </Typography>
-                    <FormControlLabel
+                    {/* <FormControlLabel
                         control={
                             <Switch checked={enableGST} onChange={(e) => setValue("enableGST", e.target.checked)} />
                         }
                         label="I would like to add my GST Number"
+                    /> */}
+                    <Controller
+                        name="enableGST"
+                        defaultValue={false}
+                        render={({ field }) => (
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={field.value}
+                                        onChange={(e) => field.onChange(e.target.checked)}
+                                    />
+                                }
+                                label="I would like to add my GST Number"
+                            />
+                        )}
                     />
 
                     {enableGST && (
