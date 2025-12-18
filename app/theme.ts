@@ -191,6 +191,14 @@ export const karnxTheme = createTheme({
                 ".MuiDataGrid-cell": {
                     fontFamily: "poppins-lt, sans-serif",
                 },
+                ".react-table tbody td": {
+                    fontSize: '14px',
+                },
+                ".react-table thead th": {
+                    fontSize: '14px',
+                    fontFamily: "poppins-semibold, sans-serif",
+                    paddingBlock: '14px',
+                },
             },
         },
         MuiOutlinedInput: {

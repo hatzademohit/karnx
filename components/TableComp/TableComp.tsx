@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
-import { Box, Button, Typography } from '@mui/material';
-import ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
+import { Box, Button, Typography, useTheme } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface TableCompProps {
   data?: any[];
@@ -11,9 +10,10 @@ export interface TableCompProps {
   buttonText?: any;
   addButton?: boolean;
   selectFilter?: any;
-  isText?: string;
+  headingText?: string;
   isExport?: boolean;
   className?: string;
+  clearFilter?: any;
 }
 
 const TableComp: React.FC<TableCompProps> = ({
@@ -21,16 +21,28 @@ const TableComp: React.FC<TableCompProps> = ({
   columns,
   onclick,
   buttonText,
-  addButton = true,
+  addButton = false,
   selectFilter,
-  isText,
+  headingText,
   className = '',
+  clearFilter,
 }) => {
-  const [isButton, setIsButton] = useState(addButton);
+
   const [value, setValue] = useState<number>(80);
+  const theme = useTheme();
 
   return (
-    <Box className={`react-table database-tbl ${className}`} sx={{ '& .MuiToolbar-root.MuiToolbar-gutters > div:has(.MuiCollapse-root.MuiCollapse-horizontal .MuiFormControl-root .MuiInputBase-root)': { marginLeft: 'auto', padding: '4px 0', alignItems: 'center' }, '.MuiToolbar-root.MuiToolbar-gutters': { minHeight: '36px' } }} data-btn={addButton}>
+    <Box className={`react-table ${className}`}
+      data-btn={addButton}
+      sx={{
+        '& .MuiToolbar-root.MuiToolbar-gutters > div:has(.MuiCollapse-root.MuiCollapse-horizontal .MuiFormControl-root .MuiInputBase-root)': { marginLeft: 'auto', padding: '4px 0', alignItems: 'center' }, '.MuiToolbar-root.MuiToolbar-gutters': { minHeight: '36px' },
+        '& .MuiPaper-root': { boxShadow: 'unset' },
+        '& .MuiTableContainer-root': { border: '1px solid #dddddd', scrollbarWidth: 'thin' },
+        '& div:has(.MuiTablePagination-root)': { boxShadow: 'unset' },
+        '& table thead th .MuiDivider-fullWidth.MuiDivider-vertical': { borderWidth: 1 },
+        '& div:has(.h3)': { padding: '0', alignItems: 'center' }
+      }}
+    >
       <MaterialReactTable
         columns={columns}
         data={data}
@@ -38,7 +50,10 @@ const TableComp: React.FC<TableCompProps> = ({
         enableFullScreenToggle={false}
         enableColumnActions={false}
         enableHiding={false}
+        enableTopToolbar
+        enableColumnResizing
         // enableColumnFilters={false}
+        layoutMode="grid"
         enableColumnFilters={true}
         enableStickyHeader
         muiSearchTextFieldProps={{
@@ -46,13 +61,15 @@ const TableComp: React.FC<TableCompProps> = ({
           sx: { maxWidth: '250px', width: '100%' },
           variant: 'outlined',
           size: 'small',
-          className: 'input-search',
         }}
-        initialState={{ showColumnFilters: false, showGlobalFilter: true, pagination: { pageSize: 10, pageIndex: 0 } }}
+        initialState={{
+          showColumnFilters: false, showGlobalFilter: true, pagination: { pageSize: 10, pageIndex: 0 },
+          density: 'compact', // 'compact' | 'comfortable' | 'spacious'
+        }}
         muiTableContainerProps={{ sx: { maxHeight: 'calc(100vh - 210px)' } }}
         renderTopToolbarCustomActions={(table) => (
           <>
-            {isButton && (
+            {addButton && (
               <Box className="add-data-btn" sx={{ display: 'flex', width: '100%', maxWidth: '500px', gap: '10px', '& .black-btn': { boxShadow: 'unset' } }}>
                 <Button onClick={onclick} variant="contained" className="btn black-btn" disableElevation>
                   {buttonText}
@@ -60,7 +77,13 @@ const TableComp: React.FC<TableCompProps> = ({
                 {selectFilter}
               </Box>
             )}
-            {isText && <Typography sx={{ fontFamily: 'kyn', fontSize: '16px', mt: '5px' }}>{isText}</Typography>}
+            {headingText && <Typography className='h3' component='h3' variant="h3" sx={{ color: theme?.common?.redColor }}>{headingText}</Typography>}
+            {clearFilter &&
+              <Button size="small" onClick={clearFilter} variant="outlined" color="inherit"
+                sx={{ whiteSpace: 'nowrap', fontFamily: 'poppins', minWidth: 'unset', ml: 'auto', borderColor: '#a9a9a9', height: '34px' }}>
+                <CloseIcon sx={{ fontSize: '16px' }} /> Clear Fliter
+              </Button>
+            }
           </>
         )}
       />

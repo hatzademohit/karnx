@@ -43,7 +43,7 @@ const Dashboard = () => {
                 // </CustomTabs.Tab>
             }
             {/* </CustomTabs> */}
-            {/* <TableComp columns={columns} data={data} /> */}
+
         </Box>
     )
 }
