@@ -56,7 +56,7 @@ p.fs10 {
   font-size: 10px;
 }
 
-button.btn {
+button.btn:not(.MuiButton-sizeLarge) {
   box-shadow: unset !important;
   border: 1px solid;
 }
@@ -232,7 +232,7 @@ span.custom-pill {
 .dialog-modal .MuiDialog-container>.MuiPaper-root {
   max-width: 770px;
   width: 100%;
-  border: 1px solid #E6E6E6;
+  /* border: 1px solid #E6E6E6; */
 }
 
 .dialog-modal:has(.modal-lg) .MuiDialog-container>.MuiPaper-root {
@@ -259,6 +259,7 @@ span.custom-pill {
   max-height: calc(100vh - 115px);
   overflow: auto;
   padding-bottom: 0;
+  scrollbar-width: thin;
 }
 
 .custom-modal .modal-body .modal-footer {
@@ -271,6 +272,12 @@ span.custom-pill {
   z-index: 9;
   margin-inline: -10px;
   padding-inline: 10px;
+}
+
+.custom-modal.priority_modal .modal-body .modal-footer {
+  background-color: #f9fafb;
+  margin-inline: -24px;
+  border-top: 2px solid #eeeeee;
 }
 
 .modal-footer .btn-status {
@@ -439,10 +446,25 @@ body:has(.open-sidebar) .sidebar-toggle {
 }
 
 .card {
-  padding: 16px 24px;
-  gap: 12px;
-  border: 1px solid #E6E6E6;
+  padding: 16px;
   background-color: #FFFFFF;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+}
+
+.card .botted-border {
+  position: relative;
+  margin-right: 16px;
+  margin-left: 5px;
+}
+
+.card .botted-border::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #BC0019;
+  border-radius: 50%;
+  left: -5.5px;
 }
 
 .card-header {

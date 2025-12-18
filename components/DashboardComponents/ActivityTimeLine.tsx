@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, useTheme } from "@mui/material";
+import { Box, Typography, Button, useTheme, Divider } from "@mui/material";
 import { apiBaseUrl } from "@/karnx/api";
 import { SingleSelectRadio } from "@/components";
 
@@ -32,7 +32,7 @@ const ActivityTimeLine: React.FC = () => {
   return (
     <Box className='card'>
       <Box className='card-header'>
-        <Typography component='h3' variant="h3" sx={{ color: theme?.common?.redColor }}>Activity Timeline</Typography>
+        <Typography component='h4' variant="h4" sx={{ color: theme?.common?.redColor }}>Activity Timeline</Typography>
         <SingleSelectRadio
           size="small"
           variant="filled"
@@ -46,33 +46,36 @@ const ActivityTimeLine: React.FC = () => {
 
       <Box className="card-body" sx={{ maxHeight: '260px', overflowY: 'auto' }}>
         {activities.map((item, idx) => (
-          <Box
-            key={item.id}
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              p: 2,
-              bgcolor: idx % 2 === 1 ? "#F7F7F9" : "#F9FAFB",
-              borderRadius: 2,
-              mb: 1.5,
-            }}
-          >
-            <Box sx={{ mr: 2, mt: 0.5 }}>{item.icon}</Box>
-            <Box>
-              <Typography variant="subtitle1" fontWeight={600}>
-                {item.title}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {item.time}
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 0.5 }}>
-                {item.details}
-              </Typography>
-              <Typography variant="body2" color="error" fontWeight={500}>
-                {item.subtitle}
-              </Typography>
+          <React.Fragment key={item?.id}>
+            {idx != 0 && <Divider className="cust-divider" />}
+            <Box
+              key={item.id}
+              sx={{
+                display: "flex",
+                alignItems: "stretch",
+                borderRadius: 2,
+                mb: 1.5,
+              }}
+            >
+              <Box className="botted-border" sx={{ borderLeft: `2px solid ${theme?.common?.borderColor}` }}></Box>
+              <Box sx={{ padding: '10px 5px 0 0', width: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h5" component='h5'>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {item.time}
+                  </Typography>
+                </Box>
+                <Typography variant="body2">
+                  {item.details}
+                </Typography>
+                <Typography variant="body2" color="error" className="fs14">
+                  {item.subtitle}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
+          </React.Fragment>
         ))}
       </Box>
 

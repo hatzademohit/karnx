@@ -165,10 +165,10 @@ const KXManager = () => {
                         ))}
                     </Grid>
                     <Grid container spacing={{ md: 3, xs: 2 }} mt={2}>
-                        <Grid size={{ lg: 6, md: 12, sm: 12, xs: 12 }}>
+                        <Grid size={{ lg: 7, md: 12, sm: 12, xs: 12 }}>
                             <ActivityTimeLine />
                         </Grid>
-                        <Grid size={{ lg: 6, md: 12, sm: 12, xs: 12 }}>
+                        <Grid size={{ lg: 5, md: 12, sm: 12, xs: 12 }}>
                             <PriorityTasks />
                         </Grid>
                         <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
