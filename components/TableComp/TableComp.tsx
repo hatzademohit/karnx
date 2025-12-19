@@ -67,7 +67,7 @@ const TableComp: React.FC<TableCompProps> = ({
           density: 'compact', // 'compact' | 'comfortable' | 'spacious'
         }}
         muiTableContainerProps={{ sx: { maxHeight: 'calc(100vh - 210px)' } }}
-        renderTopToolbarCustomActions={(table) => (
+        renderTopToolbarCustomActions={({ table }) => (
           <>
             {addButton && (
               <Box className="add-data-btn" sx={{ display: 'flex', width: '100%', maxWidth: '500px', gap: '10px', '& .black-btn': { boxShadow: 'unset' } }}>
@@ -79,8 +79,10 @@ const TableComp: React.FC<TableCompProps> = ({
             )}
             {headingText && <Typography className='h3' component='h3' variant="h3" sx={{ color: theme?.common?.redColor }}>{headingText}</Typography>}
             {clearFilter &&
-              <Button size="small" onClick={clearFilter} variant="outlined" color="inherit"
-                sx={{ whiteSpace: 'nowrap', fontFamily: 'poppins', minWidth: 'unset', ml: 'auto', borderColor: '#a9a9a9', height: '34px' }}>
+              <Button size="small" variant="outlined" color="inherit"
+                onClick={() => { clearFilter(); table.setGlobalFilter(''); table.setColumnFilters([]) }}
+                sx={{ whiteSpace: 'nowrap', fontFamily: 'poppins', minWidth: 'unset', ml: 'auto', borderColor: '#a9a9a9', height: '34px' }}
+              >
                 <CloseIcon sx={{ fontSize: '16px' }} /> Clear Fliter
               </Button>
             }
