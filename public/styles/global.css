@@ -11,6 +11,10 @@ body:has(.login-page) {
   line-height: 0;
 }
 
+html body:has(.dashbaord-page .react-table) {
+  background-color: #f9fafb;
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;

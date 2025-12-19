@@ -291,7 +291,7 @@ const KXManager = () => {
                             <PriorityTasks />
                         </Grid>
                         <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
-                            <Box sx={{ p: { md: 2, xs: '8px' }, pt: '0 !important', border: '1px solid #E6E6E6' }}>
+                            <Box sx={{ p: { md: 2, xs: '8px' }, pt: '0 !important', border: '1px solid #E6E6E6', backgroundColor: '#ffffff' }}>
                                 {/* <MUIDataGrid
                                     headingText="Charter Inquiries"
                                     gridColumns={columns}

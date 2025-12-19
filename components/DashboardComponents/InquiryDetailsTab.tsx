@@ -71,8 +71,8 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
               </Typography>
               {data?.route.length > 0 && data?.route.map(function (rt, index) {
                 return (
-                  <Typography variant="h5" key={index + rt?.departure_location}>
-                    <FlightTakeoff fontSize="small" sx={{ mr: 0.5 }} />
+                  <Typography variant="h6" key={index + rt?.departure_location} sx={{ color: '#5f5d5d' }}>
+                    <FlightTakeoff fontSize="small" sx={{ mr: 0.5, color: '#7d7a7a' }} />
                     {rt?.departure_location} → {rt?.arrival_location}
                   </Typography>
                 );
@@ -86,7 +86,7 @@ const InquiryDetailsTab: React.FC<InquiryDetailsTabProps> = ({ inquiryId }) => {
               </Typography>
               {data?.route.length > 0 && data?.route.map(function (rt, index) {
                 return (
-                  <Typography variant="h5" key={rt.arrival_location + index}>
+                  <Typography variant="h6" key={rt.arrival_location + index} sx={{ color: '#5f5d5d', mt: 1 }}>
                     {rt?.flight_departure_time}
                   </Typography>
                 );

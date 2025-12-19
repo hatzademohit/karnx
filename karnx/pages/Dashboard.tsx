@@ -11,7 +11,7 @@ const Dashboard = () => {
     const { showDetailsTabs, setShowDetailsTabs, setAdultsChild, setbookingDetails, setQuoteDetails, setCreateNewQuote } = useInquiryDetails();
 
     return (
-        <Box>
+        <Box className="dashbaord-page">
             <Box sx={{ mb: '10px', display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'space-between' }}>
                 {/* <Typography component='h1' variant="h1">Dashboard</Typography> */}
                 {showDetailsTabs &&
