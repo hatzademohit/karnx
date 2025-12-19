@@ -18,7 +18,7 @@ interface RejectionFormData {
 
 const ViewQuotes = () => {
     const callApi = useApiFunction();
-    const { inquiryId, setShowDetailsTabs, createNewQuote, setCreateNewQuote, setQuoteDetails } = useInquiryDetails();
+    const { inquiryId, setShowDetailsTabs, createNewQuote, setCreateNewQuote, setQuoteDetails, inquiryRowData } = useInquiryDetails();
     const [quotes, setQuotes] = useState([]);
     const [nonRejectedQuotes, setNonRejectedQuotes] = useState([]);
     const [openBoxQuote, setOpenBoxQuote] = useState([]);
@@ -34,7 +34,6 @@ const ViewQuotes = () => {
     const [quoteIdForRejection, setQuoteIdForRejection] = useState<number | null>(null);
     const [sameReason, setSameReason] = useState(false);
     const [sharedReason, setSharedReason] = useState("");
-
 
     const openQuoteDetails = (quote: any) => {
         const { hours, minutes } = parseToHoursMinutes(quote.estimated_flight_time);
@@ -210,8 +209,73 @@ const ViewQuotes = () => {
         fetchQuotes();
     }, []);
 
+    // Helpers to support dynamic, per-row numeric comparison and highlighting
+    const toNumber = (v: any): number => {
+        if (v === null || v === undefined) return NaN;
+        if (typeof v === 'number') return Number.isFinite(v) ? v : NaN;
+        if (typeof v === 'string') {
+            const cleaned = v.replace(/,/g, '').trim();
+            const num = Number(cleaned);
+            return Number.isFinite(num) ? num : NaN;
+        }
+        return NaN;
+    };
+
+    const findRowMinIndices = (values: any[]): number[] => {
+        // Extract numeric values; if fewer than 2 numeric values, skip highlighting
+        const nums = values.map(toNumber);
+        const numericIndices = nums
+            .map((n, i) => ({ n, i }))
+            .filter(({ n }) => Number.isFinite(n));
+        if (numericIndices.length < 2) return [];
+        const minVal = Math.min(...numericIndices.map(({ n }) => n));
+        return numericIndices.filter(({ n }) => n === minVal).map(({ i }) => i);
+    };
+
+    const renderComparableRow = (
+        label: string,
+        extractor: (q: any) => any,
+        renderCell?: (q: any, idx: number, isMin: boolean) => React.ReactNode
+    ) => {
+        const values = quotes.map(extractor);
+        const minIdx = findRowMinIndices(values);
+        const isMinAt = (idx: number) => minIdx.includes(idx);
+
+        return (
+            <TableRow>
+                <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
+                    <Typography variant="h5">{label}</Typography>
+                </TableCell>
+                {quotes.length > 0 && quotes.map((q, idx) => {
+                    let isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                    isDisabled = (q.is_selected === 'rejected');
+                    const isMin = isMinAt(idx);
+                    return (
+                        <TableCell key={q.id} sx={{ verticalAlign: 'top' }} data-disabled={isDisabled}>
+                            {renderCell ? (
+                                renderCell(q, idx, isMin)
+                            ) : (
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        whiteSpace: 'pre-line',
+                                        color: isMin ? theme.palette.success.main : 'text.primary',
+                                        fontWeight: isMin ? 700 : 500,
+                                    }}
+                                >
+                                    {applyCurrencyFormat(extractor(q))}
+                                </Typography>
+                            )}
+                        </TableCell>
+                    );
+                })}
+            </TableRow>
+        );
+    };
+
 
     const renderRow = (label: string, key: keyof typeof quotes[0], isRich?: boolean) => (
+
         <TableRow>
             <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
                 <Typography variant="h5" >{label}</Typography>
@@ -274,7 +338,7 @@ const ViewQuotes = () => {
                                                     {q[key]}
                                                 </Typography>
                                             </> :
-                                            label == 'Rejected Reason' && q.is_selected === 'rejected' && q[key] !== '' && q[key] !== null ?
+                                            label == 'Not Accepted Reason' && q.is_selected === 'rejected' && q[key] !== '' && q[key] !== null ?
                                                 <>
                                                     <Typography sx={{ color: "red", fontWeight: 600 }}>
                                                         {q[key]}
@@ -288,7 +352,7 @@ const ViewQuotes = () => {
                                                         fontWeight: isRich ? 400 : 500,
                                                     }}
                                                 >
-                                                    {applyCurrencyFormat(q[key])}
+                                                    {applyCurrencyFormat(q[key]) === 0 ? 'N/A' : q[key]}
                                                 </Typography>
                         }
                     </TableCell>
@@ -350,9 +414,11 @@ const ViewQuotes = () => {
                                                         <Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
                                                             View Details
                                                         </Button>
-                                                        <Button className="btn btn-outlined w-100" onClick={() => edidQuoteDetails()} disabled={isDisabled}>
-                                                            Edit Quote
-                                                        </Button>
+                                                        {user.access_type === 'Aircraft Operator' && [5, 19].includes(inquiryRowData.status_id) &&
+                                                            <Button className="btn btn-outlined w-100" onClick={() => edidQuoteDetails()} disabled={isDisabled}>
+                                                                Edit Quote
+                                                            </Button>
+                                                        }
                                                     </Box>
                                                 </Box>
                                             </TableCell>
@@ -363,19 +429,32 @@ const ViewQuotes = () => {
                             <TableBody>
                                 {renderRow("Rating", "rating")}
                                 {renderRow("Aircraft", "aircraft")}
-                                {renderRow("Price", "total")}
+                                {renderComparableRow(
+                                    "Price",
+                                    (q) => q.total,
+                                    (q, idx, isMin) => (
+                                        <>
+                                            <Typography color={isMin ? theme.palette.success.main : 'text.secondary'} sx={{ fontWeight: isMin ? 700 : 400 }}>
+                                                {applyCurrencyFormat(q.total)}
+                                            </Typography>
+                                            <Typography color="#BC0019" fontSize={12}>
+                                                {q.validate_till ? 'Valid until ' + dayjs(q.validate_till).format('DD-MMM-YYYY') : ''}
+                                            </Typography>
+                                        </>
+                                    )
+                                )}
                                 {renderRow("Flight Time", "estimated_flight_time")}
-                                {renderRow("Base Fees", "base_fare")}
-                                {renderRow("Fuel Fees", "fluel_cost")}
-                                {renderRow("Taxes & Fees", "taxes_fees")}
-                                {renderRow("Catering Fees", "catering_fees")}
-                                {renderRow("Handling Fees", "handling_fees")}
-                                {renderRow("Crew Fees", "crew_fees")}
+                                {renderComparableRow("Base Fees", (q) => q.base_fare)}
+                                {renderComparableRow("Fuel Fees", (q) => q.fluel_cost)}
+                                {renderComparableRow("Taxes & Fees", (q) => q.taxes_fees)}
+                                {renderComparableRow("Catering Fees", (q) => q.catering_fees)}
+                                {renderComparableRow("Handling Fees", (q) => q.handling_fees)}
+                                {renderComparableRow("Crew Fees", (q) => q.crew_fees)}
                                 {renderRow("Key Amenities", "available_amenities", true)}
                                 {renderRow("Included Service", "special_offers_promotions", true)}
                                 {(user.access_type === 'Portal Admin') || (user.access_type === 'Aircraft Operator' && quotes[0]?.is_selected === 'rejected') ?
                                     <>
-                                        {renderRow("Rejected Reason", "rejected_reason", true)}
+                                        {renderRow("Not Accepted Reason", "rejected_reason", true)}
                                     </>
                                     :
                                     <>
