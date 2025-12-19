@@ -58,9 +58,9 @@ const TableComp: React.FC<TableCompProps> = ({
         enableStickyHeader
         muiSearchTextFieldProps={{
           placeholder: 'Search...',
-          sx: { maxWidth: '250px', width: '100%' },
           variant: 'outlined',
           size: 'small',
+          className: 'global-search'
         }}
         initialState={{
           showColumnFilters: false, showGlobalFilter: true, pagination: { pageSize: 10, pageIndex: 0 },

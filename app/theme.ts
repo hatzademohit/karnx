@@ -198,6 +198,7 @@ export const karnxTheme = createTheme({
                     fontSize: '14px',
                     fontFamily: "poppins-semibold, sans-serif",
                     paddingBlock: '14px',
+                    fontWeight: 500,
 
                     '& .MuiInputBase-root::after': {
                         opacity: 0
