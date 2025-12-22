@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import Image from 'next/image';
 import { fileStorageUrl } from "@/karnx/api";
-import { get } from 'http';
+
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
     elevation={0}
@@ -66,8 +66,6 @@ export default function MyAccount() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const [userData, setUserData] = React.useState(null);
 
   const { logout, user, role, theme } = useAuth();
   const router = useRouter();
