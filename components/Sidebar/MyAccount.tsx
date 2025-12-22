@@ -124,7 +124,7 @@ export default function MyAccount() {
             {(user?.name) ? user.name : 'Operator'}
           </Typography>
           <Typography component='span' variant='body2' sx={{ fontSize: '14px !important' }}>
-            {userSesion.roles[0].description ? userSesion.roles[0].description : ''}
+            {userSesion?.roles[0]?.description ? userSesion?.roles[0]?.description : ''}
           </Typography>
         </Typography>
       </Button>
