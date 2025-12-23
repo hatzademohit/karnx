@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import Image from 'next/image';
 import { fileStorageUrl } from "@/karnx/api";
-import { get } from 'http';
+
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
     elevation={0}
@@ -66,8 +66,6 @@ export default function MyAccount() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const [userData, setUserData] = React.useState(null);
 
   const { logout, user, role, theme } = useAuth();
   const router = useRouter();
@@ -124,14 +122,16 @@ export default function MyAccount() {
             {(user?.name) ? user.name : 'Operator'}
           </Typography>
           <Typography component='span' variant='body2' sx={{ fontSize: '14px !important' }}>
-            {userSesion.roles[0].description ? userSesion.roles[0].description : ''}
+            {userSesion?.roles[0]?.description ? userSesion?.roles[0]?.description : ''}
           </Typography>
         </Typography>
       </Button>
       <StyledMenu
         id="demo-customized-menu"
-        MenuListProps={{
-          'aria-labelledby': 'demo-customized-button',
+        slotProps={{
+          list: {
+            'aria-labelledby': 'demo-customized-button',
+          },
         }}
         anchorEl={anchorEl}
         open={open}

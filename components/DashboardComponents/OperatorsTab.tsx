@@ -241,7 +241,6 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
             <CustomModal headerText="Add Operator" open={addOperator} setOpen={setAddOperator} dataClose={() => setAddOperator(false)}>
                 <Box>
                     {getOperatorList?.map((op) => (
-
                         <Card
                             key={op.id}
                             sx={{
@@ -250,15 +249,17 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                 borderRadius: 2,
                                 boxShadow: "0 1px 6px rgba(0,0,0,0.1)",
                                 transition: "0.3s",
+                                cursor: 'pointer',
                                 "&:hover": { boxShadow: "0 2px 8px rgba(0,0,0,0.15)" },
                             }}
+                            onClick={() => handleSelect(op.id)}
                         >
                             <CardContent className="card-content">
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     <Box sx={{ borderRight: '2px solid #E6E6E6', width: '50px', height: '100%', minHeight: '84px', alignContent: 'center' }}>
                                         <Checkbox
                                             checked={selectedOperators.includes(op.id)}
-                                            onChange={() => handleSelect(op.id)}
+                                        // onChange={() => handleSelect(op.id)}
                                         />
                                     </Box>
 

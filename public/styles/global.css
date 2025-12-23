@@ -11,6 +11,15 @@ body:has(.login-page) {
   line-height: 0;
 }
 
+html body:has(.dashbaord-page .react-table) {
+  background-color: #f9fafb;
+}
+
+.global-search {
+  max-width: 240px;
+  width: 100%;
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;
@@ -58,7 +67,7 @@ p.fs10 {
 
 button.btn:not(.MuiButton-sizeLarge) {
   box-shadow: unset !important;
-  border: 1px solid;
+  /* border: 1px solid; */
 }
 
 .btn.btn-blue:not(.Mui-disabled) {
@@ -105,7 +114,7 @@ button.btn:not(.MuiButton-sizeLarge) {
 }
 
 .btn.btn-status-rounded {
-  max-width: 124px;
+  max-width: 145px;
   padding: 5px 12px 4px 12px;
   border-radius: 30px;
   width: 100%;
@@ -699,7 +708,9 @@ hr.cust-divider {
   z-index: 9999999999;
 }
 
-.MuiFormControl-root:has(.Mui-disabled) {
+.MuiFormControl-root:has(.Mui-disabled):not(.react-table .MuiFormControl-root,
+  .MuiTable-root .MuiFormControl-root,
+  .MuiTableCell-root .MuiFormControl-root) {
   pointer-events: none;
 }
 
