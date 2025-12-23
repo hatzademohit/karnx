@@ -470,7 +470,7 @@ export default function CompanyProfile() {
                                     <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
                                     Email
                                 </Typography>
-                                <Link href={profile?.email} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
+                                <Link href={`mailto:${profile?.client?.email}`} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
                                     {profile?.client?.email}
                                 </Link>
                             </Grid>
