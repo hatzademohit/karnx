@@ -131,7 +131,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
         <Button className="btn btn-blue" sx={{ maxWidth: '100%', width: '100%', mt: 2 }} onClick={viewAllActivities(activities)}> View All Activities </Button>
       </Box>
 
-      <CustomModal open={viewAllActivitiesModalOpen} dataClose={() => setViewAllActivitiesModalOpen(false)} headerText={'All Activities'} className="activity_modal">
+      <CustomModal open={viewAllActivitiesModalOpen} setOpen={setViewAllActivitiesModalOpen} dataClose={() => setViewAllActivitiesModalOpen(false)} headerText={'All Activities'} className="activity_modal">
         <>
           <ActivitiesList />
           <Box className='modal-footer'>
