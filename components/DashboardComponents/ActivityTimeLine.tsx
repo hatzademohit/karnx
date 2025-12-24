@@ -59,6 +59,52 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
     fetchActivities();
   }, []);
 
+  const ActivitiesList = () => (
+    <>
+      {Array.isArray(activities) && activities?.length > 0 ? (
+        activities.slice(0, 5).map((item, idx) => (
+          <React.Fragment key={item.id}>
+            {idx !== 0 && <Divider className="cust-divider" />}
+            <Box
+              onClick={() => onActivityClick?.(item)}
+              sx={{
+                cursor: 'pointer',
+                display: "flex",
+                alignItems: "stretch",
+                borderRadius: 1.5,
+                pb: 0.5,
+                mb: 1,
+                border: '2px solid transparent',
+                '&:hover': { backgroundColor: '#f5f5f5', borderColor: theme?.common?.borderColor }
+              }}
+            >
+              <Box className="botted-border" sx={{ borderLeft: `2px solid ${theme?.common?.borderColor}` }}></Box>
+              <Box sx={{ padding: '10px 5px 0 0', width: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h5" component='h5'>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {item.time}
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary" className="fs14" sx={{ my: 0.5 }}>
+                  {item.inquiryId} • {item.details}
+                </Typography>
+                <Typography variant="body2" color="error" className="fs14">
+                  {item.subtitle}
+                </Typography>
+              </Box>
+            </Box>
+          </React.Fragment>
+        ))
+      ) : (
+        <Typography variant="body2" color="text.secondary">No activities</Typography>
+      )
+      }
+    </>
+  );
+
   return (
     <>
       <Box className='card'>
@@ -79,45 +125,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
           <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
             Loaded activities: {activities?.length}
           </Typography>
-          {Array.isArray(activities) && activities?.length > 0 ? (
-            activities.slice(0, 5).map((item, idx) => (
-              <React.Fragment key={item.id}>
-                {idx !== 0 && <Divider className="cust-divider" />}
-                <Box
-                  onClick={() => onActivityClick?.(item)}
-                  sx={{
-                    cursor: 'pointer',
-                    display: "flex",
-                    alignItems: "stretch",
-                    borderRadius: 2,
-                    pb: 0.5,
-                    mb: 1,
-                    '&:hover': { backgroundColor: '#f5f5f5' }
-                  }}
-                >
-                  <Box className="botted-border" sx={{ borderLeft: `2px solid ${theme?.common?.borderColor}` }}></Box>
-                  <Box sx={{ padding: '10px 5px 0 0', width: '100%' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="h5" component='h5'>
-                        {item.title}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {item.time}
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary" className="fs14" sx={{ my: 0.5 }}>
-                      {item.inquiryId} • {item.details}
-                    </Typography>
-                    <Typography variant="body2" color="error" className="fs14">
-                      {item.subtitle}
-                    </Typography>
-                  </Box>
-                </Box>
-              </React.Fragment>
-            ))
-          ) : (
-            <Typography variant="body2" color="text.secondary">No activities</Typography>
-          )}
+          <ActivitiesList />
         </Box>
 
         <Button className="btn btn-blue" sx={{ maxWidth: '100%', width: '100%', mt: 2 }} onClick={viewAllActivities(activities)}> View All Activities </Button>
@@ -125,45 +133,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
 
       <CustomModal open={viewAllActivitiesModalOpen} dataClose={() => setViewAllActivitiesModalOpen(false)} headerText={'All Activities'} className="activity_modal">
         <>
-          {Array.isArray(activities) && activities?.length > 0 ? (
-            activities.slice(0, 5).map((item, idx) => (
-              <React.Fragment key={item.id}>
-                {idx !== 0 && <Divider className="cust-divider" />}
-                <Box
-                  onClick={() => onActivityClick?.(item)}
-                  sx={{
-                    cursor: 'pointer',
-                    display: "flex",
-                    alignItems: "stretch",
-                    borderRadius: 2,
-                    pb: 0.5,
-                    mb: 1,
-                    '&:hover': { backgroundColor: '#f5f5f5' }
-                  }}
-                >
-                  <Box className="botted-border" sx={{ borderLeft: `2px solid ${theme?.common?.borderColor}` }}></Box>
-                  <Box sx={{ padding: '10px 5px 0 0', width: '100%' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="h5" component='h5'>
-                        {item.title}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {item.time}
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary" className="fs14" sx={{ my: 0.5 }}>
-                      {item.inquiryId} • {item.details}
-                    </Typography>
-                    <Typography variant="body2" color="error" className="fs14">
-                      {item.subtitle}
-                    </Typography>
-                  </Box>
-                </Box>
-              </React.Fragment>
-            ))
-          ) : (
-            <Typography variant="body2" color="text.secondary">No activities</Typography>
-          )}
+          <ActivitiesList />
           <Box className='modal-footer'>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5 }}>
               <Typography variant="body2">Showing {activities?.length} activities</Typography>
