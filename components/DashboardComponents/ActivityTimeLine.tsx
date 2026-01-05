@@ -99,7 +99,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
           </React.Fragment>
         ))
       ) : (
-        <Typography variant="body2" color="text.secondary" sx={{ p: 3, backgroundColor: '#f9fafb', border: `2px dashed ${theme?.common?.borderColor}`, textAlign: 'center' }}>No activities</Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ p: 3, backgroundColor: '#f9fafb', border: `2px dashed ${theme?.common?.borderColor}`, textAlign: 'center' }}>No activities available</Typography>
       )
       }
     </>

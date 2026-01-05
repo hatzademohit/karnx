@@ -59,57 +59,63 @@ const PriorityTasks: React.FC = () => {
                     <Typography component='h4' variant="h4" sx={{ color: theme?.common?.redColor }}>Priority Tasks</Typography>
                 </Box>
 
-                <Box className="card-body" sx={{ maxHeight: '260px', overflowY: 'auto' }}>
-                    {tasks.map((task) => (
-                        <Box
-                            key={task.id}
-                            onClick={() => fetchTaskList(task)}
-                            sx={{
-                                display: "flex",
-                                cursor: 'pointer',
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                p: { md: 2, xs: '8px' },
-                                mb: 1.5,
-                                bgcolor: task.bg,
-                                borderRadius: 2,
-                                border: `2px solid ${task?.border_color}`,
-                                transition: 'background-color 300ms ease',
-                                '&:hover': { backgroundColor: task?.hover_bg }
-                            }}
-                        >
-                            <Box sx={{ width: '100%', display: "flex", alignItems: "flex-start", gap: 2, justifyContent: 'space-between' }}>
-                                {/* left section */}
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    <Box sx={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: task?.border_color, color: task?.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        {task?.icon === 'warning' ? <WarningAmberIcon sx={{ color: 'inherit' }} /> : <InfoOutlineIcon sx={{ color: 'inherit' }} />}
-                                    </Box>
-                                    <Box>
-                                        <Typography variant="h5" sx={{ color: task?.color }}>
-                                            {task?.title}
-                                        </Typography>
-                                        <Typography variant="body2" className="fs12">
-                                            {task?.tasks_details?.length} task pending
-                                        </Typography>
+                {Array.isArray(tasks) && tasks?.length > 0 ? (
+                    <>
+                        <Box className="card-body" sx={{ maxHeight: '260px', overflowY: 'auto' }}>
+                            {tasks?.map((task) => (
+                                <Box
+                                    key={task.id}
+                                    onClick={() => fetchTaskList(task)}
+                                    sx={{
+                                        display: "flex",
+                                        cursor: 'pointer',
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        p: { md: 2, xs: '8px' },
+                                        mb: 1.5,
+                                        bgcolor: task.bg,
+                                        borderRadius: 2,
+                                        border: `2px solid ${task?.border_color}`,
+                                        transition: 'background-color 300ms ease',
+                                        '&:hover': { backgroundColor: task?.hover_bg }
+                                    }}
+                                >
+                                    <Box sx={{ width: '100%', display: "flex", alignItems: "flex-start", gap: 2, justifyContent: 'space-between' }}>
+                                        {/* left section */}
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <Box sx={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: task?.border_color, color: task?.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                {task?.icon === 'warning' ? <WarningAmberIcon sx={{ color: 'inherit' }} /> : <InfoOutlineIcon sx={{ color: 'inherit' }} />}
+                                            </Box>
+                                            <Box>
+                                                <Typography variant="h5" sx={{ color: task?.color }}>
+                                                    {task?.title}
+                                                </Typography>
+                                                <Typography variant="body2" className="fs12">
+                                                    {task?.tasks_details?.length} task pending
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                        {/* right section */}
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <Chip
+                                                label={task?.tasks_details?.length}
+                                                color={task?.color}
+                                                sx={{ borderRadius: "10px", backgroundColor: task?.color, color: '#ffffff', fontSize: '16px' }}
+                                            />
+                                            <ArrowForwardIosIcon sx={{ fontSize: '18px' }} />
+                                        </Box>
                                     </Box>
                                 </Box>
-                                {/* right section */}
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    <Chip
-                                        label={task?.tasks_details?.length}
-                                        color={task?.color}
-                                        sx={{ borderRadius: "10px", backgroundColor: task?.color, color: '#ffffff', fontSize: '16px' }}
-                                    />
-                                    <ArrowForwardIosIcon sx={{ fontSize: '18px' }} />
-                                </Box>
-                            </Box>
+                            ))}
                         </Box>
-                    ))}
-                </Box>
-                <Box sx={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', p: { md: 2, xs: '8px' }, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 2, mt: '12px' }}>
-                    <Typography className="fs14">Total Pending Tasks</Typography>
-                    <Typography variant="h5" component='h5'>{totalPendingTask?.total_pending_task}</Typography>
-                </Box>
+                        <Box sx={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', p: { md: 2, xs: '8px' }, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 2, mt: '12px' }}>
+                            <Typography className="fs14">Total Pending Tasks</Typography>
+                            <Typography variant="h5" component='h5'>{totalPendingTask?.total_pending_task}</Typography>
+                        </Box>
+                    </>
+                ) : (
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 2, p: 3, backgroundColor: '#f9fafb', border: `2px dashed ${theme?.common?.borderColor}`, textAlign: 'center' }}>No pending tasks available</Typography>
+                )}
             </Box>
 
             {/* modal for priority tasks */}
