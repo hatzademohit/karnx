@@ -151,8 +151,8 @@ const KXManager = () => {
         {
             header: 'Status',
             accessorKey: 'status',
-            minSize: 145,
-            size: 145,
+            minSize: 155,
+            size: 155,
             Cell: ({ row }) => (
                 <Button
                     variant="contained"
