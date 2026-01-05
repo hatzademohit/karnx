@@ -2,11 +2,13 @@ import { useFormContext } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Box, Button, Typography, Checkbox, FormControlLabel, Grid, Alert, CardContent, Card, useTheme, Divider } from "@mui/material";
 import { CustomTextField } from "@/components/CustomTextField/CustomTextField";
+import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
 const TravellerDetails = () => {
 
     const theme = useTheme();
     const { setValue, watch } = useFormContext();
+    const { adultsChild } = useInquiryDetails();
     const formData = {
         adults: watch("adults"),
         children: watch("children"),
@@ -61,8 +63,12 @@ const TravellerDetails = () => {
     const infantAgeError = validateAge("infants", inputs.infants.age);
 
     useEffect(() => {
-        setLists(formData)
-    }, [formData?.adults, formData?.children, formData?.infants]);
+        setLists({
+            adults: formData?.adults.map((item) => ({ name: item?.name ?? "", age: item?.age, selected: true })),
+            children: formData?.children.map((item) => ({ name: item?.name ?? "", age: item?.age, selected: true })),
+            infants: formData?.infants.map((item) => ({ name: item?.name ?? "", age: item?.age, selected: true })),
+        })
+    }, [adultsChild]);
     return (
         <>
             <Grid size={{ xs: 12 }}>
@@ -88,7 +94,7 @@ const TravellerDetails = () => {
                         <Box mt={1}>
                             {lists?.adults?.map((item: any, index: number) => (
                                 <FormControlLabel key={index}
-                                    control={<Checkbox size="small" checked={item.selected == 1 ? true : item.selected} onChange={() => handleToggle("adults", index)} />}
+                                    control={<Checkbox size="small" checked={item.selected} onChange={() => handleToggle("adults", index)} />}
                                     label={`${item.name}, age ${item.age}`}
                                 />
                             ))}

@@ -18,6 +18,8 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
         return value.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
     };
 
+    console.log(bookingDetails);
+
     return (
         <>
             <Grid size={{ xs: 12 }}>
@@ -32,16 +34,6 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                                     {formatName(bookingDetails?.trip_type)}
                                 </Typography>
                             </Box>
-                            {bookingDetails?.is_flexible_dates != 0 &&
-                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <Typography variant="h5">
-                                        Flexible Dates:
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {bookingDetails?.flexible_range}
-                                    </Typography>
-                                </Box>
-                            }
                         </Box>
                     </CardContent>
                 </Card>
@@ -56,15 +48,16 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                                 rules={{ required: "Departure Date & Time is required" }}
                                 render={({ field, fieldState }) => (
                                     <TextField
+                                        key={`flight_details_id_${index}`}
                                         {...field}
-                                        value={field.value ?? null}
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
                         </Grid>
                         <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                             <Controller
-                                name={`estimate.${index}.departureArrivalDateTime`}
+                                name={`estimate.${index}.departure_time`}
                                 control={control}
                                 rules={{ required: "Departure Date & Time is required" }}
                                 render={({ field, fieldState }) => (
@@ -84,7 +77,7 @@ const EstimateFlightTime: React.FC<EstimateFlightTimeProps> = ({ control }) => {
                         </Grid>
                         <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                             <Controller
-                                name={`estimate.${index}.estimatedFlightTime`}
+                                name={`estimate.${index}.estimated_flight_time`}
                                 control={control}
                                 rules={{ required: "Estimated flight time is required" }}
                                 render={({ field, fieldState }) => (

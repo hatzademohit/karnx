@@ -1,40 +1,66 @@
-@media (min-width: 1800px){
-    .login-page{
+@media (min-width: 1800px) {
+    .login-page {
+
         /* .img-section{
         } */
-        .input-section{
+        .input-section {
             padding: 0 80px;
         }
     }
-    .info-card{
+
+    .info-card {
         padding: 24px 28px 20px 32px;
     }
-    
-    .card-count{
+
+    .card-count {
         width: 74px;
         height: 74px;
 
-        svg{
+        svg {
             font-size: 38px;
         }
     }
 }
+
 @media (max-width: 899.5px) {
-    div.custom-tabs .MuiButtonBase-root.MuiTab-root{
+    div.custom-tabs .MuiButtonBase-root.MuiTab-root {
         max-width: fit-content;
     }
-    div.card{
+
+    div.card {
         padding: 10px;
     }
-    div.card-content{
+
+    div.card-content {
         padding: 10px !important;
     }
 }
+
+@media (max-width: 767.5px) {
+    .table-append table {
+        display: unset;
+    }
+
+    .table-append table tr {
+        display: flex;
+        flex-wrap: wrap;
+        width: calc(100vw - 156px);
+    }
+
+    .table-append tbody td:first-child {
+        padding: 0;
+        width: 100%;
+    }
+}
+
 @media (max-width: 599.5px) {
-    div.modal-body, .custom-modal .modal-header{
+
+    div.modal-body,
+    .custom-modal .modal-header {
         padding: 10px;
     }
-    .dialog-modal .MuiDialog-container > .MuiPaper-root{
+
+    .dialog-modal .MuiDialog-container>.MuiPaper-root {
         margin: 10px;
     }
 }

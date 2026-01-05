@@ -146,6 +146,7 @@ export const karnxTheme = createTheme({
         h6: {
             fontFamily: "poppins-semibold",
             fontSize: '14px',
+            lineHeight: '14px'
         },
         body2: {
             color: "#4D4D4D",
@@ -167,6 +168,10 @@ export const karnxTheme = createTheme({
                 root: {
                     textTransform: 'capitalize',
                     fontFamily: 'poppins-lt',
+
+                    '&.MuiButton-sizeLarge': {
+                        fontFamily: 'poppins-semibold'
+                    }
                 }
             }
         },
@@ -185,6 +190,25 @@ export const karnxTheme = createTheme({
                 // },
                 ".MuiDataGrid-cell": {
                     fontFamily: "poppins-lt, sans-serif",
+                },
+                ".react-table tbody td": {
+                    fontSize: '14px',
+                },
+                ".react-table thead th": {
+                    fontSize: '14px',
+                    fontFamily: "poppins-semibold, sans-serif",
+                    paddingBlock: '14px',
+                    fontWeight: 500,
+
+                    '& .MuiInputBase-root::after': {
+                        opacity: 0
+                    },
+
+                    '& input': {
+                        fontSize: '14px',
+                        lineHeight: '14px',
+                        fontFamily: "poppins-lt, sans-serif",
+                    }
                 },
             },
         },

@@ -18,7 +18,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
     return (
         <Grid container spacing={2}>
             {/* From / To Fields with Swap */}
-            <Grid size={{ lg: 8, md: 8, sm: 12, xs: 12 }}>
+            <Grid size={{ lg: 8, md: 12, sm: 12, xs: 12 }}>
                 <Controller
                     name="roundTripfrom"
                     control={control}
@@ -60,7 +60,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
             </Grid>
 
             {/* Departure Date */}
-            <Grid size={{ lg: 2, md: 4, sm: 12, xs: 12 }}>
+            <Grid size={{ lg: 2, md: 6, sm: 12, xs: 12 }}>
                 <Controller
                     name="roundTripdepartureDate"
                     control={control}
@@ -74,13 +74,14 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                             error={!!errors.roundTripdepartureDate}
                             helperText={errors.roundTripdepartureDate?.message}
                             minDateTime={dayjs().add(1, 'day').startOf('day')}
+                            required={true}
                         />
                     )}
                 />
             </Grid>
 
             {/* Return Date */}
-            <Grid size={{ lg: 2, md: 4, sm: 12, xs: 12 }}>
+            <Grid size={{ lg: 2, md: 6, sm: 12, xs: 12 }}>
                 <Controller
                     name="roundTripreturnDate"
                     control={control}
@@ -93,6 +94,7 @@ const RoundTripFlights = ({ control, setValue, errors, watch }: any) => {
                                 value={field.value ? dayjs(field.value) : null}
                                 withClock
                                 error={!!errors.roundTripreturnDate}
+                                required={true}
                                 helperText={errors.roundTripreturnDate?.message}
                                 minDateTime={roundTripdepartureDate ? (dayjs.isDayjs(roundTripdepartureDate)
                                     ? roundTripdepartureDate : dayjs(roundTripdepartureDate)) : dayjs().add(1, "day").startOf("day")

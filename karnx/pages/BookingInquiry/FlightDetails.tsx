@@ -71,7 +71,7 @@ const FlightDetails = () => {
         {
             id: "panel1",
             title: "Flight Details",
-            errors: "All Flieds are required",
+            errors: "Fields are required",
             asterisk: true,
             content: (
                 <RadioTabs defaultValue={radioTabActive} onchange={(value: number) => { setRadioTabActive(value) }}>

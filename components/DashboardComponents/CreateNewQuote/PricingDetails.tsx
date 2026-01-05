@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 
 const fields = [
-    { name: "baseFare", label: "Base Fees", numeric: true },
-    { name: "fuel", label: "Fuel Fees", numeric: true },
-    { name: "taxes", label: "Taxes & Fees", numeric: true },
-    { name: "crewFees", label: "Crew Fees", numeric: true },
-    { name: "handlingFees", label: "Handling Fees", numeric: true },
-    { name: "catering", label: "Catering Fees", numeric: true },
+    { name: "base_fare", label: "Base Fees", numeric: true },
+    { name: "fluel_cost", label: "Fuel Fees", numeric: true },
+    { name: "taxes_fees", label: "Taxes & Fees", numeric: true },
+    { name: "crew_fees", label: "Crew Fees", numeric: true },
+    { name: "handling_fees", label: "Handling Fees", numeric: true },
+    { name: "catering_fees", label: "Catering Fees", numeric: true },
 ];
 
 const PricingDetails = (editedData) => {
@@ -48,7 +48,7 @@ const PricingDetails = (editedData) => {
     }, [watchedValues, fields]);
 
     useEffect(() => {
-        setValue("totalAmount", totalAmount);
+        setValue("total", totalAmount);
     }, [totalAmount, setValue]);
 
     useEffect(() => {
@@ -104,7 +104,7 @@ const PricingDetails = (editedData) => {
                 </Grid>
                 <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                     <Controller
-                        name="quoteValidUntil"
+                        name="validate_till"
                         control={control}
                         rules={{
                             required: "Quote valid until date is required",
@@ -132,7 +132,7 @@ const PricingDetails = (editedData) => {
                 </Grid>
                 <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                     <Controller
-                        name="cancellationPolicy"
+                        name="cancellation_policy_id"
                         control={control}
                         rules={{
                             required: "Please select a cancellation policy",

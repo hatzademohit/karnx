@@ -25,6 +25,7 @@ import { useAuth } from '@/app/context/AuthContext';
 import { useForm, FormProvider, Controller, useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CompanyProfileSchema } from '@/utils/ValidationSchema';
+import MuiLink from "@mui/material/Link";
 
 const labelSx = { color: '#6b7280', fontSize: 14 };
 
@@ -469,7 +470,7 @@ export default function CompanyProfile() {
                                     <EmailOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
                                     Email
                                 </Typography>
-                                <Link href={profile?.email} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
+                                <Link href={`mailto:${profile?.client?.email}`} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
                                     {profile?.client?.email}
                                 </Link>
                             </Grid>
@@ -487,9 +488,9 @@ export default function CompanyProfile() {
                                     <LaunchOutlinedIcon sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
                                     Website
                                 </Typography>
-                                <Link href={profile?.client?.website} sx={{ mt: 0.5 }} underline="none" color="text.secondary" variant="body2">
+                                <MuiLink href={`https://${profile?.client?.website}`} target="_blank" variant="body2" sx={{ mt: 0.5 }}>
                                     {profile?.client?.website}
-                                </Link>
+                                </MuiLink>
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12 }}>
                                 <Typography variant="body2" color="text.secondary">

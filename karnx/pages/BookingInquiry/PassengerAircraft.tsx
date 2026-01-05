@@ -28,7 +28,7 @@ const PassengerAircraft = () => {
             carryOnBags: formData?.carryOnBags || '',
             overSizedItems: formData?.overSizedItems || '',
             // 
-            preferredServices: formData?.preferredServices || '',
+            preferredServices: formData?.preferredServices || [],
             crewRequirements: formData?.crewRequirements || '',
             additionalNotes: formData?.additionalNotes || '',
             otherAssistance: formData?.otherAssistance || '',
@@ -56,21 +56,21 @@ const PassengerAircraft = () => {
         {
             id: "panel1",
             title: "Passenger Information",
-            errors: "All Flieds are required",
+            errors: "Fields are required",
             asterisk: true,
             content: (<PassengerInformation />)
         },
         {
             id: "panel2",
             title: "Preferred Aircraft & Services",
-            errors: "All Flieds are required",
+            errors: "Fields are required",
             asterisk: true,
             content: (<PreferredServices />)
         },
         {
             id: "panel3",
             title: "Purpose of Travel",
-            errors: "All Flieds are required",
+            errors: "Fields are required",
             asterisk: true,
             content: (<PurposeofTravel />)
         },
@@ -82,7 +82,7 @@ const PassengerAircraft = () => {
         {
             id: "panel5",
             title: "Catering & Extra Services",
-            errors: "All Flieds are required",
+            errors: "Fields are required",
             content: (<CateringExtraServices />)
         },
         {

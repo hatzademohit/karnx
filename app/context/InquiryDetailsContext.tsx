@@ -11,6 +11,12 @@ interface InquiryDetailsContextType {
     setinquiryRowData?: React.Dispatch<React.SetStateAction<any | null>>
     bookingDetails: any;
     setbookingDetails: React.Dispatch<React.SetStateAction<any>>
+    createNewQuote: boolean;
+    setCreateNewQuote: React.Dispatch<React.SetStateAction<boolean>>
+    quoteDetails: any;
+    setQuoteDetails: React.Dispatch<React.SetStateAction<any>>;
+    adultsChild: any;
+    setAdultsChild: React.Dispatch<React.SetStateAction<any>>
 }
 
 export const InquiryDetailsContext = createContext<InquiryDetailsContextType | undefined>({
@@ -24,6 +30,12 @@ export const InquiryDetailsContext = createContext<InquiryDetailsContextType | u
     setinquiryRowData: () => { },
     bookingDetails: [],
     setbookingDetails: () => { },
+    createNewQuote: false,
+    setCreateNewQuote: () => { },
+    quoteDetails: [],
+    setQuoteDetails: () => { },
+    adultsChild: false,
+    setAdultsChild: () => { }
 })
 
 export const InquiryDetailsProvider = ({ children }: { children: React.ReactNode }) => {
@@ -33,9 +45,12 @@ export const InquiryDetailsProvider = ({ children }: { children: React.ReactNode
     const [inquiryId, setInquiryId] = useState<number | null>(null);
     const [inquiryRowData, setinquiryRowData] = useState<any | null>([]);
     const [bookingDetails, setbookingDetails] = useState<any>([]);
+    const [createNewQuote, setCreateNewQuote] = useState<boolean>(false);
+    const [quoteDetails, setQuoteDetails] = useState<any>([]);
+    const [adultsChild, setAdultsChild] = useState<any>(false)
 
     return (
-        <InquiryDetailsContext.Provider value={{ assignedOperatorLength, setAssignedOperatorLength, showDetailsTabs, setShowDetailsTabs, inquiryId, setInquiryId, inquiryRowData, setinquiryRowData, bookingDetails, setbookingDetails }}>
+        <InquiryDetailsContext.Provider value={{ assignedOperatorLength, setAssignedOperatorLength, showDetailsTabs, setShowDetailsTabs, inquiryId, setInquiryId, inquiryRowData, setinquiryRowData, bookingDetails, setbookingDetails, createNewQuote, setCreateNewQuote, quoteDetails, setQuoteDetails, adultsChild, setAdultsChild }}>
             {children}
         </InquiryDetailsContext.Provider>
     )

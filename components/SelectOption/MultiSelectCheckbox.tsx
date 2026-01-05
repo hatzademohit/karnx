@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import * as React from "react";
 import { OutlinedInput, InputLabel, SelectChangeEvent, FormControl, Select, MenuItem, ListItemText, Checkbox } from "@mui/material";
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 interface MultiSelectCheckboxProps {
   label?: string;
@@ -34,6 +35,7 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   disabled = false,
   inputLabel = '',
 }) => {
+  const { isMd } = useResponsive();
   const handleChange = (event: SelectChangeEvent<typeof value>) => {
     const {
       target: { value: selected },
@@ -44,7 +46,7 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   return (
     <>
       {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel}</InputLabel>}
-      <FormControl size={size} sx={{ width }}>
+      <FormControl size={isMd ? "small" : size} sx={{ width }}>
         <InputLabel>{label}</InputLabel>
         <Select
           multiple

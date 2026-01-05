@@ -7,10 +7,10 @@ import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
 
-const AircraftFlightDetails = (editedData) => {
+const AircraftFlightDetails = () => {
 	const callApi = useApiFunction();
 	const { control, watch, formState: { errors } } = useFormContext();
-	const selectedAircraft = watch("aircraft");
+	const selectedAircraft = watch("aircraft_id");
 	const theme = useTheme();
 	const [aircraftList, setAircraftList] = useState<any>([]);
 	const { inquiryRowData, inquiryId, setbookingDetails } = useInquiryDetails();
@@ -48,15 +48,15 @@ const AircraftFlightDetails = (editedData) => {
 		<Box>
 			<Typography variant="h4" color={theme?.common.redColor} mb={2}>
 				Choose Aircraft from Your Fleet *
-				{errors.aircraft && (
+				{errors.aircraft_id && (
 					<FormHelperText error>
-						{errors.aircraft.message as string}
+						{errors.aircraft_id.message as string}
 					</FormHelperText>
 				)}
 			</Typography>
 			<Grid container spacing={{ md: 2, xs: 1 }}>
 				<Controller
-					name="aircraft"
+					name="aircraft_id"
 					control={control}
 					rules={{ required: "Please select an aircraft" }}
 					render={({ field }) => (

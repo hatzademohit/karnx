@@ -251,15 +251,15 @@ export const travelAgentSchema = yup.object({
   ),
   children: yup.array().of(
     yup.object({
-      name: yup.string().required(),
-      age: yup.number().required().min(2).max(11),
+      name: yup.string(),
+      age: yup.number().min(2).max(11),
       id: yup.number().default(0)
     })
   ),
   infants: yup.array().of(
     yup.object({
-      name: yup.string().required(),
-      age: yup.number().required().min(0).max(2),
+      name: yup.string(),
+      age: yup.number().min(0).max(2),
       id: yup.number().default(0)
     })
   ),

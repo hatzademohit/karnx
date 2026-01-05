@@ -94,11 +94,10 @@ function formDataCustomization(formData, radioTabActive) {
 }
 const ContactSummary = () => {
     const router = useRouter();
-    const { theme } = useAuth()
     const { formData, setFormData, aircraftTypeOptions, activeStep, handleBackClick, handleFinish, airportCity, formatedFormData, setFormatedFormData, radioTabActive } = useStep();
     const [tripType, setTripType] = useState<number>();
     const [getRoute, setRoute] = useState<any>();
-    const { karnxToken, setLoader } = useAuth();
+    const { karnxToken, setLoader, user } = useAuth();
     const methods = useForm<any>({
         resolver: yupResolver(contactSummarySchema),
         mode: "onChange",
@@ -185,18 +184,18 @@ const ContactSummary = () => {
         });
         setRoute(routeArray);
     }, [formData, airportCity, radioTabActive, activeStep]);
-
+    console.log(formData);
     const accordionItems = [
         {
             id: "panel1",
             title: "Inquiry Summary",
-            errors: "All Flieds are required",
+            errors: "Fields are required",
             content: (
                 <Grid container spacing={2}>
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Box sx={{ display: 'flex', gap: '10px' }}>
                             <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Contact:</Typography>
-                            <Typography sx={{ fontSize: '14px', color: '#808080' }}>{formData?.contactName}</Typography>
+                            <Typography sx={{ fontSize: '14px', color: '#808080' }}>{user?.name}</Typography>
                         </Box>
                     </Grid>
                     <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
@@ -211,10 +210,10 @@ const ContactSummary = () => {
                             {tripType === 0 &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{dayjs(formData.oneWaydepartureDate).format("MMMM DD, YYYY")}</Typography>
                             }
-                            {tripType === 1 && formData.isFlexibleDates === false &&
+                            {tripType === 1 &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{dayjs(formData.roundTripdepartureDate).format("MMMM DD, YYYY")}</Typography>
                             }
-                            {tripType === 2 && formData.isFlexibleDates === false &&
+                            {tripType === 2 &&
                                 <Typography sx={{ fontSize: '14px', color: '#808080' }}>{dayjs(formData.multiCity[0].multiCitydepartureDate).format("MMMM DD, YYYY")}</Typography>
                             }
 

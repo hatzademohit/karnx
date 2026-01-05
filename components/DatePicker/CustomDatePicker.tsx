@@ -5,6 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { InputLabel, Typography, useTheme } from "@mui/material";
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 interface CustomDatePickerProps {
     label?: string;
@@ -37,6 +38,7 @@ export default function CustomDatePicker({
 }: CustomDatePickerProps) {
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
+    const { isMd } = useResponsive();
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -66,7 +68,7 @@ export default function CustomDatePicker({
                 value={
                     value && typeof value === "object" && "isValid" in value ? value : null
                 }
-                onChange={(newValue) =>{
+                onChange={(newValue) => {
                     const timeOnly = newValue ? dayjs(newValue) : "";
                     onChange(timeOnly);
                 }}
@@ -80,7 +82,7 @@ export default function CustomDatePicker({
                 slotProps={{
                     textField: {
                         name,
-                        size: "medium",
+                        size: isMd ? 'small' : 'medium',
                         fullWidth: true,
                         variant: "outlined",
                         error: error,

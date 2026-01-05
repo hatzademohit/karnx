@@ -12,16 +12,21 @@ import AddIcon from '@mui/icons-material/Add';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import { useAuth } from '@/app/context/AuthContext';
+import StartIcon from '@mui/icons-material/Start';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useResponsive } from '@/karnx/Hooks/useResponsive';
 
 interface SeperateAppBarProps {
   open: boolean;
   theme?: any;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const SeperateAppBar: FC<SeperateAppBarProps> = ({
   open,
   theme,
+  setOpen,
 }) => {
-
+  const { isXs } = useResponsive()
   const router = useRouter()
   const pathname = usePathname();
   const { hasPermission } = useAuth();
@@ -31,7 +36,7 @@ const SeperateAppBar: FC<SeperateAppBarProps> = ({
         className="header AppBar"
         position="fixed"
         open={open}
-        sx={{ backgroundColor: '#ffffff', zIndex: '99999', boxShadow: '0px 1px 3px 1px rgba(0, 0, 0, 0.15)' }}
+        sx={{ backgroundColor: '#ffffff', zIndex: '99999', boxShadow: '0px 1px 0px 1px rgba(0, 0, 0, 0.15)' }}
       >
         <Toolbar className="toolbar" sx={{ minHeight: { lg: `${headerHeightLg}px !important`, md: `${headerHeightMd}px !important`, xs: `${headerHeightXs}px !important` }, paddingRight: { md: '24px', xs: '8px' } }}>
           <Typography noWrap component="div" sx={{ display: 'flex', margin: '-6px 0 -2px -25px', padding: '6px 0 3px 25px' }}>
@@ -60,6 +65,9 @@ const SeperateAppBar: FC<SeperateAppBarProps> = ({
                 <NotificationsNoneIcon />
               </Badge>
             </IconButton> */}
+            {isXs &&
+              <IconButton size='small' className='sidebar-toggle' sx={{ color: 'rgba(3, 4, 94, 1)' }} onClick={(e) => setOpen(true)}> <MenuIcon /> </IconButton>
+            }
             <Tooltip title="Configuration Setting" arrow placement='top'>
               <IconButton onClick={() => router.push('/configuration')} sx={{ color: 'rgba(3, 4, 94, 1)' }}>
                 <SettingsOutlinedIcon />

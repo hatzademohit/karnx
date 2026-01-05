@@ -6,6 +6,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import dayjs, { Dayjs } from "dayjs";
 import { Box, InputLabel, styled, Typography, useTheme } from "@mui/material";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker"
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 interface CustomDateTimePickerProps {
   label?: string;
@@ -57,13 +59,14 @@ export default function CustomDateTimePicker({
 }: CustomDateTimePickerProps) {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme()
+  const { isMd } = useResponsive();
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ display: 'flex', gap: 1 }}>
         {datatimelabel && (
           <InputLabel sx={{ fontFamily: "poppins-semibold", width: "fit-content", color: "#333333" }}>
-            {datatimelabel} {required === true ? <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography> : ''}
+            {datatimelabel} {required === true ? <Typography component='span' sx={{ color: 'red' }}>*</Typography> : ''}
           </InputLabel>
         )}
         {subText && (
@@ -71,6 +74,8 @@ export default function CustomDateTimePicker({
         )}
       </Box>
       <DateTimePicker
+        // <MobileDateTimePicker
+        ampm={false}
         label={label}
         value={value}
         onChange={onChange}
@@ -80,6 +85,8 @@ export default function CustomDateTimePicker({
         onClose={() => setOpen(false)}
         minDateTime={minDateTime}
         maxDateTime={maxDateTime}
+        // closeOnSelect={true}
+        disablePast={true}
         viewRenderers={
           withClock
             ? {
@@ -101,7 +108,7 @@ export default function CustomDateTimePicker({
         }
         slotProps={{
           textField: {
-            size: "medium", fullWidth: true, variant: "outlined",
+            size: isMd ? 'small' : 'medium', fullWidth: true, variant: "outlined",
             error: error, helperText: helperText,
             onClick: () => setOpen(true),
           },
@@ -126,6 +133,21 @@ export default function CustomDateTimePicker({
               "& .MuiClock-pin": {
                 backgroundColor: theme?.common?.redColor,
               },
+              "& .MuiPickerView-root": {
+                maxHeight: "300px",     // shrink calendar/time area
+              },
+              "& .MuiClock-root": {
+                transform: "scale(0.85)",  // shrink clock
+              },
+              "& .MuiCalendarPicker-root": {
+                transform: "scale(0.90)",  // shrink calendar
+              },
+              "& .MuiPickersLayout-contentWrapper": {
+                padding: "8px !important", // reduce padding
+              },
+              "& .MuiPickersToolbar-root": {
+                padding: "8px !important", // shrink top toolbar
+              }
             },
           },
         }}

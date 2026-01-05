@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import { TextField, InputLabel, Box, Typography } from '@mui/material';
-import { useAuth } from '@/app/context/AuthContext';
-
+import { useResponsive } from '@/karnx/Hooks/useResponsive';
 export interface CustomTextFieldProps {
   name?: string;
   type?: string;
@@ -54,11 +53,11 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
     multiline,
     ...props
   }, ref) => {
-    const { theme } = useAuth()
+    const { isMd } = useResponsive();
 
     return (
       <Box className="w-100 textflied-container">
-        {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: theme?.common?.redColor }}>*</Typography>}</InputLabel>}
+        {inputLabel && <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>{inputLabel} {asterisk && <Typography component='span' sx={{ color: 'red' }}>*</Typography>}</InputLabel>}
         <TextField
           fullWidth
           inputRef={ref}
@@ -78,7 +77,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
           placeholder={placeholder ? placeholder : `Enter ${inputLabel}`}
           className={className}
           inputProps={{ maxLength: maxlength }}
-          size={size}
+          size={isMd ? "small" : size}
           InputLabelProps={{ shrink: InputLabelProps }}
           InputProps={InputProps}
           autoComplete='off'

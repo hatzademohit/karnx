@@ -34,9 +34,9 @@ const PassengerInformation = () => {
 
     useEffect(() => {
         setPetSize([
-            { name: "Small(0kg - 2kg)", id: 1 },
-            { name: "Medium(3kg - 8kg)", id: 2 },
-            { name: "Large(8kg & more)", id: 3 },
+            { name: "Small(0kg - 2kg)", id: 'Small(0kg - 2kg)' },
+            { name: "Medium(3kg - 8kg)", id: 'Medium(3kg - 8kg)' },
+            { name: "Large(8kg & more)", id: 'Large(8kg & more)' },
         ]);
     }, [])
 
@@ -83,7 +83,7 @@ const PassengerInformation = () => {
             </Grid>
             <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
                 <Box className='passengers-travelling-info-box'>
-                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Travelling With Pets <Typography component="span" sx={{ color: 'red' }}>*</Typography></Typography>
+                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Travelling With Pets</Typography>
                     <FormControl>
                         <Controller
                             name="isTravellingWithPets"
@@ -105,6 +105,7 @@ const PassengerInformation = () => {
                                     render={({ field, fieldState }) => (
                                         <CustomTextField
                                             inputLabel="Pet Type"
+                                            asterisk={true}
                                             className="white-bg-input"
                                             {...field}
                                             error={!!fieldState.error}
@@ -131,6 +132,7 @@ const PassengerInformation = () => {
                                             // />
                                             <SingleSelect
                                                 className="white-bg-input"
+                                                asterisk={true}
                                                 inputLabel="Pet Size"
                                                 value={selectedOption ? selectedOption.name : ""}
                                                 onChange={(e) => { field.onChange(e.target.value); console.log(e.target.value) }} // store the ID
@@ -155,6 +157,7 @@ const PassengerInformation = () => {
                                     render={({ field, fieldState }) => (
                                         <CustomTextField
                                             inputLabel="Special Requirements..."
+                                            asterisk={true}
                                             className="white-bg-input"
                                             {...field}
                                             error={!!fieldState.error}
@@ -169,7 +172,7 @@ const PassengerInformation = () => {
             </Grid>
             <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
                 <Box className='passengers-travelling-info-box'>
-                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Medical needs or assistance required <Typography component="span" sx={{ color: 'red' }}>*</Typography></Typography>
+                    <Typography sx={{ fontFamily: 'poppins-md', fontSize: '14px' }}>Medical needs or assistance required?</Typography>
                     <FormControl>
                         <Controller
                             name="isMedicalAssistanceReq"
@@ -185,7 +188,7 @@ const PassengerInformation = () => {
                     {watch('isMedicalAssistanceReq') && (
                         <Grid container spacing={1}>
                             <Grid size={{ lg: 12, md: 12, sm: 12, xs: 12 }}>
-                                <Typography component='h4' variant="h4" sx={{ mt: '10px' }}>Special Assistance</Typography>
+                                <Typography component='h4' variant="h4" sx={{ mt: '10px' }}>Special Assistance <Typography component="span" sx={{ color: 'red' }}>*</Typography></Typography>
                                 <Typography sx={{ fontFamily: 'poppins-lt', fontSize: '14px', color: '#959595', mt: '10px' }}>
                                     Select Any Assistance needed for passenger
                                 </Typography>
@@ -260,6 +263,7 @@ const PassengerInformation = () => {
                     render={({ field, fieldState }) => (
                         <CustomTextField
                             inputLabel="Checked Bags"
+                            asterisk={true}
                             {...field}
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message}
@@ -273,6 +277,7 @@ const PassengerInformation = () => {
                     control={control}
                     render={({ field, fieldState }) => (
                         <CustomTextField
+                            asterisk={true}
                             inputLabel="Carry -on Bags"
                             {...field}
                             error={!!fieldState.error}
@@ -287,6 +292,7 @@ const PassengerInformation = () => {
                     control={control}
                     render={({ field, fieldState }) => (
                         <CustomTextField
+                            asterisk={true}
                             inputLabel="Oversized Items"
                             placeholder="e.g., golf clubs, skis, etc."
                             {...field}

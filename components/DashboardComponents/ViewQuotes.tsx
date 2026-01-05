@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button, Table, TableBody, TableRow, TableCell, Divider, TableHead, Grid, Card, CardContent, useTheme, InputLabel, FormControl, TextField, FormControlLabel, Checkbox } from "@mui/material";
-import { CustomModal, CustomTextField, QuoteDetails } from "@/components";
+import { CreateNewQuoteStepper, CustomModal, CustomTextField, QuoteDetails } from "@/components";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { useForm } from "react-hook-form";
@@ -18,7 +18,7 @@ interface RejectionFormData {
 
 const ViewQuotes = () => {
     const callApi = useApiFunction();
-    const { inquiryId, setShowDetailsTabs, inquiryRowData } = useInquiryDetails();
+    const { inquiryId, setShowDetailsTabs, createNewQuote, setCreateNewQuote, setQuoteDetails, inquiryRowData } = useInquiryDetails();
     const [quotes, setQuotes] = useState([]);
     const [nonRejectedQuotes, setNonRejectedQuotes] = useState([]);
     const [openBoxQuote, setOpenBoxQuote] = useState([]);
@@ -34,7 +34,6 @@ const ViewQuotes = () => {
     const [quoteIdForRejection, setQuoteIdForRejection] = useState<number | null>(null);
     const [sameReason, setSameReason] = useState(false);
     const [sharedReason, setSharedReason] = useState("");
-
 
     const openQuoteDetails = (quote: any) => {
         const { hours, minutes } = parseToHoursMinutes(quote.estimated_flight_time);
@@ -71,6 +70,20 @@ const ViewQuotes = () => {
         setViewedQuote(quoteViewData);
         setViewQuoteDetails(true);
     };
+
+    const edidQuoteDetails = async () => {
+        setCreateNewQuote(true);
+        try {
+            const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
+            if (res?.status === true) {
+                setQuoteDetails(res.data);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            toast.error('Network error while fetching cancellation policies');
+        }
+    }
 
     const acceptQuote = (id, acceptedQuote = []) => {
         setAcceptedQuote(acceptedQuote);
@@ -140,7 +153,6 @@ const ViewQuotes = () => {
         let rejectQId = [];
         quotes.filter((q) => q.id !== acceptedQuoteId && q.is_selected !== 'rejected').map((quote, index) => {
             //if (quote.is_selected !== 'rejected') {
-            // console.log(rejectQId.indexOf(quote.id));
             if (rejectQId.indexOf(quote.id) === -1) {
                 rejectQId.push(quote.id);
                 travelAgentSetValue(`rejectedQuote.${index}`, quote.id);
@@ -174,7 +186,6 @@ const ViewQuotes = () => {
     };
 
     const handleCancel = () => {
-        // console.log("Cancelled quote dd id:", viewedQuote?.id);
         setTravelAgentModal(false);
         travelAgentReset();
     };
@@ -196,11 +207,75 @@ const ViewQuotes = () => {
 
     useEffect(() => {
         fetchQuotes();
-        //console.log(quotes);
     }, []);
+
+    // Helpers to support dynamic, per-row numeric comparison and highlighting
+    const toNumber = (v: any): number => {
+        if (v === null || v === undefined) return NaN;
+        if (typeof v === 'number') return Number.isFinite(v) ? v : NaN;
+        if (typeof v === 'string') {
+            const cleaned = v.replace(/,/g, '').trim();
+            const num = Number(cleaned);
+            return Number.isFinite(num) ? num : NaN;
+        }
+        return NaN;
+    };
+
+    const findRowMinIndices = (values: any[]): number[] => {
+        // Extract numeric values; if fewer than 2 numeric values, skip highlighting
+        const nums = values.map(toNumber);
+        const numericIndices = nums
+            .map((n, i) => ({ n, i }))
+            .filter(({ n }) => Number.isFinite(n));
+        if (numericIndices.length < 2) return [];
+        const minVal = Math.min(...numericIndices.map(({ n }) => n));
+        return numericIndices.filter(({ n }) => n === minVal).map(({ i }) => i);
+    };
+
+    const renderComparableRow = (
+        label: string,
+        extractor: (q: any) => any,
+        renderCell?: (q: any, idx: number, isMin: boolean) => React.ReactNode
+    ) => {
+        const values = quotes.map(extractor);
+        const minIdx = findRowMinIndices(values);
+        const isMinAt = (idx: number) => minIdx.includes(idx);
+
+        return (
+            <TableRow>
+                <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
+                    <Typography variant="h5">{label}</Typography>
+                </TableCell>
+                {quotes.length > 0 && quotes.map((q, idx) => {
+                    let isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                    isDisabled = (q.is_selected === 'rejected');
+                    const isMin = isMinAt(idx);
+                    return (
+                        <TableCell key={q.id} sx={{ verticalAlign: 'top' }} data-disabled={isDisabled}>
+                            {renderCell ? (
+                                renderCell(q, idx, isMin)
+                            ) : (
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        whiteSpace: 'pre-line',
+                                        color: isMin ? theme.palette.success.main : 'text.primary',
+                                        fontWeight: isMin ? 700 : 500,
+                                    }}
+                                >
+                                    {applyCurrencyFormat(extractor(q))}
+                                </Typography>
+                            )}
+                        </TableCell>
+                    );
+                })}
+            </TableRow>
+        );
+    };
 
 
     const renderRow = (label: string, key: keyof typeof quotes[0], isRich?: boolean) => (
+
         <TableRow>
             <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
                 <Typography variant="h5" >{label}</Typography>
@@ -208,7 +283,6 @@ const ViewQuotes = () => {
             {quotes.length > 0 && quotes.map((q) => {
                 let isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
                 isDisabled = (q.is_selected === 'rejected');
-                //console.log(q[key]);
                 return (
                     <TableCell key={q.id} sx={{ verticalAlign: "top" }} data-disabled={isDisabled}>
                         {label == 'Aircraft' ?
@@ -232,8 +306,8 @@ const ViewQuotes = () => {
                                 label == 'Flight Time' ?
                                     <>
                                         {(() => {
-                                            const ft = q && (q as any)[key] && (q as any)[key].estimated_flight_time;
-                                            const { hours, minutes } = parseToHoursMinutes(ft);
+                                            //const ft = q && (q as any)[key] && (q as any)[key].estimated_flight_time;
+                                            const { hours, minutes } = parseToHoursMinutes(q.estimated_flight_time);
                                             return (
                                                 <Typography color="text.secondary">
                                                     {`${hours}h ${minutes}m`}
@@ -264,7 +338,7 @@ const ViewQuotes = () => {
                                                     {q[key]}
                                                 </Typography>
                                             </> :
-                                            label == 'Rejected Reason' && q.is_selected === 'rejected' && q[key] !== '' && q[key] !== null ?
+                                            label == 'Not Accepted Reason' && q.is_selected === 'rejected' && q[key] !== '' && q[key] !== null ?
                                                 <>
                                                     <Typography sx={{ color: "red", fontWeight: 600 }}>
                                                         {q[key]}
@@ -278,7 +352,7 @@ const ViewQuotes = () => {
                                                         fontWeight: isRich ? 400 : 500,
                                                     }}
                                                 >
-                                                    {applyCurrencyFormat(q[key])}
+                                                    {applyCurrencyFormat(q[key]) === 0 ? 'N/A' : q[key]}
                                                 </Typography>
                         }
                     </TableCell>
@@ -297,144 +371,168 @@ const ViewQuotes = () => {
     }
     return (
         <>
-            <Box>
-                {user.access_type === 'Portal Admin' &&
-                    <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", flexWrap: 'wrap', gap: '4px' }}>
-                        <Box>
-                            <Typography variant="h4">
-                                Quote Comparison
-                            </Typography>
-                            <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
-                                {quotes?.length || 0} quotes received for this inquiry
+            {!createNewQuote &&
+                <Box>
+                    {user.access_type === 'Portal Admin' &&
+                        <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", flexWrap: 'wrap', gap: '4px' }}>
+                            <Box>
+                                <Typography variant="h4">
+                                    Quote Comparison
+                                </Typography>
+                                <Typography color="#333333" variant="body2" sx={{ fontFamily: 'poppins-lt' }}>
+                                    {quotes?.length || 0} quotes received for this inquiry
+                                </Typography>
+                            </Box>
+                            <Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
+                                Best Quote Price: {applyCurrencyFormat(bestQuotes?.total)}
                             </Typography>
                         </Box>
-                        <Typography variant="body2" sx={{ color: "green", fontWeight: 600 }}>
-                            Best Quote Price: {applyCurrencyFormat(bestQuotes?.total)}
-                        </Typography>
-                    </Box>
-                }
-                <Divider sx={{ my: 2 }} />
-                {/* Table */}
-                <Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
-                    <Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
-                        <TableHead>
-                            <TableRow sx={{ '& th': { borderColor: '#eee' } }}>
-                                <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
-                                    <Typography variant="h4">
-                                        Specifications
-                                    </Typography>
-                                </TableCell>
-                                {quotes.length > 0 && quotes.map((quote) => {
-                                    const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
-                                    let image = quote.aircraft.images;
-                                    image = JSON.parse(image);
-                                    return (
-                                        <TableCell key={quote.id} data-disabled={isDisabled}>
-                                            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
-                                                <img src={fileStorageUrl + image[0]} alt={quote.aircraft.asset_name} style={{ width: 'auto', maxWidth: '300px', height: '250px' }} />
-                                                <Typography variant="h4">
-                                                    {quote.client.name}
-                                                </Typography>
-                                                <Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
-                                                    View Details
-                                                </Button>
-                                            </Box>
-                                        </TableCell>
-                                    )
-                                })}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {renderRow("Rating", "rating")}
-                            {renderRow("Aircraft", "aircraft")}
-                            {renderRow("Price", "total")}
-                            {renderRow("Flight Time", "estimated_flight_time")}
-                            {renderRow("Base Fare", "base_fare")}
-                            {renderRow("Fuel", "fluel_cost")}
-                            {renderRow("Taxes & Fees", "taxes_fees")}
-                            {renderRow("Catering", "catering_fees")}
-                            {renderRow("Key Amenities", "available_amenities", true)}
-                            {renderRow("Included Service", "special_offers_promotions", true)}
-                            {(user.access_type === 'Portal Admin') || (user.access_type === 'Aircraft Operator' && quotes[0]?.is_selected === 'rejected') ?
-                                <>
-                                    {renderRow("Rejected Reason", "rejected_reason", true)}
-                                </>
-                                :
-                                <>
-
-                                </>
-                            }
-
-                            {user.access_type === 'Portal Admin' &&
-                                <TableRow>
-                                    <TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: { md: 'sticky', xs: 'static' }, left: 0, zIndex: 1 }}>
-                                        <Typography variant="h5">Select</Typography>
+                    }
+                    <Divider sx={{ my: 2 }} />
+                    {/* Table */}
+                    <Box sx={{ overflowX: "auto" }} className="quote-comparison-table">
+                        <Table sx={{ borderCollapse: 'separate', '& .MuiTableCell-root': { border: '1px solid #eeeeee', textAlign: 'center' } }}>
+                            <TableHead>
+                                <TableRow sx={{ '& th': { borderColor: '#eee' } }}>
+                                    <TableCell sx={{ position: { md: 'sticky', xs: 'static' }, left: 0, backgroundColor: '#fafafa', zIndex: 1 }}>
+                                        <Typography variant="h4">
+                                            Specifications
+                                        </Typography>
                                     </TableCell>
-                                    {quotes.map((q) => {
-                                        const isAccepted = acceptedQuoteId === q.id;
-                                        const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                                    {quotes.length > 0 && quotes.map((quote) => {
+                                        const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== quote.id;
+                                        let image = quote.aircraft.images;
+                                        image = JSON.parse(image);
                                         return (
-                                            <TableCell key={q.id} data-disabled={isDisabled}>
-                                                {q.is_selected === 'rejected' ?
-                                                    <>
-                                                        <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                                                            <Button className="btn btn-defualt w-100" disabled={true}>
-                                                                Quote Rejected
+                                            <TableCell key={quote.id} data-disabled={isDisabled}>
+                                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5 }}>
+                                                    <img src={fileStorageUrl + image[0]} alt={quote.aircraft.asset_name} style={{ width: 'auto', maxWidth: '300px', height: '250px' }} />
+                                                    <Typography variant="h4">
+                                                        {quote.client.name}
+                                                    </Typography>
+                                                    <Box className="w-100" sx={{ display: 'flex', gap: 1 }}>
+                                                        <Button className="btn btn-blue w-100" onClick={() => openQuoteDetails(quote)} disabled={isDisabled}>
+                                                            View Details
+                                                        </Button>
+                                                        {user.access_type === 'Aircraft Operator' && [5, 19].includes(inquiryRowData.status_id) &&
+                                                            <Button className="btn btn-outlined w-100" onClick={() => edidQuoteDetails()} disabled={isDisabled}>
+                                                                Edit Quote
                                                             </Button>
-                                                        </Box>
-
-                                                    </>
-                                                    :
-
-                                                    <>
-                                                        <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                                                            {['selected', 'approved'].includes(q.is_selected) ?
-                                                                <>
-                                                                    <Button className="btn btn-green w-100" >
-                                                                        Quote Accepted
-                                                                    </Button>
-                                                                </>
-                                                                :
-                                                                <>
-                                                                    <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id, q)}>
-                                                                        {isAccepted ? "Quote Accepted" : "Accept Quote"}
-                                                                    </Button>
-                                                                </>
-                                                            }
-                                                            {isAccepted && (
-                                                                <Button className="btn btn-danger w-100" disabled={isDisabled} onClick={() => cancelAcception()}>
-                                                                    Cancel
-                                                                </Button>
-                                                            )}
-                                                            {!isAccepted && !['selected', 'approved'].includes(q.is_selected) && (
-                                                                <Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
-                                                                    Reject Quote
-                                                                </Button>
-                                                            )}
-                                                        </Box>
-                                                    </>
-                                                }
-
+                                                        }
+                                                    </Box>
+                                                </Box>
                                             </TableCell>
-                                        );
+                                        )
                                     })}
                                 </TableRow>
-                            }
-                        </TableBody>
-                    </Table>
-                </Box>
-                <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
-                    <Button variant="outlined" className="btn btn-outlined" onClick={() => setShowDetailsTabs(false)}>
-                        Close
-                    </Button>
-                    {user.access_type === 'Portal Admin' &&
-                        <Button className="btn btn-blue" disabled={acceptedQuoteId == null || acceptedQuoteId == 0} onClick={() => quoteSendToTravelAgent()}>
-                            Send To Travel Agent
-                        </Button>
-                    }
-                </Box>
-            </Box>
+                            </TableHead>
+                            <TableBody>
+                                {renderRow("Rating", "rating")}
+                                {renderRow("Aircraft", "aircraft")}
+                                {renderComparableRow(
+                                    "Price",
+                                    (q) => q.total,
+                                    (q, idx, isMin) => (
+                                        <>
+                                            <Typography color={isMin ? theme.palette.success.main : 'text.secondary'} sx={{ fontWeight: isMin ? 700 : 400 }}>
+                                                {applyCurrencyFormat(q.total)}
+                                            </Typography>
+                                            <Typography color="#BC0019" fontSize={12}>
+                                                {q.validate_till ? 'Valid until ' + dayjs(q.validate_till).format('DD-MMM-YYYY') : ''}
+                                            </Typography>
+                                        </>
+                                    )
+                                )}
+                                {renderRow("Flight Time", "estimated_flight_time")}
+                                {renderComparableRow("Base Fees", (q) => q.base_fare)}
+                                {renderComparableRow("Fuel Fees", (q) => q.fluel_cost)}
+                                {renderComparableRow("Taxes & Fees", (q) => q.taxes_fees)}
+                                {renderComparableRow("Catering Fees", (q) => q.catering_fees)}
+                                {renderComparableRow("Handling Fees", (q) => q.handling_fees)}
+                                {renderComparableRow("Crew Fees", (q) => q.crew_fees)}
+                                {renderRow("Key Amenities", "available_amenities", true)}
+                                {renderRow("Included Service", "special_offers_promotions", true)}
+                                {(user.access_type === 'Portal Admin') || (user.access_type === 'Aircraft Operator' && quotes[0]?.is_selected === 'rejected') ?
+                                    <>
+                                        {renderRow("Not Accepted Reason", "rejected_reason", true)}
+                                    </>
+                                    :
+                                    <>
 
+                                    </>
+                                }
+
+                                {user.access_type === 'Portal Admin' &&
+                                    <TableRow>
+                                        <TableCell sx={{ backgroundColor: "#fafafa", borderRight: "1px solid #eee", position: { md: 'sticky', xs: 'static' }, left: 0, zIndex: 1 }}>
+                                            <Typography variant="h5">Select</Typography>
+                                        </TableCell>
+                                        {quotes.map((q) => {
+                                            const isAccepted = acceptedQuoteId === q.id;
+                                            const isDisabled = acceptedQuoteId !== null && acceptedQuoteId !== q.id;
+                                            return (
+                                                <TableCell key={q.id} data-disabled={isDisabled}>
+                                                    {q.is_selected === 'rejected' ?
+                                                        <>
+                                                            <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                                                                <Button className="btn btn-defualt w-100" disabled={true}>
+                                                                    Quote Rejected
+                                                                </Button>
+                                                            </Box>
+
+                                                        </>
+                                                        :
+
+                                                        <>
+                                                            <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                                                                {['selected', 'approved'].includes(q.is_selected) ?
+                                                                    <>
+                                                                        <Button className="btn btn-green w-100" >
+                                                                            Quote Accepted
+                                                                        </Button>
+                                                                    </>
+                                                                    :
+                                                                    <>
+                                                                        <Button className="btn btn-blue w-100" disabled={isDisabled} onClick={() => acceptQuote(q.id, q)}>
+                                                                            {isAccepted ? "Quote Accepted" : "Accept Quote"}
+                                                                        </Button>
+                                                                    </>
+                                                                }
+                                                                {isAccepted && (
+                                                                    <Button className="btn btn-danger w-100" disabled={isDisabled} onClick={() => cancelAcception()}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                )}
+                                                                {!isAccepted && !['selected', 'approved'].includes(q.is_selected) && (
+                                                                    <Button className="btn btn-danger w-100" onClick={() => rejectQuote(q.id)} disabled={isDisabled}>
+                                                                        Reject Quote
+                                                                    </Button>
+                                                                )}
+                                                            </Box>
+                                                        </>
+                                                    }
+
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                }
+                            </TableBody>
+                        </Table>
+                    </Box>
+                    <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 1.5 }}>
+                        <Button variant="outlined" className="btn btn-outlined" onClick={() => setShowDetailsTabs(false)}>
+                            Close
+                        </Button>
+                        {user.access_type === 'Portal Admin' &&
+                            <Button className="btn btn-blue" disabled={acceptedQuoteId == null || acceptedQuoteId == 0} onClick={() => quoteSendToTravelAgent()}>
+                                Send To Travel Agent
+                            </Button>
+                        }
+                    </Box>
+                </Box>
+            }
+            {createNewQuote && user.access_type === 'Aircraft Operator' && <CreateNewQuoteStepper />}
             {/* View quote modal */}
             <CustomModal headerText={<Box>Quote Details <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'poppins-lt' }}>
                 {viewedQuote.clientName}

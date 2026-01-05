@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { useResponsive } from "@/karnx/Hooks/useResponsive";
 
 export interface AutoCompleteOption {
   id: string | number;
@@ -47,6 +48,7 @@ const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
 }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
+  const { isMd } = useResponsive();
 
   // support both controlled and uncontrolled usage
   const [internalValue, setInternalValue] = useState<AutoCompleteOption[]>(value ?? []);
@@ -73,7 +75,7 @@ const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
         <Autocomplete
           multiple
           disabled={disabled}
-          size={size}
+          size={isMd ? "small" : size}
           options={options}
           value={selected}
           limitTags={limitTags}
@@ -96,7 +98,7 @@ const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
             );
           }}
           renderInput={(params) => (
-            <TextField {...params} placeholder={placeholder} helperText={helperText} error={error}/>
+            <TextField {...params} placeholder={placeholder} helperText={helperText} error={error} />
           )}
         />
       </FormControl>

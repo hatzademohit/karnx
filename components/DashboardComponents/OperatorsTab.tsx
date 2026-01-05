@@ -62,7 +62,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
     };
 
     const fetchAssignedOperators = async (inquiryId) => {
-        console.log(selectedOperators);
+        //console.log(selectedOperators);
         const fetched = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-operator/get-assigned-operators?inquiry_id=${encodeURIComponent(inquiryId)}&selected=${selectedOperators}` });
         if (fetched?.status === true) {
             //toast.success(fetched?.message);
@@ -118,7 +118,7 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                             <FlightOutlinedIcon />
                                         </IconButton>
                                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <Typography variant="h4">{op.name}</Typography>
+                                            <Typography variant="h5">{op.name}</Typography>
                                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                 <StarOutlinedIcon sx={{ color: '#FFD700' }} />
                                                 <Typography component="span" sx={{ fontFamily: 'poppins-semibold', fontSize: '14px', color: '#4D4D4D' }}> {op.rating}</Typography>
@@ -241,7 +241,6 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
             <CustomModal headerText="Add Operator" open={addOperator} setOpen={setAddOperator} dataClose={() => setAddOperator(false)}>
                 <Box>
                     {getOperatorList?.map((op) => (
-
                         <Card
                             key={op.id}
                             sx={{
@@ -250,15 +249,17 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                                 borderRadius: 2,
                                 boxShadow: "0 1px 6px rgba(0,0,0,0.1)",
                                 transition: "0.3s",
+                                cursor: 'pointer',
                                 "&:hover": { boxShadow: "0 2px 8px rgba(0,0,0,0.15)" },
                             }}
+                            onClick={() => handleSelect(op.id)}
                         >
                             <CardContent className="card-content">
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     <Box sx={{ borderRight: '2px solid #E6E6E6', width: '50px', height: '100%', minHeight: '84px', alignContent: 'center' }}>
                                         <Checkbox
                                             checked={selectedOperators.includes(op.id)}
-                                            onChange={() => handleSelect(op.id)}
+                                        // onChange={() => handleSelect(op.id)}
                                         />
                                     </Box>
 
@@ -313,6 +314,10 @@ const OperatorsTab: React.FC<OperatorsTabProps> = ({ inquiryId }) => {
                             </CardContent>
                         </Card>
                     ))}
+
+                    {getOperatorList.length === 0 &&
+                        <Typography sx={{ textAlign: 'center', py: 4 }}>No operators found.</Typography>
+                    }
                     <Divider sx={{ my: 2 }} />
                     <Box className="modal-footer"
                         sx={{

@@ -6,6 +6,7 @@ import { apiBaseUrl } from "@/karnx/api";
 import { toast } from "react-toastify";
 import useApiFunction from "@/karnx/Hooks/useApiFunction";
 import { useInquiryDetails } from "@/app/context/InquiryDetailsContext";
+import dayjs from "dayjs";
 
 const steps = ["Aircraft & Flight Details", "Pricing Details", "Amenities & Final Details"];
 
@@ -17,24 +18,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	const [activeStep, setActiveStep] = useState(0);
 	const theme = useTheme();
 	const callApi = useApiFunction();
-	const [quoteDetails, setQuoteDetails] = useState<any>([]);
-	const { setShowDetailsTabs, inquiryId, bookingDetails } = useInquiryDetails()
-	// const getQuoteDetails = async () => {
-	// 	try {
-	// 		const res = await callApi({ method: 'GET', url: `${apiBaseUrl}/inquiry-quotes/edit-quote/${inquiryId}` });
-	// 		if (res?.status === true) {
-	// 			setQuoteDetails(res.data);
-	// 		} else {
-	// 			toast.error(res?.message || '');
-	// 		}
-	// 	} catch (e) {
-	// 		toast.error('Network error while fetching cancellation policies');
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	getQuoteDetails();
-	// }, [inquiryId]);
+	const { setShowDetailsTabs, inquiryId, bookingDetails, quoteDetails, setQuoteDetails, setCreateNewQuote } = useInquiryDetails();
 
 	const methods = useForm({
 		shouldUnregister: false,
@@ -55,7 +39,8 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 			const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/submit-quote`, body: { ...data, inquiryId } });
 			if (res?.status === true) {
 				toast.success(res?.message || '');
-				setShowDetailsTabs(false)
+				setShowDetailsTabs(false);
+				setCreateNewQuote(false)
 			} else {
 				toast.error(res?.message || '');
 			}
@@ -65,48 +50,47 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 	};
 
 	useEffect(() => {
+		if (quoteDetails?.length >= 1 || quoteDetails?.length == undefined) return;
 		reset({
 			estimate: bookingDetails?.flight_time?.map((item) => ({
-				departureArrivalDateTime: item?.departure_time ?? "",
+				departure_time: item?.departure_time ?? "",
 				flight_details_id: item?.flight_details_id ?? "",
-				// estimatedFlightTime: ""
 			}))
 		});
 	}, [bookingDetails])
 
 	// for edit quote
 	useEffect(() => {
-		if (!quoteDetails) return;
-		reset()
-		// reset({
-		// 	aircraft: quoteDetails?.aircraft_id ?? "",
-		// 	baseFare: quoteDetails?.base_fare ?? "",
-		// 	fuel: quoteDetails?.fluel_cost ?? "",
-		// 	taxes: quoteDetails?.taxes_fees ?? "",
-		// 	crewFees: quoteDetails?.crew_fees ?? "",
-		// 	handlingFees: quoteDetails?.handling_fees ?? "",
-		// 	catering: quoteDetails?.catering_fees ?? "",
-		// 	totalAmount: quoteDetails?.total ?? 0,
-		// 	quoteValidUntil: quoteDetails?.validate_till ?? "",
-		// 	cancellationPolicy: quoteDetails?.cancellation_policy_id ?? "",
-		// 	amenities: quoteDetails?.amenities_ids ? quoteDetails.amenities_ids.split(",").map(Number) : [],
-		// 	specialOffers: quoteDetails?.special_offers_promotions ?? "",
-		// 	addtionalNotes: quoteDetails?.additional_notes ?? "",
-		// 	estimate: quoteDetails?.estimate?.map((item) => ({
-		// 		departureArrivalDateTime: item?.departureArrivalDateTime ?? "",
-		// 		estimatedFlightTime: item?.estimatedFlightTime ?? ""
-		// 	}))
-		// });
-	}, [quoteDetails, reset]);
-
-	useEffect(() => {
-		if (quoteDetails) reset(quoteDetails);
-	}, [activeStep, quoteDetails, reset]);
-
+		if (quoteDetails?.length <= 0) return;
+		reset({
+			aircraft_id: quoteDetails?.aircraft_id ?? "",
+			base_fare: quoteDetails?.base_fare ?? "",
+			fluel_cost: quoteDetails?.fluel_cost ?? "",
+			taxes_fees: quoteDetails?.taxes_fees ?? "",
+			crew_fees: quoteDetails?.crew_fees ?? "",
+			handling_fees: quoteDetails?.handling_fees ?? "",
+			catering_fees: quoteDetails?.catering_fees ?? "",
+			total: quoteDetails?.total ?? 0,
+			validate_till: quoteDetails?.validate_till ?? "",
+			cancellation_policy_id: quoteDetails?.cancellation_policy_id ?? "",
+			amenities_ids: Array.isArray(quoteDetails?.amenities_ids) ? quoteDetails.amenities_ids.map(Number)
+				: quoteDetails?.amenities_ids != null ? String(quoteDetails.amenities_ids).split(",").map(Number) : [],
+			special_offers_promotions: quoteDetails?.special_offers_promotions ?? "",
+			additional_notes: quoteDetails?.additional_notes ?? "",
+			estimate: quoteDetails?.inquiry_quote_flight_time?.map((item) => {
+				const time_convert = dayjs().hour(Math.floor(item?.flight_duration / 60)).minute(item?.flight_duration % 60).second(0);;
+				return ({
+					departure_time: item?.departure_date_time ?? "",
+					flight_details_id: item?.booking_inquiries_flight_location_id ?? "",
+					estimated_flight_time: time_convert ?? ""
+				})
+			})
+		});
+	}, [reset, quoteDetails]);
 
 	const handleNext = async () => {
-		const formData = watch();
-		setQuoteDetails(prev => ({ ...prev, ...formData }));
+		// const formData = watch();
+		// setQuoteDetails(prev => ({ ...prev, ...formData }));
 		const valid = await trigger();
 		if (valid) setActiveStep((prev) => prev + 1);
 	};
@@ -132,7 +116,7 @@ const CreateNewQuoteStepper: React.FC<CreateNewQuoteProps> = () => {
 				</Stepper>
 
 				<Box sx={{ mb: 3, border: `1px solid ${theme?.common.borderColor}`, p: { md: 3, xs: '10px' } }}>
-					{activeStep === 0 && <AircraftFlightDetails editedData={quoteDetails} />}
+					{activeStep === 0 && <AircraftFlightDetails />}
 					{activeStep === 1 && <PricingDetails editedData={quoteDetails} />}
 					{activeStep === 2 && <AmenitiesDetails editedData={quoteDetails} />}
 				</Box>

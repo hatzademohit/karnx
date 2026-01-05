@@ -12,7 +12,7 @@ const TravelAgentQuoteView = () => {
     const [acceptQuote, setAcceptQuote] = useState(false);
     const [openRejection, setOpenRejection] = useState(false);
     const [findMethod, setFindMethod] = useState<string>()
-    const { inquiryId, inquiryRowData, setinquiryRowData } = useInquiryDetails();
+    const { setShowDetailsTabs, inquiryId, inquiryRowData, setinquiryRowData } = useInquiryDetails();
     const [getQuote, setQuote] = useState<any>(
         { client: { name: '' }, aircraft: { asset_name: '' } }
     );
@@ -51,11 +51,12 @@ const TravelAgentQuoteView = () => {
                 toast.success(res?.message || '');
                 if (action === 'accepted') {
                     setAcceptQuote(true);
+                    const updatedStatus = res.data;
                     setinquiryRowData((prev) => ({
                         ...prev,
-                        status: "Quote Accepted",
-                        status_color: '#b4f7ab',
-                        status_id: 17,
+                        status: updatedStatus.status_name, // "Quote Accepted",
+                        status_color: updatedStatus.color_code, //'#b4f7ab',
+                        status_id: updatedStatus.id, //17,
                     }));
                 }
             } else {
@@ -76,8 +77,26 @@ const TravelAgentQuoteView = () => {
             message: "",
         },
     });
-    const onRejectionSubmit = async (data: any) => {
-        console.log(data)
+    const onRejectRequoteSubmit = async (data: any) => {
+        console.log(data, findMethod);
+        try {
+            const bodyParam = {
+                action: findMethod,
+                inquiryId,
+                message: data.message,
+                quoteId: getQuote.id,
+            };
+
+            const res = await callApi({ method: 'POST', url: `${apiBaseUrl}/inquiry-quotes/agent-reject-requote-qute`, body: bodyParam });
+            if (res?.status === true) {
+                toast.success(res?.message || '');
+                setShowDetailsTabs(false);
+            } else {
+                toast.error(res?.message || '');
+            }
+        } catch (e) {
+            //toast.error('Network error while sending quote to travel agent');
+        }
     }
     useEffect(() => {
         reset({
@@ -120,7 +139,7 @@ const TravelAgentQuoteView = () => {
                     </Typography>
                 </Box>
             } open={openRejection} setOpen={setOpenRejection} dataClose={() => setOpenRejection(false)}>
-                <Typography component="form" onSubmit={handleSubmit(onRejectionSubmit)} >
+                <Typography component="form" onSubmit={handleSubmit(onRejectRequoteSubmit)} >
                     <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }} required={true}>Massage</InputLabel>
                     <FormControl fullWidth>
                         <TextField
