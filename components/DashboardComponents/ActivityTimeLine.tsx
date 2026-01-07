@@ -110,7 +110,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
       <Box className='card'>
         <Box className='card-header'>
           <Typography component='h4' variant="h4" sx={{ color: theme?.common?.redColor }}>Activity Timeline</Typography>
-          <SingleSelectRadio
+          {/* <SingleSelectRadio
             size="small"
             variant="filled"
             options={options}
@@ -118,7 +118,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
             onChange={(value: any) => setSelectedActivity(value)}
             className="select_filter"
             menuClassName="custom-select-dropdown"
-          />
+          /> */}
         </Box>
 
         <Box className="card-body" sx={{ maxHeight: '270px', overflowY: 'auto', mt: 0 }}>

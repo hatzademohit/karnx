@@ -213,13 +213,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           Authorization: `Bearer ${karnxToken}`,
         },
       })
+      console.log("Session validation response:", res);
       if (res.ok != true) {
-        handleSessionExpired()
-        return false;
+        //handleSessionExpired()
+        //return false;
       }
     } catch (error) {
-      handleSessionExpired()
-      return false;
+      //handleSessionExpired()
+      //return false;
     }
     return true;
   };

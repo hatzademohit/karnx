@@ -16,8 +16,20 @@ import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
+type Priority = {
+    id: string | number;
+    title: string;
+    time: string;
+    details: string;
+    subtitle?: string;
+    inquiryId?: string;
+};
 
-const PriorityTasks: React.FC = () => {
+type PriorityTaskProps = {
+    onPriorityClick?: (activity: Priority) => void;
+};
+
+const PriorityTasks: React.FC<PriorityTaskProps> = ({ onPriorityClick }) => {
     const theme = useTheme();
     const [tasks, setTaskData] = useState([]);
     const [openTasks, setOpenTasks] = useState(false);
@@ -175,7 +187,7 @@ const PriorityTasks: React.FC = () => {
                             </Box>
                         </Box>
                         <Button className="btn w-100" variant="contained" size="large"
-                            sx={{ mt: 2, borderColor: `${taskList?.color} !important`, backgroundColor: `${taskList?.color} !important`, mb: 1 }}>
+                            sx={{ mt: 2, borderColor: `${taskList?.color} !important`, backgroundColor: `${taskList?.color} !important`, mb: 1 }} onClick={() => onPriorityClick?.(taskDetails)}>
                             Take Action
                         </Button>
                     </Box>
