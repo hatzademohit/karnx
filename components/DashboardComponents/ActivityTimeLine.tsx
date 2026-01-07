@@ -99,7 +99,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
           </React.Fragment>
         ))
       ) : (
-        <Typography variant="body2" color="text.secondary" sx={{ p: 3, backgroundColor: '#f9fafb', border: `2px dashed ${theme?.common?.borderColor}`, textAlign: 'center' }}>No activities</Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ p: 3, backgroundColor: '#f9fafb', border: `2px dashed ${theme?.common?.borderColor}`, textAlign: 'center' }}>No activities available</Typography>
       )
       }
     </>
@@ -131,7 +131,7 @@ const ActivityTimeLine: React.FC<ActivityTimeLineProps> = ({ onActivityClick }) 
         <Button className="btn btn-blue" sx={{ maxWidth: '100%', width: '100%', mt: 2 }} onClick={viewAllActivities(activities)}> View All Activities </Button>
       </Box>
 
-      <CustomModal open={viewAllActivitiesModalOpen} dataClose={() => setViewAllActivitiesModalOpen(false)} headerText={'All Activities'} className="activity_modal">
+      <CustomModal open={viewAllActivitiesModalOpen} setOpen={setViewAllActivitiesModalOpen} dataClose={() => setViewAllActivitiesModalOpen(false)} headerText={'All Activities'} className="activity_modal">
         <>
           <ActivitiesList />
           <Box className='modal-footer'>
