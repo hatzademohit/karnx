@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Link, Stack, Tooltip, Typography, useTheme } from '@mui/material';
-import { CustomModal, AutoComplteCheckbox, RHFCustomTextField, FileSelection } from '@/components';
+import { CustomModal, AutoComplteCheckbox, RHFCustomTextField, SingleFileSelection } from '@/components';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
@@ -121,11 +121,13 @@ export default function CompanyProfile() {
                 state: (editing ? draft?.client?.state : profile?.client?.city) ?? '',
                 country: (editing ? draft?.client?.country : profile?.client?.country) ?? '',
                 pinCode: (editing ? draft?.client?.pincode : profile?.client?.pincode) ?? '',
+                terms_conditions_policis: (editing ? draft?.client?.terms_conditions_policis : profile?.client?.terms_conditions_policis) ?? null,
             });
         }
     }, [profile, reset, editing]);
 
     const onSubmit = (data) => {
+        // console.log('Form Data on Submit:', data);
         save();
     };
 
@@ -211,29 +213,32 @@ export default function CompanyProfile() {
                                 <Controller
                                     name="operatingRegions"
                                     control={control}
-                                    render={({ field }) => (
-                                        <AutoComplteCheckbox
-                                            inputLabel="Operating Regions"
-                                            options={profile?.regionCities}
-                                            value={profile?.regionCities?.filter((city) =>
-                                                field.value.includes(city.id)
-                                            )
-                                            }
-                                            onChange={(selected) => {
-                                                field.onChange(selected.map((val) => val.id));
-                                                setDraft({
-                                                    ...draft,
-                                                    client: {
-                                                        ...draft.client,
-                                                        operating_reginons: selected.map((v) => v.id),
-                                                    },
-                                                });
-                                            }}
-                                            disabled={!editing}
-                                            error={!!errors.operatingRegions}
-                                            helperText={errors?.operatingRegions?.message as string}
-                                        />
-                                    )}
+                                    render={({ field }) => {
+                                        const selectedIds = field.value ?? [];
+                                        const selectedVales = profile?.regionCities?.filter((city) =>
+                                            selectedIds.includes(city.id)
+                                        );
+                                        return (
+                                            <AutoComplteCheckbox
+                                                inputLabel="Operating Regions"
+                                                options={profile?.regionCities}
+                                                value={selectedVales}
+                                                onChange={(selected) => {
+                                                    field.onChange(selected.map((val) => val.id));
+                                                    setDraft({
+                                                        ...draft,
+                                                        client: {
+                                                            ...draft.client,
+                                                            operating_reginons: selected.map((v) => v.id),
+                                                        },
+                                                    });
+                                                }}
+                                                disabled={!editing}
+                                                error={!!errors.operatingRegions}
+                                                helperText={errors?.operatingRegions?.message as string}
+                                            />
+                                        )
+                                    }}
                                 />
                             </Grid>
 
@@ -373,25 +378,28 @@ export default function CompanyProfile() {
                             name="terms_conditions_policis"
                             control={control}
                             render={({ field }) => (
-                                <>
-                                    <FileSelection
-                                        onFileSelect={(files) => {
-                                            field.onChange(Array.from(files));
-                                            setDraft({ ...draft, client: { ...draft.client, terms_conditions_policis: Array.from(files) } });
-                                        }}
-                                        defaultValue={draft?.client?.terms_conditions_policis || []}
-                                        multiple={false}
-                                        disabled={!editing}
-                                        accept=".pdf,.doc,.docx"
-                                    />
-                                    {errors.terms_conditions_policis && (
-                                        <Typography color="error" className="fs12" sx={{ mt: 1 }}>
-                                            {errors.terms_conditions_policis.message as string}
-                                        </Typography>
-                                    )}
-                                </>
+                                <SingleFileSelection
+                                    value={field.value || null}
+                                    onChange={(file) => {
+                                        field.onChange(file);
+                                        setDraft({
+                                            ...draft,
+                                            client: {
+                                                ...draft.client,
+                                                terms_conditions_policis: file ? [file] : [],
+                                            },
+                                        });
+                                    }}
+                                    disabled={!editing}
+                                    accept=".pdf,.doc,.docx"
+                                />
                             )}
                         />
+                        {errors.terms_conditions_policis && (
+                            <Typography color="error" className="fs12" sx={{ mt: 1 }}>
+                                {errors.terms_conditions_policis.message as string}
+                            </Typography>
+                        )}
                     </Grid>
                 </Grid>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingBlock: '10px', }}>
