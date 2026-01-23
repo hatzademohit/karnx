@@ -1,14 +1,17 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import {  Box,  Typography, Paper, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Typography, Paper, List, ListItem, ListItemText } from "@mui/material";
 
 type FileSelectionProps = {
   onFileSelect?: (files: File[]) => void;
   defaultValue?: File[];
+  accept?: string;
+  disabled?: boolean;
+  multiple?: boolean;
 };
 
-const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValue }) => {
+const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValue, accept, disabled, multiple }) => {
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>(defaultValue || []);
 
@@ -31,7 +34,7 @@ const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValu
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" sx={{width: '100%'}} gap={1}>
+    <Box display="flex" flexDirection="column" alignItems="center" sx={{ width: '100%' }} gap={1}>
       <Paper
         {...getRootProps()}
         elevation={isDragActive ? 6 : 2}
@@ -45,10 +48,11 @@ const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValu
           textAlign: "center",
           cursor: "pointer",
           transition: "all 0.2s ease-in-out",
-          boxShadow: 'unset'
+          boxShadow: 'unset',
+          '&:has(> input[disabled])': { backgroundColor: '#dfdfdf', cursor: 'not-allowed' },
         }}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} disabled={disabled} accept={accept} multiple={multiple} />
         {isDragActive ? (
           <Typography color="primary">Drop the files here ...</Typography>
         ) : (
@@ -61,15 +65,15 @@ const FileSelection: React.FC<FileSelectionProps> = ({ onFileSelect, defaultValu
         )}
       </Paper>
 
-       {selectedFiles.length > 0 && (
-        <Box width="100%" sx={{ display: 'flex', alignItems: 'center', gap: '10px'}}>
+      {selectedFiles.length > 0 && (
+        <Box width="100%" sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Typography variant="subtitle1" fontWeight="medium">
             Selected files:
           </Typography>
-          <List dense sx={{p: 0}}>
+          <List dense sx={{ p: 0 }}>
             {selectedFiles.map((file, i) => (
               <ListItem key={i} sx={{ p: 0 }}>
-                <ListItemText primary={file.name} sx={{ '& .MuiListItemText-primary': { color: '#555555', fontFamily: 'poppins-lt' }}} />
+                <ListItemText primary={file.name} sx={{ '& .MuiListItemText-primary': { color: '#555555', fontFamily: 'poppins-lt' } }} />
               </ListItem>
             ))}
           </List>

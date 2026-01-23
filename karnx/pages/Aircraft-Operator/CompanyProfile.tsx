@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Link, Stack, Tooltip, Typography, useTheme } from '@mui/material';
-import { CustomModal, AutoComplteCheckbox, RHFCustomTextField } from '@/components';
+import { CustomModal, AutoComplteCheckbox, RHFCustomTextField, FileSelection } from '@/components';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
@@ -126,7 +126,7 @@ export default function CompanyProfile() {
     }, [profile, reset, editing]);
 
     const onSubmit = (data) => {
-        save()
+        save();
     };
 
     return (
@@ -207,25 +207,6 @@ export default function CompanyProfile() {
                             </Grid>
 
                             {/* Operating Regions */}
-                            {/* <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-                                <Controller name='operatingRegions' control={control} render={({ field }) =>{
-                                    // console.log(field.value)
-                                return(
-                                    <AutoComplteCheckbox
-                                        inputLabel="Operating Regions"
-                                        options={profile?.regionCities}
-                                        value={selectedOption}
-                                        onChange={(selected: any) => {
-                                            setSelectedOption(selected)
-                                            setDraft({ ...draft, client: { ...draft.client, operating_reginons: selected.map((val) => val.id) } });
-                                        }}
-                                        disabled={!editing}
-                                        error={!!errors.operatingRegions}
-                                        helperText={errors?.operatingRegions?.message as string}
-
-                                    />
-                                )}}/>
-                            </Grid> */}
                             <Grid size={{ md: 4, sm: 6, xs: 12 }}>
                                 <Controller
                                     name="operatingRegions"
@@ -378,6 +359,39 @@ export default function CompanyProfile() {
                                 />
                             </Grid>
                         </Grid>
+                    </Grid>
+                    {/* divider */}
+                    <Grid size={{ xs: 12 }}>
+                        <Divider className='cust-divider' />
+                    </Grid>
+                    {/* Terms & Conditions */}
+                    <Grid size={{ sm: 12, xs: 12 }}>
+                        <Typography variant='h4' sx={{ textAlign: 'center', color: theme?.common?.redColor, textDecoration: 'underline' }}>Terms & Conditions</Typography>
+                    </Grid>
+                    <Grid size={{ sm: 12, xs: 12 }}>
+                        <Controller
+                            name="terms_conditions_policis"
+                            control={control}
+                            render={({ field }) => (
+                                <>
+                                    <FileSelection
+                                        onFileSelect={(files) => {
+                                            field.onChange(Array.from(files));
+                                            setDraft({ ...draft, client: { ...draft.client, terms_conditions_policis: Array.from(files) } });
+                                        }}
+                                        defaultValue={draft?.client?.terms_conditions_policis || []}
+                                        multiple={false}
+                                        disabled={!editing}
+                                        accept=".pdf,.doc,.docx"
+                                    />
+                                    {errors.terms_conditions_policis && (
+                                        <Typography color="error" className="fs12" sx={{ mt: 1 }}>
+                                            {errors.terms_conditions_policis.message as string}
+                                        </Typography>
+                                    )}
+                                </>
+                            )}
+                        />
                     </Grid>
                 </Grid>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingBlock: '10px', }}>

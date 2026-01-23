@@ -126,7 +126,7 @@ const PriorityTasks: React.FC<PriorityTaskProps> = ({ onPriorityClick }) => {
                         </Box>
                     </>
                 ) : (
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 2, p: 3, backgroundColor: '#f9fafb', border: `2px dashed ${theme?.common?.borderColor}`, textAlign: 'center' }}>No pending tasks available</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 2, p: 3, backgroundColor: '#f9fafb', border: `2px dashed ${theme?.common?.borderColor}`, textAlign: 'center' }}>There is no pending tasks</Typography>
                 )}
             </Box>
 
