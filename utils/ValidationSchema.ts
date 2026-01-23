@@ -239,6 +239,7 @@ export const CompanyProfileSchema = yup.object().shape({
   state: yup.string().required('State is required'),
   country: yup.string().required('Country is required'),
   pinCode: yup.string().required('Pin Code is required'),
+  terms_conditions_policis: yup.mixed<File>().nullable().required('You must import the terms and conditions'),
 })
 
 export const travelAgentSchema = yup.object({
