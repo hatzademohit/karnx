@@ -32,7 +32,7 @@ const PricingDetails = (editedData) => {
                 toast.error(res?.message || '');
             }
         } catch (e) {
-            toast.error('Network error while fetching cancellation policies');
+            //toast.error('Network error while fetching cancellation policies');
         }
     };
 
@@ -130,7 +130,7 @@ const PricingDetails = (editedData) => {
                         }}
                     />
                 </Grid>
-                <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                {/* <Grid size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                     <Controller
                         name="cancellation_policy_id"
                         control={control}
@@ -148,7 +148,7 @@ const PricingDetails = (editedData) => {
                             />
                         )}
                     />
-                </Grid>
+                </Grid> */}
             </Grid>
         </Box>
     );

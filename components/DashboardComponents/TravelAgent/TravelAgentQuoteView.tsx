@@ -78,7 +78,7 @@ const TravelAgentQuoteView = () => {
         },
     });
     const onRejectRequoteSubmit = async (data: any) => {
-        console.log(data, findMethod);
+        //console.log(data, findMethod);
         try {
             const bodyParam = {
                 action: findMethod,
@@ -124,7 +124,7 @@ const TravelAgentQuoteView = () => {
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
                                 <Button className="btn btn-blue" onClick={() => handleQuoteAction('accepted')}>Accept Quote</Button>
                                 <Button className="btn btn-danger" onClick={() => handleOpenModal('rejected')}>Reject Quote</Button>
-                                <Button className="btn btn-warning" color="warning" onClick={() => handleOpenModal('requote')}>Revise Quote</Button>
+                                {/* <Button className="btn btn-warning" color="warning" onClick={() => handleOpenModal('requote')}>Revise Quote</Button> */}
                             </Box>
                         </Grid>
                     }

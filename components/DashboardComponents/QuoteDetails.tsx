@@ -1,9 +1,12 @@
-import React from "react";
-import { Box, Typography, Divider, Grid, Card, CardContent, useTheme } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Divider, Grid, Card, CardContent, useTheme, Button } from "@mui/material";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { applyCurrencyFormat, parseToHoursMinutes } from "@/utils/commonFunctions";
 import dayjs from "dayjs";
+import { fileStorageUrl } from "@/karnx/api";
+import CustomModal from "../CustomModal";
+import Link from "next/link";
 const QuoteDetails = ({ quote }) => {
     const theme = useTheme();
     const { hours, minutes } = parseToHoursMinutes(quote.estimated_flight_time);
@@ -31,10 +34,12 @@ const QuoteDetails = ({ quote }) => {
         aircraftAmenities: quote?.available_amenities,//['Wi-Fi tututu', 'In-seat power', 'Entertainment system', 'Conference area'],
         includedServices: quote.special_offers_promotions,
         total: applyCurrencyFormat(quote.total),
-        cancelationCondition: quote.cancelation_policy ? quote.cancelation_policy.name : '',
+        cancelationCondition: quote.client.terms_conditions_policis ? fileStorageUrl + quote.client.terms_conditions_policis : '',
         additionalNotes: quote.additional_notes || '',
         quoteStatus: quote.is_selected || '',
     };
+
+    const [openTermsPolicies, setOpenTermsPolicies] = useState(false);
     return (
         <>
             {/* Flight Details */}
@@ -213,9 +218,11 @@ const QuoteDetails = ({ quote }) => {
                 <Card elevation={2}>
                     <CardContent>
                         <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>Terms & Conditions</Typography>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            <Typography> {viewedQuote?.cancelationCondition}  </Typography>
+                        <Box sx={{ display: '', flexDirection: 'column', gap: 2 }}>
+                            <Link href="#" onClick={() => setOpenTermsPolicies(true)}> View Terms, Conditions & Policies. </Link>
                         </Box>
+                        {/* <Typography> {viewedQuote?.cancelationCondition}  </Typography> */}
+
                     </CardContent>
                 </Card>
             </Grid>
@@ -231,6 +238,24 @@ const QuoteDetails = ({ quote }) => {
                     </CardContent>
                 </Card>
             </Grid>
+
+            <CustomModal sx={{ '.MuiDialog-container .MuiPaper-root': { maxWidth: '400px' } }} headerText={
+                <Box sx={{ fontSize: '18px' }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }} >
+                        View Terms & Conditions
+                    </Typography>
+                </Box>
+            } open={openTermsPolicies} setOpen={setOpenTermsPolicies} dataClose={() => setOpenTermsPolicies(false)}>
+                <Box sx={{ fontSize: '18px' }}>
+                    {viewedQuote?.cancelationCondition}
+                </Box>
+
+
+                <Divider sx={{ mb: 2, mt: 4 }} />
+                <Box className="modal-footer" sx={{ pb: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: '150px', width: '100%' } }}>
+                    <Button className="btn btn-outlined" onClick={() => setOpenTermsPolicies(false)}>Close</Button>
+                </Box>
+            </CustomModal >
         </>
     );
 };
