@@ -26,6 +26,7 @@ import { useForm, FormProvider, Controller, useFormContext } from "react-hook-fo
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CompanyProfileSchema } from '@/utils/ValidationSchema';
 import MuiLink from "@mui/material/Link";
+import { fileStorageUrl } from "@/karnx/api";
 
 const labelSx = { color: '#6b7280', fontSize: 14 };
 
@@ -71,10 +72,55 @@ export default function CompanyProfile() {
         setSelectedOption(profile.regionCities.filter((o: any) => (profile.client.operating_reginons ?? []).includes(o?.id)));
         setEditing(false);
     };
-    const save = async () => {
+    const save = async (data) => {
         try {
-            const payload = draft;
-            const updated = await callApi({ method: 'PUT', url: `${apiBaseUrl}/clients/${user?.client_id}`, body: payload?.client });
+            // Build multipart form data including file and text fields
+            const fd = new FormData();
+
+            const c = {
+                ...draft?.client,
+            } as any;
+
+            // Prefer the latest file from RHF field, fallback to draft state
+            const file: File | null = (data?.terms_conditions_policies as File) || (c?.terms_conditions_policies?.[0] as File) || null;
+
+            // Append primitive fields if they exist
+            const appendIf = (key: string, val: any) => {
+                if (val !== undefined && val !== null) fd.append(key, String(val));
+            };
+
+            appendIf('name', c?.name);
+            appendIf('safety_ratings', c?.safety_ratings);
+            appendIf('response_time', c?.response_time);
+            appendIf('certifications', c?.certifications);
+            appendIf('specialties', c?.specialties);
+            appendIf('contact_person', c?.contact_person);
+            appendIf('email', c?.email);
+            appendIf('phone', c?.phone);
+            appendIf('website', c?.website);
+            appendIf('address_line1', c?.address_line1);
+            appendIf('address_line2', c?.address_line2);
+            appendIf('area', c?.area);
+            appendIf('city', c?.city);
+            appendIf('state', c?.state);
+            appendIf('country', c?.country);
+            appendIf('pincode', c?.pincode);
+
+            // Arrays: operating_reginons -> send as JSON string (adjust if backend expects repeated keys)
+            const regions = c?.operating_reginons ?? [];
+            if (Array.isArray(regions)) {
+                // Option A: JSON string (common pattern in this codebase)
+                fd.append('operating_reginons', JSON.stringify(regions));
+                // If your API expects array syntax, replace above with:
+                // regions.forEach((id: any) => fd.append('operating_reginons[]', String(id)));
+            }
+
+            // File field: backend expects 'terms_conditions_policies_new' according to previous code
+            if (file) {
+                fd.append('terms_conditions_policies', file, (file as File).name);
+            }
+
+            const updated = await callApi({ method: 'POST', url: `${apiBaseUrl}/clients/${user?.client_id}`, body: fd });
             if (updated?.status === true) {
                 toast.success(updated?.message);
                 await getProfileData();
@@ -121,16 +167,16 @@ export default function CompanyProfile() {
                 state: (editing ? draft?.client?.state : profile?.client?.city) ?? '',
                 country: (editing ? draft?.client?.country : profile?.client?.country) ?? '',
                 pinCode: (editing ? draft?.client?.pincode : profile?.client?.pincode) ?? '',
-                terms_conditions_policis: (editing ? draft?.client?.terms_conditions_policis : profile?.client?.terms_conditions_policis) ?? null,
+                //terms_conditions_policis: (editing ? draft?.client?.terms_conditions_policis : profile?.client?.terms_conditions_policis) ?? null,
             });
         }
     }, [profile, reset, editing]);
 
     const onSubmit = (data) => {
         // console.log('Form Data on Submit:', data);
-        save();
+        save(data);
     };
-
+    const fileLink = fileStorageUrl + profile?.client?.terms_conditions_policies;
     return (
         <FormProvider {...methods}>
             <Stack direction="row" spacing={1} mb={2} justifyContent='space-between' alignItems='center'>
@@ -373,34 +419,43 @@ export default function CompanyProfile() {
                     <Grid size={{ sm: 12, xs: 12 }}>
                         <Typography variant='h4' sx={{ textAlign: 'center', color: theme?.common?.redColor, textDecoration: 'underline' }}>Terms & Conditions</Typography>
                     </Grid>
-                    <Grid size={{ sm: 12, xs: 12 }}>
-                        <Controller
-                            name="terms_conditions_policis"
-                            control={control}
-                            render={({ field }) => (
-                                <SingleFileSelection
-                                    value={field.value || null}
-                                    onChange={(file) => {
-                                        field.onChange(file);
-                                        setDraft({
-                                            ...draft,
-                                            client: {
-                                                ...draft.client,
-                                                terms_conditions_policis: file ? [file] : [],
-                                            },
-                                        });
-                                    }}
-                                    disabled={!editing}
-                                    accept=".pdf,.doc,.docx"
-                                />
+                    {editing ? (
+                        <Grid size={{ sm: 12, xs: 12 }}>
+                            <Controller
+                                name="terms_conditions_policies"
+                                control={control}
+                                render={({ field }) => (
+                                    <SingleFileSelection
+                                        value={field.value || null}
+                                        onChange={(file) => {
+                                            field.onChange(file);
+                                            setDraft({
+                                                ...draft,
+                                                client: {
+                                                    ...draft.client,
+                                                    terms_conditions_policies: file ? [file] : [],
+                                                },
+                                            });
+                                        }}
+                                        disabled={!editing}
+                                        accept=".pdf"
+                                    />
+                                )}
+                            />
+                            {errors.terms_conditions_policies && (
+                                <Typography color="error" className="fs12" sx={{ mt: 1 }}>
+                                    {errors.terms_conditions_policies.message as string}
+                                </Typography>
                             )}
-                        />
-                        {errors.terms_conditions_policis && (
-                            <Typography color="error" className="fs12" sx={{ mt: 1 }}>
-                                {errors.terms_conditions_policis.message as string}
-                            </Typography>
-                        )}
-                    </Grid>
+                        </Grid>
+                    ) : (
+
+                        <Grid size={{ sm: 12, xs: 12 }}>
+                            <Box sx={{ display: '', flexDirection: 'column', gap: 2 }}>
+                                <Link href={fileLink ?? '#'} target={profile?.client?.terms_conditions_policies ?? ''} rel={profile?.client?.terms_conditions_policies ?? ''}> View Terms, Conditions & Policies. </Link>
+                            </Box>
+                        </Grid>
+                    )}
                 </Grid>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingBlock: '10px', }}>
                     {editing ?
