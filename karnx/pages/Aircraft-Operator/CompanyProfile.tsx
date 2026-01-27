@@ -89,6 +89,7 @@ export default function CompanyProfile() {
                 if (val !== undefined && val !== null) fd.append(key, String(val));
             };
 
+            appendIf("_method", "PUT");
             appendIf('name', c?.name);
             appendIf('safety_ratings', c?.safety_ratings);
             appendIf('response_time', c?.response_time);
