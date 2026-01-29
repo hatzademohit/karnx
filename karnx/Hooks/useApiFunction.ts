@@ -35,9 +35,10 @@ export default function useApiFunction() {
 
       // Only set JSON content-type when not sending FormData and body exists
       if (!isFormData && body !== undefined && !(baseHeaders as any)["Content-Type"]) {
-        baseHeaders["Content-Type"] = "application/json";
-      }
+        //baseHeaders["Content-Type"] = "application/json";
 
+      }
+      //baseHeaders["Content-Type"] = "multipart/form-data";
       const response = await fetch(url, {
         method,
         headers: baseHeaders,

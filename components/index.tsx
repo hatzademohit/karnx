@@ -41,6 +41,6 @@ import BillingAddress from "./DashboardComponents/TravelAgent/BillingAddress";
 import TravelAgentCommission from "./DashboardComponents/TravelAgent/TravelAgentCommission";
 import EstimateFlightTime from "./DashboardComponents/CreateNewQuote/EstimateFlightTime";
 import CustomAccordion from './CustomAccordion/CustomAccordion'
-import SingleFileSelection from "./FileSelection/SingleFIleSilection";
+import SingleFileSelection from "./FileSelection/SingleFileSelection";
 
 export { CustomTextField, RHFCustomTextField, PageLoader, SimpleAutoComplete, SingleSelect, MUIDataGrid, TableComp, AlertMassage, CustomModal, CustomTabs, InfoCard, MultiSelectCheckbox, SingleSelectRadio, ConfirmationModal, SimpleTable, StepperComponent, RadioTabs, CustomDateTimePicker, SwapComp, FileSelection, DateRangePickerInput, CardDataGrid, TabLayout, AircraftFlightDetails, PricingDetails, AmenitiesDetails, CreateNewQuoteStepper, CustomTimePicker, CustomDatePicker, AutoComplteCheckbox, ViewQuotes, NoQuotes, QuoteDetails, TravelAgentQuoteView, TravelAgentFullQuoteView, TravellerDetails, ContactDetails, GSTDetails, BillingAddress, TravelAgentCommission, EstimateFlightTime, CustomAccordion, SingleFileSelection };

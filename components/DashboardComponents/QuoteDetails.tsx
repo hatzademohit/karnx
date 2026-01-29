@@ -219,10 +219,8 @@ const QuoteDetails = ({ quote }) => {
                     <CardContent>
                         <Typography variant="h4" color={theme.common?.blueColor} sx={{ mb: 2 }}>Terms & Conditions</Typography>
                         <Box sx={{ display: '', flexDirection: 'column', gap: 2 }}>
-                            <Link href="#" onClick={() => setOpenTermsPolicies(true)}> View Terms, Conditions & Policies. </Link>
+                            <Link href={viewedQuote?.cancelationCondition ?? '#'} target={viewedQuote?.cancelationCondition ? '_blank' : '#'}> View Terms, Conditions & Policies. </Link>
                         </Box>
-                        {/* <Typography> {viewedQuote?.cancelationCondition}  </Typography> */}
-
                     </CardContent>
                 </Card>
             </Grid>
@@ -238,24 +236,6 @@ const QuoteDetails = ({ quote }) => {
                     </CardContent>
                 </Card>
             </Grid>
-
-            <CustomModal sx={{ '.MuiDialog-container .MuiPaper-root': { maxWidth: '400px' } }} headerText={
-                <Box sx={{ fontSize: '18px' }}>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }} >
-                        View Terms & Conditions
-                    </Typography>
-                </Box>
-            } open={openTermsPolicies} setOpen={setOpenTermsPolicies} dataClose={() => setOpenTermsPolicies(false)}>
-                <Box sx={{ fontSize: '18px' }}>
-                    {viewedQuote?.cancelationCondition}
-                </Box>
-
-
-                <Divider sx={{ mb: 2, mt: 4 }} />
-                <Box className="modal-footer" sx={{ pb: '10px', mt: '10px', display: 'flex', justifyContent: 'flex-end', gap: 2, '& .btn': { maxWidth: '150px', width: '100%' } }}>
-                    <Button className="btn btn-outlined" onClick={() => setOpenTermsPolicies(false)}>Close</Button>
-                </Box>
-            </CustomModal >
         </>
     );
 };
