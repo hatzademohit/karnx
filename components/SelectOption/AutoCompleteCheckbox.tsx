@@ -6,6 +6,7 @@ import {
   Checkbox,
   Autocomplete,
   TextField,
+  Typography,
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -30,6 +31,7 @@ interface AutoCompleteCheckboxProps {
   limitTags?: number;
   helperText?: string;
   error?: boolean;
+  asterisk?: boolean;
 }
 
 const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
@@ -45,6 +47,7 @@ const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
   limitTags = 2,
   helperText = '',
   error = false,
+  asterisk = false,
 }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -68,7 +71,7 @@ const AutoCompleteCheckbox: React.FC<AutoCompleteCheckboxProps> = ({
     <>
       {inputLabel && (
         <InputLabel sx={{ fontFamily: 'poppins-semibold', width: 'fit-content', color: '#333333' }}>
-          {inputLabel}
+          {inputLabel} {asterisk && <Typography component='span' sx={{ color: 'red' }}>*</Typography>}
         </InputLabel>
       )}
       <FormControl fullWidth sx={{ width, '& .MuiInputBase-sizeSmall': { paddingBlock: '3.3px !important' } }}>

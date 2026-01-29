@@ -6,6 +6,7 @@ interface Props {
     label: string;
     placeholder?: string;
     disabled?: boolean;
+    asterisk?: boolean;
     onValueChange?: (value: any) => void; // optional callback
 }
 
@@ -15,6 +16,7 @@ const RHFCustomTextField = ({
     placeholder,
     disabled,
     onValueChange,
+    asterisk = false,
 }: Props) => {
     const {
         control,
@@ -38,6 +40,7 @@ const RHFCustomTextField = ({
                         disabled={disabled}
                         error={!!errors[name]}
                         helperText={errors[name]?.message as string}
+                        asterisk={asterisk}
                     />
                 )
             }}

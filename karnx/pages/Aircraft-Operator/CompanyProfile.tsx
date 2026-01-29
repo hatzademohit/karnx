@@ -183,6 +183,7 @@ export default function CompanyProfile() {
                                     placeholder="Enter company name"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, name: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
 
@@ -194,6 +195,7 @@ export default function CompanyProfile() {
                                     placeholder="e.g., ARGUS Gold, Wyvern Wingman"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, safety_ratings: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
 
@@ -205,6 +207,7 @@ export default function CompanyProfile() {
                                     placeholder="e.g., < 2 hours"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, response_time: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
 
@@ -223,6 +226,7 @@ export default function CompanyProfile() {
                                                 inputLabel="Operating Regions"
                                                 options={profile?.regionCities}
                                                 value={selectedVales}
+                                                asterisk={true}
                                                 onChange={(selected) => {
                                                     field.onChange(selected.map((val) => val.id));
                                                     setDraft({
@@ -250,6 +254,7 @@ export default function CompanyProfile() {
                                     placeholder="e.g., Argus Gold, IS-BAO, Wyvern Wingman"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, certifications: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
 
@@ -261,6 +266,7 @@ export default function CompanyProfile() {
                                     placeholder="e.g., Corporate Travel, VIP Transport"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, specialties: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                         </Grid>
@@ -281,6 +287,7 @@ export default function CompanyProfile() {
                                     label="Contact Person"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, contact_person: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -289,6 +296,7 @@ export default function CompanyProfile() {
                                     label="Email"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, email: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -297,6 +305,7 @@ export default function CompanyProfile() {
                                     label="Phone"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, phone: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -313,6 +322,7 @@ export default function CompanyProfile() {
                                     label="Address Line 1"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, address_line1: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -329,6 +339,7 @@ export default function CompanyProfile() {
                                     label="Area"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, area: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -337,6 +348,7 @@ export default function CompanyProfile() {
                                     label="City"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, city: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -345,6 +357,7 @@ export default function CompanyProfile() {
                                     label="State"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, state: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -353,6 +366,7 @@ export default function CompanyProfile() {
                                     label="Country"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, country: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                             <Grid size={{ md: 3, sm: 6, xs: 12 }}>
@@ -361,6 +375,7 @@ export default function CompanyProfile() {
                                     label="Pin Code"
                                     onValueChange={(val: any) => setDraft({ ...draft, client: { ...draft.client, pincode: val } })}
                                     disabled={!editing}
+                                    asterisk={true}
                                 />
                             </Grid>
                         </Grid>
